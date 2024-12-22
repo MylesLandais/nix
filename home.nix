@@ -17,6 +17,7 @@
   ./vimopts.nix
   ./gtk
    inputs.nixvim.homeManagerModules.nixvim
+   inputs.tokyonight.homeManagerModules.default
   ];
   # environment.
   home.packages = with pkgs; [
@@ -61,6 +62,12 @@
   prompt.enable = true;
   devtooling.enable = true;
   shelltools.enable = true;
+  tokyonight = {
+    style = "storm";
+    enable = true;
+  };
+  programs.bat.tokyonight.enable = true;
+  programs.git.delta.tokyonight.enable = true;
   programs.nixvim = {
       enable = true;
       defaultEditor = true;

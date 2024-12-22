@@ -6,6 +6,7 @@
 {
   imports = [
     ./atuin
+    ./bat
     ./direnv 
     ./eza
     ./fzf
@@ -18,6 +19,7 @@
   };
   config = lib.mkIf config.devtooling.enable {
     atuin.enable = lib.mkDefault true;
+    bat.enable = lib.mkDefault true;
     direnv.enable = lib.mkDefault true;
     eza.enable = lib.mkDefault true;
     fzf.enable = lib.mkDefault true;
