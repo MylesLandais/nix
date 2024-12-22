@@ -15,7 +15,7 @@
       syntaxHighlighting.enable = true;
       initExtra = ''
           source <(kubectl completion zsh)
-          eval "$(atuin init zsh --disable-up-arrow)"
+          zvm_after_init_commands+=(eval "$(atuin init zsh --disable-up-arrow)")
           '';
       plugins = [
       {

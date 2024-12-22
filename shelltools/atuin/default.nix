@@ -8,7 +8,7 @@
   config = lib.mkIf config.atuin.enable {
     programs.atuin = {
       enable = true;
-      enableZshIntegration = true;
+      enableZshIntegration = false;
       flags = ["--disable-up-arrow"];
       settings = {
         update_check = false;
