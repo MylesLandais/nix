@@ -52,6 +52,7 @@
     coreutils
     fd
     tokyonight-gtk-theme
+    tldr
   ];
   home.pointerCursor = {
   gtk.enable = true;
