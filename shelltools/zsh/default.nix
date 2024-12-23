@@ -27,6 +27,7 @@
 
       shellAliases = {
         ll = "eza --icons --git --git-ignore --git -F -l";
+        cat = "bat";
         hms = "home-manager switch";
         k = "kubectl";
         update = "sudo nixos-rebuild switch";
