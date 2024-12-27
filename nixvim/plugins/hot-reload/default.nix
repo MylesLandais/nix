@@ -19,7 +19,7 @@
           },
         }
         end
-        }),
+        })
         '';
     extraPlugins = [(pkgs.vimUtils.buildVimPlugin {
         name = "hot-reload";
