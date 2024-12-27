@@ -21,6 +21,7 @@
   ];
   # environment.
   home.packages = with pkgs; [
+    vhs
     vesktop
     bitwarden-desktop
     lazygit

@@ -1,4 +1,4 @@
-{pkgs, lib, config, ...}:
+{lib, config, ...}:
 {
   options = {
     sitter.enable = lib.mkEnableOption "Enable sitter nixvim plugin module";

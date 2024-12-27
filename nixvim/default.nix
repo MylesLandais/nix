@@ -24,6 +24,8 @@
     ./plugins/images
     ./plugins/presence
     ./plugins/blink
+    ./plugins/trouble
+    ./plugins/hot-reload
   ];
 
   options = {
@@ -49,5 +51,7 @@
     image.enable = lib.mkDefault true;
     presence.enable = lib.mkDefault true;
     blink.enable = lib.mkDefault true;
+    trouble.enable = lib.mkDefault true;
+    reload.enable = lib.mkDefault true;
   };
 }

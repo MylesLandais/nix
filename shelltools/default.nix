@@ -12,6 +12,7 @@
     ./fzf
     ./zoxide
     ./zsh
+    ./yazi
   ];
 
   options = {
@@ -25,5 +26,6 @@
     fzf.enable = lib.mkDefault true;
     zoxide.enable = lib.mkDefault true;
     zsh.enable = lib.mkDefault true;
+    yazi.enable = lib.mkDefault true;
   };
 }
