@@ -8,7 +8,7 @@
   config = lib.mkIf config.zoxide.enable {
     programs.zoxide = {
       enable = true;
-      enableZshIntegration = false;
+      enableZshIntegration = true;
     };
   };
 

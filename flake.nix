@@ -19,29 +19,33 @@
     };
   };
 
-  outputs = { home-manager,nixpkgs,hyprpanel,nixvim,tokyonight,... } @ inputs:
-  let
+  outputs = {
+    home-manager,
+    nixpkgs,
+    hyprpanel,
+    nixvim,
+    tokyonight,
+    ...
+  } @ inputs: let
     system = "x86_64-linux";
     username = "franky";
-  in
-  {
+  in {
     homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs { 
-         inherit system; 
-          overlays = [
-            inputs.hyprpanel.overlay
-          ];
-        };
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          inputs.hyprpanel.overlay
+        ];
+      };
 
       # pass inputs as specialArgs
-      extraSpecialArgs = { 
-          inherit inputs;
-          inherit system;
-
-        };
+      extraSpecialArgs = {
+        inherit inputs;
+        inherit system;
+      };
 
       # import your home.nix
-      modules = [ ./home.nix ];
+      modules = [./home.nix];
     };
   };
 }

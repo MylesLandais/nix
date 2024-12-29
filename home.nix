@@ -1,5 +1,10 @@
-{ pkgs, lib, config, inputs, ... }:
 {
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}: {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "franky";
@@ -8,21 +13,23 @@
 
   home.stateVersion = "24.11"; # Please read the comment before changing.
   imports = [
-  ./hypr.nix
-  ./prompt
-  ./nixvim
-  ./shelltools
-  ./devtooling
-  ./keymaps.nix
-  ./vimopts.nix
-  ./gtk
-  ./hyprpanel.nix
-   inputs.nixvim.homeManagerModules.nixvim
-   inputs.tokyonight.homeManagerModules.default
+    ./hypr.nix
+    ./prompt
+    ./nixvim
+    ./shelltools
+    ./devtooling
+    ./keymaps.nix
+    ./vimopts.nix
+    ./gtk
+    ./hyprpanel.nix
+    inputs.nixvim.homeManagerModules.nixvim
+    inputs.tokyonight.homeManagerModules.default
   ];
   # environment.
   home.packages = with pkgs; [
     hyprpanel
+    cavalier
+    alejandra
     markdown-oxide
     vhs
     ffmpeg
@@ -60,11 +67,11 @@
     tldr
   ];
   home.pointerCursor = {
-  gtk.enable = true;
-  package = pkgs.bibata-cursors;
-  name = "Bibata-Modern-Ice";
-  size = 22;
-};
+    gtk.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Ice";
+    size = 22;
+  };
   prompt.enable = true;
   devtooling.enable = true;
   shelltools.enable = true;
@@ -75,36 +82,35 @@
   programs.bat.tokyonight.enable = true;
   programs.git.delta.tokyonight.enable = true;
   programs.nixvim = {
-      enable = true;
-      defaultEditor = true;
-      luaLoader.enable = true;
+    enable = true;
+    defaultEditor = true;
+    luaLoader.enable = true;
     extraConfigLua = "require('go').setup()";
     extraPlugins = with pkgs.vimPlugins; [
       plenary-nvim
       go-nvim
       nvim-treesitter.withAllGrammars
     ];
-      plugins = {
-        nix = {
-          enable = true;
-        };
-        web-devicons = {
-          enable = true;
-        };
+    plugins = {
+      nix = {
+        enable = true;
       };
-      colorschemes = {
-        kanagawa = {
-	  enable = true;
-          settings = {
-            transparent = true;
-            theme  = "wave";
-        };
-	};
+      web-devicons = {
+        enable = true;
       };
     };
+    colorschemes = {
+      kanagawa = {
+        enable = true;
+        settings = {
+          transparent = true;
+          theme = "wave";
+        };
+      };
+    };
+  };
   nixvimcfg.enable = true;
   gtk-mod.enable = true;
-
 
   home.file = {
   };
@@ -115,5 +121,4 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-
-  }
+}

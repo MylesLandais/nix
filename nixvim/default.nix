@@ -50,7 +50,7 @@
     markdown-preview.enable = lib.mkDefault true;
     image.enable = lib.mkDefault true;
     presence.enable = lib.mkDefault true;
-    blink.enable = lib.mkDefault false;
+    blink.enable = lib.mkDefault true;
     trouble.enable = lib.mkDefault true;
     reload.enable = lib.mkDefault true;
   };

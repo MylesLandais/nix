@@ -7,9 +7,9 @@
   programs.nixvim.plugins = {
     lsp = {
       enable = true;
-        #capabilities = ''
-        # capabilities = require('blink.cmp').get_lsp_capabilities()
-        # '';
+        capabilities = ''
+         capabilities = require('blink.cmp').get_lsp_capabilities()
+         '';
       keymaps = {
         silent = true;
         diagnostic = {
@@ -41,7 +41,10 @@
             ];
           };
           tflint.enable = true;
-          nixd.enable = true;
+          nixd = {
+            enable = true;
+            settings.formatting.command = ["alejandra -qq"];
+          };
           ts_ls.enable = true;
           rust_analyzer = {
             enable = true;
