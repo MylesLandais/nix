@@ -53,6 +53,5 @@
     blink.enable = lib.mkDefault false;
     trouble.enable = lib.mkDefault true;
     reload.enable = lib.mkDefault true;
-    luasnip.enable = lib.mkDefault false;
   };
 }

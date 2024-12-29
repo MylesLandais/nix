@@ -22,6 +22,7 @@
   ];
   # environment.
   home.packages = with pkgs; [
+    hyprpanel
     markdown-oxide
     vhs
     ffmpeg
@@ -51,7 +52,6 @@
     bind
     ags
     libnotify
-    hyprpanel
     exercism
     bitwarden-cli
     coreutils

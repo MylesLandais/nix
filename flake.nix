@@ -15,18 +15,23 @@
     };
     hyprpanel = {
       url = "github:Jas-SinghFSU/HyprPanel";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { home-manager,nixpkgs, nixvim,tokyonight,hyprpanel,... } @ inputs:
+  outputs = { home-manager,nixpkgs,hyprpanel,nixvim,tokyonight,... } @ inputs:
   let
     system = "x86_64-linux";
     username = "franky";
   in
   {
     homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
-      pkgs = import nixpkgs { inherit system; 
-      };
+        pkgs = import nixpkgs { 
+         inherit system; 
+          overlays = [
+            inputs.hyprpanel.overlay
+          ];
+        };
 
       # pass inputs as specialArgs
       extraSpecialArgs = { 

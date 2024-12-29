@@ -1,12 +1,10 @@
 {inputs,...}:
 {
-  imports = [
-    inputs.hyprpanel.homeManagerModules.hyprpanel
-  ];
+  imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
   programs.hyprpanel = {
-    enable = true;
+    enable = false;
     systemd.enable = true;
-    overwritte.enable = false;
+    overwrite.enable = false;
     layout = {
       "bar.layouts" = {
         "0" = {
