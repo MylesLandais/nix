@@ -1,4 +1,4 @@
-{pkg, inputs, config,lib, ...}:
+{config,lib, ...}:
 {
   options = {
     blink.enable = lib.mkEnableOption "Enable blink nixvim plugin module";
@@ -16,8 +16,8 @@
             enable = true;
           };
         };
-        documentation = {
-          auto_show = true;
+        windows.documentation = {
+          auto_show = false;
         };
         keymap = {
           preset = "default";

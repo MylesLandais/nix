@@ -14,6 +14,7 @@
         indent.enable = true;
         highlight.enable = true;
         auto_install = false;
+        ensure_instaled = "all";
       };
     };
     treesitter-refactor = {

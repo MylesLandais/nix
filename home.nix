@@ -16,12 +16,16 @@
   ./keymaps.nix
   ./vimopts.nix
   ./gtk
+  ./hyprpanel.nix
    inputs.nixvim.homeManagerModules.nixvim
    inputs.tokyonight.homeManagerModules.default
   ];
   # environment.
   home.packages = with pkgs; [
+    markdown-oxide
     vhs
+    ffmpeg
+    ttyd
     vesktop
     bitwarden-desktop
     lazygit
@@ -78,6 +82,7 @@
     extraPlugins = with pkgs.vimPlugins; [
       plenary-nvim
       go-nvim
+      nvim-treesitter.withAllGrammars
     ];
       plugins = {
         nix = {
