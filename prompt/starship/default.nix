@@ -12,11 +12,12 @@
     programs.starship =
       let
         oxo = import ./oxocarbon.nix;
+        tokyonight = import ./tokyonight.nix;
       in
       {
         enable = true;
         enableZshIntegration = true;
-        settings = oxo;
+        settings = tokyonight;
       };
   };
 }
