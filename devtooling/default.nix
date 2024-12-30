@@ -2,11 +2,10 @@
   lib,
   config,
   ...
-}:
-{
+}: {
   imports = [
     ./git
-    ./gleam 
+    ./gleam
     ./go
     ./kubernetes
     ./lua

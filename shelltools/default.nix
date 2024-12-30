@@ -2,12 +2,11 @@
   lib,
   config,
   ...
-}:
-{
+}: {
   imports = [
     ./atuin
     ./bat
-    ./direnv 
+    ./direnv
     ./eza
     ./fzf
     ./zoxide

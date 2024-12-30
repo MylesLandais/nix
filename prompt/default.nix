@@ -2,8 +2,7 @@
   lib,
   config,
   ...
-}:
-{
+}: {
   imports = [
     ./starship
   ];
