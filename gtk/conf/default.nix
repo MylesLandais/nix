@@ -9,10 +9,13 @@
     gtk = {
       enable = true;
       iconTheme = {
-        name = "Tokyonight-Dark";
+        package = pkgs.kanagawa-icon-theme;
+        name = "Kanagawa";
       };
       theme = {
-        name =  "Tokyonight-Dark";
+        name =  "Kanagawa-B";
+        #package = pkgs.tokyonight-gtk-theme;
+        package = pkgs.kanagawa-gtk-theme;
       };
     };
  };

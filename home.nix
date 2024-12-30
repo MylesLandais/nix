@@ -28,6 +28,9 @@
   # environment.
   home.packages = with pkgs; [
     hyprpanel
+    sassc
+    gnome-themes-extra
+    gtk-engine-murrine
     cavalier
     alejandra
     markdown-oxide
@@ -64,6 +67,8 @@
     coreutils
     fd
     tokyonight-gtk-theme
+    kanagawa-gtk-theme
+    kanagawa-icon-theme
     tldr
   ];
   home.pointerCursor = {
@@ -77,7 +82,7 @@
   shelltools.enable = true;
   tokyonight = {
     style = "storm";
-    enable = true;
+    enable = false;
   };
   programs.bat.tokyonight.enable = true;
   programs.git.delta.tokyonight.enable = true;

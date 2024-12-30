@@ -13,11 +13,12 @@
       let
         oxo = import ./oxocarbon.nix;
         tokyonight = import ./tokyonight.nix;
+        kanagawa = import ./kanagawa.nix;
       in
       {
         enable = true;
         enableZshIntegration = true;
-        settings = tokyonight;
+        settings = kanagawa;
       };
   };
 }
