@@ -8,6 +8,12 @@
   config = lib.mkIf config.luasnip.enable {
   programs.nixvim.plugins.luasnip = {
     enable = true;
+    fromVscode = [
+        {
+          paths = "${pkgs.vimPlugins.friendly-snippets}";
+
+        }
+      ];
     settings = {
       enable_autosnippets = true;
       exit_roots = false;

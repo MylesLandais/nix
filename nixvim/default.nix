@@ -26,6 +26,7 @@
     ./plugins/blink
     ./plugins/trouble
     ./plugins/hot-reload
+    ./plugins/luasnip
   ];
 
   options = {
@@ -50,8 +51,9 @@
     markdown-preview.enable = lib.mkDefault true;
     image.enable = lib.mkDefault true;
     presence.enable = lib.mkDefault true;
-    blink.enable = lib.mkDefault true;
+    blink.enable = lib.mkDefault false;
     trouble.enable = lib.mkDefault true;
     reload.enable = lib.mkDefault true;
+    luasnip.enable = lib.mkDefault true;
   };
 }
