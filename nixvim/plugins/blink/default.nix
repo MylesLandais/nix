@@ -11,6 +11,14 @@
       keymap = {
         preset = "default";
         };
+        sources = {
+            default = [
+              "lsp"
+              "path"
+              "snippets"
+              "luasnip"
+            ];
+        };
       };
   };
  };

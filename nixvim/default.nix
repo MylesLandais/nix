@@ -37,7 +37,7 @@
     lualine.enable = lib.mkDefault true;
     telescope.enable = lib.mkDefault true;
     git_helpers.enable = lib.mkDefault true;
-    cmp.enable = lib.mkDefault true;
+    cmp.enable = lib.mkDefault false;
     lsp.enable = lib.mkDefault true;
     lint.enable = lib.mkDefault true;
     harpoon.enable = lib.mkDefault true;
@@ -50,7 +50,7 @@
     markdown-preview.enable = lib.mkDefault true;
     image.enable = lib.mkDefault true;
     presence.enable = lib.mkDefault true;
-    blink.enable = lib.mkDefault false;
+    blink.enable = lib.mkDefault true;
     trouble.enable = lib.mkDefault true;
     reload.enable = lib.mkDefault true;
     luasnip.enable = lib.mkDefault true;
