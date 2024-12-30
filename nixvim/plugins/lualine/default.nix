@@ -10,6 +10,9 @@
     enable = true;
     settings = {
       extensions = [ "fzf" ];
+      options = {
+        theme = "kanagawa";
+        };
       globalstatus = true;
 
       # +-------------------------------------------------+

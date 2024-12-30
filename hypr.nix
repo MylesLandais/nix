@@ -5,10 +5,10 @@
     settings = {
       ipc = "on";
       splash = false;
-      preload = ["/home/franky/wallpapers/wall-01.png"];
+      preload = ["/home/franky/wallpapers/sunset_kanagawa-dragon.jpg"];
       wallpaper = [
-        "DP-4,/home/franky/wallpapers/wall-01.png"
-        "HDMI-A-2,/home/franky/wallpapers/wall-01.png"
+        "DP-4,/home/franky/wallpapers/sunset_kanagawa-dragon.jpg"
+        "HDMI-A-2,/home/franky/wallpapers/sunset_kanagawa-dragon.jpg"
       ];
     };
   };

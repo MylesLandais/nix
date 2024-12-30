@@ -118,6 +118,11 @@
   gtk-mod.enable = true;
 
   home.file = {
+    "${config.xdg.configHome}/ghostty/config".text = ''
+      theme = "Kanagawa Wave"
+      background-opacity = 0.9
+      window-decoration = false
+      '';
   };
 
   home.sessionVariables = {
