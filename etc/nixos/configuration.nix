@@ -16,6 +16,10 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelParams = [
+    "pci=nomsi"
+    "clearcpuid=514"
+  ];
 
   # network config
 
@@ -38,15 +42,43 @@
   # };
 
   # Enable the X11 windowing system.
+  services.prometheus = {
+    exporters = {
+      node = {
+        enable = true;
+        openFirewall = true;
+        enabledCollectors = [
+          "systemd"
+          "logind"
+        ];
+      };
+      nvidia-gpu = {
+        enable = true;
+        openFirewall = true;
+      };
+    };
+
+  };
   services.xserver.videoDrivers = ["nvidia"];
+  hardware.graphics = {
+    enable = true; 
+    extraPackages = with pkgs; [ 
+      mesa.drivers
+      nvidia-vaapi-driver
+  ]; 
+    enable32Bit = true;
+  };
+
   hardware.nvidia = {
     modesetting.enable = true;
-    open = false;
+    open = true;
     powerManagement.enable = false;
     powerManagement.finegrained = false;
     nvidiaSettings = true;
-
+    #package = config.boot.kernelPackages.nvidiaPackages.beta;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
+
   virtualisation.docker.enable = true;
   services.xserver.enable = true;
   services.blueman.enable = true;
@@ -81,6 +113,7 @@
   programs.steam.enable = true;
   programs.hyprland.enable = true;
   programs.hyprland.xwayland.enable = true;
+
   security.rtkit.enable = true;
   fonts.packages = with pkgs; [
    nerd-fonts.hack
@@ -132,7 +165,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = [
-    inputs.zen-browser.packages."x86_64-linux".specific
+    inputs.zen-browser.packages."x86_64-linux".default
   #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #   wget
    ];

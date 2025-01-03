@@ -10,6 +10,9 @@
   home.username = "franky";
   home.enableNixpkgsReleaseCheck = false;
   home.homeDirectory = "/home/franky";
+  nixpkgs.config = {
+    allowUnfree = true; 
+  };
 
   home.stateVersion = "24.11"; # Please read the comment before changing.
   imports = [
@@ -35,6 +38,8 @@
     alejandra
     markdown-oxide
     vhs
+    virtualgl
+    vulkan-tools
     ffmpeg
     ttyd
     vesktop
@@ -70,6 +75,9 @@
     kanagawa-gtk-theme
     kanagawa-icon-theme
     tldr
+    btop
+    nvtop
+    gamemode
   ];
   home.pointerCursor = {
     gtk.enable = true;
