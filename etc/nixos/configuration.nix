@@ -19,6 +19,7 @@
   boot.kernelParams = [
     "pci=nomsi"
     "clearcpuid=514"
+    "nvidia_drm.fbdev=1"
   ];
 
   # network config
@@ -57,7 +58,41 @@
         openFirewall = true;
       };
     };
-
+  };
+  services.promtail = {
+    enable = true;
+    configuration = {
+      server = {
+        http_listen_port = 3101;
+        grpc_listen_port = 0;
+      };
+      positions = {
+        filename = "/tmp/positions.yaml";
+      };
+      clients = [
+        {
+          url = "https://loki.pik8s.universe.home/loki/api/v1/push";
+          tls_config = {
+            insecure_skip_verify = true;
+          };
+        }
+      ];
+      scrape_configs = [
+        {
+        job_name = "journal";
+        journal = {
+          max_age = "12h";
+          labels = {
+            job = "systemd-journal";
+            host = "kraken";
+          };
+        };
+        relabel_configs = [{
+          source_labels = [ "__journal__systemd_unit" ];
+          target_label = "unit";
+        }];
+      }];
+    };
   };
   services.xserver.videoDrivers = ["nvidia"];
   hardware.graphics = {
@@ -75,8 +110,8 @@
     powerManagement.enable = false;
     powerManagement.finegrained = false;
     nvidiaSettings = true;
-    #package = config.boot.kernelPackages.nvidiaPackages.beta;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
+    #package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
   virtualisation.docker.enable = true;
