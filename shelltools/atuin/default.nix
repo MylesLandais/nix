@@ -1,6 +1,8 @@
-{lib, config, ...}:
 {
-
+  lib,
+  config,
+  ...
+}: {
   options = {
     atuin.enable = lib.mkEnableOption "Enable atuin module";
   };
@@ -22,7 +24,5 @@
         history_filter = ["^ "];
       };
     };
-
   };
-
 }

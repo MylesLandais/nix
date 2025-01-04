@@ -1,5 +1,8 @@
-{lib, config, ...}:
 {
+  lib,
+  config,
+  ...
+}: {
   options = {
     cmp.enable = lib.mkEnableOption "Enable cmp nixvim plugins module";
   };
@@ -28,7 +31,7 @@
             };
           };
         };
-        
+
         cmp = {
           enable = true;
           autoEnableSources = true;
@@ -57,7 +60,7 @@
             ];
           };
         };
+      };
     };
   };
- };
 }

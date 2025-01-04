@@ -11,7 +11,7 @@
   home.enableNixpkgsReleaseCheck = false;
   home.homeDirectory = "/home/franky";
   nixpkgs.config = {
-    allowUnfree = true; 
+    allowUnfree = true;
   };
 
   home.stateVersion = "24.11"; # Please read the comment before changing.
@@ -130,7 +130,7 @@
       theme = "Kanagawa Wave"
       background-opacity = 0.9
       window-decoration = false
-      '';
+    '';
   };
 
   home.sessionVariables = {

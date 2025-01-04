@@ -1,6 +1,9 @@
-
-{pkgs,lib,config, ...}:
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     tmux.enable = lib.mkEnableOption "Enable tmux module";
   };
@@ -29,9 +32,7 @@
         set -g @continuum-restore "on"
         set -g @continuum-boot "on"
         set -g @continuum-save-interval "10"
-        '';
-
+      '';
     };
   };
-
 }

@@ -1,32 +1,35 @@
-{lib, config, ...}:
 {
+  lib,
+  config,
+  ...
+}: {
   options = {
     lsp.enable = lib.mkEnableOption "Enable lsp nixvim plugins module";
   };
   config = lib.mkIf config.lsp.enable {
-  programs.nixvim.plugins = {
-    lsp = {
-      enable = true;
+    programs.nixvim.plugins = {
+      lsp = {
+        enable = true;
         capabilities = ''
-        capabilities = require('blink.cmp').get_lsp_capabilities()
+          capabilities = require('blink.cmp').get_lsp_capabilities()
         '';
-      keymaps = {
-        silent = true;
-        diagnostic = {
-          # Navigate in diagnostics
-          "<leader>k" = "goto_prev";
-          "<leader>j" = "goto_next";
+        keymaps = {
+          silent = true;
+          diagnostic = {
+            # Navigate in diagnostics
+            "<leader>k" = "goto_prev";
+            "<leader>j" = "goto_next";
+          };
+          lspBuf = {
+            gd = "definition";
+            gD = "references";
+            gt = "type_definition";
+            gi = "implementation";
+            K = "hover";
+            grn = "rename";
+          };
         };
-        lspBuf = {
-          gd = "definition";
-          gD = "references";
-          gt = "type_definition";
-          gi = "implementation";
-          K = "hover";
-          grn = "rename";
-        };
-      };
-       servers = {
+        servers = {
           gopls.enable = true;
           golangci_lint_ls.enable = false;
           lua_ls.enable = true;
@@ -52,8 +55,8 @@
             installCargo = false;
           };
           terraform_lsp.enable = true;
-       };
+        };
+      };
+    };
   };
-};
-};
 }

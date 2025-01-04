@@ -1,25 +1,28 @@
-{ config,lib, ...}:
 {
+  config,
+  lib,
+  ...
+}: {
   options = {
     blink.enable = lib.mkEnableOption "Enable blink nixvim plugin module";
   };
 
   config = lib.mkIf config.blink.enable {
-  programs.nixvim.plugins.blink-cmp = {
-    enable = true;
-    settings = {
-      keymap = {
-        preset = "default";
+    programs.nixvim.plugins.blink-cmp = {
+      enable = true;
+      settings = {
+        keymap = {
+          preset = "default";
         };
         sources = {
-            default = [
-              "lsp"
-              "path"
-              "snippets"
-              "luasnip"
-            ];
+          default = [
+            "lsp"
+            "path"
+            "snippets"
+            "luasnip"
+          ];
         };
       };
+    };
   };
- };
 }

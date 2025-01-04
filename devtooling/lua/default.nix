@@ -1,6 +1,9 @@
-
-{pkgs,lib,config, ...}:
 {
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     lua.enable = lib.mkEnableOption "Enable lua module";
   };
@@ -9,5 +12,4 @@
       lua-language-server
     ];
   };
-
 }

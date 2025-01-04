@@ -1,6 +1,9 @@
-{pkgs, lib, config, ...}:
 {
-
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     bat.enable = lib.mkEnableOption "Enable bat module";
   };
@@ -14,7 +17,5 @@
         prettybat
       ];
     };
-
   };
-
 }

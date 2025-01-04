@@ -62,7 +62,6 @@
     format = "[$symbol$context( ($namespace))]($style) in ";
     style = "bold #393939";
     symbol = "⚓ ";
-
   };
 
   cmd_duration = {

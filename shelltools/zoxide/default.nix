@@ -1,6 +1,9 @@
-{pkgs, lib, config, ...}:
 {
-
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     zoxide.enable = lib.mkEnableOption "Enable zoxide module";
   };
@@ -11,6 +14,4 @@
       enableZshIntegration = true;
     };
   };
-
 }
-

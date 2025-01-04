@@ -1,6 +1,9 @@
-{pkgs, lib, config, ...}:
 {
-
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     git.enable = lib.mkEnableOption "Enable git module";
   };
@@ -12,7 +15,5 @@
       userName = "FKouhai";
       userEmail = "frandres00@gmail.com";
     };
-
   };
-
 }

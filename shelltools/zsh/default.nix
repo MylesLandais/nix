@@ -1,6 +1,9 @@
-{pkgs, lib, config, ...}:
 {
-
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     zsh.enable = lib.mkEnableOption "Enable zsh module";
   };
@@ -14,16 +17,16 @@
       dotDir = ".config/zsh";
       syntaxHighlighting.enable = true;
       initExtra = ''
-          source <(kubectl completion zsh)
-          zvm_after_init_commands+=(eval "$(atuin init zsh --disable-up-arrow)")
-          '';
+        source <(kubectl completion zsh)
+        zvm_after_init_commands+=(eval "$(atuin init zsh --disable-up-arrow)")
+      '';
       plugins = [
-      {
-        name = "vi-mode";
-        src = pkgs.zsh-vi-mode;
-        file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
-      }
-    ];
+        {
+          name = "vi-mode";
+          src = pkgs.zsh-vi-mode;
+          file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
+        }
+      ];
 
       shellAliases = {
         ll = "eza --icons --git --git-ignore --git -F -l";
@@ -37,9 +40,6 @@
         ignoreSpace = true;
         save = 10000;
       };
-
     };
   };
-
 }
-

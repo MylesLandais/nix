@@ -62,15 +62,13 @@
     format = "[$symbol$context( ($namespace))]($style) in ";
     style = "bold #3d59a1";
     symbol = "󱃾 ";
-
   };
   direnv = {
     description = "Show '.envrc' when using a direnv environment";
     when = ''[ "$DIRENV_DIR" != "" ] && [ "$IN_NIX_SHELL" != "" ]'';
-    shell = [ "bash" "--noprofile" "--norc" ];
+    shell = ["bash" "--noprofile" "--norc"];
     style = "italic #ffc777";
     format = "[via](italic #586068) [.envrc]($style)";
-
   };
 
   cmd_duration = {

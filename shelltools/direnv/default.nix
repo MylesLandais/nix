@@ -1,6 +1,9 @@
-{pkgs, lib, config, ...}:
 {
-
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     direnv.enable = lib.mkEnableOption "Enable direnv module";
   };
@@ -11,7 +14,5 @@
       package = pkgs.direnv;
       enableZshIntegration = true;
     };
-
   };
-
 }

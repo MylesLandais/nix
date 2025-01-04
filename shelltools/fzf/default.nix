@@ -1,6 +1,9 @@
-{pkgs, lib, config, ...}:
 {
-
+  pkgs,
+  lib,
+  config,
+  ...
+}: {
   options = {
     fzf.enable = lib.mkEnableOption "Enable fzf module";
   };
@@ -11,6 +14,4 @@
       enableZshIntegration = false;
     };
   };
-
 }
-

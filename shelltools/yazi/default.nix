@@ -1,5 +1,8 @@
-{ config, lib, ... }:
 {
+  config,
+  lib,
+  ...
+}: {
   options = {
     yazi.enable = lib.mkEnableOption "Enable yazi module";
   };
@@ -18,7 +21,5 @@
         sort_sensitive = false;
       };
     };
-
   };
-
 }
