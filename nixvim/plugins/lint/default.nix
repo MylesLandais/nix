@@ -13,8 +13,7 @@
       lint = {
         enable = true;
         lintersByFt = {
-          text = ["vale"];
-          markdown = ["vale"];
+          text = ["value"];
           dockerfile = ["hadolint"];
           terraform = ["tflint"];
           go = ["golangcilint"];

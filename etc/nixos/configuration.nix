@@ -1,20 +1,16 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
+
+{ config, lib, pkgs,inputs,extra-types, ... }:
+
 {
-  config,
-  lib,
-  pkgs,
-  inputs,
-  extra-types,
-  ...
-}: {
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    ./udev.nix
-    #<home-manager/nixos>
-  ];
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+      ./udev.nix
+      #<home-manager/nixos>
+    ];
 
   # systemd-boot
   boot.loader.systemd-boot.enable = true;
@@ -33,7 +29,7 @@
   networking.nameservers = ["192.168.0.2" "192.168.0.1"];
   nix.settings.experimental-features = ["nix-command" "flakes"];
   nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
-  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Europe/Madrid";
@@ -83,31 +79,28 @@
       ];
       scrape_configs = [
         {
-          job_name = "journal";
-          journal = {
-            max_age = "12h";
-            labels = {
-              job = "systemd-journal";
-              host = "kraken";
-            };
+        job_name = "journal";
+        journal = {
+          max_age = "12h";
+          labels = {
+            job = "systemd-journal";
+            host = "kraken";
           };
-          relabel_configs = [
-            {
-              source_labels = ["__journal__systemd_unit"];
-              target_label = "unit";
-            }
-          ];
-        }
-      ];
+        };
+        relabel_configs = [{
+          source_labels = [ "__journal__systemd_unit" ];
+          target_label = "unit";
+        }];
+      }];
     };
   };
   services.xserver.videoDrivers = ["nvidia"];
   hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
+    enable = true; 
+    extraPackages = with pkgs; [ 
       mesa.drivers
       nvidia-vaapi-driver
-    ];
+  ]; 
     enable32Bit = true;
   };
 
@@ -125,19 +118,20 @@
   services.xserver.enable = true;
   services.blueman.enable = true;
   services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
+   layout = "us";
+   variant = "";
+};
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-  };
+
+};
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
-    sugarCandyNix = {
+    sugarCandyNix ={
       enable = true;
       settings = {
         Background = lib.cleanSource ./wp2.jpg;
@@ -148,7 +142,7 @@
         PartialBlur = true;
       };
     };
-  };
+};
   programs.zsh.enable = true;
   programs.firefox.enable = true;
   programs.steam.enable = true;
@@ -157,19 +151,22 @@
 
   security.rtkit.enable = true;
   fonts.packages = with pkgs; [
-    nerd-fonts.hack
-  ];
+   nerd-fonts.hack
+];
   users.defaultUserShell = pkgs.zsh;
   users.users.franky = {
-    isNormalUser = true;
-    description = "franky";
-    extraGroups = ["networkmanager" "wheel" "docker"];
-    packages = with pkgs; [
-      nixfmt-rfc-style
-      nixd
-    ];
-  };
+   isNormalUser = true;
+   description = "franky";
+   extraGroups = ["networkmanager" "wheel" "docker"];
+   packages = with pkgs; [
+     nixfmt-rfc-style
+     nixd
+   ];
+};
   nixpkgs.config.allowUnfree = true;
+
+
+  
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -204,9 +201,9 @@
   # $ nix search wget
   environment.systemPackages = [
     inputs.zen-browser.packages."x86_64-linux".default
-    #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #   wget
-  ];
+  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  #   wget
+   ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -250,4 +247,6 @@
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "24.11"; # Did you read the comment?
+
 }
+

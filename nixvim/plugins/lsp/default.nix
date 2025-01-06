@@ -11,7 +11,7 @@
       lsp = {
         enable = true;
         capabilities = ''
-          capabilities = require('blink.cmp').get_lsp_capabilities()
+         capabilities = require('blink.cmp').get_lsp_capabilities()
         '';
         keymaps = {
           silent = true;

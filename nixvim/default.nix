@@ -42,7 +42,7 @@
     lint.enable = lib.mkDefault true;
     harpoon.enable = lib.mkDefault true;
     dashboard.enable = lib.mkDefault true;
-    sitter.enable = lib.mkDefault true;
+    sitter.enable = lib.mkDefault false;
     telekasten.enable = lib.mkDefault true;
     toggleterm.enable = lib.mkDefault true;
     clipboard-image.enable = lib.mkDefault true;
