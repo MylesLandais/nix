@@ -31,6 +31,8 @@
   # environment.
   home.packages = with pkgs; [
     hyprpanel
+    pulseaudio-ctl
+    pulseaudio
     sassc
     gnome-themes-extra
     gtk-engine-murrine

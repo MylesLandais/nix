@@ -13,6 +13,7 @@
       enable = true;
       fromVscode = [
         {
+          lazyLoad= true;
           paths = "${pkgs.vimPlugins.friendly-snippets}";
         }
       ];
@@ -21,10 +22,6 @@
         exit_roots = false;
         link_roots = true;
         keep_roots = true;
-        update_events = [
-          "TextChanged"
-          "TextChangedI"
-        ];
       };
     };
   };

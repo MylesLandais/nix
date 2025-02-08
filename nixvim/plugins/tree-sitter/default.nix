@@ -21,13 +21,13 @@
         };
       };
       treesitter-refactor = {
-        enable = true;
+        enable = false;
         highlightDefinitions = {
           enable = true;
           clearOnCursorMove = false;
         };
       };
-      hmts.enable = true;
+      hmts.enable = false;
     };
   };
 }
