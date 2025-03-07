@@ -19,33 +19,37 @@
     };
   };
 
-  outputs = {
-    home-manager,
-    nixpkgs,
-    hyprpanel,
-    nixvim,
-    tokyonight,
-    ...
-  } @ inputs: let
-    system = "x86_64-linux";
-    username = "franky";
-  in {
-    homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          inputs.hyprpanel.overlay
-        ];
-      };
+  outputs =
+    {
+      self,
+      home-manager,
+      nixpkgs,
+      hyprpanel,
+      nixvim,
+      tokyonight,
+      ...
+    }@inputs:
+    let
+      system = "x86_64-linux";
+      username = "franky";
+    in
+    {
+      homeConfigurations."${username}" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            inputs.hyprpanel.overlay
+          ];
+        };
 
-      # pass inputs as specialArgs
-      extraSpecialArgs = {
-        inherit inputs;
-        inherit system;
-      };
+        # pass inputs as specialArgs
+        extraSpecialArgs = {
+          inherit inputs;
+          inherit system;
+        };
 
-      # import your home.nix
-      modules = [./home.nix];
+        # import your home.nix
+        modules = [ ./home.nix ];
+      };
     };
-  };
 }

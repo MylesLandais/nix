@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     dashboard.enable = lib.mkEnableOption "Enable dashboard nixvim plugin module";
   };

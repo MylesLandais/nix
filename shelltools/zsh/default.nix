@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     zsh.enable = lib.mkEnableOption "Enable zsh module";
   };
@@ -31,6 +32,7 @@
       shellAliases = {
         ll = "eza --icons --git --git-ignore --git -F -l";
         cat = "bat";
+        ns = "nix-search-tv print | fzf --preview 'nix-search-tv preview {}' --scheme history";
         hms = "home-manager switch";
         k = "kubectl";
         update = "sudo nixos-rebuild switch";

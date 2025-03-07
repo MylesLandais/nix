@@ -1,5 +1,6 @@
-{inputs, ...}: {
-  imports = [inputs.hyprpanel.homeManagerModules.hyprpanel];
+{ inputs, ... }:
+{
+  imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
   programs.hyprpanel = {
     enable = false;
     systemd.enable = true;
@@ -7,14 +8,28 @@
     layout = {
       "bar.layouts" = {
         "0" = {
-          left = ["dashboard" "workspaces"];
-          middle = ["media"];
-          right = ["volume" "systray" "notifications"];
+          left = [
+            "dashboard"
+            "workspaces"
+          ];
+          middle = [ "media" ];
+          right = [
+            "volume"
+            "systray"
+            "notifications"
+          ];
         };
         "1" = {
-          left = ["dashboard" "workspaces"];
-          middle = ["media"];
-          right = ["volume" "systray" "notifications"];
+          left = [
+            "dashboard"
+            "workspaces"
+          ];
+          middle = [ "media" ];
+          right = [
+            "volume"
+            "systray"
+            "notifications"
+          ];
         };
       };
     };

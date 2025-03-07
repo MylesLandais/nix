@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     oil.enable = lib.mkEnableOption "Enable oil nixvim plugin module";
   };

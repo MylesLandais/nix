@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     telekasten.enable = lib.mkEnableOption "Enable telekasten nixvim plugin module";
   };

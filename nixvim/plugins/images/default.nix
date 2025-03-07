@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     image.enable = lib.mkEnableOption "Enable image nixvim plugin module";
   };

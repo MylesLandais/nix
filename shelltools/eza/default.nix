@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     eza.enable = lib.mkEnableOption "Enable eza module";
   };

@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     luasnip.enable = lib.mkEnableOption "Enable luasnip nixvim plugin module";
   };
@@ -13,7 +14,7 @@
       enable = true;
       fromVscode = [
         {
-          lazyLoad= true;
+          lazyLoad = true;
           paths = "${pkgs.vimPlugins.friendly-snippets}";
         }
       ];

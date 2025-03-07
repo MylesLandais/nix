@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     clipboard-image.enable = lib.mkEnableOption "Enable clipboard-image nixvim plugin module";
   };

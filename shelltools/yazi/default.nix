@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     yazi.enable = lib.mkEnableOption "Enable yazi module";
   };

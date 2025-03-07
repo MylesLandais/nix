@@ -1,11 +1,12 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   services.hyprpaper = {
     enable = true;
     package = pkgs.hyprpaper;
     settings = {
       ipc = "on";
       splash = false;
-      preload = ["/home/franky/wallpapers/sunset_kanagawa-dragon.jpg"];
+      preload = [ "/home/franky/wallpapers/sunset_kanagawa-dragon.jpg" ];
       wallpaper = [
         "DP-4,/home/franky/wallpapers/sunset_kanagawa-dragon.jpg"
         "HDMI-A-2,/home/franky/wallpapers/sunset_kanagawa-dragon.jpg"
@@ -99,16 +100,17 @@
         "$mod SHIFT, R, exec, wlogout"
         "$mod, D, exec, vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto "
       ]
-      ++ (
-        builtins.concatLists (builtins.genList (
-            i: let
-              ws = i + 1;
-            in [
-              "$mod, code:1${toString i},workspace, ${toString ws}"
-              "$mod SHIFT, code:1${toString i},movetoworkspace, ${toString ws}"
-            ]
-          )
-          9)
-      );
+      ++ (builtins.concatLists (
+        builtins.genList (
+          i:
+          let
+            ws = i + 1;
+          in
+          [
+            "$mod, code:1${toString i},workspace, ${toString ws}"
+            "$mod SHIFT, code:1${toString i},movetoworkspace, ${toString ws}"
+          ]
+        ) 9
+      ));
   };
 }

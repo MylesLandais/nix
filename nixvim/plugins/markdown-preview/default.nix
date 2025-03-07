@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     markdown-preview.enable = lib.mkEnableOption "Enable markdown-preview nixvim plugin module";
   };

@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     packer.enable = lib.mkEnableOption "Enable packer nixvim plugin module";
   };

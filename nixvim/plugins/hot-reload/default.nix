@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     reload.enable = lib.mkEnableOption "Enable hot reload nixvim plugin module";
   };

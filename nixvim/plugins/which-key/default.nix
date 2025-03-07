@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     which-key.enable = lib.mkEnableOption "Enable which-key nixvim plugin module";
   };

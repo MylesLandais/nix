@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     git_helpers.enable = lib.mkEnableOption "Enable git nixvim plugins module";
   };

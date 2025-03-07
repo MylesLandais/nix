@@ -2,17 +2,25 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     lsp.enable = lib.mkEnableOption "Enable lsp nixvim plugins module";
   };
   config = lib.mkIf config.lsp.enable {
     programs.nixvim.plugins = {
+      lsp-format = {
+        enable = true;
+        lspServersToEnable = [
+          "gopls"
+          "nixd"
+        ];
+      };
       lsp = {
         enable = true;
-        capabilities = ''
-         capabilities = require('blink.cmp').get_lsp_capabilities()
-        '';
+        #capabilities = ''
+        #capabilities = require('blink.cmp').get_lsp_capabilities()
+        #'';
         keymaps = {
           silent = true;
           diagnostic = {
@@ -33,7 +41,6 @@
           gopls.enable = true;
           golangci_lint_ls.enable = false;
           lua_ls.enable = true;
-          nil_ls.enable = true;
           gleam.enable = true;
           marksman.enable = false;
           markdown_oxide = {
@@ -46,9 +53,12 @@
           tflint.enable = true;
           nixd = {
             enable = true;
-            settings.formatting.command = ["alejandra -qq"];
+            settings.formatting.command = [ "nixfmt" ];
           };
           ts_ls.enable = true;
+          elixirls = {
+            enable = true;
+          };
           rust_analyzer = {
             enable = true;
             installRustc = false;

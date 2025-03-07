@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     lint.enable = lib.mkEnableOption "Enable lint nixvim plugin module";
   };
@@ -13,10 +14,10 @@
       lint = {
         enable = true;
         lintersByFt = {
-          text = ["value"];
-          dockerfile = ["hadolint"];
-          terraform = ["tflint"];
-          go = ["golangcilint"];
+          text = [ "value" ];
+          dockerfile = [ "hadolint" ];
+          terraform = [ "tflint" ];
+          go = [ "golangcilint" ];
         };
       };
     };

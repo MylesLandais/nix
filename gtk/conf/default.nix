@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     gtk-conf.enable = lib.mkEnableOption "Enable gtk module";
   };

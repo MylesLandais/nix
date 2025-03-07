@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     presence.enable = lib.mkEnableOption "Enable presence nixvim plugin module";
   };

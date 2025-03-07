@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     go.enable = lib.mkEnableOption "Enable go module";
   };

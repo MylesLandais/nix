@@ -4,7 +4,8 @@
   config,
   inputs,
   ...
-}: {
+}:
+{
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "franky";
@@ -42,6 +43,7 @@
     vhs
     virtualgl
     vulkan-tools
+    nix-search-tv
     ffmpeg
     ttyd
     vesktop
@@ -70,7 +72,6 @@
     ags
     libnotify
     exercism
-    bitwarden-cli
     coreutils
     fd
     tokyonight-gtk-theme
@@ -80,6 +81,8 @@
     btop
     nvtop
     gamemode
+    hubble
+    brave
   ];
   home.pointerCursor = {
     gtk.enable = true;
@@ -107,9 +110,6 @@
       nvim-treesitter.withAllGrammars
     ];
     plugins = {
-      nix = {
-        enable = true;
-      };
       web-devicons = {
         enable = true;
       };
