@@ -7,7 +7,7 @@
     $directory$character
   '';
   # format = "$symbol[󰉊 ](bold #ee5396) $directory$character
-  right_format = "$cmd_duration$time";
+  right_format = "$cmd_duration$time$nix_shell";
   character = {
     success_symbol = "[󰅂 ](bold #658594)";
     error_symbol = "[󰅂 ](bold #E82424)";
@@ -53,8 +53,8 @@
   nix_shell = {
     disabled = false;
     heuristic = false;
-    impure_msg = "[impure-shell](red)";
-    pure_msg = "[pure-shell](green)";
+    impure_msg = "[impure-shell](red)";
+    pure_msg = "[pure-shell](green)";
     unknown_msg = "[unknown-shell](yellow)";
   };
   kubernetes = {

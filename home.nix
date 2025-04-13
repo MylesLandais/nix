@@ -4,8 +4,7 @@
   config,
   inputs,
   ...
-}:
-{
+}: {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "franky";
@@ -25,7 +24,7 @@
     ./keymaps.nix
     ./vimopts.nix
     ./gtk
-    ./hyprpanel.nix
+    #./hyprpanel.nix
     inputs.nixvim.homeManagerModules.nixvim
     inputs.tokyonight.homeManagerModules.default
   ];
@@ -79,10 +78,15 @@
     kanagawa-icon-theme
     tldr
     btop
-    nvtop
+    nvtopPackages.nvidia
     gamemode
     hubble
     brave
+    telegram-desktop
+    statping-ng
+    revive
+    terraform-ls
+    tflint
   ];
   home.pointerCursor = {
     gtk.enable = true;
@@ -93,16 +97,12 @@
   prompt.enable = true;
   devtooling.enable = true;
   shelltools.enable = true;
-  tokyonight = {
-    style = "storm";
-    enable = false;
-  };
   programs.bat.tokyonight.enable = true;
-  programs.git.delta.tokyonight.enable = true;
+  programs.git.delta.tokyonight.enable = false;
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
-    luaLoader.enable = true;
+    luaLoader.enable = false;
     extraConfigLua = "require('go').setup()";
     extraPlugins = with pkgs.vimPlugins; [
       plenary-nvim
@@ -118,7 +118,7 @@
       kanagawa = {
         enable = true;
         settings = {
-          transparent = true;
+          transparent = false;
           theme = "wave";
         };
       };
