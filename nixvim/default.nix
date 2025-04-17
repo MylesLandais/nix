@@ -2,8 +2,7 @@
   lib,
   config,
   ...
-}:
-{
+}: {
   imports = [
     ./plugins/lualine
     ./plugins/packer
@@ -27,6 +26,7 @@
     ./plugins/trouble
     ./plugins/hot-reload
     ./plugins/luasnip
+    ./plugins/code_companion
   ];
 
   options = {
@@ -55,5 +55,6 @@
     trouble.enable = lib.mkDefault true;
     reload.enable = lib.mkDefault true;
     luasnip.enable = lib.mkDefault true;
+    companion.enable = lib.mkDefault true;
   };
 }

@@ -2,9 +2,9 @@
   pkgs,
   lib,
   config,
+  rust,
   ...
-}:
-{
+}: {
   options = {
     rust.enable = lib.mkEnableOption "Enable rust module";
   };

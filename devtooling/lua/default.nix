@@ -3,8 +3,7 @@
   lib,
   config,
   ...
-}:
-{
+}: {
   options = {
     lua.enable = lib.mkEnableOption "Enable lua module";
   };

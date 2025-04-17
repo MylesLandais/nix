@@ -5,8 +5,7 @@
   inputs,
   extra-types,
   ...
-}:
-{
+}: {
   services.udev = {
     enable = true;
     extraRules = ''
@@ -153,7 +152,5 @@
       # Performance Designed Products Victrix Pro FS-12 for PS4 & PS5
       KERNEL=="hidraw*", ATTRS{idVendor}=="0e6f", ATTRS{idProduct}=="020c", MODE="0660", TAG+="uaccess"
     '';
-
   };
-
 }

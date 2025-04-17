@@ -1,7 +1,6 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 {
   config,
   lib,
@@ -9,17 +8,15 @@
   inputs,
   extra-types,
   ...
-}:
-
-{
+}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./ollama.nix
     ./udev.nix
     #<home-manager/nixos>
   ];
 
-  # systemd-boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -32,16 +29,10 @@
   # network config
 
   networking.hostName = "kraken"; # Define your hostname.
-  networking.search = [ "universe.home" ];
-  networking.nameservers = [
-    "192.168.0.2"
-    "192.168.0.1"
-  ];
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  networking.search = ["universe.home"];
+  networking.nameservers = ["192.168.0.2" "192.168.0.1"];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+  #nix.nixPath = ["nixpkgs=${nixpkgs}"];
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
@@ -49,13 +40,64 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
-
-  # Enable the X11 windowing system.
+  services.opentelemetry-collector = {
+    enable = true;
+    package = pkgs.opentelemetry-collector-contrib;
+    settings = {
+      receivers = {
+        hostmetrics = {
+          collection_interval = "60s";
+          scrapers = {
+            cpu = {};
+            disk = {};
+            load = {};
+            filesystem = {};
+            memory = {};
+            network = {};
+          };
+        };
+      };
+      processors = {
+        resourcedetection = {
+          detectors = ["env" "system"];
+          system = {
+            hostname_sources = "os";
+          };
+        };
+      };
+      extensions = {
+        zpages = {};
+        health_check = {};
+      };
+      exporters = {
+        otlphttp = {
+          endpoint = "https://otelcollector.universe.home:443";
+          tls = {
+            insecure = false;
+            insecure_skip_verify = true;
+          };
+        };
+      };
+      service = {
+        telemetry = {
+          metrics = {
+            address = "0.0.0.0:8888";
+          };
+        };
+        extensions = [
+          "zpages"
+          "health_check"
+        ];
+        pipelines = {
+          "metrics/hostmetrics" = {
+            receivers = ["hostmetrics"];
+            processors = ["resourcedetection"];
+            exporters = ["otlphttp"];
+          };
+        };
+      };
+    };
+  };
   services.prometheus = {
     exporters = {
       node = {
@@ -102,7 +144,7 @@
           };
           relabel_configs = [
             {
-              source_labels = [ "__journal__systemd_unit" ];
+              source_labels = ["__journal__systemd_unit"];
               target_label = "unit";
             }
           ];
@@ -110,7 +152,11 @@
       ];
     };
   };
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "client";
+  };
+  services.xserver.videoDrivers = ["nvidia"];
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
@@ -127,7 +173,6 @@
     powerManagement.finegrained = false;
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.beta;
-    #package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
   virtualisation.docker.enable = true;
@@ -142,7 +187,6 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-
   };
   services.displayManager.sddm = {
     enable = true;
@@ -173,96 +217,21 @@
   users.users.franky = {
     isNormalUser = true;
     description = "franky";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "docker"
-    ];
+    extraGroups = ["networkmanager" "wheel" "docker"];
     packages = with pkgs; [
       nixfmt-rfc-style
       nixd
+      openssl
+      openssl.dev
     ];
   };
-  nixpkgs.config.allowUnfree = true;
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  # hardware.pulseaudio.enable = true;
-  # OR
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  # };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.alice = {
-  #   isNormalUser = true;
-  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  #   packages = with pkgs; [
-  #     tree
-  #   ];
-  # };
-
-  # programs.firefox.enable = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  nix.optimise.automatic = true;
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
   environment.systemPackages = [
-    inputs.zen-browser.packages."x86_64-linux".default
-    #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #   wget
   ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
-
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-  # to actually do that.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "24.11"; # Did you read the comment?
-
 }
