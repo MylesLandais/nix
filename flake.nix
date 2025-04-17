@@ -72,6 +72,7 @@
           home-manager.extraSpecialArgs = {
             vars = {
               hostName = "franktory";
+              isDesktop = true;
               class = "laptop";
               wallpaper = "/home/franky/wallpapers/wall-01.png";
               mainMonitor = {
@@ -126,6 +127,7 @@
           home-manager.extraSpecialArgs = {
             vars = {
               hostName = "kraken";
+              isDesktop = true;
               class = "desktop";
               wallpaper = "/home/franky/wallpapers/sunset_kanagawa-dragon.jpg";
               mainMonitor = {

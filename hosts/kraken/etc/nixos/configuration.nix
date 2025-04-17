@@ -223,6 +223,7 @@
       nixd
       openssl
       openssl.dev
+      nvtopPackages.nvidia
     ];
   };
   nix.optimise.automatic = true;

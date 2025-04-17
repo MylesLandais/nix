@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  vars,
   config,
   inputs,
   ...
@@ -78,7 +79,6 @@
     kanagawa-icon-theme
     tldr
     btop
-    nvtopPackages.nvidia
     gamemode
     hubble
     brave

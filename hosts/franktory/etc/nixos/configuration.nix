@@ -20,7 +20,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "franktory"; # Define your hostname.
-  networking.search = ["home.universe.home"];
+  networking.search = ["universe.home"];
   networking.nameservers = ["192.168.0.2" "1.1.1.1"];
   nix.settings.experimental-features = ["nix-command" "flakes"];
   #nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
@@ -53,6 +53,8 @@
 
   # Configure keymap in X11
   services.blueman.enable = true;
+  services.upower.enable = true;
+  services.power-profiles-daemon.enable = true;
   services.xserver.enable = true;
   services.displayManager.sddm = {
     enable = true;
@@ -109,7 +111,6 @@
     description = "franky";
     extraGroups = ["networkmanager" "wheel"];
     packages = with pkgs; [
-      neovim
       nixfmt-rfc-style
       nixd
     ];
@@ -120,7 +121,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    neovim
     tailscale
   ];
 
