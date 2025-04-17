@@ -1,15 +1,20 @@
-{ pkgs, ... }:
 {
+  pkgs,
+  vars,
+  config,
+  inputs,
+  ...
+}: {
   services.hyprpaper = {
     enable = true;
     package = pkgs.hyprpaper;
     settings = {
       ipc = "on";
       splash = false;
-      preload = [ "/home/franky/wallpapers/sunset_kanagawa-dragon.jpg" ];
+      preload = [vars.wallpaper];
       wallpaper = [
-        "DP-4,/home/franky/wallpapers/sunset_kanagawa-dragon.jpg"
-        "HDMI-A-2,/home/franky/wallpapers/sunset_kanagawa-dragon.jpg"
+        "${vars.mainMonitor.name},${vars.wallpaper}"
+        "${vars.secondaryMonitor.name},${vars.wallpaper}"
       ];
     };
   };
@@ -62,8 +67,8 @@
       ];
     };
     monitor = [
-      "DP-4,1920x1080@100,0x0,1"
-      "HDMI-A-2,1920x1080@100,1920x0,1"
+      "${vars.mainMonitor.name},${vars.mainMonitor.width}x${vars.mainMonitor.height}@${vars.mainMonitor.refresh},0x0,1"
+      "${vars.secondaryMonitor.name},${vars.secondaryMonitor.width}x${vars.secondaryMonitor.height}@${vars.secondaryMonitor.refresh},1920x0,1"
     ];
     env = [
       "BROWSER=zen"
@@ -87,7 +92,7 @@
       [
         "$mod, RETURN, exec,ghostty"
         "$mod, W, exec, zen"
-        "$mod, C, exec, /home/franky/Nix-Cider2/result/bin/Cider"
+        "$mod, C, exec, Cider"
         "$mod, D, exec,vesktop"
         "$mod, Q, killactive,"
         "$mod, M, exit,"
@@ -102,15 +107,14 @@
       ]
       ++ (builtins.concatLists (
         builtins.genList (
-          i:
-          let
+          i: let
             ws = i + 1;
-          in
-          [
+          in [
             "$mod, code:1${toString i},workspace, ${toString ws}"
             "$mod SHIFT, code:1${toString i},movetoworkspace, ${toString ws}"
           ]
-        ) 9
+        )
+        9
       ));
   };
 }
