@@ -11,6 +11,7 @@
       plugins = {
         codecompanion = {
           enable = true;
+          lazyLoad.enable = false;
           settings = {
             ollama = {
               __raw = ''

@@ -3,8 +3,7 @@
   lib,
   config,
   ...
-}:
-{
+}: {
   options = {
     clipboard-image.enable = lib.mkEnableOption "Enable clipboard-image nixvim plugin module";
   };
@@ -13,8 +12,10 @@
     programs.nixvim.plugins.clipboard-image = {
       enable = true;
       clipboardPackage = null;
-      default = {
-        imgDir = "/home/franky/vaults/personal/assets/imgs";
+      settings = {
+        default = {
+          imgDir = "/home/franky/vaults/personal/assets/imgs";
+        };
       };
     };
   };

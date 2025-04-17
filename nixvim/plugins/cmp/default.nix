@@ -28,6 +28,7 @@
           cmp = {
             enable = true;
             menu = {
+              code_companion = "[AI]";
               nvim_lsp = "[LSP]";
               nvim_lua = "[api]";
               path = "[path]";
@@ -55,6 +56,7 @@
 
             sources = [
               {name = "path";}
+              {name = "codecompanion";}
               {name = "nvim_lsp";}
               {name = "luasnip";}
               {

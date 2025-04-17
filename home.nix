@@ -118,7 +118,7 @@
       kanagawa = {
         enable = true;
         settings = {
-          transparent = false;
+          transparent = true;
           theme = "wave";
         };
       };
@@ -129,7 +129,7 @@
 
   home.file = {
     "${config.xdg.configHome}/ghostty/config".text = ''
-      theme = "Kanagawa Wave"
+      theme = "Kanagawa Dragon"
       background-opacity = 0.9
       window-decoration = false
     '';

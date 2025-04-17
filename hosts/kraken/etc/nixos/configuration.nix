@@ -160,7 +160,7 @@
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      mesa.drivers
+      mesa
       nvidia-vaapi-driver
     ];
     enable32Bit = true;
