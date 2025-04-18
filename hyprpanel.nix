@@ -20,7 +20,7 @@
               ++ (
                 if !vars.isDesktop
                 then ["battery"]
-                else ""
+                else [""]
               );
             middle = ["media"];
             right = [
