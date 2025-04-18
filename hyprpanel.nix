@@ -1,41 +1,44 @@
-{ inputs, ... }:
-{
-  imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
+{inputs, ...}: {
+  imports = [inputs.hyprpanel.homeManagerModules.hyprpanel];
   programs.hyprpanel = {
-    enable = false;
+    enable = true;
     systemd.enable = true;
     overwrite.enable = false;
-    layout = {
-      "bar.layouts" = {
-        "0" = {
-          left = [
-            "dashboard"
-            "workspaces"
-          ];
-          middle = [ "media" ];
-          right = [
-            "volume"
-            "systray"
-            "notifications"
-          ];
-        };
-        "1" = {
-          left = [
-            "dashboard"
-            "workspaces"
-          ];
-          middle = [ "media" ];
-          right = [
-            "volume"
-            "systray"
-            "notifications"
-          ];
+    settings = {
+      layout = {
+        "bar.layouts" = {
+          "*" = {
+            left = [
+              "dashboard"
+              "workspaces"
+            ];
+            middle = ["media"];
+            right = [
+              "volume"
+              "bluetooth"
+              "volume"
+              "systray"
+              "clock"
+              "notifications"
+            ];
+          };
         };
       };
-    };
-    settings = {
-      bar.launcher.autoDetectIcon = true;
-      bar.workspaces.show_icons = true;
+      wallpaper.enable = false;
+      scalingPriority = "hyprland";
+      bar = {
+        launcher.autoDetectIcon = true;
+        workspaces = {
+          show_numbered = true;
+          show_icons = false;
+        };
+        windowtitle = {
+          class_name = false;
+          custom_title = false;
+          truncation_size = 35;
+        };
+        notifications.show_total = true;
+      };
       menus.clock = {
         time = {
           military = true;
@@ -45,10 +48,15 @@
       };
       menus.dashboard.directories.enabled = false;
       menus.dashboard.stats.enable_gpu = true;
-      theme.bar.transparent = true;
-      theme.font = {
-        name = "Hack Nerd Font";
-        size = "16px";
+      theme = {
+        bar = {
+          transparent = true;
+          floating = false;
+        };
+        font = {
+          name = "Hack Nerd Font";
+          size = "16px";
+        };
       };
     };
   };

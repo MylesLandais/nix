@@ -22,7 +22,7 @@
                       },
                       schema = {
                           model = {
-                              default = 'qwen2.5-coder:7b',
+                              default = 'qwen2.5-coder:14b',
                           },
                           num_ctx = {
                               default = 32768,

@@ -43,29 +43,28 @@
   } @ inputs: let
     system = "x86_64-linux";
     username = "franky";
+    pkgs = import nixpkgs {
+      inherit system;
+      config = {allowUnfree = true;};
+      overlays = [
+        hyprpanel.overlay
+        sddm-sugar-candy-nix.overlays.default
+      ];
+    };
   in {
     nixosConfigurations."franktory" = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config = {
-          allowUnfree = true;
-        };
-        overlays = [
-          inputs.hyprpanel.overlay
-          sddm-sugar-candy-nix.overlays.default
-        ];
-      };
-      modules = [
+      inherit pkgs;
+      modules = with pkgs; [
         ./hosts/franktory/etc/nixos/configuration.nix
         sddm-sugar-candy-nix.nixosModules.default
+        home-manager.nixosModules.home-manager
         {
           environment.systemPackages = [
             ghostty.packages.x86_64-linux.default
             zen-browser.packages.x86_64-linux.default
           ];
         }
-        home-manager.nixosModules.home-manager
         {
           home-manager.useUserPackages = true;
           home-manager.useGlobalPkgs = true;
@@ -101,26 +100,18 @@
     };
     nixosConfigurations."kraken" = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config = {
-          allowUnfree = true;
-        };
-        overlays = [
-          inputs.hyprpanel.overlay
-          sddm-sugar-candy-nix.overlays.default
-        ];
-      };
-      modules = [
+      inherit pkgs;
+      modules = with pkgs.overlays; [
         ./hosts/kraken/etc/nixos/configuration.nix
         sddm-sugar-candy-nix.nixosModules.default
+        home-manager.nixosModules.home-manager
+
         {
           environment.systemPackages = [
             ghostty.packages.x86_64-linux.default
             zen-browser.packages.x86_64-linux.default
           ];
         }
-        home-manager.nixosModules.home-manager
         {
           home-manager.useUserPackages = true;
           home-manager.useGlobalPkgs = true;

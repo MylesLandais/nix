@@ -11,9 +11,6 @@
   home.username = "franky";
   home.enableNixpkgsReleaseCheck = false;
   home.homeDirectory = "/home/franky";
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
 
   home.stateVersion = "24.11"; # Please read the comment before changing.
   imports = [
@@ -25,7 +22,7 @@
     ./keymaps.nix
     ./vimopts.nix
     ./gtk
-    #./hyprpanel.nix
+    ./hyprpanel.nix
     inputs.nixvim.homeManagerModules.nixvim
     inputs.tokyonight.homeManagerModules.default
   ];

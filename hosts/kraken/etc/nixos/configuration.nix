@@ -232,7 +232,5 @@
     dates = "weekly";
     options = "--delete-older-than 30d";
   };
-  environment.systemPackages = [
-  ];
   system.stateVersion = "24.11"; # Did you read the comment?
 }

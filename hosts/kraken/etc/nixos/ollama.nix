@@ -13,9 +13,7 @@
     openFirewall = true;
     acceleration = "cuda";
     loadModels = [
-      "deepseek-r1"
-      "llama3.2"
-      "qwen2.5-coder:7b"
+      "qwen2.5-coder:14b"
     ];
   };
   services.open-webui = {
