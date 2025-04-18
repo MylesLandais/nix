@@ -1,4 +1,8 @@
-{inputs, ...}: {
+{
+  inputs,
+  vars,
+  ...
+}: {
   imports = [inputs.hyprpanel.homeManagerModules.hyprpanel];
   programs.hyprpanel = {
     enable = true;
@@ -8,15 +12,20 @@
       layout = {
         "bar.layouts" = {
           "*" = {
-            left = [
-              "dashboard"
-              "workspaces"
-            ];
+            left =
+              [
+                "dashboard"
+                "workspaces"
+              ]
+              ++ (
+                if !vars.isDesktop
+                then ["battery"]
+                else ""
+              );
             middle = ["media"];
             right = [
               "volume"
               "bluetooth"
-              "volume"
               "systray"
               "clock"
               "notifications"

@@ -71,7 +71,7 @@
           home-manager.extraSpecialArgs = {
             vars = {
               hostName = "franktory";
-              isDesktop = true;
+              isDesktop = false;
               class = "laptop";
               wallpaper = "/home/franky/wallpapers/wall-01.png";
               mainMonitor = {
