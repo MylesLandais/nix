@@ -26,7 +26,6 @@
       italic_font = "auto";
       bold_italic_font = "auto";
       enable_audio_bell = false;
-      background_opacity = "0.8";
       scrollback_lines = -1;
       tab_bar_edge = "top";
       allow_remote_control = "yes";

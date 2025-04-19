@@ -13,12 +13,12 @@
       kubectl
     ];
     programs.k9s = let
-      k9s_file = "./skin.yaml";
+      #k9s_file = "./skin.yaml";
     in {
       enable = true;
-      skins = {
-        skin = k9s_file;
-      };
+      #skins = {
+      # skin = k9s_file;
+      #};
     };
   };
 }

@@ -3,8 +3,7 @@
   lib,
   config,
   ...
-}:
-{
+}: {
   options = {
     gtk-conf.enable = lib.mkEnableOption "Enable gtk module";
   };
@@ -16,11 +15,11 @@
         package = pkgs.kanagawa-icon-theme;
         name = "Kanagawa";
       };
-      theme = {
-        name = "Kanagawa-B";
-        #package = pkgs.tokyonight-gtk-theme;
-        package = pkgs.kanagawa-gtk-theme;
-      };
+      #theme = {
+      #name = "Kanagawa-B";
+      #package = pkgs.tokyonight-gtk-theme;
+      #package = pkgs.kanagawa-gtk-theme;
+      #:};
     };
   };
 }

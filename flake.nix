@@ -9,6 +9,11 @@
       url = "github:mrjones2014/tokyonight.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    stylix = {
+      url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -37,6 +42,7 @@
     zen-browser,
     ghostty,
     hyprpanel,
+    stylix,
     nixvim,
     tokyonight,
     ...

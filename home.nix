@@ -23,6 +23,7 @@
     ./vimopts.nix
     ./gtk
     ./hyprpanel.nix
+    inputs.stylix.homeManagerModules.stylix
     inputs.nixvim.homeManagerModules.nixvim
     inputs.tokyonight.homeManagerModules.default
   ];
@@ -96,8 +97,21 @@
   prompt.enable = true;
   devtooling.enable = true;
   shelltools.enable = true;
-  programs.bat.tokyonight.enable = true;
+  #programs.bat.tokyonight.enable = true;
   programs.git.delta.tokyonight.enable = false;
+  stylix = {
+    autoEnable = false;
+    enable = true;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/kanagawa.yaml";
+    targets = {
+      vesktop.enable = true;
+      btop.enable = true;
+      gtk.enable = true;
+      kubecolor.enable = true;
+      lazygit.enable = true;
+      wofi.enable = true;
+    };
+  };
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
