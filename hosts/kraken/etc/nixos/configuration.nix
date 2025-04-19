@@ -156,6 +156,7 @@
     enable = true;
     useRoutingFeatures = "client";
   };
+  services.rpcbind.enable = true;
   services.xserver.videoDrivers = ["nvidia"];
   hardware.graphics = {
     enable = true;
@@ -223,6 +224,7 @@
       nixd
       openssl
       openssl.dev
+      nfs-utils
       nvtopPackages.nvidia
     ];
   };

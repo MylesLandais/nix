@@ -84,6 +84,8 @@
     revive
     terraform-ls
     tflint
+    mpv
+    plex-mpv-shim
   ];
   home.pointerCursor = {
     gtk.enable = true;

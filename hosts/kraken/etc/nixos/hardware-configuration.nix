@@ -12,7 +12,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod"];
+  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" "nfs"];
   boot.initrd.kernelModules = [];
   boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];
@@ -27,19 +27,26 @@
     fsType = "vfat";
     options = ["fmask=0022" "dmask=0022"];
   };
+
   fileSystems."/data" = {
     device = "/dev/sdb1";
     fsType = "ext4";
   };
+
   fileSystems."/home/franky/games" = {
     device = "/dev/sda1";
     fsType = "ext4";
   };
+
   fileSystems."/home/franky/games2" = {
     device = "/dev/sdc1";
     fsType = "ext4";
   };
 
+  fileSystems."/mnt/NAS" = {
+    device = "192.168.0.33:/mnt/user/Babylon";
+    fsType = "nfs";
+  };
   swapDevices = [];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -49,6 +56,7 @@
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp8s0.useDHCP = lib.mkDefault true;
 
+  boot.supportedFilesystems = ["nfs"];
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;

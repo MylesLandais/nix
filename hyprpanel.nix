@@ -22,7 +22,10 @@
                 then ["battery"]
                 else [""]
               );
-            middle = ["media"];
+            middle = [
+              "media"
+              "network"
+            ];
             right = [
               "volume"
               "bluetooth"
