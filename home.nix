@@ -117,8 +117,9 @@
       kanagawa = {
         enable = true;
         settings = {
+          background.dark = "dragon";
           transparent = true;
-          theme = "wave";
+          theme = "dragon";
         };
       };
     };

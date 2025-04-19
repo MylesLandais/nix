@@ -3,8 +3,7 @@
   lib,
   config,
   ...
-}:
-{
+}: {
   options = {
     tmux.enable = lib.mkEnableOption "Enable tmux module";
   };
@@ -20,6 +19,7 @@
         {
           plugin = kanagawa;
           extraConfig = ''
+            set -g @kanagawa-theme 'dragon'
             set -g @kanagawa-plugins "git weather playerctl kubernetes-context"
             set -g @kanagawa-show-powerline true
             set -g @kanagawa-refresh-rate 5
@@ -32,7 +32,6 @@
             set -g @kanagawa-kubernetes-hide-user true
             set -g @kanagawa-playerctl-format "►  {{ artist }} - {{ title }}"
           '';
-
         }
       ];
       extraConfig = ''
