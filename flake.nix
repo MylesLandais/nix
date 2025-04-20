@@ -126,7 +126,8 @@
               hostName = "kraken";
               isDesktop = true;
               class = "desktop";
-              wallpaper = "/home/franky/wallpapers/sunset_kanagawa-dragon.jpg";
+              #wallpaper = "/home/franky/wallpapers/sunset_kanagawa-dragon.jpg";
+              wallpaper = "/home/franky/wallpapers/3895e.jpg";
               mainMonitor = {
                 name = "DP-4";
                 width = "1920";

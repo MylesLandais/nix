@@ -50,6 +50,7 @@
     lazydocker
     ripgrep
     gcc
+    gowall
     jq
     wofi
     wlogout
