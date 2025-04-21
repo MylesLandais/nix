@@ -32,6 +32,9 @@
       inputs.nixpkgs-stable.follows = "nixpkgs";
       inputs.nixpkgs-unstable.follows = "nixpkgs";
     };
+    wallpapers = {
+      url = "github:FKouhai/Kanagawa-wallpapers";
+    };
   };
 
   outputs = {
@@ -43,6 +46,7 @@
     ghostty,
     hyprpanel,
     stylix,
+    wallpapers,
     nixvim,
     tokyonight,
     ...
@@ -69,6 +73,7 @@
           environment.systemPackages = [
             ghostty.packages.x86_64-linux.default
             zen-browser.packages.x86_64-linux.default
+            wallpapers.packages.x86_64-linux.default
           ];
         }
         {
@@ -79,7 +84,7 @@
               hostName = "franktory";
               isDesktop = false;
               class = "laptop";
-              wallpaper = "/home/franky/wallpapers/wall-01.png";
+              wallpaper = "${wallpapers}/kanagawa-dragon/wall-01";
               mainMonitor = {
                 name = "eDP-1";
                 width = "1920";
@@ -116,6 +121,7 @@
           environment.systemPackages = [
             ghostty.packages.x86_64-linux.default
             zen-browser.packages.x86_64-linux.default
+            wallpapers.packages.x86_64-linux.default
           ];
         }
         {
@@ -126,8 +132,7 @@
               hostName = "kraken";
               isDesktop = true;
               class = "desktop";
-              #wallpaper = "/home/franky/wallpapers/sunset_kanagawa-dragon.jpg";
-              wallpaper = "/home/franky/wallpapers/3895e.jpg";
+              wallpaper = "${wallpapers}/kanagawa-dragon/3895e.jpg";
               mainMonitor = {
                 name = "DP-4";
                 width = "1920";
