@@ -52,7 +52,6 @@
     gcc
     gowall
     jq
-    wofi
     wlogout
     hack-font
     playerctl
@@ -100,16 +99,19 @@
   shelltools.enable = true;
   #programs.bat.tokyonight.enable = true;
   programs.git.delta.tokyonight.enable = false;
+  programs.wofi.enable = true;
   stylix = {
     autoEnable = false;
     enable = true;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/kanagawa.yaml";
     targets = {
+      k9s.enable = true;
       vesktop.enable = true;
       btop.enable = true;
       gtk.enable = true;
       kubecolor.enable = true;
       lazygit.enable = true;
+      qt.enable = true;
       wofi.enable = true;
     };
   };

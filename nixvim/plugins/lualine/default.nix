@@ -14,7 +14,7 @@
       settings = {
         extensions = ["fzf"];
         options = {
-          theme = "kanagawa-dragon";
+          theme = "kanagawa";
         };
         globalstatus = true;
 

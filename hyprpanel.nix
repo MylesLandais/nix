@@ -61,6 +61,7 @@
       menus.dashboard.directories.enabled = false;
       menus.dashboard.stats.enable_gpu = true;
       theme = {
+        name = "gruvbox_split";
         bar = {
           transparent = true;
           floating = false;
