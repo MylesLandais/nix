@@ -65,6 +65,20 @@
         "workspaces, 1, 6, default"
       ];
     };
+    windowrule = [
+      "float,title:(Picture-in-Picture)"
+      "pin,title:(Picture-in-Picture)"
+      "noshadow,title:(Picture-in-Picture)"
+      "size 25% 25%,title:(Picture-in-Picture)"
+      "move 100%-w-20,title:(Picture-in-Picture)"
+      "noinitialfocus,title:(Picture-in-Picture)"
+      "float,class:(mpv)"
+      "pin,class:(mpv)"
+      "noshadow,class:(mpv)"
+      "size 50% 50%,class:(mpv)"
+      "move 100%-w-20,class:(mpv)"
+      "noinitialfocus,class:(mpv)"
+    ];
     monitor = [
       "${vars.mainMonitor.name},${vars.mainMonitor.width}x${vars.mainMonitor.height}@${vars.mainMonitor.refresh},0x0,1"
       "${vars.secondaryMonitor.name},${vars.secondaryMonitor.width}x${vars.secondaryMonitor.height}@${vars.secondaryMonitor.refresh},1920x0,1"
@@ -103,6 +117,10 @@
         "$mod, S, exec, hyprshot -m region"
         "$mod SHIFT, R, exec, wlogout"
         "$mod, D, exec, vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto "
+        "$mod, H, movefocus, l"
+        "$mod, L, movefocus, r"
+        "$mod, K, movefocus, u"
+        "$mod, J, movefocus, d"
       ]
       ++ (builtins.concatLists (
         builtins.genList (
