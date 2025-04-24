@@ -103,7 +103,7 @@
   stylix = {
     autoEnable = false;
     enable = true;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/kanagawa.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/kanagawa-dragon.yaml";
     targets = {
       k9s.enable = true;
       vesktop.enable = true;
