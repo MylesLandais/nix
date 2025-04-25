@@ -78,6 +78,11 @@
       "size 50% 50%,class:(mpv)"
       "move 100%-w-20,class:(mpv)"
       "noinitialfocus,class:(mpv)"
+      "float, class:(GLava)"
+      "size 100% 25%,class:(GLava)"
+      "move 100%-w-20,class:(GLava)"
+      "noshadow,class:(GLava)"
+      "noinitialfocus,title:(GLava)"
     ];
     monitor = [
       "${vars.mainMonitor.name},${vars.mainMonitor.width}x${vars.mainMonitor.height}@${vars.mainMonitor.refresh},0x0,1"

@@ -87,6 +87,7 @@
     tflint
     mpv
     plex-mpv-shim
+    glava
   ];
   home.pointerCursor = {
     gtk.enable = true;
