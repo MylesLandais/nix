@@ -3,8 +3,7 @@
   lib,
   config,
   ...
-}:
-{
+}: {
   options = {
     zsh.enable = lib.mkEnableOption "Enable zsh module";
   };
@@ -17,7 +16,7 @@
       autosuggestion.enable = true;
       dotDir = ".config/zsh";
       syntaxHighlighting.enable = true;
-      initExtra = ''
+      initContent = ''
         source <(kubectl completion zsh)
         zvm_after_init_commands+=(eval "$(atuin init zsh --disable-up-arrow)")
       '';
@@ -35,7 +34,10 @@
         ns = "nix-search-tv print | fzf --preview 'nix-search-tv preview {}' --scheme history";
         hms = "home-manager switch";
         k = "kubectl";
-        update = "sudo nixos-rebuild switch";
+        fzfcheckout = "git branch | fzf | xargs git checkout";
+        rebuild = "sudo nixos-rebuild switch --flake ~/.config/home-manager";
+        upgrade = "nix flake update --flake ~/.config/home-manager && sudo nixos-rebuild switch --flake ~/.config/home-manager --upgrade";
+        cleanup = "sudo nix profile wipe-history --profile /nix/var/nix/profiles/system --older-than 2d  && sudo nix-collect-garbage --delete-older-than 2d";
       };
       history = {
         expireDuplicatesFirst = true;

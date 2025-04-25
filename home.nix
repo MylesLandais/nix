@@ -97,7 +97,6 @@
   prompt.enable = true;
   devtooling.enable = true;
   shelltools.enable = true;
-  #programs.bat.tokyonight.enable = true;
   programs.git.delta.tokyonight.enable = false;
   programs.wofi.enable = true;
   stylix = {
