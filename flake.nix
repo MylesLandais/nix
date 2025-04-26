@@ -84,7 +84,7 @@
               hostName = "franktory";
               isDesktop = false;
               class = "laptop";
-              wallpaper = "${wallpapers}/kanagawa-dragon/wall-01";
+              wallpaper = "${wallpapers}/kanagawa-dragon/wall-01.png";
               mainMonitor = {
                 name = "eDP-1";
                 width = "1920";
