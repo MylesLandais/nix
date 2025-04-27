@@ -114,7 +114,7 @@
         "$mod, D, exec,vesktop"
         "$mod, Q, killactive,"
         "$mod, M, exit,"
-        "$mod, E, exec, thunar"
+        "$mod, E, exec, cosmic-files"
         "$mod, B, exec, hyprlock"
         "$mod, N, exec, swaync-client -t -sw"
         "$mod, V, togglefloating,"

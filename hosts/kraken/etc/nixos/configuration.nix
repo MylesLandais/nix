@@ -229,6 +229,7 @@
     ];
   };
   nix.optimise.automatic = true;
+  nix.settings.trusted-users = ["root" "franky" "@wheel"];
   nix.gc = {
     automatic = true;
     dates = "weekly";

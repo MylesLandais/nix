@@ -88,6 +88,7 @@
     mpv
     plex-mpv-shim
     glava
+    cosmic-files
   ];
   home.pointerCursor = {
     gtk.enable = true;
