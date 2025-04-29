@@ -19,6 +19,7 @@
       initContent = ''
         source <(kubectl completion zsh)
         zvm_after_init_commands+=(eval "$(atuin init zsh --disable-up-arrow)")
+        export SSH_AUTH_SOCK=/home/franky/.bitwarden-ssh-agent.sock
       '';
       plugins = [
         {
