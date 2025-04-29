@@ -35,10 +35,10 @@
     sassc
     gnome-themes-extra
     gtk-engine-murrine
-    cavalier
     alejandra
     markdown-oxide
     vhs
+    element-desktop
     virtualgl
     vulkan-tools
     nix-search-tv
@@ -89,6 +89,7 @@
     plex-mpv-shim
     glava
     cosmic-files
+    nixos-generators
   ];
   home.pointerCursor = {
     gtk.enable = true;

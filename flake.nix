@@ -61,6 +61,20 @@
         sddm-sugar-candy-nix.overlays.default
       ];
     };
+    env_pkgs = {
+      environment.systemPackages = [
+        ghostty.packages.x86_64-linux.default
+        zen-browser.packages.x86_64-linux.default
+        wallpapers.packages.x86_64-linux.default
+      ];
+    };
+    hm_user_cfg = {
+      home-manager.users."${username}" = {
+        imports = [
+          ./home.nix
+        ];
+      };
+    };
   in {
     nixosConfigurations."franktory" = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -69,13 +83,8 @@
         ./hosts/franktory/etc/nixos/configuration.nix
         sddm-sugar-candy-nix.nixosModules.default
         home-manager.nixosModules.home-manager
-        {
-          environment.systemPackages = [
-            ghostty.packages.x86_64-linux.default
-            zen-browser.packages.x86_64-linux.default
-            wallpapers.packages.x86_64-linux.default
-          ];
-        }
+        env_pkgs
+        hm_user_cfg
         {
           home-manager.useUserPackages = true;
           home-manager.useGlobalPkgs = true;
@@ -98,13 +107,7 @@
                 refresh = "60";
               };
             };
-            inherit inputs;
-            inherit system;
-          };
-          home-manager.users."${username}" = {
-            imports = [
-              ./home.nix
-            ];
+            inherit inputs system;
           };
         }
       ];
@@ -112,18 +115,14 @@
     nixosConfigurations."kraken" = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       inherit pkgs;
+
       modules = with pkgs.overlays; [
         ./hosts/kraken/etc/nixos/configuration.nix
         sddm-sugar-candy-nix.nixosModules.default
         home-manager.nixosModules.home-manager
+        env_pkgs
+        hm_user_cfg
 
-        {
-          environment.systemPackages = [
-            ghostty.packages.x86_64-linux.default
-            zen-browser.packages.x86_64-linux.default
-            wallpapers.packages.x86_64-linux.default
-          ];
-        }
         {
           home-manager.useUserPackages = true;
           home-manager.useGlobalPkgs = true;
@@ -146,13 +145,7 @@
                 refresh = "100";
               };
             };
-            inherit inputs;
-            inherit system;
-          };
-          home-manager.users."${username}" = {
-            imports = [
-              ./home.nix
-            ];
+            inherit inputs system;
           };
         }
       ];
