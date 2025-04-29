@@ -89,7 +89,7 @@
       "${vars.secondaryMonitor.name},${vars.secondaryMonitor.width}x${vars.secondaryMonitor.height}@${vars.secondaryMonitor.refresh},1920x0,1"
     ];
     env = [
-      "BROWSER=zen"
+      "BROWSER=brave"
       "XDG_CONFIG_HOME=/home/franky/.config"
       "XDG_SESSION_TYPE=wayland"
       "XCURSOR_SIZE=22"
@@ -109,7 +109,7 @@
     bind =
       [
         "$mod, RETURN, exec,ghostty"
-        "$mod, W, exec, zen"
+        "$mod, W, exec, brave"
         "$mod, C, exec, Cider"
         "$mod, D, exec,vesktop"
         "$mod, Q, killactive,"

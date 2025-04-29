@@ -29,6 +29,11 @@
           features = "decorations";
         };
       };
+      extraConfig = {
+        commit.gpgsign = true;
+        gpg.format = "ssh";
+        user.signingkey = "~/.ssh/bw.pub";
+      };
       signing = {
         format = "ssh";
         key = "~/.ssh/bw.pub";
