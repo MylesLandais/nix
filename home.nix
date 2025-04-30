@@ -32,6 +32,7 @@
     hyprpanel
     pulseaudio-ctl
     pulseaudio
+    pulsemixer
     sassc
     gnome-themes-extra
     gtk-engine-murrine
