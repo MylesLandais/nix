@@ -179,7 +179,7 @@
       }
       # Go to definition
       {
-        action = ":TermExec cmd='hms && exit'<CR>";
+        action = ":TermExec cmd='rebuild && exit'<CR>";
         key = "<leader>eh";
         options = {
           silent = true;
@@ -278,7 +278,7 @@
       # Telescope search commands
       {
         action = ":Telescope command_history<CR>";
-        key = "<leader>sc";
+        key = "<leader>fh";
         options = {
           silent = true;
           noremap = true;
@@ -298,7 +298,7 @@
       # Telescope search commands
       {
         action = ":Telescope commands<CR>";
-        key = "<leader>sc";
+        key = "<leader>fc";
         options = {
           silent = true;
           noremap = true;
@@ -308,7 +308,7 @@
       # Telescope diagnostics
       {
         action = ":Telescope diagnostics<CR>";
-        key = "<leader>d";
+        key = "<leader>fd";
         options = {
           silent = true;
           noremap = true;
@@ -328,11 +328,38 @@
       # Telescope undo tree
       {
         action = ":Telescope undo<CR>";
-        key = "<leader>u";
+        key = "<leader>fu";
         options = {
           silent = true;
           noremap = true;
           desc = "Undo tree";
+        };
+      }
+      {
+        action = ":Telescope git_commits<CR>";
+        key = "<leader>fx";
+        options = {
+          silent = true;
+          noremap = true;
+          desc = "git commit";
+        };
+      }
+      {
+        action = ":Telescope git_branches<CR>";
+        key = "<leader>ft";
+        options = {
+          silent = true;
+          noremap = true;
+          desc = "git branches";
+        };
+      }
+      {
+        action = ":Telescope git_status<CR>";
+        key = "<leader>fst";
+        options = {
+          silent = true;
+          noremap = true;
+          desc = "git status";
         };
       }
       # Diffview open comparing in git
