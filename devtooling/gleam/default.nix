@@ -4,7 +4,8 @@
   config,
   inputs,
   ...
-}: {
+}:
+{
   options = {
     gleam.enable = lib.mkEnableOption "Enable gleam module";
   };

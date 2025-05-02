@@ -4,7 +4,8 @@
   config,
   inputs,
   ...
-}: {
+}:
+{
   options = {
     kubernetes.enable = lib.mkEnableOption "Enable kubernetes option";
   };

@@ -4,14 +4,15 @@
   config,
   inputs,
   ...
-}: {
+}:
+{
   services.hyprpaper = {
     enable = true;
     package = pkgs.hyprpaper;
     settings = {
       ipc = "on";
       splash = false;
-      preload = [vars.wallpaper];
+      preload = [ vars.wallpaper ];
       wallpaper = [
         "${vars.mainMonitor.name},${vars.wallpaper}"
         "${vars.secondaryMonitor.name},${vars.wallpaper}"
@@ -129,14 +130,15 @@
       ]
       ++ (builtins.concatLists (
         builtins.genList (
-          i: let
+          i:
+          let
             ws = i + 1;
-          in [
+          in
+          [
             "$mod, code:1${toString i},workspace, ${toString ws}"
             "$mod SHIFT, code:1${toString i},movetoworkspace, ${toString ws}"
           ]
-        )
-        9
+        ) 9
       ));
   };
 }

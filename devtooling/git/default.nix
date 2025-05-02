@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     git.enable = lib.mkEnableOption "Enable git module";
   };

@@ -5,7 +5,8 @@
   inputs,
   extra-types,
   ...
-}: {
+}:
+{
   services.ollama = {
     enable = true;
     port = 11434;

@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options = {
     blink.enable = lib.mkEnableOption "Enable blink nixvim plugin module";
   };

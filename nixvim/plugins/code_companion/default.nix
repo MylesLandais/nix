@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     companion.enable = lib.mkEnableOption "Enable code companion nixvim plugin module";
   };

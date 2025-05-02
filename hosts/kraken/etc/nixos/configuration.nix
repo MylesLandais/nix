@@ -8,7 +8,8 @@
   inputs,
   extra-types,
   ...
-}: {
+}:
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -29,9 +30,15 @@
   # network config
 
   networking.hostName = "kraken"; # Define your hostname.
-  networking.search = ["universe.home"];
-  networking.nameservers = ["192.168.0.2" "192.168.0.1"];
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  networking.search = [ "universe.home" ];
+  networking.nameservers = [
+    "192.168.0.2"
+    "192.168.0.1"
+  ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   #nix.nixPath = ["nixpkgs=${nixpkgs}"];
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
@@ -48,26 +55,29 @@
         hostmetrics = {
           collection_interval = "60s";
           scrapers = {
-            cpu = {};
-            disk = {};
-            load = {};
-            filesystem = {};
-            memory = {};
-            network = {};
+            cpu = { };
+            disk = { };
+            load = { };
+            filesystem = { };
+            memory = { };
+            network = { };
           };
         };
       };
       processors = {
         resourcedetection = {
-          detectors = ["env" "system"];
+          detectors = [
+            "env"
+            "system"
+          ];
           system = {
             hostname_sources = "os";
           };
         };
       };
       extensions = {
-        zpages = {};
-        health_check = {};
+        zpages = { };
+        health_check = { };
       };
       exporters = {
         otlphttp = {
@@ -90,9 +100,9 @@
         ];
         pipelines = {
           "metrics/hostmetrics" = {
-            receivers = ["hostmetrics"];
-            processors = ["resourcedetection"];
-            exporters = ["otlphttp"];
+            receivers = [ "hostmetrics" ];
+            processors = [ "resourcedetection" ];
+            exporters = [ "otlphttp" ];
           };
         };
       };
@@ -144,7 +154,7 @@
           };
           relabel_configs = [
             {
-              source_labels = ["__journal__systemd_unit"];
+              source_labels = [ "__journal__systemd_unit" ];
               target_label = "unit";
             }
           ];
@@ -157,7 +167,7 @@
     useRoutingFeatures = "client";
   };
   services.rpcbind.enable = true;
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
@@ -218,7 +228,11 @@
   users.users.franky = {
     isNormalUser = true;
     description = "franky";
-    extraGroups = ["networkmanager" "wheel" "docker"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+    ];
     packages = with pkgs; [
       nixfmt-rfc-style
       nixd
@@ -229,7 +243,11 @@
     ];
   };
   nix.optimise.automatic = true;
-  nix.settings.trusted-users = ["root" "franky" "@wheel"];
+  nix.settings.trusted-users = [
+    "root"
+    "franky"
+    "@wheel"
+  ];
   nix.gc = {
     automatic = true;
     dates = "weekly";

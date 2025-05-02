@@ -2,7 +2,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     lsp.enable = lib.mkEnableOption "Enable lsp nixvim plugins module";
   };
@@ -54,7 +55,7 @@
           tflint.enable = true;
           nixd = {
             enable = true;
-            settings.formatting.command = ["nixfmt"];
+            settings.formatting.command = [ "nixfmt" ];
           };
           ts_ls.enable = true;
           elixirls = {

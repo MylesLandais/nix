@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   options = {
     lualine.enable = lib.mkEnableOption "Enable lualine nixvim plugin module";
   };
@@ -12,7 +13,7 @@
     programs.nixvim.plugins.lualine = {
       enable = true;
       settings = {
-        extensions = ["fzf"];
+        extensions = [ "fzf" ];
         options = {
           theme = "kanagawa";
         };
@@ -22,8 +23,8 @@
         # | A | B | C                             X | Y | Z |
         # +-------------------------------------------------+
         sections = {
-          lualine_a = ["mode"];
-          lualine_b = ["branch"];
+          lualine_a = [ "mode" ];
+          lualine_b = [ "branch" ];
           lualine_c = [
             "filename"
             "diff"

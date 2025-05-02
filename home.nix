@@ -5,7 +5,8 @@
   config,
   inputs,
   ...
-}: {
+}:
+{
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "franky";
@@ -36,6 +37,7 @@
     sassc
     gnome-themes-extra
     gtk-engine-murrine
+    treefmt
     alejandra
     markdown-oxide
     vhs

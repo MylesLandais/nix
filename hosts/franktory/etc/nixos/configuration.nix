@@ -8,7 +8,8 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -20,9 +21,15 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "franktory"; # Define your hostname.
-  networking.search = ["universe.home"];
-  networking.nameservers = ["192.168.0.2" "1.1.1.1"];
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  networking.search = [ "universe.home" ];
+  networking.nameservers = [
+    "192.168.0.2"
+    "1.1.1.1"
+  ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   #nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   networking.wireless.enable = false; # Enables wireless support via wpa_supplicant.
 
@@ -109,7 +116,10 @@
   users.users.franky = {
     isNormalUser = true;
     description = "franky";
-    extraGroups = ["networkmanager" "wheel"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [
       nixfmt-rfc-style
       nixd

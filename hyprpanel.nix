@@ -2,8 +2,9 @@
   inputs,
   vars,
   ...
-}: {
-  imports = [inputs.hyprpanel.homeManagerModules.hyprpanel];
+}:
+{
+  imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
   programs.hyprpanel = {
     enable = true;
     overwrite.enable = false;
@@ -11,16 +12,10 @@
       layout = {
         "bar.layouts" = {
           "*" = {
-            left =
-              [
-                "dashboard"
-                "workspaces"
-              ]
-              ++ (
-                if !vars.isDesktop
-                then ["battery"]
-                else [""]
-              );
+            left = [
+              "dashboard"
+              "workspaces"
+            ] ++ (if !vars.isDesktop then [ "battery" ] else [ "" ]);
             middle = [
               "media"
               "network"

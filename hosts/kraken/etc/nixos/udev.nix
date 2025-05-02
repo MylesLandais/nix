@@ -5,7 +5,8 @@
   inputs,
   extra-types,
   ...
-}: {
+}:
+{
   services.udev = {
     enable = true;
     extraRules = ''
