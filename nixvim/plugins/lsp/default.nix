@@ -54,7 +54,7 @@
           tflint.enable = true;
           nixd = {
             enable = true;
-            settings.formatting.command = ["alejandra"];
+            settings.formatting.command = ["nixfmt"];
           };
           ts_ls.enable = true;
           elixirls = {
