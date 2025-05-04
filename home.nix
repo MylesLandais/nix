@@ -136,12 +136,29 @@
       };
     };
     colorschemes = {
-      kanagawa = {
+      kanagawa-paper = {
         enable = true;
+
         settings = {
-          background.dark = "dragon";
+          background = "dark";
           transparent = true;
-          theme = "dragon";
+          undercurl = true;
+          terminal_colors = true;
+          theme = "ink";
+          styles = {
+            comments = {
+              italic = true;
+            };
+            functions = {
+              italic = true;
+            };
+            keywords = {
+              bold = true;
+            };
+            statement_style = {
+              bold = true;
+            };
+          };
         };
       };
     };
