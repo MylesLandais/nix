@@ -215,6 +215,7 @@
     };
   };
   programs.zsh.enable = true;
+  programs.nh.enable = true;
   programs.firefox.enable = true;
   programs.steam.enable = true;
   programs.hyprland.enable = true;

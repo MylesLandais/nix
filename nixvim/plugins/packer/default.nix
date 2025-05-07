@@ -10,7 +10,7 @@
   };
 
   config = lib.mkIf config.packer.enable {
-    programs.nixvim.plugins.lazy = {
+    programs.nixvim.plugins.lz-n = {
       enable = true;
     };
   };

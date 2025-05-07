@@ -93,6 +93,7 @@
     glava
     cosmic-files
     nixos-generators
+    cava
   ];
   home.pointerCursor = {
     gtk.enable = true;
@@ -141,7 +142,7 @@
 
         settings = {
           background = "dark";
-          transparent = true;
+          transparent = false;
           undercurl = true;
           terminal_colors = true;
           theme = "ink";
