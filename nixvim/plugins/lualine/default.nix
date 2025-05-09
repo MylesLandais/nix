@@ -15,7 +15,7 @@
       settings = {
         extensions = [ "fzf" ];
         options = {
-          theme = "kanagawa-paper";
+          theme = "default";
         };
         globalstatus = true;
 
