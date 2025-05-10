@@ -15,6 +15,7 @@
       shortcut = "a";
       plugins = with pkgs.tmuxPlugins; [
         resurrect
+        tmux-fzf
         continuum
         better-mouse-mode
         {
@@ -41,6 +42,7 @@
         set -g mouse "on"
         set -g allow-passthrough on
         set-option -g status-position top
+        set -g @plugin sainnhe/tmux-fzf
         set -g @resurrect-strategy-vim "session"
         set -g @resurrect-strategy-nvim "session"
         set -g @resurrect-capture-pane-contents "on"
