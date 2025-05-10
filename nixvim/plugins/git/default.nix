@@ -14,6 +14,10 @@
       gitblame = {
         enable = false;
       };
+      git-worktree = {
+        enable = true;
+        enableTelescope = true;
+      };
       gitsigns = {
         enable = true;
         settings = {

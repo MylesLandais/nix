@@ -354,6 +354,15 @@
         };
       }
       {
+        action = ":Telescope git_worktree<CR>";
+        key = "<leader>fw";
+        options = {
+          silent = true;
+          noremap = true;
+          desc = "git worktree";
+        };
+      }
+      {
         action = ":Telescope git_status<CR>";
         key = "<leader>fst";
         options = {

@@ -41,6 +41,7 @@
     alejandra
     markdown-oxide
     vhs
+    dysk
     element-desktop
     virtualgl
     vulkan-tools

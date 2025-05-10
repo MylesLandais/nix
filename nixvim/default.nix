@@ -8,6 +8,7 @@
     ./plugins/lualine
     ./plugins/packer
     ./plugins/oil
+    ./plugins/overseer
     ./plugins/telescope
     ./plugins/git
     ./plugins/cmp
@@ -36,6 +37,7 @@
   config = lib.mkIf config.nixvimcfg.enable {
     packer.enable = lib.mkDefault true;
     oil.enable = lib.mkDefault true;
+    overseer.enable = lib.mkDefault true;
     lualine.enable = lib.mkDefault true;
     telescope.enable = lib.mkDefault true;
     git_helpers.enable = lib.mkDefault true;
