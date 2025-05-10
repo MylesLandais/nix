@@ -31,6 +31,7 @@
   # environment.
   home.packages = with pkgs; [
     hyprpanel
+    gpgme
     pulseaudio-ctl
     pulseaudio
     pulsemixer
