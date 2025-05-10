@@ -216,14 +216,14 @@
           desc = "Open git blame URL";
         };
       }
-      # lazy git dashboard
+      # LazyGit
       {
         action = ":LazyGit<CR>";
         key = "<leader>lg";
         options = {
           silent = true;
           noremap = true;
-          desc = "Open lazygit";
+          desc = "open lazygit";
         };
       }
       # markdown preview mapping
