@@ -25,7 +25,7 @@
         cmp-nvim-lsp-signature-help.enable = true;
         cmp-dictionary.enable = true;
         lspkind = {
-          enable = true;
+          enable = false;
           cmp = {
             enable = true;
             menu = {

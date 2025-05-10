@@ -1,6 +1,8 @@
 {
+  self,
   lib,
   config,
+  inputs,
   ...
 }:
 {
@@ -18,9 +20,7 @@
       };
       lsp = {
         enable = true;
-        # capabilities = ''
-        #  capabilities = require('blink.cmp').get_lsp_capabilities()
-        # '';
+        inlayHints = true;
         keymaps = {
           silent = true;
           diagnostic = {
@@ -55,7 +55,17 @@
           tflint.enable = true;
           nixd = {
             enable = true;
-            settings.formatting.command = [ "nixfmt" ];
+            settings =
+              let
+                flake = ''(builtins.getFlake "${inputs.self}")'';
+                system = ''''${builtins.currentSystem}'';
+              in
+              {
+                nixpkgs.expr = "import ${flake}.inputs.nixpkgs {}";
+                nixos.expr = "${flake}.nixosConfiguration.kraken.options";
+                nixvim.expr = "${flake}.packages.${system}.nvim.options";
+                formatting.command = [ "nixfmt" ];
+              };
           };
           ts_ls.enable = true;
           elixirls = {

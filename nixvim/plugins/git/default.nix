@@ -11,12 +11,12 @@
 
   config = lib.mkIf config.git_helpers.enable {
     programs.nixvim.plugins = {
-      gitblame = {
-        enable = false;
-      };
       git-worktree = {
         enable = true;
         enableTelescope = true;
+        settings = {
+          update_on_change = true;
+        };
       };
       gitsigns = {
         enable = true;
@@ -27,26 +27,6 @@
             virt_text_pos = "eol";
           };
           signcolumn = true;
-          signs = {
-            add = {
-              text = "│";
-            };
-            change = {
-              text = "│";
-            };
-            changedelete = {
-              text = "~";
-            };
-            delete = {
-              text = "_";
-            };
-            topdelete = {
-              text = "‾";
-            };
-            untracked = {
-              text = "┆";
-            };
-          };
           watch_gitdir = {
             follow_files = true;
           };
@@ -55,6 +35,10 @@
       lazygit = {
         enable = true;
       };
+      fugit2 = {
+        enable = true;
+      };
+      fugitive.enable = true;
       git-conflict = {
         enable = true;
         settings = {
