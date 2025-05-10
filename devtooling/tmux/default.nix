@@ -21,17 +21,14 @@
           plugin = kanagawa;
           extraConfig = ''
             set -g @kanagawa-theme 'dragon'
-            set -g @kanagawa-plugins "git weather playerctl kubernetes-context"
+            set -g @kanagawa-plugins "weather playerctl kubernetes-context"
             set -g @kanagawa-show-powerline true
             set -g @kanagawa-refresh-rate 5
-            set -g @kanagawa-git-show-current-symbol ✓
-            set -g @kanagawa-git-show-diff-symbol !
-            set -g @kanagawa-git-show-remote-status true
             set -g @kanagawa-show-location false
             set -g @kanagawa-fixed-location "Madrid"
             set -g @kanagawa-show-empty-plugins false
             set -g @kanagawa-kubernetes-hide-user true
-            set -g @kanagawa-playerctl-format "►  {{ artist }} - {{ title }}"
+            set -g @kanagawa-playerctl-format "► {{ artist }} - {{ title }}"
           '';
         }
       ];
