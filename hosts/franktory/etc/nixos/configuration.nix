@@ -81,6 +81,11 @@
   services.tailscale = {
     enable = true;
   };
+
+  virtualisation.qemu = {
+    package = pkgs.qemu;
+  };
+
   services.openssh = {
     enable = true;
     settings = {

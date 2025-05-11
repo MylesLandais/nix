@@ -187,6 +187,7 @@
   };
 
   virtualisation.docker.enable = true;
+  virtualisation.libvirtd.enable = true;
   services.xserver.enable = true;
   services.blueman.enable = true;
   services.xserver.xkb = {
@@ -255,6 +256,10 @@
     description = "franky";
     extraGroups = [
       "networkmanager"
+      "qemu-libvirtd"
+      "libvirtd"
+      "audio"
+      "disk"
       "wheel"
       "docker"
     ];
@@ -263,6 +268,8 @@
       nixd
       openssl
       openssl.dev
+      qemu
+      qemu_kvm
       nfs-utils
       nvtopPackages.nvidia
     ];

@@ -30,6 +30,7 @@
   ];
   # environment.
   home.packages = with pkgs; [
+    vial
     hyprpanel
     gpgme
     pulseaudio-ctl

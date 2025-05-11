@@ -23,7 +23,11 @@
     "nfs"
   ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelModules = [
+    "kvm-amd"
+    "kvm-intel"
+    "kvm"
+  ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
