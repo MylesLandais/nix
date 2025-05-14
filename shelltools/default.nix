@@ -9,6 +9,7 @@
     ./bat
     ./direnv
     ./eza
+    ./fish
     ./fzf
     ./zoxide
     ./zsh
@@ -26,6 +27,7 @@
     fzf.enable = lib.mkDefault true;
     zoxide.enable = lib.mkDefault true;
     zsh.enable = lib.mkDefault true;
+    fish.enable = lib.mkDefault true;
     yazi.enable = lib.mkDefault true;
   };
 }

@@ -216,6 +216,7 @@
     };
   };
   programs.zsh.enable = true;
+  programs.fish.enable = true;
   programs.nh.enable = true;
   programs.firefox.enable = true;
   programs.steam.enable = true;
@@ -226,7 +227,7 @@
   fonts.packages = with pkgs; [
     nerd-fonts.hack
   ];
-  users.defaultUserShell = pkgs.zsh;
+  users.defaultUserShell = pkgs.fish;
   users.motd = ''
 
               ▗▄▄▄       ▗▄▄▄▄    ▄▄▄▖
