@@ -19,7 +19,9 @@
       syntaxHighlighting.enable = true;
       initContent = ''
         source <(kubectl completion zsh)
-        zvm_after_init_commands+=(eval "$(atuin init zsh --disable-up-arrow)")
+        source "$(fzf-share)/key-bindings.zsh"
+        source "$(fzf-share)/completion.zsh"
+        source <(fzf --zsh)
         export SSH_AUTH_SOCK=/home/franky/.bitwarden-ssh-agent.sock
       '';
       plugins = [
@@ -27,6 +29,10 @@
           name = "vi-mode";
           src = pkgs.zsh-vi-mode;
           file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
+        }
+        {
+          name = "fzf";
+          src = pkgs.fzf-zsh;
         }
       ];
 

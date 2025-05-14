@@ -38,6 +38,7 @@
     pulsemixer
     sassc
     gnome-themes-extra
+    fishPlugins.forgit
     gtk-engine-murrine
     treefmt
     alejandra
@@ -138,6 +139,8 @@
       web-devicons = {
         enable = true;
       };
+      timerly.enable = true;
+      noice.enable = true;
     };
     colorschemes = {
       kanagawa-paper = {
@@ -179,6 +182,7 @@
   };
 
   home.sessionVariables = {
+    SSH_AUTH_SOCK = "/home/franky/.bitwarden-ssh-agent.sock";
     # EDITOR = "emacs";
   };
 
