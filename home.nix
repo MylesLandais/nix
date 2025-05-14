@@ -182,7 +182,6 @@
   };
 
   home.sessionVariables = {
-    SSH_AUTH_SOCK = "/home/franky/.bitwarden-ssh-agent.sock";
     # EDITOR = "emacs";
   };
 

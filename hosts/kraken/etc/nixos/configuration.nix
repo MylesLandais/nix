@@ -47,6 +47,16 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
+  services.openssh = {
+    enable = true;
+    ports = [ 22 ];
+    settings = {
+      PasswordAuthentication = true;
+      UseDns = false;
+      X11Forwarding = false;
+
+    };
+  };
   services.opentelemetry-collector = {
     enable = true;
     package = pkgs.opentelemetry-collector-contrib;
