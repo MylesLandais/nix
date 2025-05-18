@@ -14,7 +14,7 @@
       enable = true;
       shellInit = ''
         set -U fish_term24bit 1
-        set SSH_AUTH_SOCK /home/franky/.bitwarden-ssh-agent.sock
+        set -gx SSH_AUTH_SOCK /home/franky/.bitwarden-ssh-agent.sock
         fish_vi_key_bindings
       '';
 
