@@ -30,6 +30,7 @@
   ];
   # environment.
   home.packages = with pkgs; [
+    matugen
     vial
     hyprpanel
     gpgme
@@ -148,7 +149,7 @@
 
         settings = {
           background = "dark";
-          transparent = false;
+          transparent = true;
           undercurl = true;
           terminal_colors = true;
           theme = "ink";

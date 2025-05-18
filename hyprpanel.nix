@@ -7,7 +7,7 @@
   imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
   programs.hyprpanel = {
     enable = true;
-    overwrite.enable = false;
+    overwrite.enable = true;
     settings = {
       layout = {
         "bar.layouts" = {
@@ -30,7 +30,9 @@
           };
         };
       };
-      wallpaper.enable = false;
+      wallpaper.enable = true;
+      wallpaper.image = "${vars.wallpaper}";
+      wallpaper.pywal = true;
       scalingPriority = "hyprland";
       bar = {
         launcher.autoDetectIcon = true;
@@ -55,7 +57,9 @@
       menus.dashboard.directories.enabled = false;
       menus.dashboard.stats.enable_gpu = true;
       theme = {
-        name = "gruvbox_split";
+        matugen = true;
+        matugen_settings.mode = "dark";
+        #name = "gruvbox_split";
         osd.radius = "0.7em";
         bar = {
           transparent = true;
