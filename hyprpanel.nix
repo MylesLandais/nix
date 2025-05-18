@@ -56,9 +56,21 @@
       menus.dashboard.stats.enable_gpu = true;
       theme = {
         name = "gruvbox_split";
+        osd.radius = "0.7em";
         bar = {
           transparent = true;
+          border_radius = "1.5em";
           floating = false;
+          buttons = {
+            radius = "1em";
+            workspaces.pill.radius = "2.5rem * 0.7";
+          };
+          menus = {
+            border.radius = "1em";
+            card_radius = "1em";
+            popover.radius = "1em";
+            progressbar.radius = "1em";
+          };
         };
         font = {
           name = "Hack Nerd Font";
