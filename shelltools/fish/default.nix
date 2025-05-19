@@ -16,6 +16,8 @@
         set -U fish_term24bit 1
         set -gx SSH_AUTH_SOCK /home/franky/.bitwarden-ssh-agent.sock
         fish_vi_key_bindings
+        function last_history_item; echo $history[1]; end
+        abbr -a !! --position anywhere --function last_history_item
       '';
 
       shellAliases = {

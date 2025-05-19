@@ -75,6 +75,7 @@
             enable = true;
             installRustc = false;
             installCargo = false;
+            settings.formatting.command = "cargo fmt";
           };
           terraform_lsp.enable = true;
         };
