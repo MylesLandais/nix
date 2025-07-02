@@ -31,6 +31,8 @@
   # environment.
   home.packages = with pkgs; [
     matugen
+    solaar
+    heroic
     vial
     hyprpanel
     gpgme
@@ -110,6 +112,7 @@
   devtooling.enable = true;
   shelltools.enable = true;
   programs.git.delta.tokyonight.enable = false;
+  programs.onlyoffice.enable = true;
   programs.wofi.enable = true;
   stylix = {
     autoEnable = false;
@@ -142,6 +145,28 @@
       };
       timerly.enable = true;
       noice.enable = true;
+      mini = {
+        enable = true;
+        modules = {
+          animate = {
+            cursor = {
+              enable = true;
+            };
+            scroll = {
+              enable = true;
+            };
+            resize = {
+              enable = true;
+            };
+            open = {
+              enable = true;
+            };
+            close = {
+              enable = true;
+            };
+          };
+        };
+      };
     };
     colorschemes = {
       kanagawa-paper = {
@@ -179,6 +204,7 @@
       theme = "Kanagawa Dragon"
       background-opacity = 0.9
       window-decoration = false
+      font-family = "Hack Nerd Font"
     '';
   };
 
