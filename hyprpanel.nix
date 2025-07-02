@@ -1,33 +1,31 @@
 {
   inputs,
+  pkgs,
   vars,
   ...
 }:
 {
-  imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
   programs.hyprpanel = {
     enable = true;
-    overwrite.enable = true;
+    package = pkgs.hyprpanel;
     settings = {
-      layout = {
-        "bar.layouts" = {
-          "*" = {
-            left = [
-              "dashboard"
-              "workspaces"
-            ] ++ (if !vars.isDesktop then [ "battery" ] else [ "" ]);
-            middle = [
-              "media"
-              "network"
-            ];
-            right = [
-              "volume"
-              "bluetooth"
-              "systray"
-              "clock"
-              "notifications"
-            ];
-          };
+      bar.layouts = {
+        "*" = {
+          left = [
+            "dashboard"
+            "workspaces"
+          ];
+          middle = [
+            "media"
+            "network"
+          ] ++ (if !vars.isDesktop then [ "battery" ] else [ "" ]);
+          right = [
+            "volume"
+            "bluetooth"
+            "systray"
+            "clock"
+            "notifications"
+          ];
         };
       };
       wallpaper.enable = true;
