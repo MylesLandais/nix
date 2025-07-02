@@ -9,6 +9,11 @@
     keymaps = [
       {
         mode = "n";
+        key = "<leader><leader>";
+        action.__raw = "function() Snacks.picker.smart() end";
+      }
+      {
+        mode = "n";
         key = "<leader>a";
         action.__raw = "function() require'harpoon':list():add() end";
       }
