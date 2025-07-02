@@ -45,17 +45,17 @@
   };
 
   fileSystems."/data" = {
-    device = "/dev/sdb1";
+    device = "/dev/disk/by-uuid/ad9c7904-29df-474d-8de4-8d93137e06b9";
     fsType = "ext4";
   };
 
   fileSystems."/home/franky/games" = {
-    device = "/dev/sda1";
+    device = "/dev/disk/by-uuid/4b0344e8-255f-4709-9e76-7e7b499d5521";
     fsType = "ext4";
   };
 
   fileSystems."/home/franky/games2" = {
-    device = "/dev/sdc1";
+    device = "/dev/disk/by-uuid/442159ec-9409-420b-ba62-6c0d08b6e2f8";
     fsType = "ext4";
   };
 
