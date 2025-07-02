@@ -23,10 +23,6 @@
       url = "gitlab:Zhaith-Izaliel/sddm-sugar-candy-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprpanel = {
-      url = "github:Jas-SinghFSU/HyprPanel";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     ghostty = {
       url = "git+ssh://git@github.com/ghostty-org/ghostty";
       inputs.nixpkgs-stable.follows = "nixpkgs";
@@ -45,7 +41,6 @@
       sddm-sugar-candy-nix,
       zen-browser,
       ghostty,
-      hyprpanel,
       stylix,
       wallpapers,
       nixvim,
@@ -61,7 +56,6 @@
           allowUnfree = true;
         };
         overlays = [
-          hyprpanel.overlay
           sddm-sugar-candy-nix.overlays.default
         ];
       };
