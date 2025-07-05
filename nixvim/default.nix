@@ -1,11 +1,16 @@
 {
   self,
   lib,
+  pkgs,
+  inputs,
   config,
   ...
 }:
 {
   imports = [
+    # import home manager module
+    inputs.nixvim.homeManagerModules.nixvim
+    # import plugin config
     ./plugins/lualine
     ./plugins/packer
     ./plugins/oil
@@ -30,6 +35,8 @@
     ./plugins/hot-reload
     ./plugins/luasnip
     ./plugins/code_companion
+    ./keymaps.nix
+    ./vimopts.nix
   ];
 
   options = {
@@ -60,5 +67,89 @@
     reload.enable = lib.mkDefault true;
     luasnip.enable = lib.mkDefault true;
     companion.enable = lib.mkDefault true;
+
+    # basic nixvim config
+    programs.nixvim = {
+      enable = true;
+      defaultEditor = true;
+      luaLoader.enable = false;
+
+      extraConfigLua = "require('go').setup()";
+
+      extraPlugins = with pkgs.vimPlugins; [
+        plenary-nvim
+        go-nvim
+        nvim-treesitter.withAllGrammars
+      ];
+
+      plugins = {
+        web-devicons = {
+          enable = true;
+        };
+
+        timerly.enable = true;
+        noice.enable = true;
+
+        mini = {
+          enable = true;
+
+          modules = {
+            animate = {
+              cursor = {
+                enable = true;
+              };
+              scroll = {
+                enable = true;
+              };
+              resize = {
+                enable = true;
+              };
+              open = {
+                enable = true;
+              };
+              close = {
+                enable = true;
+              };
+            };
+          };
+        };
+      };
+
+      colorschemes = {
+        kanagawa-paper = {
+          enable = true;
+
+          settings = {
+            background = "dark";
+            transparent = true;
+            undercurl = true;
+            terminal_colors = true;
+            theme = "ink";
+
+            styles = {
+              comments = {
+                italic = true;
+              };
+
+              functions = {
+                italic = true;
+              };
+
+              keywords = {
+                bold = true;
+              };
+
+              statement_style = {
+                bold = true;
+              };
+
+            };
+
+          };
+
+        };
+      };
+    };
   };
+
 }

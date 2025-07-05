@@ -20,12 +20,9 @@
     ./nixvim
     ./shelltools
     ./devtooling
-    ./keymaps.nix
-    ./vimopts.nix
     ./gtk
     ./hyprpanel.nix
     inputs.stylix.homeManagerModules.stylix
-    inputs.nixvim.homeManagerModules.nixvim
     inputs.tokyonight.homeManagerModules.default
   ];
   # environment.
@@ -128,73 +125,6 @@
       lazygit.enable = true;
       qt.enable = true;
       wofi.enable = true;
-    };
-  };
-  programs.nixvim = {
-    enable = true;
-    defaultEditor = true;
-    luaLoader.enable = false;
-    extraConfigLua = "require('go').setup()";
-    extraPlugins = with pkgs.vimPlugins; [
-      plenary-nvim
-      go-nvim
-      nvim-treesitter.withAllGrammars
-    ];
-    plugins = {
-      web-devicons = {
-        enable = true;
-      };
-      timerly.enable = true;
-      noice.enable = true;
-      mini = {
-        enable = true;
-        modules = {
-          animate = {
-            cursor = {
-              enable = true;
-            };
-            scroll = {
-              enable = true;
-            };
-            resize = {
-              enable = true;
-            };
-            open = {
-              enable = true;
-            };
-            close = {
-              enable = true;
-            };
-          };
-        };
-      };
-    };
-    colorschemes = {
-      kanagawa-paper = {
-        enable = true;
-
-        settings = {
-          background = "dark";
-          transparent = true;
-          undercurl = true;
-          terminal_colors = true;
-          theme = "ink";
-          styles = {
-            comments = {
-              italic = true;
-            };
-            functions = {
-              italic = true;
-            };
-            keywords = {
-              bold = true;
-            };
-            statement_style = {
-              bold = true;
-            };
-          };
-        };
-      };
     };
   };
   nixvimcfg.enable = true;
