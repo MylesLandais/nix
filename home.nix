@@ -30,6 +30,7 @@
   ];
   # environment.
   home.packages = with pkgs; [
+    jetbrains.goland
     matugen
     solaar
     heroic
