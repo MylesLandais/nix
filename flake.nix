@@ -92,7 +92,7 @@
                 hostName = "franktory";
                 isDesktop = false;
                 class = "laptop";
-                wallpaper = "${wallpapers}/kanagawa-dragon/wall-01.png";
+                wallpaper = "${wallpapers}/kanagawa-dragon/sciel.jpg";
                 mainMonitor = {
                   name = "eDP-1";
                   width = "1920";
@@ -130,7 +130,7 @@
                 hostName = "kraken";
                 isDesktop = true;
                 class = "desktop";
-                wallpaper = "${wallpapers}/kanagawa-dragon/3895e.jpg";
+                wallpaper = "${wallpapers}/kanagawa-dragon/sciel.jpg";
                 mainMonitor = {
                   name = "DP-4";
                   width = "1920";
