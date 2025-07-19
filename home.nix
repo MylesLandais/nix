@@ -22,84 +22,89 @@
     ./devtooling
     ./gtk
     ./hyprpanel.nix
-    inputs.stylix.homeManagerModules.stylix
+    inputs.stylix.homeModules.stylix
     inputs.tokyonight.homeManagerModules.default
   ];
-  # environment.
+
   home.packages = with pkgs; [
-    jetbrains.goland
-    matugen
-    solaar
-    heroic
-    vial
-    hyprpanel
-    gpgme
-    pulseaudio-ctl
-    pulseaudio
-    pulsemixer
-    sassc
-    gnome-themes-extra
-    fishPlugins.forgit
-    gtk-engine-murrine
-    treefmt
+    # jetbrains.goland
+    ags
     alejandra
-    markdown-oxide
-    vhs
+    bind
+    bitwarden-desktop
+    brave
+    btop
+    cava
+    coreutils
+    cosmic-files
+    devbox
     dysk
     element-desktop
-    virtualgl
-    vulkan-tools
-    nix-search-tv
-    ffmpeg
-    ttyd
-    vesktop
-    bitwarden-desktop
-    lazygit
-    lazydocker
-    ripgrep
-    gcc
-    gowall
-    jq
-    wlogout
-    hack-font
-    playerctl
-    tmux
-    hyprshot
-    pavucontrol
-    wl-clipboard
-    waybar
-    jetbrains-mono
-    fastfetch
-    nwg-look
-    ollama
-    hyprpaper
-    devbox
-    bind
-    ags
-    libnotify
     exercism
-    coreutils
+    fastfetch
     fd
-    tokyonight-gtk-theme
+    ffmpeg
+    fishPlugins.forgit
+    gamemode
+    gcc
+    git-lfs
+    glava
+    gnome-themes-extra
+    gowall
+    gpgme
+    gtk-engine-murrine
+    hack-font
+    heroic
+    hubble
+    hyprpanel
+    hyprpaper
+    hyprshot
+    jetbrains-mono
+    jq
     kanagawa-gtk-theme
     kanagawa-icon-theme
-    tldr
-    btop
-    gamemode
-    hubble
-    brave
-    telegram-desktop
-    statping-ng
+    lazydocker
+    lazygit
+    libnotify
+    libnvidia-container
+    markdown-oxide
+    matugen
+    mpv
+    nix-search-tv
+    nixos-generators
+    nvidia-docker
+    nwg-look
+    ollama
+    opencloud-desktop
+    pavucontrol
+    playerctl
+    plex-mpv-shim
+    pulseaudio
+    pulseaudio-ctl
+    pulsemixer
     revive
+    ripgrep
+    sassc
+    solaar
+    statping-ng
+    telegram-desktop
     terraform-ls
     tflint
-    mpv
-    plex-mpv-shim
-    glava
-    cosmic-files
-    nixos-generators
-    cava
+    tldr
+    tmux
+    tokyonight-gtk-theme
+    treefmt
+    ttyd
+    vesktop
+    vhs
+    vial
+    virtualgl
+    vulkan-tools
+    waybar
+    wl-clipboard
+    wlogout
   ];
+
   home.pointerCursor = {
     gtk.enable = true;
     package = pkgs.bibata-cursors;
@@ -110,6 +115,7 @@
   devtooling.enable = true;
   shelltools.enable = true;
   programs.git.delta.tokyonight.enable = false;
+  programs.git.lfs.enable = true;
   programs.onlyoffice.enable = true;
   programs.wofi.enable = true;
   stylix = {
@@ -121,6 +127,7 @@
       vesktop.enable = true;
       btop.enable = true;
       gtk.enable = true;
+      hyprland.enable = true;
       kubecolor.enable = true;
       lazygit.enable = true;
       qt.enable = true;
