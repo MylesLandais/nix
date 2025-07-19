@@ -29,8 +29,8 @@
         };
       };
       wallpaper.enable = true;
-      wallpaper.image = "${vars.wallpaper}";
       wallpaper.pywal = true;
+      wallpaper.image = "${vars.wallpaper}";
       scalingPriority = "hyprland";
       bar = {
         launcher.autoDetectIcon = true;
