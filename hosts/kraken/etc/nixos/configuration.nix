@@ -178,6 +178,7 @@
   };
   services.rpcbind.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia-container-toolkit.enable = true;
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
@@ -197,6 +198,7 @@
   };
 
   virtualisation.docker.enable = true;
+  virtualisation.docker.enableNvidia = true;
   virtualisation.libvirtd.enable = true;
   services.xserver.enable = true;
   services.blueman.enable = true;
