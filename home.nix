@@ -123,14 +123,16 @@
     enable = true;
     base16Scheme = "${pkgs.base16-schemes}/share/themes/kanagawa-dragon.yaml";
     targets = {
-      k9s.enable = true;
-      vesktop.enable = true;
+      bat.enable = true;
       btop.enable = true;
       gtk.enable = true;
       hyprland.enable = true;
+      k9s.enable = true;
       kubecolor.enable = true;
       lazygit.enable = true;
+      mpv.enable = true;
       qt.enable = true;
+      vesktop.enable = true;
       wofi.enable = true;
     };
   };
