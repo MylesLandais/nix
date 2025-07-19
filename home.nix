@@ -117,7 +117,32 @@
   programs.git.delta.tokyonight.enable = false;
   programs.git.lfs.enable = true;
   programs.onlyoffice.enable = true;
-  programs.wofi.enable = true;
+  programs.wofi.enable = false;
+  programs.fuzzel = {
+    enable = true;
+    settings = {
+      main = {
+        font = "Hack Nerd Font";
+        prompt = ''">    "'';
+        lines = 20;
+        width = 60;
+        horizontal-pad = 40;
+        vertical-pad = 16;
+        inner-pad = 6;
+      };
+      colors = {
+        background = "1e1e2efa";
+        text = "19617813801";
+        border = "#c4b28a";
+      };
+    };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme = "gtk";
+    style.name = "qt6gtk2";
+  };
   stylix = {
     autoEnable = false;
     enable = true;
@@ -125,13 +150,12 @@
     targets = {
       bat.enable = true;
       btop.enable = true;
-      gtk.enable = true;
+      gtk.enable = false;
       hyprland.enable = true;
       k9s.enable = true;
       kubecolor.enable = true;
       lazygit.enable = true;
       mpv.enable = true;
-      qt.enable = true;
       vesktop.enable = true;
       wofi.enable = true;
     };

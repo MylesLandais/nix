@@ -95,6 +95,7 @@
       "XDG_SESSION_TYPE=wayland"
       "XCURSOR_SIZE=22"
       "EDITOR=nvim"
+      "QT_STYLE_OVERRIDE=''"
     ];
     "$mod" = "SUPER";
     exec-once = [
@@ -119,7 +120,7 @@
         "$mod, B, exec, hyprlock"
         "$mod, N, exec, swaync-client -t -sw"
         "$mod, V, togglefloating,"
-        "$mod, R, exec, wofi --show drun"
+        "$mod, R, exec, fuzzel"
         "$mod, S, exec, hyprshot -m region"
         "$mod SHIFT, R, exec, wlogout"
         "$mod, D, exec, vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto "
