@@ -15,6 +15,7 @@
     ./hardware-configuration.nix
     ./ollama.nix
     ./udev.nix
+    ./logiops.nix
     #<home-manager/nixos>
   ];
 
@@ -179,6 +180,8 @@
   services.rpcbind.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia-container-toolkit.enable = true;
+  hardware.logitech.wireless.enable = true;
+  hardware.logitech.wireless.enableGraphical = true;
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
