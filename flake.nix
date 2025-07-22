@@ -133,9 +133,9 @@
                 wallpaper = "${wallpapers}/kanagawa-dragon/sciel.jpg";
                 mainMonitor = {
                   name = "DP-4";
-                  width = "1920";
-                  height = "1080";
-                  refresh = "100";
+                  width = "2560";
+                  height = "1440";
+                  refresh = "180";
                 };
                 secondaryMonitor = {
                   name = "HDMI-A-2";
