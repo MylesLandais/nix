@@ -47,6 +47,7 @@
     fishPlugins.forgit
     gamemode
     gcc
+    gh
     git-lfs
     glava
     gnome-themes-extra
@@ -78,6 +79,7 @@
     opencloud-desktop
     pavucontrol
     playerctl
+    plex-desktop
     plex-mpv-shim
     pulseaudio
     pulseaudio-ctl

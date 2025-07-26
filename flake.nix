@@ -139,9 +139,9 @@
                 };
                 secondaryMonitor = {
                   name = "HDMI-A-2";
-                  width = "1920";
-                  height = "1080";
-                  refresh = "100";
+                  width = "2560";
+                  height = "1440";
+                  refresh = "180";
                 };
               };
               inherit inputs system;

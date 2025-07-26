@@ -18,6 +18,7 @@
           update_on_change = true;
         };
       };
+      octo.enable = true;
       gitsigns = {
         enable = true;
         settings = {
