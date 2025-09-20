@@ -34,6 +34,8 @@
     bitwarden-desktop
     brave
     btop
+    calibre
+    calibre-web
     cava
     coreutils
     cosmic-files
@@ -51,6 +53,7 @@
     git-lfs
     glava
     gnome-themes-extra
+    gnome-keyring
     gowall
     gpgme
     gtk-engine-murrine
@@ -75,6 +78,8 @@
     nixos-generators
     nvidia-docker
     nwg-look
+    obsidian
+    oci-cli
     ollama
     opencloud-desktop
     pavucontrol
@@ -87,6 +92,7 @@
     revive
     ripgrep
     sassc
+    gnome-secrets
     solaar
     statping-ng
     telegram-desktop
@@ -105,6 +111,7 @@
     waybar
     wl-clipboard
     wlogout
+    zed-editor
   ];
 
   home.pointerCursor = {

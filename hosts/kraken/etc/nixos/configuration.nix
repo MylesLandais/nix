@@ -200,6 +200,7 @@
     package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
 
+  hardware.pulseaudio.enable = false;
   virtualisation.docker.enable = true;
   virtualisation.docker.enableNvidia = true;
   virtualisation.libvirtd.enable = true;
@@ -274,6 +275,7 @@
       "networkmanager"
       "qemu-libvirtd"
       "libvirtd"
+      "dialout"
       "audio"
       "disk"
       "wheel"

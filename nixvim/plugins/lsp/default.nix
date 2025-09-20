@@ -53,6 +53,7 @@
             ];
           };
           tflint.enable = true;
+          astro.enable = true;
           nixd = {
             enable = true;
             settings =

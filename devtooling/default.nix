@@ -12,6 +12,7 @@
     ./lua
     ./rust
     ./tmux
+    ./zed
   ];
 
   options = {
@@ -25,5 +26,6 @@
     lua.enable = lib.mkDefault true;
     rust.enable = lib.mkDefault true;
     tmux.enable = lib.mkDefault true;
+    zed.enable = lib.mkDefault true;
   };
 }
