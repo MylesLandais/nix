@@ -66,8 +66,9 @@
       gh
       git-lfs
       glava
-      gnome-themes-extra
       gnome-keyring
+      gnome-secrets
+      gnome-themes-extra
       gowall
       gpgme
       gtk-engine-murrine
@@ -106,8 +107,8 @@
       revive
       ripgrep
       sassc
-      gnome-secrets
       solaar
+      statix
       statping-ng
       telegram-desktop
       terraform-ls
