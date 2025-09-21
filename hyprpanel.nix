@@ -18,7 +18,8 @@
           middle = [
             "media"
             "network"
-          ] ++ (if !vars.isDesktop then [ "battery" ] else [ "" ]);
+          ]
+          ++ (if !vars.isDesktop then [ "battery" ] else [ "" ]);
           right = [
             "volume"
             "bluetooth"
@@ -28,9 +29,11 @@
           ];
         };
       };
-      wallpaper.enable = true;
-      wallpaper.pywal = true;
-      wallpaper.image = "${vars.wallpaper}";
+      wallpaper = {
+        enable = true;
+        pywal = true;
+        image = "${vars.wallpaper}";
+      };
       scalingPriority = "hyprland";
       bar = {
         launcher.autoDetectIcon = true;
@@ -45,15 +48,19 @@
         };
         notifications.show_total = true;
       };
-      menus.clock = {
-        time = {
-          military = true;
-          hideSeconds = true;
+      menus = {
+        clock = {
+          time = {
+            military = true;
+            hideSeconds = true;
+          };
+          weather.unit = "metric";
         };
-        weather.unit = "metric";
+        dashboard = {
+          directories.enabled = false;
+          stats.enable_gpu = true;
+        };
       };
-      menus.dashboard.directories.enabled = false;
-      menus.dashboard.stats.enable_gpu = true;
       theme = {
         matugen = true;
         matugen_settings.mode = "dark";
