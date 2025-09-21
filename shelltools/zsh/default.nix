@@ -15,7 +15,6 @@
       autocd = true;
       enableCompletion = true;
       autosuggestion.enable = true;
-      dotDir = ".config/zsh";
       syntaxHighlighting.enable = true;
       initContent = ''
         source <(kubectl completion zsh)
