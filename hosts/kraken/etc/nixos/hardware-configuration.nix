@@ -13,56 +13,64 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = [
-    "nvme"
-    "xhci_pci"
-    "ahci"
-    "usb_storage"
-    "usbhid"
-    "sd_mod"
-    "nfs"
-  ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [
-    "kvm-amd"
-    "kvm-intel"
-    "kvm"
-  ];
-  boot.extraModulePackages = [ ];
-
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/af2f8af9-f207-491a-8c3c-a734e7f2917e";
-    fsType = "ext4";
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/3095-1960";
-    fsType = "vfat";
-    options = [
-      "fmask=0022"
-      "dmask=0022"
+  boot = {
+    initrd = {
+      availableKernelModules = [
+        "nvme"
+        "xhci_pci"
+        "ahci"
+        "usb_storage"
+        "usbhid"
+        "sd_mod"
+        "nfs"
+      ];
+      kernelModules = [ ];
+    };
+    kernelModules = [
+      "kvm-amd"
+      "kvm-intel"
+      "kvm"
     ];
+    extraModulePackages = [ ];
+    supportedFilesystems = [ "nfs" ];
   };
 
-  fileSystems."/data" = {
-    device = "/dev/disk/by-uuid/ad9c7904-29df-474d-8de4-8d93137e06b9";
-    fsType = "ext4";
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-uuid/af2f8af9-f207-491a-8c3c-a734e7f2917e";
+      fsType = "ext4";
+    };
+
+    "/boot" = {
+      device = "/dev/disk/by-uuid/3095-1960";
+      fsType = "vfat";
+      options = [
+        "fmask=0022"
+        "dmask=0022"
+      ];
+    };
+
+    "/data" = {
+      device = "/dev/disk/by-uuid/ad9c7904-29df-474d-8de4-8d93137e06b9";
+      fsType = "ext4";
+    };
+
+    "/home/franky/games" = {
+      device = "/dev/disk/by-uuid/4b0344e8-255f-4709-9e76-7e7b499d5521";
+      fsType = "ext4";
+    };
+
+    "/home/franky/games2" = {
+      device = "/dev/disk/by-uuid/442159ec-9409-420b-ba62-6c0d08b6e2f8";
+      fsType = "ext4";
+    };
+
+    "/mnt/NAS" = {
+      device = "192.168.0.33:/mnt/user/Babylon";
+      fsType = "nfs";
+    };
   };
 
-  fileSystems."/home/franky/games" = {
-    device = "/dev/disk/by-uuid/4b0344e8-255f-4709-9e76-7e7b499d5521";
-    fsType = "ext4";
-  };
-
-  fileSystems."/home/franky/games2" = {
-    device = "/dev/disk/by-uuid/442159ec-9409-420b-ba62-6c0d08b6e2f8";
-    fsType = "ext4";
-  };
-
-  fileSystems."/mnt/NAS" = {
-    device = "192.168.0.33:/mnt/user/Babylon";
-    fsType = "nfs";
-  };
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -72,12 +80,13 @@
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp8s0.useDHCP = lib.mkDefault true;
 
-  boot.supportedFilesystems = [ "nfs" ];
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
+  hardware = {
+    cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+    };
   };
 }
