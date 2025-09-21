@@ -26,17 +26,21 @@
         cmp-dictionary.enable = true;
         lspkind = {
           enable = false;
+          settings = {
+            cmp = {
+              menu = {
+                code_companion = "[AI]";
+                nvim_lsp = "[LSP]";
+                nvim_lua = "[api]";
+                path = "[path]";
+                luasnip = "[snip]";
+                buffer = "[buffer]";
+                neorg = "[neorg]";
+              };
+            };
+          };
           cmp = {
             enable = true;
-            menu = {
-              code_companion = "[AI]";
-              nvim_lsp = "[LSP]";
-              nvim_lua = "[api]";
-              path = "[path]";
-              luasnip = "[snip]";
-              buffer = "[buffer]";
-              neorg = "[neorg]";
-            };
           };
         };
 

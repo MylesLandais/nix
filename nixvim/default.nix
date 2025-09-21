@@ -9,7 +9,7 @@
 {
   imports = [
     # import home manager module
-    inputs.nixvim.homeManagerModules.nixvim
+    inputs.nixvim.homeModules.nixvim
     # import plugin config
     ./plugins/lualine
     ./plugins/packer
