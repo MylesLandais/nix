@@ -7,12 +7,9 @@
     };
     tokyonight = {
       url = "github:mrjones2014/tokyonight.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix = {
       url = "github:danth/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
     };
     nixvim = {
       url = "github:nix-community/nixvim";
@@ -25,8 +22,6 @@
     };
     ghostty = {
       url = "git+ssh://git@github.com/ghostty-org/ghostty";
-      inputs.nixpkgs-stable.follows = "nixpkgs";
-      inputs.nixpkgs-unstable.follows = "nixpkgs";
     };
     wallpapers = {
       url = "github:FKouhai/Kanagawa-wallpapers";
@@ -85,32 +80,35 @@
           env_pkgs
           hm_user_cfg
           {
-            home-manager.useUserPackages = true;
-            home-manager.useGlobalPkgs = true;
-            home-manager.extraSpecialArgs = {
-              vars = {
-                hostName = "franktory";
-                isDesktop = false;
-                class = "laptop";
-                wallpaper = "${wallpapers}/kanagawa-dragon/sciel.jpg";
-                mainMonitor = {
-                  name = "eDP-1";
-                  width = "1920";
-                  height = "1080";
-                  refresh = "60";
+            home-manager = {
+              useUserPackages = true;
+              useGlobalPkgs = true;
+              extraSpecialArgs = {
+                vars = {
+                  hostName = "franktory";
+                  isDesktop = false;
+                  class = "laptop";
+                  wallpaper = "${wallpapers}/kanagawa-dragon/sciel.jpg";
+                  mainMonitor = {
+                    name = "eDP-1";
+                    width = "1920";
+                    height = "1080";
+                    refresh = "60";
+                  };
+                  secondaryMonitor = {
+                    name = "HDMI-A-1";
+                    width = "1920";
+                    height = "1080";
+                    refresh = "60";
+                  };
                 };
-                secondaryMonitor = {
-                  name = "HDMI-A-1";
-                  width = "1920";
-                  height = "1080";
-                  refresh = "60";
-                };
+                inherit inputs system;
               };
-              inherit inputs system;
             };
           }
         ];
       };
+
       nixosConfigurations."kraken" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         inherit pkgs;
@@ -123,28 +121,30 @@
           hm_user_cfg
 
           {
-            home-manager.useUserPackages = true;
-            home-manager.useGlobalPkgs = true;
-            home-manager.extraSpecialArgs = {
-              vars = {
-                hostName = "kraken";
-                isDesktop = true;
-                class = "desktop";
-                wallpaper = "${wallpapers}/kanagawa-dragon/sciel.jpg";
-                mainMonitor = {
-                  name = "DP-4";
-                  width = "2560";
-                  height = "1440";
-                  refresh = "180";
+            home-manager = {
+              useUserPackages = true;
+              useGlobalPkgs = true;
+              extraSpecialArgs = {
+                vars = {
+                  hostName = "kraken";
+                  isDesktop = true;
+                  class = "desktop";
+                  wallpaper = "${wallpapers}/kanagawa-dragon/sciel.jpg";
+                  mainMonitor = {
+                    name = "DP-4";
+                    width = "2560";
+                    height = "1440";
+                    refresh = "180";
+                  };
+                  secondaryMonitor = {
+                    name = "HDMI-A-2";
+                    width = "2560";
+                    height = "1440";
+                    refresh = "180";
+                  };
                 };
-                secondaryMonitor = {
-                  name = "HDMI-A-2";
-                  width = "2560";
-                  height = "1440";
-                  refresh = "180";
-                };
+                inherit inputs system;
               };
-              inherit inputs system;
             };
           }
         ];
