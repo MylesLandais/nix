@@ -86,6 +86,7 @@
       lazygit
       libnotify
       libnvidia-container
+      lmstudio
       markdown-oxide
       matugen
       mpv
