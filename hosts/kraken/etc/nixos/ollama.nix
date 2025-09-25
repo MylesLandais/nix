@@ -13,6 +13,18 @@
     host = "0.0.0.0";
     openFirewall = true;
     acceleration = "cuda";
+    package = (
+      pkgs.ollama.overrideAttrs {
+        version = "0.12.0";
+        doCheck = false;
+        src = pkgs.fetchFromGitHub {
+          owner = "ollama";
+          repo = "ollama";
+          tag = "v0.12.0";
+          hash = "sha256-CRlrq2vFdk+YlxCSg6FNVg6YpAZ4PSMHeAaGwkx9QFw=";
+        };
+      }
+    );
     loadModels = [
       "qwen2.5-coder:14b"
     ];

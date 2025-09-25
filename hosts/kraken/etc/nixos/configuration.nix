@@ -62,7 +62,11 @@
       "192.168.0.2"
       "192.168.0.1"
     ];
-    networkmanager.enable = true; # Easiest to use and most distros use this by default.
+    networkmanager = {
+      plugins = with pkgs; [
+        networkmanager-openvpn
+      ];
+    };
   };
   #nix.nixPath = ["nixpkgs=${nixpkgs}"];
 
@@ -325,6 +329,7 @@
         qemu_kvm
         nfs-utils
         nvtopPackages.nvidia
+        wireguard-tools
       ];
     };
   };

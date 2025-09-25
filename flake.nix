@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    agenix.url = "github:ryantm/agenix";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -31,6 +32,7 @@
   outputs =
     {
       self,
+      agenix,
       home-manager,
       nixpkgs,
       sddm-sugar-candy-nix,
@@ -58,6 +60,7 @@
         environment.systemPackages = [
           ghostty.packages.x86_64-linux.default
           zen-browser.packages.x86_64-linux.default
+          agenix.packages.x86_64-linux.default
           wallpapers.packages.x86_64-linux.default
         ];
       };
@@ -77,6 +80,7 @@
           ./hosts/franktory/etc/nixos/configuration.nix
           sddm-sugar-candy-nix.nixosModules.default
           home-manager.nixosModules.home-manager
+          agenix.homeManagerModules.default
           env_pkgs
           hm_user_cfg
           {
@@ -119,11 +123,13 @@
           home-manager.nixosModules.home-manager
           env_pkgs
           hm_user_cfg
-
           {
             home-manager = {
               useUserPackages = true;
               useGlobalPkgs = true;
+              sharedModules = [
+                agenix.homeManagerModules.age
+              ];
               extraSpecialArgs = {
                 vars = {
                   hostName = "kraken";

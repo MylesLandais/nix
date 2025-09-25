@@ -39,8 +39,17 @@
             model = "gemini-2.5-flash";
           };
           ollama = {
-            endpoint = "http://127.0.0.1:11434";
-            model = "gemma3:12b";
+            endpoint = "https://ollama.com";
+            model = "qwen3-coder:480b";
+            api_key_name = "OLLAMA_API_KEY";
+          };
+          lmstudio = {
+            __inherited_from = "openai";
+            endpoint = "http://127.0.0.1:1234/v1";
+            model = "qwen/qwen3-coder-30b";
+            timeout = 30000;
+            temperature = 0;
+            max_completion_tokens = 8192;
           };
         };
       };

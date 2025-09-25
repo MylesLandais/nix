@@ -22,6 +22,16 @@
     inputs.tokyonight.homeManagerModules.default
   ];
 
+  age = {
+    identityPaths = [ "/home/franky/.ssh/age" ];
+    secretsDir = "/run/agenix";
+    secrets = {
+      ollama = {
+        file = ./secrets/ollama.age;
+        mode = "400";
+      };
+    };
+  };
   home = {
     username = "franky";
     enableNixpkgsReleaseCheck = false;
@@ -42,6 +52,7 @@
 
     packages = with pkgs; [
       # jetbrains.goland
+      age
       ags
       alejandra
       bind
@@ -51,10 +62,13 @@
       calibre
       calibre-web
       cava
+      crush
       coreutils
       cosmic-files
       devbox
       dysk
+      protonvpn-cli
+      protonvpn-gui
       element-desktop
       exercism
       fastfetch
@@ -96,7 +110,6 @@
       nwg-look
       obsidian
       oci-cli
-      ollama
       opencloud-desktop
       pavucontrol
       playerctl
