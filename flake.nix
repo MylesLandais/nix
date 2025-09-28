@@ -78,6 +78,9 @@
       nixosConfigurations."franktory" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         inherit pkgs;
+        specialArgs = {
+          inherit inputs;
+        };
         modules = with pkgs; [
           ./hosts/franktory/etc/nixos/configuration.nix
           sddm-sugar-candy-nix.nixosModules.default
@@ -118,8 +121,11 @@
       nixosConfigurations."kraken" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         inherit pkgs;
+        specialArgs = {
+          inherit inputs;
+        };
 
-        modules = with pkgs.overlays; [
+        modules = with pkgs; [
           ./hosts/kraken/etc/nixos/configuration.nix
           sddm-sugar-candy-nix.nixosModules.default
           chaotic.nixosModules.default

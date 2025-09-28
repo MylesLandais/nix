@@ -10,10 +10,10 @@
   ...
 }:
 let
+  wp = "${inputs.wallpapers.packages.${pkgs.system}.default}/kanagawa-dragon/sciel.jpg";
   sddm-astronaut = pkgs.sddm-astronaut.override {
     themeConfig = {
-      AccentColor = "#746385";
-      FormPosition = "left";
+      Background = wp;
     };
   };
 in
@@ -233,18 +233,13 @@ in
     displayManager.sddm = {
       enable = true;
       wayland.enable = true;
-      theme = "sddm-astronaut-theme";
-      extraPackages = [ sddm-astronaut ];
-      package = pkgs.kdePackages.sddm;
-      sugarCandyNix = {
-        enable = false;
-        settings = {
-          Background = lib.cleanSource ./wp2.jpg;
-          ScreenWidth = 1920;
-          ScreenHeight = 1080;
-          FormPosition = "left";
-          HaveFormBackground = true;
-          PartialBlur = true;
+      theme = lib.mkForce "sddm-astronaut-theme";
+      extraPackages = with pkgs; [
+        sddm-astronaut
+      ];
+      settings = {
+        Theme = {
+          Current = "sddm-astronaut-theme";
         };
       };
     };
@@ -291,6 +286,9 @@ in
   security.rtkit.enable = true;
   fonts.packages = with pkgs; [
     nerd-fonts.hack
+  ];
+  environment.systemPackages = with pkgs; [
+    sddm-astronaut
   ];
   users = {
     defaultUserShell = pkgs.fish;
@@ -341,6 +339,7 @@ in
         nfs-utils
         nvtopPackages.nvidia
         wireguard-tools
+        kdePackages.qtmultimedia
       ];
     };
   };

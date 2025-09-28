@@ -53,6 +53,7 @@
       # jetbrains.goland
       age
       ags
+      tmux-sessionizer
       alejandra
       bind
       bitwarden-desktop
