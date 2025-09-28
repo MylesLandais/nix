@@ -9,6 +9,14 @@
   extra-types,
   ...
 }:
+let
+  sddm-astronaut = pkgs.sddm-astronaut.override {
+    themeConfig = {
+      AccentColor = "#746385";
+      FormPosition = "left";
+    };
+  };
+in
 {
   imports = [
     # Include the results of the hardware scan.
@@ -45,7 +53,7 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_cachyos;
     kernelParams = [
       "pci=nomsi"
       "clearcpuid=514"
@@ -225,8 +233,11 @@
     displayManager.sddm = {
       enable = true;
       wayland.enable = true;
+      theme = "sddm-astronaut-theme";
+      extraPackages = [ sddm-astronaut ];
+      package = pkgs.kdePackages.sddm;
       sugarCandyNix = {
-        enable = true;
+        enable = false;
         settings = {
           Background = lib.cleanSource ./wp2.jpg;
           ScreenWidth = 1920;

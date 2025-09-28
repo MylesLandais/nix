@@ -2,6 +2,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     agenix.url = "github:ryantm/agenix";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,6 +34,7 @@
     {
       self,
       agenix,
+      chaotic,
       home-manager,
       nixpkgs,
       sddm-sugar-candy-nix,
@@ -100,7 +102,7 @@
                     refresh = "60";
                   };
                   secondaryMonitor = {
-                    name = "HDMI-A-1";
+                    name = "HDMI-A-2";
                     width = "1920";
                     height = "1080";
                     refresh = "60";
@@ -120,6 +122,7 @@
         modules = with pkgs.overlays; [
           ./hosts/kraken/etc/nixos/configuration.nix
           sddm-sugar-candy-nix.nixosModules.default
+          chaotic.nixosModules.default
           home-manager.nixosModules.home-manager
           env_pkgs
           hm_user_cfg
