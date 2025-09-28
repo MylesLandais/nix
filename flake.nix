@@ -18,10 +18,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
-    sddm-sugar-candy-nix = {
-      url = "gitlab:Zhaith-Izaliel/sddm-sugar-candy-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     ghostty = {
       url = "git+ssh://git@github.com/ghostty-org/ghostty";
     };
@@ -37,7 +33,6 @@
       chaotic,
       home-manager,
       nixpkgs,
-      sddm-sugar-candy-nix,
       zen-browser,
       ghostty,
       stylix,
@@ -54,9 +49,6 @@
         config = {
           allowUnfree = true;
         };
-        overlays = [
-          sddm-sugar-candy-nix.overlays.default
-        ];
       };
       env_pkgs = {
         environment.systemPackages = [
@@ -83,7 +75,6 @@
         };
         modules = with pkgs; [
           ./hosts/franktory/etc/nixos/configuration.nix
-          sddm-sugar-candy-nix.nixosModules.default
           home-manager.nixosModules.home-manager
           agenix.homeManagerModules.default
           env_pkgs
@@ -127,7 +118,6 @@
 
         modules = with pkgs; [
           ./hosts/kraken/etc/nixos/configuration.nix
-          sddm-sugar-candy-nix.nixosModules.default
           chaotic.nixosModules.default
           home-manager.nixosModules.home-manager
           env_pkgs

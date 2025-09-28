@@ -687,7 +687,6 @@
         "home-manager": "home-manager_3",
         "nixpkgs": "nixpkgs_5",
         "nixvim": "nixvim",
-        "sddm-sugar-candy-nix": "sddm-sugar-candy-nix",
         "stylix": "stylix",
         "tokyonight": "tokyonight",
         "wallpapers": "wallpapers",
@@ -713,26 +712,6 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "type": "github"
-      }
-    },
-    "sddm-sugar-candy-nix": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1758830012,
-        "narHash": "sha256-snWDpyL6OI2J/ney5ibBNl65MynAZ2N4KTAtGbFdX5o=",
-        "owner": "Zhaith-Izaliel",
-        "repo": "sddm-sugar-candy-nix",
-        "rev": "06c3628c22525965684755e22ec739e06e32cda4",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "Zhaith-Izaliel",
-        "repo": "sddm-sugar-candy-nix",
-        "type": "gitlab"
       }
     },
     "stylix": {
