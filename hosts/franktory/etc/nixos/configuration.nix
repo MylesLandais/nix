@@ -9,6 +9,11 @@
   inputs,
   ...
 }:
+let
+  sddm-astronaut = pkgs.sddm-astronaut.overrideAttrs (oldAttrs: {
+    embeddedTheme = "japanese_aesthetic";
+  });
+in
 {
   imports = [
     # Include the results of the hardware scan.
@@ -66,15 +71,13 @@
     displayManager.sddm = {
       enable = true;
       wayland.enable = true;
-      sugarCandyNix = {
-        enable = true;
-        settings = {
-          Background = lib.cleanSource ./wp2.jpg;
-          ScreenWidth = 1920;
-          ScreenHeight = 1080;
-          FormPosition = "left";
-          HaveFormBackground = true;
-          PartialBlur = true;
+      theme = lib.mkForce "sddm-astronaut-theme";
+      extraPackages = with pkgs; [
+        sddm-astronaut
+      ];
+      settings = {
+        Theme = {
+          Current = "sddm-astronaut-theme";
         };
       };
     };
@@ -141,6 +144,7 @@
   };
   environment.systemPackages = with pkgs; [
     tailscale
+    sddm-astronaut
   ];
 
   system.stateVersion = "24.11"; # Did you read the comment?

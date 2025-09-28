@@ -10,12 +10,9 @@
   ...
 }:
 let
-  wp = "${inputs.wallpapers.packages.${pkgs.system}.default}/kanagawa-dragon/sciel.jpg";
-  sddm-astronaut = pkgs.sddm-astronaut.override {
-    themeConfig = {
-      Background = wp;
-    };
-  };
+  sddm-astronaut = pkgs.sddm-astronaut.overrideAttrs (oldAttrs: {
+    embeddedTheme = "japanese_aesthetic";
+  });
 in
 {
   imports = [
