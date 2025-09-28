@@ -24,7 +24,6 @@
 
   age = {
     identityPaths = [ "/home/franky/.ssh/age" ];
-    secretsDir = "/run/agenix";
     secrets = {
       ollama = {
         file = ./secrets/ollama.age;
@@ -62,13 +61,11 @@
       calibre
       calibre-web
       cava
-      crush
       coreutils
       cosmic-files
+      crush
       devbox
       dysk
-      protonvpn-cli
-      protonvpn-gui
       element-desktop
       exercism
       fastfetch
@@ -111,10 +108,13 @@
       obsidian
       oci-cli
       opencloud-desktop
+      opencode
       pavucontrol
       playerctl
       plex-desktop
       plex-mpv-shim
+      protonvpn-cli
+      protonvpn-gui
       pulseaudio
       pulseaudio-ctl
       pulsemixer
