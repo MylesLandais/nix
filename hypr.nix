@@ -5,7 +5,30 @@
   inputs,
   ...
 }:
+let
+  add_record_player = pkgs.writeShellApplication {
+    name = "add_record_player";
+    text = ''
+      # Wait a moment for audio services to fully start
+      sleep 2
+      # Set PCM2900C input volume to 100%
+      pactl set-source-volume alsa_input.usb-BurrBrown_from_Texas_Instruments_USB_AUDIO_CODEC-00.pro-input-0 65536
+      # Unmute PCM2900C input
+      pactl set-source-mute alsa_input.usb-BurrBrown_from_Texas_Instruments_USB_AUDIO_CODEC-00.pro-input-0 false
+      # Set Scarlett Solo output volume to 100%
+      pactl set-sink-volume alsa_output.usb-Focusrite_Scarlett_Solo_USB_Y7RBNDQ2A68E32-00.pro-output-0 65536
+      # Unmute Scarlett Solo output
+      pactl set-sink-mute alsa_output.usb-Focusrite_Scarlett_Solo_USB_Y7RBNDQ2A68E32-00.pro-output-0 false
+      # Create loopback from PCM2900C input to Scarlett Solo output
+      pactl load-module module-loopback source=alsa_input.usb-BurrBrown_from_Texas_Instruments_USB_AUDIO_CODEC-00.pro-input-0 sink=alsa_output.usb-Focusrite_Scarlett_Solo_USB_Y7RBNDQ2A68E32-00.pro-output-0
+      echo "PCM2900C to Scarlett Solo loopback configured successfully"
+    '';
+  };
+in
 {
+  home.packages = [
+    add_record_player
+  ];
   dbus.packages = [
     pkgs.pass-secret-service
     pkgs.gcr
@@ -109,8 +132,8 @@
       exec-once = [
         "hyprpanel &"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-        "pw-loopback --latency=1"
         "hyprpaper &"
+        "add_record_player"
       ];
       bindm = [
         "$mod, mouse:272, movewindow"

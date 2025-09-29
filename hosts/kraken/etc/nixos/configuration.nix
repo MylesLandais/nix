@@ -222,9 +222,9 @@ in
       };
     };
     blueman.enable = true;
-    pipewire = {
-      enable = true;
-      extraConfig = {
+pipewire = {
+        enable = true;
+extraConfig = {
         pipewire = {
           "10-custom-latency.conf" = {
             "context.properties" = {
@@ -232,6 +232,26 @@ in
               "default.clock.quantum" = 1024;
               "api.alsa.headroom" = 1024;
             };
+          };
+          "99-pcm2900c-loopback.conf" = {
+            "context.modules" = [
+              {
+                name = "libpipewire-module-loopback";
+                args = {
+                  "node.name" = "pcm2900c-loopback";
+                  "node.description" = "PCM2900C Loopback";
+                  "auto.connect" = true;
+                  "capture.props" = {
+                    "node.target" = "alsa_input.usb-BurrBrown_from_Texas_Instruments_USB_AUDIO_CODEC-00.pro-input-0";
+                    "media.class" = "Audio/Source";
+                  };
+                  "playback.props" = {
+                    "node.passive" = true;
+                    "media.class" = "Audio/Sink";
+                  };
+                };
+              }
+            ];
           };
         };
         pipewire-pulse = {
