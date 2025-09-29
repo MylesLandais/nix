@@ -10,7 +10,7 @@
   ...
 }:
 let
-  sddm-astronaut = pkgs.sddm-astronaut.overrideAttrs (oldAttrs: {
+  sddm-astronaut = pkgs.sddm-astronaut.override (oldAttrs: {
     embeddedTheme = "japanese_aesthetic";
   });
 in

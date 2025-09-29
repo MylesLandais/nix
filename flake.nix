@@ -136,16 +136,16 @@
                   class = "desktop";
                   wallpaper = "${wallpapers}/kanagawa-dragon/sciel.jpg";
                   mainMonitor = {
-                    name = "DP-4";
+                    name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. GS27QA 24286B001135";
                     width = "2560";
                     height = "1440";
                     refresh = "180";
                   };
                   secondaryMonitor = {
-                    name = "HDMI-A-2";
+                    name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. GS27QA 24286B001081";
                     width = "2560";
                     height = "1440";
-                    refresh = "180";
+                    refresh = "144";
                   };
                 };
                 inherit inputs system;
