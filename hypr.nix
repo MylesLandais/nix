@@ -108,9 +108,9 @@
       "$mod" = "SUPER";
       exec-once = [
         "hyprpanel &"
-        "hyprpaper &"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-        "pactl load-module module-loopback latency_msec=1"
+        "pw-loopback --latency=1"
+        "hyprpaper &"
       ];
       bindm = [
         "$mod, mouse:272, movewindow"

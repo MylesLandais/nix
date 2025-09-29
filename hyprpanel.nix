@@ -7,6 +7,7 @@
 {
   programs.hyprpanel = {
     enable = true;
+    systemd.enable = true;
     package = pkgs.hyprpanel;
     settings = {
       bar.layouts = {
@@ -31,7 +32,7 @@
       };
       wallpaper = {
         enable = true;
-        pywal = true;
+        pywal = false;
         image = "${vars.wallpaper}";
       };
       scalingPriority = "hyprland";
