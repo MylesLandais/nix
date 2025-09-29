@@ -92,6 +92,7 @@ in
 
       };
     };
+
     opentelemetry-collector = {
       enable = true;
       package = pkgs.opentelemetry-collector-contrib;
@@ -223,10 +224,32 @@ in
     blueman.enable = true;
     pipewire = {
       enable = true;
+      extraConfig = {
+        pipewire = {
+          "10-custom-latency.conf" = {
+            "context.properties" = {
+              "default.clock.min-quantum" = 256;
+              "default.clock.quantum" = 1024;
+              "api.alsa.headroom" = 1024;
+            };
+          };
+        };
+        pipewire-pulse = {
+          "10-custom-latency.conf" = {
+            "context.properties" = {
+              "default.clock.min-quantum" = 256;
+              "default.clock.quantum" = 1024;
+            };
+          };
+        };
+      };
+
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      wireplumber.enable = true;
     };
+
     displayManager.sddm = {
       enable = true;
       wayland.enable = true;
@@ -241,6 +264,7 @@ in
       };
     };
   };
+
   hardware = {
     nvidia-container-toolkit.enable = true;
     logitech.wireless.enable = true;
