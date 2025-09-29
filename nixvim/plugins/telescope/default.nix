@@ -12,6 +12,9 @@
   config = lib.mkIf config.telescope.enable {
     programs.nixvim.plugins.telescope = {
       enable = true;
+      extensions = {
+        manix.enable = true;
+      };
       settings.defaults = {
         file_ignore_patterns = [
           "^.git/"

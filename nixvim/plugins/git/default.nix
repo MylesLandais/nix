@@ -40,6 +40,7 @@
         enable = true;
       };
       fugitive.enable = true;
+      diffview.enable = true;
       git-conflict = {
         enable = true;
         settings = {
