@@ -48,8 +48,8 @@
   # Since you are using GDM (GNOME's Display Manager), KDE has been removed
   # to ensure a stable desktop session.
   services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   # --- XDG PORTAL CONFIGURATION FOR GNOME ---
   # This is required for modern applications, including RustDesk screen sharing,
@@ -60,7 +60,7 @@
   };
 
   # Audio configuration
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -155,5 +155,24 @@
 
   # System state version
   system.stateVersion = "24.11";
+
+  programs.chromium = {
+    enable = true;
+    extensions = [
+      "nngceckbapebfimnlniiiahkandclblb"  # Bitwarden
+      "djnghjlejbfgnbnmjfgbdaebfbiklpha"  # Kanagawa
+    ];
+  };
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = [ "chromium-browser.desktop" ];
+      "x-scheme-handler/http" = [ "chromium-browser.desktop" ];
+      "x-scheme-handler/https" = [ "chromium-browser.desktop" ];
+      "x-scheme-handler/about" = [ "chromium-browser.desktop" ];
+      "x-scheme-handler/unknown" = [ "chromium-browser.desktop" ];
+    };
+  };
 
 }
