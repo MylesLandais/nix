@@ -42,14 +42,14 @@
       };
     in
     {
-      nixosConfigurations."potato" = nixpkgs.lib.nixosSystem {
+      nixosConfigurations."dell-potato" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         inherit pkgs;
         specialArgs = {
           inherit inputs;
         };
         modules = with pkgs; [
-          ./hosts/potato/etc/nixos/configuration.nix
+          ./hosts/dell-potato/etc/nixos/configuration.nix
           home-manager.nixosModules.home-manager
           hm_user_cfg
           {
@@ -58,7 +58,7 @@
               useGlobalPkgs = true;
               extraSpecialArgs = {
                 vars = {
-                  hostName = "potato";
+                  hostName = "dell-potato";
                 };
                 inherit inputs system pkgs;
               };
