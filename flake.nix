@@ -1,7 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    agenix.url = "github:ryantm/agenix";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -13,50 +12,26 @@
     stylix = {
       url = "github:danth/stylix";
     };
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
-    ghostty = {
-      url = "git+ssh://git@github.com/ghostty-org/ghostty";
-    };
-    wallpapers = {
-      url = "github:FKouhai/Kanagawa-wallpapers";
-    };
   };
 
   outputs =
     {
       self,
-      agenix,
       chaotic,
       home-manager,
       nixpkgs,
-      zen-browser,
-      ghostty,
       stylix,
-      wallpapers,
-      nixvim,
       tokyonight,
       ...
     }@inputs:
     let
       system = "x86_64-linux";
-      username = "franky";
+      username = "warby";
       pkgs = import nixpkgs {
         inherit system;
         config = {
           allowUnfree = true;
         };
-      };
-      env_pkgs = {
-        environment.systemPackages = [
-          ghostty.packages.x86_64-linux.default
-          zen-browser.packages.x86_64-linux.default
-          agenix.packages.x86_64-linux.default
-          wallpapers.packages.x86_64-linux.default
-        ];
       };
       hm_user_cfg = {
         home-manager.users."${username}" = {
@@ -67,17 +42,15 @@
       };
     in
     {
-      nixosConfigurations."franktory" = nixpkgs.lib.nixosSystem {
+      nixosConfigurations."potato" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         inherit pkgs;
         specialArgs = {
           inherit inputs;
         };
         modules = with pkgs; [
-          ./hosts/franktory/etc/nixos/configuration.nix
+          ./hosts/potato/etc/nixos/configuration.nix
           home-manager.nixosModules.home-manager
-          agenix.homeManagerModules.default
-          env_pkgs
           hm_user_cfg
           {
             home-manager = {
@@ -85,74 +58,13 @@
               useGlobalPkgs = true;
               extraSpecialArgs = {
                 vars = {
-                  hostName = "franktory";
-                  isDesktop = false;
-                  class = "laptop";
-                  wallpaper = "${wallpapers}/kanagawa-dragon/sciel.jpg";
-                  mainMonitor = {
-                    name = "eDP-1";
-                    width = "1920";
-                    height = "1080";
-                    refresh = "60";
-                  };
-                  secondaryMonitor = {
-                    name = "HDMI-A-2";
-                    width = "1920";
-                    height = "1080";
-                    refresh = "60";
-                  };
+                  hostName = "potato";
                 };
-                inherit inputs system;
+                inherit inputs system pkgs;
               };
             };
           }
         ];
       };
-
-      nixosConfigurations."kraken" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        inherit pkgs;
-        specialArgs = {
-          inherit inputs;
-        };
-
-        modules = with pkgs; [
-          ./hosts/kraken/etc/nixos/configuration.nix
-          chaotic.nixosModules.default
-          home-manager.nixosModules.home-manager
-          env_pkgs
-          hm_user_cfg
-          {
-            home-manager = {
-              useUserPackages = true;
-              useGlobalPkgs = true;
-              sharedModules = [
-                agenix.homeManagerModules.age
-              ];
-              extraSpecialArgs = {
-                vars = {
-                  hostName = "kraken";
-                  isDesktop = true;
-                  class = "desktop";
-                  wallpaper = "${wallpapers}/kanagawa-dragon/sciel.jpg";
-                  mainMonitor = {
-                    name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. GS27QA 24286B001135";
-                    width = "2560";
-                    height = "1440";
-                    refresh = "180";
-                  };
-                  secondaryMonitor = {
-                    name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. GS27QA 24286B001081";
-                    width = "2560";
-                    height = "1440";
-                    refresh = "144";
-                  };
-                };
-                inherit inputs system;
-              };
-            };
-          }
-        ];
-      };
-    };
+};
 }

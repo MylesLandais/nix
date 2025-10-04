@@ -7,41 +7,30 @@
   ...
 }:
 {
+  nixpkgs.config.allowUnfree = true;
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
 
   imports = [
-    ./hypr.nix
-    ./prompt
-    ./nixvim
-    ./shelltools
-    ./devtooling
-    ./gtk
-    ./hyprpanel.nix
+    ##./hypr.nix
+    ## ./nixvim
+    ##./hyprpanel.nix
     inputs.stylix.homeModules.stylix
     inputs.tokyonight.homeManagerModules.default
   ];
 
-  age = {
-    identityPaths = [ "/home/franky/.ssh/age" ];
-    secrets = {
-      ollama = {
-        file = ./secrets/ollama.age;
-        mode = "400";
-      };
-    };
-  };
   home = {
-    username = "franky";
+    username = "warby";
     enableNixpkgsReleaseCheck = false;
-    homeDirectory = "/home/franky";
+    homeDirectory = "/home/warby";
     stateVersion = "24.11"; # Please read the comment before changing.
     file = {
       "${config.xdg.configHome}/ghostty/config".text = ''
         theme = "Kanagawa Dragon"
         background-opacity = 0.9
         window-decoration = false
-        font-family = "Hack Nerd Font"
+        font-family = "JetBrainsMono Nerd Font"
       '';
     };
 
@@ -51,24 +40,14 @@
 
     packages = with pkgs; [
       # jetbrains.goland
-      age
-      ags
-      tmux-sessionizer
-      alejandra
       bind
       bitwarden-desktop
       brave
       btop
       calibre
       calibre-web
-      cava
       coreutils
-      cosmic-files
-      crush
-      devbox
-      dysk
-      element-desktop
-      exercism
+      nemo
       fastfetch
       fd
       ffmpeg
@@ -77,19 +56,13 @@
       gcc
       gh
       git-lfs
-      glava
       gnome-keyring
       gnome-secrets
       gnome-themes-extra
-      gowall
       gpgme
       gtk-engine-murrine
       hack-font
       heroic
-      hubble
-      hyprpanel
-      hyprpaper
-      hyprshot
       jetbrains-mono
       jq
       kanagawa-gtk-theme
@@ -97,50 +70,36 @@
       lazydocker
       lazygit
       libnotify
-      libnvidia-container
-      lmstudio
       markdown-oxide
       matugen
       mpv
       nix-search-tv
       nixos-generators
-      nvidia-docker
       nwg-look
       obsidian
-      oci-cli
       opencloud-desktop
-      opencode
       pavucontrol
       playerctl
       plex-desktop
       plex-mpv-shim
-      protonvpn-cli
-      protonvpn-gui
       pulseaudio
       pulseaudio-ctl
       pulsemixer
       revive
       ripgrep
       sassc
-      solaar
       statix
-      statping-ng
-      telegram-desktop
       terraform-ls
       tflint
       tldr
-      tmux
       tokyonight-gtk-theme
       treefmt
       ttyd
       vesktop
       vhs
-      vial
       virtualgl
       vulkan-tools
-      waybar
       wl-clipboard
-      wlogout
       zed-editor
     ];
     pointerCursor = {
@@ -151,9 +110,6 @@
     };
   };
 
-  prompt.enable = true;
-  devtooling.enable = true;
-  shelltools.enable = true;
   programs = {
     home-manager.enable = true;
     git = {
@@ -196,15 +152,8 @@
       bat.enable = true;
       btop.enable = true;
       gtk.enable = false;
-      hyprland.enable = true;
-      k9s.enable = true;
-      kubecolor.enable = true;
-      lazygit.enable = true;
       mpv.enable = true;
       vesktop.enable = true;
-      wofi.enable = true;
     };
   };
-  nixvimcfg.enable = true;
-  gtk-mod.enable = true;
 }
