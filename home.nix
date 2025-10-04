@@ -7,7 +7,6 @@
   ...
 }:
 {
-  nixpkgs.config.allowUnfree = true;
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -42,7 +41,6 @@
       # jetbrains.goland
       bind
       bitwarden-desktop
-      brave
       btop
       calibre
       calibre-web
@@ -114,14 +112,14 @@
     enable = true;
     mimeApps = {
       enable = true;
-      defaultApplications = {
-        "text/html" = [ "chromium-browser.desktop" ];
-        "x-scheme-handler/http" = [ "chromium-browser.desktop" ];
-        "x-scheme-handler/https" = [ "chromium-browser.desktop" ];
-        "x-scheme-handler/about" = [ "chromium-browser.desktop" ];
-        "x-scheme-handler/unknown" = [ "chromium-browser.desktop" ];
-        "x-scheme-handler/discord" = [ "vesktop.desktop" ];
-      };
+        defaultApplications = {
+          "text/html" = [ "brave-browser.desktop" ];
+          "x-scheme-handler/http" = [ "brave-browser.desktop" ];
+          "x-scheme-handler/https" = [ "brave-browser.desktop" ];
+          "x-scheme-handler/about" = [ "brave-browser.desktop" ];
+          "x-scheme-handler/unknown" = [ "brave-browser.desktop" ];
+          "x-scheme-handler/discord" = [ "vesktop.desktop" ];
+        };
     };
   };
 
@@ -152,6 +150,17 @@
         };
       };
     };
+    brave = {
+      enable = true;
+      commandLineArgs = [
+        "--enable-features=WebUIDarkMode"
+      ];
+        extensions = [
+          { id = "akibfjgmcjogdlefokjmhblcibgkndog"; }  # Shazam
+          { id = "cjlbjibclmofpebnmgibklnkhhjlbjgc"; }  # Kanagawa Theme
+          { id = "nngceckbapebfimnlniiiahkandclblb"; }  # Bitwarden
+        ];
+    };
   };
 
   qt = {
@@ -166,7 +175,7 @@
     targets = {
       bat.enable = true;
       btop.enable = true;
-      gtk.enable = false;
+      gtk.enable = true;
       mpv.enable = true;
       vesktop.enable = true;
     };

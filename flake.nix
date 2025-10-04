@@ -57,6 +57,7 @@
             home-manager = {
               useUserPackages = true;
               useGlobalPkgs = true;
+              backupFileExtension = "backup";
               extraSpecialArgs = {
                 vars = {
                   hostName = "dell-potato";
