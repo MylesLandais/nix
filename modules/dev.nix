@@ -1,34 +1,17 @@
 { config, pkgs, ... }:
 
-let
-  customCodeServerImage = pkgs.dockerTools.buildImage {
-    name = "code-server-custom";
-    fromImage = pkgs.dockerTools.pullImage {
-      imageName = "codercom/code-server";
-      imageDigest = "sha256:6edc8e2d2849749c1a1a5eff8e76563b96db407e68899c143473a6004d0a6b5a";
-      sha256 = "sha256-xSd/TPS72jca1dXSwTGT5kFsyV8slsb3gXTzXEYauB4=";
-    };
-    runAsRoot = ''
-      #!${pkgs.runtimeShell}
-      mkdir -p /home/coder/.local/share/code-server/User
-      echo '{"workbench.colorTheme": "Tokyo Night"}' > /home/coder/.local/share/code-server/User/settings.json
-      chown -R 1000:1000 /home/coder/.local
-    '';
-    config = {
-      Cmd = [ "--bind-addr" "0.0.0.0:8080" ];
-      User = "1000";
-    };
-  };
-in
+
 
 {
 
-  system.activationScripts.loadCodeServerImage = ''
-    ${pkgs.docker}/bin/docker load < ${customCodeServerImage} || true
+  system.activationScripts.codeServerSetup = ''
     mkdir -p /var/lib/code-server-certs
     if [ ! -f /var/lib/code-server-certs/cert.pem ]; then
       ${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:4096 -keyout /var/lib/code-server-certs/key.pem -out /var/lib/code-server-certs/cert.pem -days 365 -nodes -subj "/CN=localhost"
     fi
+    mkdir -p /var/lib/code-server-local/share/code-server/User
+    echo '{"workbench.colorTheme": "Tokyo Night"}' > /var/lib/code-server-local/share/code-server/User/settings.json
+    chown -R 1000:1000 /var/lib/code-server-local
   '';
 
   # Shared developer tooling for all hosts: Docker, libvirtd, Portainer
@@ -48,7 +31,7 @@ in
       backend = "docker";
       containers = {
          "code-server" = {
-           image = "code-server-custom";
+           image = "codercom/code-server:latest";
            ports = [ "8080:8080" ];
            volumes = [
              "/var/run/docker.sock:/var/run/docker.sock"
@@ -60,11 +43,9 @@ in
            environment = {
              PASSWORD = "devsandbox123";
              TZ = "America/New_York";
-             CERT_FILE = "/certs/cert.pem";
-             KEY_FILE = "/certs/key.pem";
            };
            user = "1000";
-            cmd = [ "sh" "-c" "code-server --install-extension enkia.tokyo-night && code-server --bind-addr 0.0.0.0:8080 --cert /certs/cert.pem --cert-key /certs/key.pem" ];
+           cmd = [ "sh" "-c" "code-server --install-extension enkia.tokyo-night && code-server --bind-addr 0.0.0.0:8080 --cert /certs/cert.pem --cert-key /certs/key.pem" ];
            autoStart = true;
          };
         "portainer" = {

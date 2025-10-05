@@ -97,10 +97,10 @@ echo "--- code-server ---"
 if docker ps --format '{{.Names}}' | grep -q code-server; then
     pass "code-server container is running"
     CODE_IMAGE=$(docker inspect code-server --format '{{.Config.Image}}' 2>/dev/null)
-    if [ "$CODE_IMAGE" = "code-server-custom" ]; then
-        pass "code-server using custom image"
+    if [[ "$CODE_IMAGE" == *"codercom/code-server"* ]]; then
+        pass "code-server using expected image ($CODE_IMAGE)"
     else
-        fail "code-server not using custom image (using: $CODE_IMAGE)"
+        fail "code-server not using expected image (using: $CODE_IMAGE)"
     fi
     CODE_PORT=$(docker port code-server 2>/dev/null | grep 8080 | cut -d':' -f2)
     if [ -n "$CODE_PORT" ]; then
