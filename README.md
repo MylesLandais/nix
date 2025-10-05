@@ -6,6 +6,12 @@ This repo contains the nix configurations for my main workstations
 Under hosts I have the hardware and basic config of each of my hosts, these are divided by their hostname.
 ```
 .
+
+## Usage
+
+To apply changes: `./rebuild-clean.sh` (handles cleanups and nixos-rebuild switch --flake .#dell-potato).
+
+Recent updates: Brave with Shazam/Kanagawa/Bitwarden extensions, system dark theming, default browser set.
 ├── devtooling -> Direcotry that contains all the configs for my dev tools
 │   ├── default.nix
 │   ├── git

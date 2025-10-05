@@ -18,6 +18,7 @@ in
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ../../modules/dev.nix
   ];
 
   # Bootloader.
@@ -135,6 +136,9 @@ in
       extraGroups = [
         "networkmanager"
         "wheel"
+        "docker"
+        "libvirtd"
+        "qemu-libvirtd"
       ];
       packages = with pkgs; [
         nixfmt-rfc-style
@@ -142,6 +146,9 @@ in
       ];
     };
   };
+
+  users.groups.libvirtd.members = [ "franky" ];
+  users.groups.docker.members = [ "franky" ];
   environment.systemPackages = with pkgs; [
     tailscale
     sddm-astronaut

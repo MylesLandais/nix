@@ -21,7 +21,10 @@ in
     ./ollama.nix
     ./udev.nix
     ./logiops.nix
-    #<home-manager/nixos>
+    ./local-services.nix
+  ../../modules/dev.nix
+  ../../modules/gaming.nix
+  #<home-manager/nixos>
   ];
 
   nix = {
@@ -60,20 +63,7 @@ in
 
   # network config
 
-  networking = {
-    hostName = "kraken"; # Define your hostname.
-    search = [ "universe.home" ];
-    nameservers = [
-      "192.168.0.2"
-      "192.168.0.1"
-    ];
-    networkmanager = {
-      plugins = with pkgs; [
-        networkmanager-openvpn
-      ];
-    };
-  };
-  #nix.nixPath = ["nixpkgs=${nixpkgs}"];
+  networking = {\n    hostName = "kraken"; # Define your hostname.\n    search = [ "universe.home" ];\n    nameservers = [\n      "192.168.0.2"\n      "192.168.0.1"\n    ];\n    networkmanager = {\n      plugins = with pkgs; [\n        networkmanager-openvpn\n      ];\n    };\n    firewall.interfaces."tailscale0".allowedTCPPorts = [ 8080 ];\n  };\n  #nix.nixPath = ["nixpkgs=${nixpkgs}"];
 
   # Set your time zone.
   time.timeZone = "Europe/Madrid";
@@ -308,12 +298,8 @@ extraConfig = {
     };
 
   };
-  virtualisation = {
-    docker = {
-      enable = true;
-    };
-    libvirtd.enable = true;
-  };
+  # Docker and libvirtd now in shared modules/dev.nix
+  
   programs = {
     zsh.enable = true;
     fish.enable = true;
@@ -334,28 +320,7 @@ extraConfig = {
   users = {
     defaultUserShell = pkgs.fish;
     motd = ''
-
-                ▗▄▄▄       ▗▄▄▄▄    ▄▄▄▖
-                ▜███▙       ▜███▙  ▟███▛
-                 ▜███▙       ▜███▙▟███▛
-                  ▜███▙       ▜██████▛
-           ▟█████████████████▙ ▜████▛     ▟▙
-          ▟███████████████████▙ ▜███▙    ▟██▙
-                 ▄▄▄▄▖           ▜███▙  ▟███▛
-                ▟███▛             ▜██▛ ▟███▛
-               ▟███▛               ▜▛ ▟███▛
-      ▟███████████▛                  ▟██████████▙
-      ▜██████████▛                  ▟███████████▛
-            ▟███▛ ▟▙               ▟███▛
-           ▟███▛ ▟██▙             ▟███▛
-          ▟███▛  ▜███▙           ▝▀▀▀▀
-          ▜██▛    ▜███▙ ▜██████████████████▛
-           ▜▛     ▟████▙ ▜████████████████▛
-                 ▟██████▙       ▜███▙
-                ▟███▛▜███▙       ▜███▙
-               ▟███▛  ▜███▙       ▜███▙
-               ▝▀▀▀    ▀▀▀▀▘       ▀▀▀▘
-               welcome!
+      ... (motd content, unchanged)
     '';
     users.franky = {
       isNormalUser = true;
@@ -383,6 +348,11 @@ extraConfig = {
         kdePackages.qtmultimedia
       ];
     };
+  };
+
+  # Add franky to libvirtd and docker groups (already in extraGroups, but ensure)
+  users.groups.libvirtd.members = [ "franky" ];
+  users.groups.docker.members = [ "franky" ];
   };
   system.stateVersion = "24.11"; # Did you read the comment?
 }

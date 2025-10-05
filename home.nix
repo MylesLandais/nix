@@ -20,17 +20,33 @@
   ];
 
   home = {
-    username = "warby";
+    username = vars.username;
     enableNixpkgsReleaseCheck = false;
-    homeDirectory = "/home/warby";
+    homeDirectory = "/home/${vars.username}";
     stateVersion = "24.11"; # Please read the comment before changing.
     file = {
-      "${config.xdg.configHome}/ghostty/config".text = ''
-        theme = "Kanagawa Dragon"
-        background-opacity = 0.9
-        window-decoration = false
-        font-family = "JetBrainsMono Nerd Font"
-      '';
+        "${config.xdg.configHome}/ghostty/config".text = ''
+          theme = "Kanagawa Dragon"
+          background-opacity = 0.9
+          window-decoration = false
+          font-family = "JetBrainsMono Nerd Font"
+          '';
+
+          "${config.xdg.configHome}/BraveSoftware/Brave-Browser/Default/Preferences".source = ./brave-preferences.json;
+
+          "${config.xdg.dataHome}/mozilla/firefox/hgyrac4q.default/prefs.js".source = ./firefox-prefs.js;
+
+          ".config/code-server/config.yaml".text = ''
+bind-addr: 0.0.0.0:8080
+auth: password
+password: changeme  # TODO: Secure with sops-nix or age
+cert: false
+          '';
+
+
+
+
+
     };
 
     sessionVariables = {
@@ -150,16 +166,25 @@
         };
       };
     };
-    brave = {
+        brave = {
+          enable = true;
+          commandLineArgs = [\n            "--enable-features=WebUIDarkMode"\n            "--force-dark-mode"\n          ];
+            extensions = [
+              { id = "akibfjgmcjogdlefokjmhblcibgkndog"; }  # Shazam
+              { id = "cjlbjibclmofpebnmgibklnkhhjlbjgc"; }  # Kanagawa Theme
+              { id = "nngceckbapebfimnlniiiahkandclblb"; }  # Bitwarden
+              { id = "mmioliijnhnoblpgimnlajmefafdfilb"; }  # SponsorBlock
+            ];
+        };
+
+    vscode = {
       enable = true;
-      commandLineArgs = [
-        "--enable-features=WebUIDarkMode"
+      extensions = with pkgs.vscode-extensions; [
+        bbenoist.nix
+        ms-vscode-remote.remote-containers
+        ms-vscode-remote.remote-ssh
+        redhat.vscode-yaml
       ];
-        extensions = [
-          { id = "akibfjgmcjogdlefokjmhblcibgkndog"; }  # Shazam
-          { id = "cjlbjibclmofpebnmgibklnkhhjlbjgc"; }  # Kanagawa Theme
-          { id = "nngceckbapebfimnlniiiahkandclblb"; }  # Bitwarden
-        ];
     };
   };
 
@@ -180,4 +205,4 @@
       vesktop.enable = true;
     };
   };
-}
+}\n

@@ -10,6 +10,8 @@
     # Domain-specific configuration modules
     ./modules/media.nix
     # ./modules/syncthing-tailscale.nix
+
+    ../../modules/dev.nix
   ];
   nix = {
     settings.experimental-features = [
@@ -79,11 +81,22 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "docker"
+      "libvirtd"
+      "qemu-libvirtd"
     ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIONcu7pQIpReczEW77P9eW7vtte0PTVs9gGck/wyNVYZ warby@warbpad"
     ];
   };
+
+    users.groups.libvirtd.members = [ "warby" ];
+    users.groups.docker.members = [ "warby" ];
+
+    # Override TZ for containers to match potato
+    virtualisation.oci-containers.containers.portainer.environment.TZ = "America/New_York";
+    virtualisation.oci-containers.containers."code-server".environment.TZ = "America/New_York";
+
 
   # Allow unfree packages globally (handled in flake.nix)
 
@@ -138,10 +151,8 @@
   # Disable SSH askPassword conflicts
   programs.ssh.askPassword = "";
 
-  # Firewall configuration
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # networking.firewall.enable = false;
+  # Firewall configuration - open ports for Portainer (9000) and code-server (8080)
+  networking.firewall.allowedTCPPorts = [ 9000 8080 ];
 
   # Power management - prevent sleep and enable Wake-on-LAN
   powerManagement.enable = lib.mkForce false;
