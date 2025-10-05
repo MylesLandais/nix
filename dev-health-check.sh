@@ -159,7 +159,7 @@ if docker ps --format '{{.Names}}' | grep -q livebook; then
     if [ -n "$LIVEBOOK_PORT" ]; then
         pass "livebook accessible on port $LIVEBOOK_PORT"
         echo "  URL: http://localhost:$LIVEBOOK_PORT (password: devsandbox123)"
-        if curl -s --max-time 5 "http://localhost:$LIVEBOOK_PORT" | grep -q "Livebook"; then
+        if curl -s --max-time 5 "http://localhost:$LIVEBOOK_PORT/authenticate" | grep -q "Livebook"; then
             pass "Livebook web interface responding"
         else
             fail "Livebook web interface not responding"

@@ -15,6 +15,7 @@
     ##./hypr.nix
     ## ./nixvim
     ##./hyprpanel.nix
+    ./modules/pro.nix
     inputs.stylix.homeModules.stylix
     inputs.tokyonight.homeManagerModules.default
   ];
