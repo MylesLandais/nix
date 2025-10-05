@@ -12,6 +12,7 @@
     ./modules/syncthing-tailscale.nix
 
     ../../../../modules/dev.nix
+    ../../../../modules/python.nix
   ];
   nix = {
     settings.experimental-features = [

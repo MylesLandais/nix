@@ -2,40 +2,24 @@
 
 set -e
 
-# Common cleanup for NixOS rebuild issues
+echo "Running rebuild-clean.sh..."
+
+# Cleanup steps (no sudo needed - user files)
 echo "Cleaning up common conflicts..."
+rm -f ~/.config/chromium/SingletonLock
+rm -f ~/.config/BraveSoftware/Brave-Browser/Default/Preferences.backup
 
-# Remove Chromium lock
-rm -f /home/warby/.config/chromium/Default/LOCK
-echo "Removed Chromium lock."
+# Fix repo permissions (non-sudo - user owns the files)
+echo "Fixing repo permissions..."
+# chmod -R u+rwX ~/Workspace/Nixos 2>/dev/null || true  # No sudo needed, user owns files
 
-# Backup GTK configs if they exist
-if [ -d /home/warby/.config/gtk-3.0 ]; then
-  rm -rf /home/warby/.config/gtk-3.0
-  echo "Removed GTK 3.0 config."
-fi
-if [ -d /home/warby/.config/gtk-4.0 ]; then
-  rm -rf /home/warby/.config/gtk-4.0
-  echo "Removed GTK 4.0 config."
-fi
-if [ -f /home/warby/.gtkrc-2.0 ]; then
-  rm -f /home/warby/.gtkrc-2.0
-  echo "Removed GTK 2.0 config."
+# Warn about dirty Git tree
+if ! git diff --quiet HEAD 2>/dev/null; then
+    echo "warning: Git tree is dirty"
 fi
 
-# Remove Brave backup conflict
-rm -f /home/warby/.config/BraveSoftware/Brave-Browser/Default/Preferences.backup
-echo "Removed Brave Preferences backup."
-
-# Copy Firefox prefs if missing (automates initial setup)
-if [ ! -f ./firefox-prefs.js ]; then
-  cp /home/warby/.mozilla/firefox/hgyrac4q.default/prefs.js ./firefox-prefs.js
-  echo "Copied Firefox prefs to ./firefox-prefs.js for declarative management."
-fi
-
-# Run rebuild
-cd /home/warby/Workspace/Nixos
-sudo chmod -R a+rX /home/warby/Workspace/Nixos
+# Rebuild (uses passwordless sudo for nixos-rebuild only)
+echo "Building the system configuration..."
 sudo nixos-rebuild switch --flake .#dell-potato --impure
 
-echo "Rebuild complete."
+echo "Rebuild complete!"

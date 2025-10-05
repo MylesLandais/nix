@@ -4,21 +4,15 @@
   # OpenGL
   hardware.opengl = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
   };
 
-  # NVIDIA drivers (optimized for gaming)
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = false;  # Disable for better performance
-    powerManagement.finegrained = true;
-    open = false;  # Use proprietary for stability
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-  };
+  # Intel graphics support (for dell-potato)
+  hardware.opengl.extraPackages = with pkgs; [
+    intel-media-driver
+    vaapiIntel
+  ];
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "modesetting" ];
 
   # Steam
   programs.steam = {
@@ -31,27 +25,37 @@
   programs.gamescope.enable = true;
 
   # RetroArch for emulation (Batocera-like)
-  programs.retroarch.enable = true;
   programs.gamemode.enable = true;
 
   # Additional gaming tools
   environment.systemPackages = with pkgs; [
+    # Gaming tools
     gamescope
-    retroarchFull
     lutris
-    heroic-games-launcher
+    heroic
     wineWowPackages.stable
     protontricks
     mangohud  # For performance overlay
     gamemode
+
+    # RetroArch and cores
+    retroarchFull
+    libretro.swanstation
+    libretro.beetle-psx
+
+    # Standalone emulators
+    mgba
+    snes9x-gtk
+    mednafen
+    pcsx2
+    rpcs3
   ];
 
   # Enable fuse for flatpaks/steam
-  services.fuse.userAllowOther.enable = true;
+  programs.fuse.userAllowOther = true;
 
   # Performance: Enable early KMS
-  boot.kernelParams = [ "nvidia_drm.modeset=1" ];
+  # No specific kernel params for Intel
 
   # 32-bit support
-  system.replaceRuntimeDependencies = true;  # For better compatibility
 }

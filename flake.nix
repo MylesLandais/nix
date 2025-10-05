@@ -49,8 +49,9 @@
         specialArgs = {
           inherit inputs;
         };
-        modules = with pkgs; [
+        modules = [
           ./hosts/dell-potato/etc/nixos/configuration.nix
+          ./modules/gaming.nix
           home-manager.nixosModules.home-manager
           hm_user_cfg
           {
@@ -61,6 +62,7 @@
               extraSpecialArgs = {
                 vars = {
                   hostName = "dell-potato";
+                  username = "warby";
                 };
                 inherit inputs system pkgs;
               };

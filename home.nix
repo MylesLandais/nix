@@ -39,7 +39,7 @@
           ".config/code-server/config.yaml".text = ''
 bind-addr: 0.0.0.0:8080
 auth: password
-password: changeme  # TODO: Secure with sops-nix or age
+password: admin  # Matches container env; secure with sops-nix
 cert: false
           '';
 
@@ -79,34 +79,33 @@ cert: false
       heroic
       jetbrains-mono
       jq
-      kanagawa-gtk-theme
-      kanagawa-icon-theme
-      lazydocker
-      lazygit
-      libnotify
-      markdown-oxide
-      matugen
-      mpv
-      nix-search-tv
-      nixos-generators
-      nwg-look
-      obsidian
-      opencloud-desktop
-      pavucontrol
-      playerctl
-      plex-desktop
-      plex-mpv-shim
-      pulseaudio
-      pulseaudio-ctl
-      pulsemixer
-      revive
-      ripgrep
-      sassc
-      statix
-      terraform-ls
-      tflint
-      tldr
-      tokyonight-gtk-theme
+       kanagawa-gtk-theme
+       kanagawa-icon-theme
+       lazydocker
+       lazygit
+       libnotify
+       markdown-oxide
+       matugen
+       mpv
+       nix-search-tv
+       nixos-generators
+       nwg-look
+       obsidian
+       opencloud-desktop
+       pavucontrol
+       playerctl
+       plex-desktop
+       plex-mpv-shim
+       pulseaudio
+       pulseaudio-ctl
+       pulsemixer
+       revive
+       ripgrep
+       sassc
+       statix
+       terraform-ls
+       tflint
+       tldr
       treefmt
       ttyd
       vesktop
@@ -160,18 +159,23 @@ cert: false
           inner-pad = 6;
         };
         colors = {
-          background = "1e1e2efa";
-          text = "19617813801";
-          border = "#c4b28a";
+          background = "0d0c0cfa";  # base00 with alpha
+          text = "c5c9c5ff";      # base05
+          border = "c4b28aff";     # base0A
+          selection = "8ba4b0ff";  # base0D
+          selection-text = "0d0c0cff"; # base00
         };
       };
     };
         brave = {
           enable = true;
-          commandLineArgs = [\n            "--enable-features=WebUIDarkMode"\n            "--force-dark-mode"\n          ];
+          commandLineArgs = [
+            "--enable-features=WebUIDarkMode"
+            "--force-dark-mode"
+          ];
             extensions = [
               { id = "akibfjgmcjogdlefokjmhblcibgkndog"; }  # Shazam
-              { id = "cjlbjibclmofpebnmgibklnkhhjlbjgc"; }  # Kanagawa Theme
+              { id = "djnghjlejbfgnbnmjfgbdaeafbiklpha"; }  # Kanagawa Theme
               { id = "nngceckbapebfimnlniiiahkandclblb"; }  # Bitwarden
               { id = "mmioliijnhnoblpgimnlajmefafdfilb"; }  # SponsorBlock
             ];
@@ -179,12 +183,23 @@ cert: false
 
     vscode = {
       enable = true;
-      extensions = with pkgs.vscode-extensions; [
-        bbenoist.nix
-        ms-vscode-remote.remote-containers
-        ms-vscode-remote.remote-ssh
-        redhat.vscode-yaml
-      ];
+      package = pkgs.vscode;
+      profiles.default = {
+        extensions = with pkgs.vscode-extensions; [
+          bbenoist.nix
+          ms-vscode-remote.remote-containers
+          ms-vscode-remote.remote-ssh
+          redhat.vscode-yaml
+          # kilocode.kilo-code  # Not in nixpkgs; install manually from marketplace
+          # quinn.vscode-kanagawa  # Not in nixpkgs; install manually from marketplace
+        ];
+        userSettings = {
+          "workbench.colorTheme" = "Kanagawa";  # Set after manual extension install
+          "editor.fontFamily" = "JetBrains Mono Nerd Font";
+          "terminal.integrated.fontFamily" = "JetBrains Mono Nerd Font";
+          # "kilo-code.apiKey" = "your-kilo-code-api-key";  # Set after manual install
+        };
+      };
     };
   };
 
@@ -205,4 +220,4 @@ cert: false
       vesktop.enable = true;
     };
   };
-}\n
+}

@@ -74,6 +74,25 @@
             };
           };
         };
+
+        # GBA Game Backups (RetroArch saves/ROMs)
+        "gba-backups" = {
+          path = "/home/warby/.config/retroarch/saves/GBA";
+          id = "gba-backups";
+          devices = [ "cerberus-ng" ];
+          
+          # Folder options for games (one-way sync to backup)
+          ignorePerms = false;
+          rescanIntervalS = 300;  # Scan every 5 minutes for quick saves
+          
+          # Versioning for game saves
+          versioning = {
+            type = "simple";
+            params = {
+              keep = "5";  # Keep last 5 versions
+            };
+          };
+        };
       };
       
       # Options for better Tailscale integration
@@ -110,12 +129,14 @@
     lidSwitch = "ignore";  # Don't suspend when lid is closed (if laptop)
     lidSwitchDocked = "ignore";
     lidSwitchExternalPower = "ignore";
-    extraConfig = ''
-      HandleSuspendKey=ignore
-      HandleHibernateKey=ignore
-      HandleLidSwitch=ignore
-      IdleAction=ignore
-    '';
+    settings = {
+      Login = {
+        HandleSuspendKey = "ignore";
+        HandleHibernateKey = "ignore";
+        HandleLidSwitch = "ignore";
+        IdleAction = "ignore";
+      };
+    };
   };
 
   # Disable sleep targets
