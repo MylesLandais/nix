@@ -9,9 +9,9 @@
 
     # Domain-specific configuration modules
     ./modules/media.nix
-    # ./modules/syncthing-tailscale.nix
+    ./modules/syncthing-tailscale.nix
 
-    ../../modules/dev.nix
+    ../../../../modules/dev.nix
   ];
   nix = {
     settings.experimental-features = [
@@ -36,6 +36,8 @@
   # Boot configuration
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   # Network configuration
   networking.hostName = "potato";
@@ -71,8 +73,7 @@
     pulse.enable = true;
   };
 
-  # Graphics support
-  hardware.graphics.enable = true;
+  # Graphics support\n  hardware.graphics.enable = true;\n  hardware.enableRedistributableFirmware = true;\n  hardware.cpu.intel.updateMicrocode = true;
 
   # User configuration
   users.users.warby = {
@@ -102,25 +103,26 @@
 
   # Core system packages
   # Changed 'rustdesk' to 'rustdesk-flutter' for better stability.
-  environment.systemPackages = with pkgs; [
-    # Essential system tools
-    vim
-    wget
-    curl
-    git
-    htop
-    rustdesk-flutter # <-- Corrected package
+   environment.systemPackages = with pkgs; [
+     # Essential system tools
+     vim
+     wget
+     curl
+     git
+     htop
+     rustdesk-flutter # <-- Corrected package
+     openssl
 
-    # Web browsers
-    firefox
-    ungoogled-chromium
-    ghostty
-    opencode
-    vesktop
+     # Web browsers
+     firefox
+     ungoogled-chromium
+     ghostty
+     opencode
+     vesktop
 
-    # System utilities
-    gparted
-  ];
+     # System utilities
+     gparted
+   ];
 
   # --- CORRECTED RUSTDESK CLIENT SERVICE ---
   # The 'services.rustdesk-server' block was removed. That module is for
@@ -166,6 +168,47 @@
 
   # System state version
   system.stateVersion = "24.11";
+
+   security.pki.certificates = [
+     ''-----BEGIN CERTIFICATE-----
+MIIFCTCCAvGgAwIBAgIUftWnYe1SkoudcxwbAhmr4fw6vMAwDQYJKoZIhvcNAQEL
+BQAwFDESMBAGA1UEAwwJbG9jYWxob3N0MB4XDTI1MTAwNTE3MDA0NVoXDTI2MTAw
+NTE3MDA0NVowFDESMBAGA1UEAwwJbG9jYWxob3N0MIICIjANBgkqhkiG9w0BAQEF
+AAOCAg8AMIICCgKCAgEAx0/l4tHNRrVXddQmfsO/rNJNgVK6fvgzjw2l7Ya11yQX
+UYpjklRiOEyzmSYwf2c8X/AmMjR6Q6HQbfp2MOD/gz7UXcIq4KyagABHLgmWUTiQ
+BNiNOYpBEnS2LtNtj1nUXJ8Ps/c/illwS8wj7wY7f8pcF9iWi6x0b6JRxFtkwL8n
+JhePwCninVAEeUGluLQHuIYbFd8jmGhrECKEyUlKiYy00EvvPAZY37un2BY/if0s
+yXAhFn/ON6MMRRqLQnEr8S0OGjINDnkjVjPLJn7NDkB6+fdSzvDd/fHBA1dR2u2h
+DLZCIfHNWoA80+3qwN+HWihON+fMYdpYokWs9IxLGRPKS5fIeUZPBY1zG1aYWppw
+4vQOSRdg8sfoD4IqgS7538PXI5DyMahw4qW+uJqBLNrvr6vMXRBIc7FgGZn5Tszd
+27GdIIUGgfdQZPt2HbWMlRvGjg2rrEIAetEdmpYDRTTWmdBNkZcJLhzqE9tpmvmD
+/W2OmpPAx2JkjRirIU4SnPorXfhy7ZGEtZtlRt9CSE0lB9AnLHGWigWn+IFFncW5
+AP6GEij6HRLs/IR0eJkftpj/gWqjiHbUvRKYFQJlvIrZAvGcSzcshDFIPLGCb11d
+JvumcPKuqCuWUNn+lXNTssTwqbtx8NRnNmJIF4zybg2Le0NQtghEoHDYmSSyuNUC
+AwEAAaNTMFEwHQYDVR0OBBYEFOzGpYp6/rieTdJG9/fyBTdFozP6MB8GA1UdIwQY
+MBaAFOzGpYp6/rieTdJG9/fyBTdFozP6MA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZI
+hvcNAQELBQADggIBAAYOYdd8782srMUSAZD5LEPveV3f2JRo1l36TnArXMfpYSq2
+6tykDZPE6u22Sr/vr/5uZZqh+K3eTSijzCKeyT8qCAyQ+Piaj3jy4eZu8oWPDqnY
+RDBK3jC0to6MvpfeX9pg9EhsMWteA0zADu0FIJ750lPduTamqTScsezbEdsjiwvj
+9VFhb1fEZNoeKbb/KefkIyHnQcR8ge3s/2cAXZp388c6nzeL5m2v0o1xMk8u+PDu
+KcMVMXn6GsPnwadSl6WVD22Bmob0sKTx2GCkscDBdm7ophYBQ6stg4JDViNBUjSJ
+SqcVs2TRLAV9Jnmg2XL5l9idLOtdKfUHT5botQQ6FPSD6Og0JDXKc3NbNhvzIRKj
+YzqBSzod6kCS84lZXlS+CEiwP5PfVtZgnJ8gsJGjCzi4iHJWfwyrSMA+jPfu+KaX
+RL2vlBPLV80euh/Kl+YePocJuJlrN0hYQLOmNYd0JvhWH14bkcMimXqMizL9uu81
+izHFF6/mgkfPkrhfzrhdlJ6HSgpahm0ejKCSbIJE03uxkirkXt5SoQaUmWAyIfLV
+HGlRkeBhHNZVSB/YQDFsWo66R08EOINFRrtxU7XSlhxwwMkOMSjj4ArmOycQU/Ej
+giADdXELAdf3NgclxpZfwPGubqiNrJFUVc7NqO8KTBkz8xiUA2scPAoN92Ik
+-----END CERTIFICATE-----''
+   ];
+
+   security.sudo.extraRules = [
+     {
+       users = [ "warby" ];
+       commands = [
+         { command = "ALL"; options = [ "NOPASSWD" ]; }
+       ];
+     }
+   ];
 
   programs.chromium = {
     enable = true;
