@@ -45,7 +45,7 @@
              TZ = "America/New_York";
            };
            user = "1000";
-           cmd = [ "sh" "-c" "code-server --install-extension enkia.tokyo-night && code-server --bind-addr 0.0.0.0:8080 --cert /certs/cert.pem --cert-key /certs/key.pem" ];
+           cmd = [ "--bind-addr" "0.0.0.0:8080" "--cert" "/certs/cert.pem" "--cert-key" "/certs/key.pem" ];
            autoStart = true;
          };
         "portainer" = {
