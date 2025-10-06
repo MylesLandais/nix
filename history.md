@@ -8,6 +8,7 @@
 - Manually installed Tokyo Night extension after container startup.
 - Updated dev-health-check.sh to detect custom vs. base image, SSL certificate presence, and HTTPS accessibility.
 - Fixed container startup issues by simplifying cmd to standard flags.
+- Reset Portainer admin password to 'devsandbox123' for consistency with other services, using API initialization after data reset.
 
 ## 2025-10-04
 - Integrated Brave browser via Home Manager with extensions: Shazam (akibfjgmcjogdlefokjmhblcibgkndog), Kanagawa Theme (cjlbjibclmofpebnmgibklnkhhjlbjgc), Bitwarden (nngceckbapebfimnlniiiahkandclblb).
