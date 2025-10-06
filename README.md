@@ -7,9 +7,23 @@ Under hosts I have the hardware and basic config of each of my hosts, these are 
 ```
 .
 
+## Modules
+
+The configuration is modularized into logical collections for easy management and selective inclusion:
+
+- **dev.nix**: Development environment setup including Docker, libvirtd, code-server, and related tools.
+- **gaming.nix**: Gaming software and emulators, including Steam, RetroArch, and standalone emulators.
+- **pro.nix**: Professional open source creative tools like GIMP, Krita, Blender, OBS Studio, Audacity, and OpenCV.
+- **python.nix**: Python development environment.
+- **agenix.nix**: Secrets management with agenix.
+
+These modules can be imported in host configurations as needed, allowing for tailored setups per machine.
+
 ## Usage
 
 To apply changes: `./rebuild-clean.sh` (handles cleanups and nixos-rebuild switch --flake .#dell-potato).
+
+To check the health of your development environment: `./dev-health-check.sh` (comprehensive checks for all modules and services).
 
 ## Code-Server Setup
 

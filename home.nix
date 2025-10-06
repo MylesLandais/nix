@@ -40,7 +40,7 @@
           ".config/code-server/config.yaml".text = ''
 bind-addr: 0.0.0.0:8080
 auth: password
-password: admin  # Matches container env; secure with sops-nix
+password: admin  # Matches container env; secure with agenix
 cert: false
           '';
 

@@ -48,30 +48,32 @@
            cmd = [ "--bind-addr" "0.0.0.0:8080" "--cert" "/certs/cert.pem" "--cert-key" "/certs/key.pem" ];
            autoStart = true;
          };
-        "portainer" = {
-          image = "portainer/portainer-ce:latest";
-          ports = [ "9000:9000" ];
-          volumes = [
-            "/var/run/docker.sock:/var/run/docker.sock"
-            "/var/lib/portainer:/data"
-          ];
-          environment = {
-            TZ = "America/New_York";
-          };
-          autoStart = true;
-        };
-        "chrome-remote" = {
-           image = "selenium/standalone-chrome-debug:latest";
-           ports = [ "4444:4444" "5900:5900" "7900:7900" "9222:9222" ];
+         "portainer" = {
+           image = "portainer/portainer-ce:latest";
+           ports = [ "9000:9000" ];
            volumes = [
-             "/dev/shm:/dev/shm"
+             "/var/run/docker.sock:/var/run/docker.sock"
+             "/var/lib/portainer:/data"
            ];
            environment = {
              TZ = "America/New_York";
-             SE_VNC_PASSWORD = "devsandbox123";
            };
            autoStart = true;
          };
+         "chrome-remote" = {
+             image = "selenium/standalone-chrome-debug:alpine";
+             ports = [ "4444:4444" "5900:5900" "7900:7900" "9222:9222" ];
+             volumes = [
+               "/dev/shm:/dev/shm"
+               "/var/lib/chrome-remote:/home/seluser/.config/google-chrome"
+             ];
+             environment = {
+               TZ = "America/New_York";
+               SE_VNC_PASSWORD = "devsandbox123";
+               SE_OPTS = "--disable-blink-features=AutomationControlled --disable-dev-shm-usage --no-sandbox --disable-gpu --user-agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'";
+             };
+             autoStart = true;
+           };
          "livebook" = {
            image = "ghcr.io/livebook-dev/livebook:latest";
            ports = [ "8081:8080" ];
@@ -91,6 +93,16 @@
 
   networking.firewall.allowedTCPPorts = [ 9000 8080 8081 4444 5900 7900 9222 ];
 
+  # PostgreSQL service for Phoenix development
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = [ "phoenix_dev" ];
+    authentication = pkgs.lib.mkOverride 10 ''
+      #type database  DBuser  auth-method
+      local all       all     trust
+    '';
+  };
+
   environment.systemPackages = with pkgs; [
     docker-compose
     lazydocker
@@ -98,6 +110,7 @@
     elixir
     nodejs
     postgresql
+    inotify-tools
     remmina
   ];
 

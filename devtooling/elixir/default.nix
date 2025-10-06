@@ -14,6 +14,7 @@
       elixir
       erlang
       livebook
+      rebar3
     ];
   };
 }

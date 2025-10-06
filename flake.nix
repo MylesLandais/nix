@@ -6,6 +6,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     tokyonight = {
       url = "github:mrjones2014/tokyonight.nix";
     };
@@ -20,6 +24,7 @@
       chaotic,
       home-manager,
       nixpkgs,
+      agenix,
       stylix,
       tokyonight,
       ...
@@ -52,6 +57,7 @@
         modules = [
           ./hosts/dell-potato/etc/nixos/configuration.nix
           ./modules/gaming.nix
+          agenix.nixosModules.default
           home-manager.nixosModules.home-manager
           hm_user_cfg
           {

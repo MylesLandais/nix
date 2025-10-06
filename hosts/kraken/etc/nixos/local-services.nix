@@ -13,7 +13,7 @@
     config = ''
       bind-addr = 0.0.0.0:8080
       auth = password
-      password = $(cat ${config.sops.secrets."code-server-password".path})
+       password = $(cat ${config.age.secrets.code-server-password.path})
       cert = false  # Enable HTTPS with Tailscale certs if needed
     '';
     extraPackages = with pkgs; [ nodejs yarn ];  # For extensions

@@ -24,6 +24,7 @@ in
     ./local-services.nix
   ../../modules/dev.nix
   ../../modules/gaming.nix
+  ../../modules/agenix.nix
   #<home-manager/nixos>
   ];
 

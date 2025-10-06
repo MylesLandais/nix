@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# dev-health-check.sh - Verify dev environment configuration
-# Checks Docker, libvirt, Portainer, code-server, chrome-remote, and dev tools
+# dev-health-check.sh - Comprehensive dev environment health check
+# Checks Docker, libvirt, containers, dev tools, creative tools, gaming tools, secrets, Nix flake, and more
 
 set -e
 
@@ -61,6 +61,18 @@ if systemctl is-active --quiet libvirtd; then
     pass "libvirtd service is running"
 else
     fail "libvirtd service is not running"
+fi 2>/dev/null || true
+
+if groups 2>/dev/null | grep -q libvirtd; then
+    pass "User is in libvirtd group"
+else
+    fail "User is not in libvirtd group"
+fi
+
+if command -v virsh &> /dev/null && virsh list --all &>/dev/null 2>&1; then
+    pass "libvirt is accessible"
+else
+    fail "libvirt is not accessible"
 fi
 
 if groups | grep -q libvirtd; then
@@ -127,26 +139,38 @@ echo ""
 # Check jupyter container
 echo "--- Jupyter ---"
 if docker ps --format '{{.Names}}' | grep -q jupyter; then
-    pass "jupyter container is running"
+    pass "Jupyter container is running"
     JUPYTER_PORT=$(docker port jupyter 2>/dev/null | grep 8888 | cut -d':' -f2)
     if [ -n "$JUPYTER_PORT" ]; then
-        pass "jupyter accessible on port $JUPYTER_PORT"
+        pass "Jupyter accessible on port $JUPYTER_PORT"
         echo "  URL: http://localhost:$JUPYTER_PORT (token: devsandbox123)"
         if curl -s --max-time 5 "http://localhost:$JUPYTER_PORT/tree" | grep -q "Jupyter"; then
-            pass "Jupyter web interface responding"
+            pass "Jupyter web interface is responding correctly"
         else
-            fail "Jupyter web interface not responding"
+            fail "Jupyter web interface is not responding"
         fi
     fi
     # Extra Python checks
     PYTHON_VERSION=$(docker exec jupyter python --version 2>/dev/null | awk '{print $2}')
     if [ -n "$PYTHON_VERSION" ]; then
-        pass "Python available in container (version: $PYTHON_VERSION)"
+        pass "Python $PYTHON_VERSION is available in container"
+        # Check if Jupyter data directory is accessible
+        if docker exec jupyter ls /home/jovyan/work &>/dev/null; then
+            pass "Jupyter workspace directory is mounted and accessible"
+        else
+            fail "Jupyter workspace directory is not accessible"
+        fi
+        # Check if key Python packages are available
+        if docker exec jupyter python -c "import numpy, pandas, matplotlib; print('Key packages imported successfully')" &>/dev/null; then
+            pass "Essential Python packages (numpy, pandas, matplotlib) are installed"
+        else
+            fail "Essential Python packages are missing"
+        fi
     else
-        fail "Python not available in jupyter container"
+        fail "Python is not available in Jupyter container"
     fi
 else
-    fail "jupyter container is not running"
+    fail "Jupyter container is not running"
 fi
 
 echo ""
@@ -191,8 +215,15 @@ if docker ps --format '{{.Names}}' | grep -q chrome-remote; then
     if [ -n "$CHROME_VNC_PORT" ]; then
         pass "Chrome VNC accessible on port $CHROME_VNC_PORT"
         echo "  VNC: vnc://localhost:$CHROME_VNC_PORT (password: devsandbox123)"
+        echo "  SSH Tunnel: ssh -L 5901:localhost:$CHROME_VNC_PORT user@host (then connect to localhost:5901)"
         if nc -z localhost $CHROME_VNC_PORT 2>/dev/null; then
             pass "VNC port $CHROME_VNC_PORT is open"
+            # Test VNC authentication (basic connectivity test)
+            if timeout 5 bash -c "echo 'RFB 003.008' | nc localhost $CHROME_VNC_PORT | head -1 | grep -q 'RFB'"; then
+                pass "VNC server responding to connections"
+            else
+                fail "VNC server not responding properly"
+            fi
         else
             fail "VNC port $CHROME_VNC_PORT is not open"
         fi
@@ -200,6 +231,7 @@ if docker ps --format '{{.Names}}' | grep -q chrome-remote; then
     if [ -n "$CHROME_NOVNC_PORT" ]; then
         pass "Chrome noVNC accessible on port $CHROME_NOVNC_PORT"
         echo "  noVNC: http://localhost:$CHROME_NOVNC_PORT"
+        echo "  Remmina: Create VNC connection with SSH tunnel enabled"
         if curl -s --max-time 5 "http://localhost:$CHROME_NOVNC_PORT" | grep -q "noVNC"; then
             pass "noVNC web interface responding"
         else
@@ -221,6 +253,23 @@ fi
 
 echo ""
 
+# Check home-manager
+echo "--- Home Manager ---"
+if command -v home-manager &>/dev/null; then
+    pass "home-manager is installed"
+    HM_VERSION=$(home-manager --version 2>&1 | head -n1 | awk '{print $2}')
+    echo "  Version: $HM_VERSION"
+    if [ -d "$HOME/.config/home-manager" ]; then
+        pass "Home Manager config directory exists"
+    else
+        warn "Home Manager config directory not found"
+    fi
+else
+    fail "home-manager is not available"
+fi
+
+echo ""
+
 # Check dev tools
 echo "--- Dev Tools ---"
 for tool in docker-compose lazydocker virt-manager elixir livebook node postgres remmina; do
@@ -235,6 +284,65 @@ for tool in docker-compose lazydocker virt-manager elixir livebook node postgres
         pass "$tool is installed ($VERSION)"
     else
         fail "$tool is not available"
+    fi
+done
+
+echo ""
+
+# Check creative tools
+echo "--- Creative Tools ---"
+for tool in gimp krita blender obs-studio audacity opencv; do
+    if command -v $tool &>/dev/null; then
+        VERSION=$($tool --version 2>&1 | head -n1 | awk '{print $NF}' || echo "unknown")
+        pass "$tool is installed ($VERSION)"
+    else
+        fail "$tool is not available"
+    fi
+done
+
+echo ""
+
+# Check agenix secrets
+echo "--- Agenix Secrets ---"
+if command -v agenix &>/dev/null; then
+    pass "agenix is installed"
+    AGENIX_VERSION=$(agenix --version 2>&1 | head -n1 | awk '{print $2}')
+    echo "  Version: $AGENIX_VERSION"
+    # Check if secrets directory exists
+    if [ -d "/run/secrets" ]; then
+        pass "Secrets directory exists"
+        SECRET_COUNT=$(ls /run/secrets | wc -l)
+        echo "  $SECRET_COUNT secrets available"
+    else
+        warn "Secrets directory not found (secrets may not be decrypted yet)"
+    fi
+else
+    fail "agenix is not available"
+fi
+
+echo ""
+
+# Check gaming tools
+echo "--- Gaming Tools ---"
+for tool in steam retroarch mgba snes9x-gtk mednafen pcsx2 rpcs3 lutris heroic protontricks; do
+    if command -v $tool &>/dev/null; then
+        VERSION=$($tool --version 2>&1 | head -n1 | awk '{print $NF}' || echo "installed")
+        pass "$tool is installed ($VERSION)"
+    else
+        warn "$tool is not available (gaming module may not be enabled)"
+    fi
+done
+
+echo ""
+
+# Check shell tools
+echo "--- Shell Tools ---"
+for tool in atuin bat direnv eza fzf yazi zoxide zsh fish; do
+    if command -v $tool &>/dev/null; then
+        VERSION=$($tool --version 2>&1 | head -n1 | awk '{print $NF}' || echo "installed")
+        pass "$tool is installed ($VERSION)"
+    else
+        warn "$tool is not available (shelltools module may not be enabled)"
     fi
 done
 
@@ -262,6 +370,26 @@ if [ -x "$NIXOS_REBUILD" ]; then
     fi
 else
     warn "nixos-rebuild not found"
+fi
+
+echo ""
+
+# Check Nix flake
+echo "--- Nix Flake ---"
+if [ -f "flake.nix" ] && [ -f "flake.lock" ]; then
+    pass "Flake files exist"
+    if nix flake check --no-build 2>/dev/null; then
+        pass "Flake check passed"
+    else
+        warn "Flake check failed (run: nix flake check)"
+    fi
+    if nix flake metadata 2>/dev/null | grep -q "Locked"; then
+        pass "Flake lock is valid"
+    else
+        fail "Flake lock is invalid"
+    fi
+else
+    fail "Flake files not found"
 fi
 
 echo ""
@@ -353,8 +481,10 @@ else
     echo ""
     echo "Common fixes:"
     echo "  • Group membership: Log out and back in, or run: newgrp docker && newgrp libvirtd"
-    echo "  • Start containers: docker start portainer code-server chrome-remote"
+    echo "  • Start containers: docker start portainer code-server chrome-remote livebook"
     echo "  • Start services: sudo systemctl start docker libvirtd"
     echo "  • Passwordless nixos-rebuild: See NixOS Sudo section for configuration details"
+    echo "  • Flake issues: Run nix flake update or nix flake lock"
+    echo "  • Missing tools: Ensure modules (dev, gaming, pro) are imported in configuration.nix"
     exit 1
 fi
