@@ -1,3 +1,40 @@
+# ============================================================================
+# Home Manager Configuration - User Environment Setup
+# ============================================================================
+#
+# This file configures the user environment using Home Manager, providing
+# a declarative way to manage user-specific packages, dotfiles, and settings.
+#
+# STRUCTURE:
+# ==========
+# - imports: Modular configurations and external modules
+# - home: Core user information and state management
+# - programs: Application-specific configurations
+# - xdg: XDG Base Directory compliance
+# - qt/stylix: Theming and appearance
+#
+# MODULAR IMPORTS:
+# ================
+# - ./modules/pro.nix: Professional creative tools
+# - stylix: System-wide theming
+# - tokyonight: Color scheme for supported applications
+#
+# KEY FEATURES:
+# =============
+# - User packages: Comprehensive toolset for development and productivity
+# - Browser configuration: Brave with extensions and custom preferences
+# - Terminal theming: Ghostty with Kanagawa theme
+# - File associations: Default applications for various MIME types
+# - GTK theming: Kanagawa theme with Bibata cursors
+#
+# MAINTENANCE:
+# ============
+# - Update home.stateVersion when upgrading NixOS versions
+# - Use home-manager switch to apply changes
+# - Backup existing configs before major changes
+#
+# ============================================================================
+
 {
   pkgs,
   lib,
@@ -15,9 +52,9 @@
     ##./hypr.nix
     ## ./nixvim
     ##./hyprpanel.nix
-    ./modules/pro.nix
-    inputs.stylix.homeModules.stylix
-    inputs.tokyonight.homeManagerModules.default
+    ./modules/pro.nix                    # Professional creative tools
+    inputs.stylix.homeModules.stylix     # System theming
+    inputs.tokyonight.homeManagerModules.default  # Color schemes
   ];
 
   home = {

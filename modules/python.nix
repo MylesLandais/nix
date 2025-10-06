@@ -1,5 +1,46 @@
 { config, pkgs, ... }:
 
+# ============================================================================
+# Python Development Environment Module
+# ============================================================================
+#
+# This module provides a Python data science environment through a Jupyter
+# notebook container. It includes essential scientific computing packages
+# for machine learning, data analysis, and interactive development.
+#
+# CONTAINER CONFIGURATION:
+# ========================
+# - Image: jupyter/minimal-notebook:latest (1.56GB)
+# - Port: 8888 (accessible via http://localhost:8888)
+# - Token: devsandbox123 (for authentication)
+# - Workspace: /home/warby/Workspace/Jupyter mounted to /home/jovyan/work
+#
+# INCLUDED PACKAGES:
+# ==================
+# - Jupyter Lab: Modern web-based interface for notebooks
+# - Python 3.11+: Latest stable Python version
+# - NumPy: Fundamental package for array computing
+# - Pandas: Data manipulation and analysis library
+# - Matplotlib: Comprehensive plotting library
+# - SciPy: Scientific computing library
+# - Scikit-learn: Machine learning in Python
+#
+# USAGE:
+# ======
+# 1. Import this module in your NixOS configuration
+# 2. Access Jupyter at http://localhost:8888 with token 'devsandbox123'
+# 3. Work in mounted directory: /home/warby/Workspace/Jupyter
+#
+# OPTIMIZATION NOTES:
+# ===================
+# The experimental ultra-minimal custom image is commented out due to
+# Nix build complexity. Current implementation uses official Jupyter
+# minimal-notebook image which provides good balance of size and features.
+#
+# Future: Custom distroless-style image targeting ~500MB (67% reduction)
+# ============================================================================
+
+# EXPERIMENTAL: Custom ultra-minimal Jupyter image (currently disabled)
 # let
 #   # Define required Python packages for Jupyter
 #   pythonPackages = with pkgs.python3Packages; [

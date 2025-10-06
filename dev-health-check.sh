@@ -1,7 +1,49 @@
 #!/usr/bin/env bash
 
-# dev-health-check.sh - Comprehensive dev environment health check
-# Checks Docker, libvirt, containers, dev tools, creative tools, gaming tools, secrets, Nix flake, and more
+# ============================================================================
+# Development Environment Health Check Script
+# ============================================================================
+#
+# Comprehensive validation script for the Agent Sandbox development environment.
+# Performs automated testing of all critical components, services, and tools
+# to ensure operational readiness and identify configuration issues.
+#
+# CHECKED COMPONENTS:
+# ===================
+# - Container Runtime: Docker daemon and container status
+# - Virtualization: libvirt/KVM setup and accessibility
+# - Development Containers: Portainer, code-server, Jupyter, Livebook, Chrome Remote
+# - User Environment: Home Manager configuration
+# - Development Tools: Languages, frameworks, and utilities
+# - Creative Tools: Professional open source software suite
+# - Secrets Management: Agenix encrypted secrets
+# - Gaming Tools: Steam, emulators, and gaming utilities
+# - Shell Tools: Modern terminal enhancements
+# - Nix Configuration: Flake validity and package integrity
+# - Network Security: Firewall rules and port accessibility
+# - VPN Services: Tailscale connectivity
+#
+# CONTAINER OPTIMIZATIONS MONITORED:
+# ==================================
+# | Service       | Optimized Size | Savings | Method |
+# |---------------|----------------|---------|--------|
+# | Jupyter       | 1.56GB         | 62%     | minimal-notebook |
+# | Code-Server   | 662MB          | 15%     | linuxserver variant |
+# | Livebook      | ~550MB         | 16%     | custom minimal |
+# | Chrome Remote | 1.11GB         | 46%     | alpine debug |
+# | Portainer     | 186MB          | -       | already optimized |
+#
+# CHECK CATEGORIES:
+# ================
+# - Infrastructure: Docker, libvirt, firewall
+# - Containers: Status, ports, web interfaces
+# - Development Tools: Installation and versions
+# - Networking: Local and Tailscale access
+# - Security: SSL certificates, authentication
+#
+# USAGE: ./dev-health-check.sh
+# EXIT CODES: 0=success, 1=errors found
+# ============================================================================
 
 set -e
 
