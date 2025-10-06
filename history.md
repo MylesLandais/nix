@@ -10,6 +10,7 @@
 - Fixed container startup issues by simplifying cmd to standard flags.
 - Reset Portainer admin password to 'devsandbox123' for consistency with other services, using API initialization after data reset.
 - Optimized disk space by removing unused Docker images (jupyter/scipy-notebook, jupyter/minimal-notebook, linuxserver/code-server) and running Nix garbage collection on old system generations.
+- Tuned Nix build performance with max-jobs=4, cores=4, added Chaotic substituter, enabled sandbox and auto-optimise-store; commented out problematic jupyter and livebook containers to resolve build issues.
 
 ## 2025-10-04
 - Integrated Brave browser via Home Manager with extensions: Shazam (akibfjgmcjogdlefokjmhblcibgkndog), Kanagawa Theme (cjlbjibclmofpebnmgibklnkhhjlbjgc), Bitwarden (nngceckbapebfimnlniiiahkandclblb).

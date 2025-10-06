@@ -14,26 +14,44 @@
     ../../../../modules/dev.nix
     ../../../../modules/python.nix
   ];
-  nix = {
-    settings.experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+   nix = {
+     settings.experimental-features = [
+       "nix-command"
+       "flakes"
+     ];
 
-    optimise.automatic = true;
+     optimise.automatic = true;
 
-    settings.trusted-users = [
-      "root"
-      "warby"
-      "@wheel"
-    ];
+     settings = {
+       trusted-users = [
+         "root"
+         "warby"
+         "@wheel"
+       ];
 
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
-    };
-  };
+       max-jobs = 4;
+       cores = 4;
+
+       substituters = [
+         "https://cache.nixos.org"
+         "https://nyx.chaotic.cx"
+       ];
+
+       trusted-public-keys = [
+         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+         "nyx.chaotic.cx-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
+       ];
+
+       sandbox = true;
+       auto-optimise-store = true;
+     };
+
+     gc = {
+       automatic = true;
+       dates = "weekly";
+       options = "--delete-older-than 30d";
+     };
+   };
   # Boot configuration
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
