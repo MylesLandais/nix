@@ -75,22 +75,20 @@
 #   };
 # in
 {
-  # Jupyter container for Python development - commented out due to build issues
-  # virtualisation.oci-containers.containers = {
-  #   "jupyter" = {
-  #     imageFile = jupyterImage;
-  #     ports = [ "8888:8888" ];
-  #     volumes = [
-  #       "/home/warby/Workspace/Jupyter:/home/jovyan/work"
-  #     ];
-  #     environment = {
-  #       TZ = "America/New_York";
-  #       JUPYTER_TOKEN = "devsandbox123";
-  #     };
-  #     autoStart = true;
-  #   };
-  # };
+  virtualisation.oci-containers.containers = {
+    "jupyter" = {
+      image = import ./jupyter-image.nix { inherit pkgs; };
+      ports = [ "8888:8888" ];
+      volumes = [
+        "/home/warby/Workspace/Jupyter:/home/jovyan/work"
+      ];
+      environment = {
+        TZ = "America/New_York";
+        JUPYTER_TOKEN = "devsandbox123";
+      };
+      autoStart = true;
+    };
+  };
 
-  # Open firewall port for Jupyter - commented out
-  # networking.firewall.allowedTCPPorts = [ 8888 ];
+  networking.firewall.allowedTCPPorts = [ 8888 ];
 }
