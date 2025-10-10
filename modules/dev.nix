@@ -79,7 +79,7 @@
         };
         ports = lib.mkOption {
           type = lib.types.listOf lib.types.str;
-          default = [ "9000:9000" ];
+          default = [ "0.0.0.0:9000:9000" ];
           description = "Port mappings for Portainer";
         };
       };
