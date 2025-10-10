@@ -59,7 +59,7 @@
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   # Network configuration
-  networking.hostName = "potato";
+  networking.hostName = "dell-potato";
   networking.networkmanager.enable = true;
 
   # Internationalization
@@ -114,6 +114,8 @@
     users.groups.docker.members = [ "warby" ];
 
     # Override TZ for containers to match potato
+    virtualisation.podman.enable = true;
+    virtualisation.docker.enable = false;
     virtualisation.oci-containers.containers.portainer.environment.TZ = "America/New_York";
     virtualisation.oci-containers.containers."code-server".environment.TZ = "America/New_York";
 
@@ -141,6 +143,8 @@
 
      # System utilities
      gparted
+     xwayland
+     xpra
    ];
 
   # --- CORRECTED RUSTDESK CLIENT SERVICE ---
@@ -148,15 +152,29 @@
   # self-hosting a relay server, not for enabling remote access TO this machine.
   # This systemd service runs the RustDesk client in the background for
   # unattended remote access.
+  systemd.services.xpra = {
+    description = "Xpra Virtual Display Server";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network-online.target" ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.xpra}/bin/xpra start :100 --start-child=xterm --bind-tcp=0.0.0.0:10000 --no-daemon";
+      Restart = "always";
+      User = "root";
+    };
+  };
+
   systemd.services.rustdesk = {
     description = "RustDesk Remote Access Service";
     wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
+    after = [ "xpra.service" ];
+    requires = [ "xpra.service" ];
     serviceConfig = {
       Type = "simple";
-      ExecStart = "${pkgs.rustdesk-flutter}/bin/rustdesk --service";
+      ExecStart = "${pkgs.rustdesk-flutter}/bin/rustdesk --service --display :100";
       Restart = "always";
       User = "root"; # Necessary for access on the login screen
+      Environment = "DISPLAY=:100 WAYLAND_DISPLAY= XDG_SESSION_TYPE=";
     };
   };
 
