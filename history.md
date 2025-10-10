@@ -1,5 +1,12 @@
 # NixOS Config History
 
+## 2025-10-09
+- Generated a system information report for the `dell-potato` host.
+- Created and debugged a shell script (`generate_report.sh`) to collect hardware, driver, and encoding details.
+- Resolved execution issues on NixOS by correcting the shebang from `#!/bin/bash` to `#!/usr/bin/env bash` and finally executing with `bash ./generate_report.sh` to ensure the correct interpreter.
+- Appended the generated report to `hosts/dell-potato/etc/nixos/README.md` for documentation.
+- Staged and committed the changes with a detailed message outlining the process.
+
 ## 2025-10-05
 - Resolved code-server Docker image build failures by removing custom image derivation (avoiding VM space issues) and using base codercom/code-server:latest.
 - Added self-signed SSL certificate generation in system activation script for HTTPS support.
