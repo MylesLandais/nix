@@ -207,6 +207,12 @@ cert: false
             "--enable-features=WebUIDarkMode"
             "--force-dark-mode"
           ];
+          extensions = [
+            { id = "akibfjgmcjogdlefokjmhblcibgkndog"; }  # Shazam
+            { id = "djnghjlejbfgnbnmjfgbdaeafbiklpha"; }  # Kanagawa Theme
+            { id = "nngceckbapebfimnlniiiahkandclblb"; }  # Bitwarden
+            { id = "mmioliijnhnoblpgimnlajmefafdfilb"; }  # SponsorBlock
+          ];
           preferences = {
             "accessibility" = { "captions" = { "headless_caption_enabled" = false; }; };
             "alternate_error_pages" = { "backup" = false; };
@@ -456,12 +462,6 @@ cert: false
               "weekly_storage" = { "search_count" = [ { "day" = 1759550400.0; "value" = 2.0; } ]; };
             };
           };
-            extensions = [
-              { id = "akibfjgmcjogdlefokjmhblcibgkndog"; }  # Shazam
-              { id = "djnghjlejbfgnbnmjfgbdaeafbiklpha"; }  # Kanagawa Theme
-              { id = "nngceckbapebfimnlniiiahkandclblb"; }  # Bitwarden
-              { id = "mmioliijnhnoblpgimnlajmefafdfilb"; }  # SponsorBlock
-            ];
         };
     firefox = {
         enable = true;
