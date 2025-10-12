@@ -42,3 +42,39 @@ This behavior prevents true unattended access, which is a critical requirement f
 ## Current Status
 
 The problem is a **blocker** for using RustDesk as a reliable unattended access solution on GNOME/Wayland-based NixOS systems. The security model of Wayland and GNOME's `xdg-desktop-portal` seems to fundamentally prevent a background service from capturing the screen without explicit user consent, even when running as root.
+
+## Alternative Solution: Sunshine/Moonlight
+
+As an alternative to RustDesk, Sunshine (with Moonlight client) has been implemented and configured. Sunshine is designed for game streaming but provides excellent remote desktop functionality with better Wayland/GNOME compatibility.
+
+### Sunshine Setup
+
+1. **Package Available**: Sunshine is available in Nixpkgs (`pkgs.sunshine`)
+2. **NixOS Module**: Created `modules/sunshine.nix` with proper systemd service configuration
+3. **Configuration**: Integrated into `dell-potato` host configuration
+4. **Firewall**: Ports 47984-47990, 48010 opened for TCP/UDP
+5. **Capabilities**: Service runs with CAP_SYS_ADMIN for screen capture
+6. **Wayland Support**: Environment variables set for Wayland compatibility
+
+### Key Advantages over RustDesk
+
+- **Better Wayland Support**: Designed to work with modern display servers
+- **No User Prompts**: Can capture screen unattended without interactive permission requests
+- **Game Streaming Optimized**: Lower latency and better performance for remote desktop use
+- **Cross-Platform Clients**: Moonlight clients available for Windows, macOS, Linux, Android, iOS, etc.
+- **Web UI**: Built-in web interface for configuration and management
+
+### Testing Required
+
+- Verify Sunshine service starts correctly on dell-potato
+- Test Moonlight client connection from remote device
+- Confirm unattended access works (no user interaction required)
+- Compare performance and reliability vs. RustDesk
+
+### Next Steps
+
+1. Deploy configuration to dell-potato
+2. Test Sunshine service startup
+3. Install Moonlight client on remote device
+4. Verify connection and functionality
+5. Document results and performance comparison

@@ -13,6 +13,7 @@
 
     ../../../../modules/dev.nix
     ../../../../modules/python.nix
+    ../../../../modules/sunshine.nix
   ];
    nix = {
      settings.experimental-features = [
@@ -147,36 +148,37 @@
      xpra
    ];
 
-  # --- CORRECTED RUSTDESK CLIENT SERVICE ---
-  # The 'services.rustdesk-server' block was removed. That module is for
-  # self-hosting a relay server, not for enabling remote access TO this machine.
-  # This systemd service runs the RustDesk client in the background for
-  # unattended remote access.
-  systemd.services.xpra = {
-    description = "Xpra Virtual Display Server";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network-online.target" ];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.xpra}/bin/xpra start :100 --start-child=xterm --bind-tcp=0.0.0.0:10000 --no-daemon";
-      Restart = "always";
-      User = "root";
-    };
-  };
+  # --- SUNSHINE GAME STREAMING SERVICE ---
+  # Enable Sunshine for unattended remote desktop access via Moonlight client
+  services.sunshine.enable = true;
 
-  systemd.services.rustdesk = {
-    description = "RustDesk Remote Access Service";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "xpra.service" ];
-    requires = [ "xpra.service" ];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.rustdesk-flutter}/bin/rustdesk --service --display :100";
-      Restart = "always";
-      User = "root"; # Necessary for access on the login screen
-      Environment = "DISPLAY=:100 WAYLAND_DISPLAY= XDG_SESSION_TYPE=";
-    };
-  };
+  # --- LEGACY RUSTDESK CONFIGURATION (DISABLED) ---
+  # Keeping for reference, but Sunshine should provide better Wayland/GNOME compatibility
+  # systemd.services.xpra = {
+  #   description = "Xpra Virtual Display Server";
+  #   wantedBy = [ "multi-user.target" ];
+  #   after = [ "network-online.target" ];
+  #   serviceConfig = {
+  #     Type = "simple";
+  #     ExecStart = "${pkgs.xpra}/bin/xpra start :100 --start-child=xterm --bind-tcp=0.0.0.0:10000 --no-daemon";
+  #     Restart = "always";
+  #     User = "root";
+  #   };
+  # };
+
+  # systemd.services.rustdesk = {
+  #   description = "RustDesk Remote Access Service";
+  #   wantedBy = [ "multi-user.target" ];
+  #   after = [ "xpra.service" ];
+  #   requires = [ "xpra.service" ];
+  #   serviceConfig = {
+  #     Type = "simple";
+  #     ExecStart = "${pkgs.rustdesk-flutter}/bin/rustdesk --service --display :100";
+  #     Restart = "always";
+  #     User = "root"; # Necessary for access on the login screen
+  #     Environment = "DISPLAY=:100 WAYLAND_DISPLAY= XDG_SESSION_TYPE=";
+  #   };
+  # };
 
   # SSH server configuration
   services.openssh = {
