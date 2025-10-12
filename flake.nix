@@ -70,11 +70,20 @@
     let
       system = "x86_64-linux";
       username = "warby";
+      overlay = final: prev: {
+        libretro-thepowdertoy = prev.libretro-thepowdertoy.overrideAttrs (oldAttrs: {
+          cmakeFlags = (oldAttrs.cmakeFlags or []) ++ [
+            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+            "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
+          ];
+        });
+      };
       pkgs = import nixpkgs {
         inherit system;
         config = {
           allowUnfree = true;
         };
+        overlays = [ overlay ];
       };
       hm_user_cfg = {
         home-manager.users."${username}" = {

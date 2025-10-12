@@ -92,7 +92,18 @@
     pulse.enable = true;
   };
 
-  # Graphics support\n  hardware.graphics.enable = true;\n  hardware.enableRedistributableFirmware = true;\n  hardware.cpu.intel.updateMicrocode = true;
+  # Graphics support - Intel integrated + AMD discrete GPU
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      mesa
+      intel-media-driver  # Intel VA-API driver
+      vaapiVdpau         # VA-API/VDPAU wrapper
+      libvdpau-va-gl     # VDPAU driver with OpenGL/VAAPI backend
+    ];
+  };
+  hardware.enableRedistributableFirmware = true;
+  hardware.cpu.intel.updateMicrocode = true;
 
   # User configuration
   users.users.warby = {
@@ -137,6 +148,7 @@
      # Web browsers
      firefox
      ungoogled-chromium
+     brave
      ghostty
      opencode
      vesktop

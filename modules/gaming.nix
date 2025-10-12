@@ -57,13 +57,13 @@
 { config, lib, pkgs, ... }:
 
 {
-  # OpenGL support for 3D gaming
-  hardware.opengl = {
+  # Graphics support for 3D gaming
+  hardware.graphics = {
     enable = true;
   };
 
   # Intel graphics support (optimized for dell-potato)
-  hardware.opengl.extraPackages = with pkgs; [
+  hardware.graphics.extraPackages = with pkgs; [
     intel-media-driver  # Hardware-accelerated video decoding
     vaapiIntel         # VAAPI support for Intel GPUs
   ];
@@ -99,9 +99,37 @@
     retroarchFull              # Full RetroArch with all cores
     libretro.swanstation       # PS1 core (modern)
     libretro.beetle-psx        # PS1 core (accurate)
+    # Temporarily disabled cores due to CMake compatibility issues:
+    # libretro.thepowdertoy
+    # libretro.citra
+    # libretro.dolphin
+    # libretro.tic80
+    # libretro.mgba
+    # Temporarily disabled cores due to CMake compatibility issues:
+    # libretro.thepowdertoy
+    # libretro.mgba             # Game Boy Advance - temporarily disabled due to CMake compatibility issue
+    # libretro.citra            # 3DS emulator - temporarily disabled due to CMake compatibility issue
+    # libretro.dolphin          # Wii/GameCube emulator - temporarily disabled due to CMake compatibility issue
+    # libretro.genesis-plus-gx  # Genesis/Mega Drive - temporarily disabled due to CMake compatibility issue
+    # libretro.snes9x           # Super Nintendo - temporarily disabled due to CMake compatibility issue
+    # libretro.snes9x2002       # Super Nintendo - temporarily disabled due to CMake compatibility issue
+    # libretro.snes9x2005       # Super Nintendo - temporarily disabled due to CMake compatibility issue
+    # libretro.snes9x2005-plus  # Super Nintendo - temporarily disabled due to CMake compatibility issue
+    # libretro.snes9x2010       # Super Nintendo - temporarily disabled due to CMake compatibility issue
+    # libretro.fmsx             # MSX - temporarily disabled due to CMake compatibility issue
+    # libretro.mame2003-plus    # Arcade - temporarily disabled due to CMake compatibility issue
+    # libretro.mame2000         # Arcade - temporarily disabled due to CMake compatibility issue
+    # libretro.mame2010         # Arcade - temporarily disabled due to CMake compatibility issue
+    # libretro.mame2015         # Arcade - temporarily disabled due to CMake compatibility issue
+    # libretro.fbneo            # Arcade - temporarily disabled due to CMake compatibility issue
+    # libretro.fbalpha2012      # Arcade - temporarily disabled due to CMake compatibility issue
+    # libretro.mame2003         # Arcade - temporarily disabled due to CMake compatibility issue
+    # libretro.opera            # 3DO - temporarily disabled due to CMake compatibility issue
+    # libretro.tic80            # Fantasy console - temporarily disabled due to CMake compatibility issue
+    # libretro.picodrive        # Sega - temporarily disabled due to CMake compatibility issue
 
     # Standalone emulators
-    mgba          # Game Boy Advance
+    # mgba          # Game Boy Advance - temporarily disabled due to CMake compatibility issue
     snes9x-gtk    # Super Nintendo
     mednafen      # Multi-system emulator
     pcsx2         # PlayStation 2
