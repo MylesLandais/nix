@@ -1,0 +1,118 @@
+name: NixOS Configuration Test
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'hosts/**'
+      - 'modules/**'
+      - 'flake.nix'
+      - 'flake.lock'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'hosts/**'
+      - 'modules/**'
+      - 'flake.nix'
+      - 'flake.lock'
+
+jobs:
+  test-nixos-config:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        host: [dell-potato, kraken]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Nix
+      uses: cachix/install-nix-action@v25
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+
+    - name: Enable Nix flakes
+      run: |
+        mkdir -p ~/.config/nix
+        echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+    - name: Cache Nix store
+      uses: cachix/cachix-action@v14
+      with:
+        name: nix-community
+        authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+    - name: Validate flake
+      run: nix flake check
+
+    - name: Build configuration
+      run: nix build ".#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel"
+
+    - name: Test configuration (dry-run)
+      run: |
+        # Create a minimal NixOS system for testing
+        sudo mkdir -p /etc/nixos
+        sudo cp -r . /etc/nixos/
+        cd /etc/nixos
+        sudo nixos-rebuild dry-run --flake ".#${{ matrix.host }}"
+
+    - name: Generate test report
+      run: |
+        echo "Test Report for ${{ matrix.host }}" > test-report.txt
+        echo "Timestamp: $(date)" >> test-report.txt
+        echo "Status: PASSED" >> test-report.txt
+        echo "" >> test-report.txt
+        echo "System Info:" >> test-report.txt
+        uname -a >> test-report.txt
+        echo "" >> test-report.txt
+        echo "Nix Info:" >> test-report.txt
+        nix --version >> test-report.txt
+
+    - name: Upload test report
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-report-${{ matrix.host }}
+        path: test-report.txt
+
+  deploy:
+    needs: test-nixos-config
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    strategy:
+      matrix:
+        host: [dell-potato]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Nix
+      uses: cachix/install-nix-action@v25
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+
+    - name: Enable Nix flakes
+      run: |
+        mkdir -p ~/.config/nix
+        echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+    - name: Add deploy host to known_hosts
+      run: |
+        ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy to target
+      run: |
+        nixos-rebuild switch --flake ".#${{ matrix.host }}" \
+          --target-host "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+          --use-remote-sudo
+
+    - name: Verify deployment
+      run: |
+        ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "uname -a"
+        ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "systemctl status nixos-upgrade"

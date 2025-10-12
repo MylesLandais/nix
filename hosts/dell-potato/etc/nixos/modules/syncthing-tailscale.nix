@@ -126,14 +126,13 @@
 
   # Disable automatic suspend
   services.logind = {
-    lidSwitch = "ignore";  # Don't suspend when lid is closed (if laptop)
-    lidSwitchDocked = "ignore";
-    lidSwitchExternalPower = "ignore";
     settings = {
       Login = {
         HandleSuspendKey = "ignore";
         HandleHibernateKey = "ignore";
         HandleLidSwitch = "ignore";
+        HandleLidSwitchDocked = "ignore";
+        HandleLidSwitchExternalPower = "ignore";
         IdleAction = "ignore";
       };
     };

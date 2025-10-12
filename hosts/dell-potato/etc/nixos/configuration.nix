@@ -56,7 +56,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = pkgs.linuxPackages_cachyos;
 
   # Network configuration
   networking.hostName = "dell-potato";
@@ -92,14 +92,20 @@
     pulse.enable = true;
   };
 
-  # Graphics support - Intel integrated + AMD discrete GPU
+  # Graphics support - Intel integrated + AMD discrete GPU (when present)
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [
       mesa
       intel-media-driver  # Intel VA-API driver
       vaapiVdpau         # VA-API/VDPAU wrapper
       libvdpau-va-gl     # VDPAU driver with OpenGL/VAAPI backend
+
+      # AMD-specific packages (conditionally loaded)
+      rocmPackages.clr.icd  # ROCm OpenCL
+      libva                # VA-API
+      vulkan-loader        # Vulkan ICD
     ];
   };
   hardware.enableRedistributableFirmware = true;
@@ -135,29 +141,36 @@
 
   # Core system packages
   # Changed 'rustdesk' to 'rustdesk-flutter' for better stability.
-   environment.systemPackages = with pkgs; [
-     # Essential system tools
-     vim
-     wget
-     curl
-     git
-     htop
-     rustdesk-flutter # <-- Corrected package
-     openssl
+    environment.systemPackages = with pkgs; [
+      # Essential system tools
+      vim
+      wget
+      curl
+      git
+      htop
+      rustdesk-flutter # <-- Corrected package
+      openssl
 
-     # Web browsers
-     firefox
-     ungoogled-chromium
-     brave
-     ghostty
-     opencode
-     vesktop
+      # Web browsers
+      firefox
+      ungoogled-chromium
+      brave
+      ghostty
+      opencode
+      vesktop
 
-     # System utilities
-     gparted
-     xwayland
-     xpra
-   ];
+      # System utilities
+      gparted
+      xwayland
+      xpra
+
+      # AMD graphics debugging tools
+      glxinfo
+      vulkan-tools
+      clinfo
+      amdgpu_top
+      libva-utils
+    ];
 
   # --- SUNSHINE GAME STREAMING SERVICE ---
   # Enable Sunshine for unattended remote desktop access via Moonlight client
@@ -215,6 +228,20 @@
 
   # Enable Wake-on-LAN
   networking.interfaces.enp0s31f6.wakeOnLan.enable = true;
+
+  # AMD graphics kernel parameters (for when AMD GPU is present)
+  boot.kernelParams = [
+    "amdgpu.si_support=1"
+    "amdgpu.cik_support=1"
+    "radeon.si_support=0"
+    "radeon.cik_support=0"
+  ];
+
+  # Environment variables for AMD graphics
+  environment.sessionVariables = {
+    AMD_VULKAN_ICD = "RADV";
+    ROCR_VISIBLE_DEVICES = "all";
+  };
 
   # System state version
   system.stateVersion = "24.11";

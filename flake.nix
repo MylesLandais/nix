@@ -38,8 +38,8 @@
 
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";  # Core packages
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable"; # Additional packages
+    nixpkgs.url = "github:nixos/nixpkgs/master";  # Core packages
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable"; # Additional packages with CachyOS kernel
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";  # Pin to same nixpkgs
@@ -68,6 +68,12 @@
       ...
     }@inputs:
     let
+      # Add Chaotic Nyx overlay for CachyOS kernel access
+      chaotic-overlay = final: prev: {
+        linuxPackages_cachyos = chaotic.packages.${prev.system}.linuxPackages_cachyos;
+      };
+    in
+    let
       system = "x86_64-linux";
       username = "warby";
       overlay = final: prev: {
@@ -82,13 +88,15 @@
         inherit system;
         config = {
           allowUnfree = true;
+          permittedInsecurePackages = [ "mbedtls-2.28.10" ];
         };
-        overlays = [ overlay ];
+        overlays = [ overlay chaotic-overlay ];
       };
       hm_user_cfg = {
         home-manager.users."${username}" = {
           imports = [
             ./home.nix
+            ./hosts/dell-potato/etc/nixos/home-manager/home.nix
           ];
           home.stateVersion = "24.11";
         };
