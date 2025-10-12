@@ -1,5 +1,12 @@
 # NixOS Config History
 
+## 2025-10-12
+- Fixed Brave browser crashes on dell-potato host (Intel integrated + AMD discrete GPU, GNOME desktop).
+- Added hardware acceleration configuration with VA-API drivers for hybrid graphics setup.
+
+## 2025-10-09
+# NixOS Config History
+
 ## 2025-10-09
 - Generated a system information report for the `dell-potato` host.
 - Created and debugged a shell script (`generate_report.sh`) to collect hardware, driver, and encoding details.
