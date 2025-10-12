@@ -13,7 +13,6 @@
 
     ../../../../modules/dev.nix
     ../../../../modules/python.nix
-    ../../../../modules/sunshine.nix
   ];
    nix = {
      settings.experimental-features = [
@@ -116,7 +115,7 @@
 
     # Override TZ for containers to match potato
     virtualisation.podman.enable = true;
-    virtualisation.docker.enable = false;
+    virtualisation.docker.enable = lib.mkForce true;
     virtualisation.oci-containers.containers.portainer.environment.TZ = "America/New_York";
     virtualisation.oci-containers.containers."code-server".environment.TZ = "America/New_York";
 

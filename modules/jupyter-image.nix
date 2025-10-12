@@ -15,7 +15,7 @@ let
   jupyterImage = pkgs.dockerTools.buildLayeredImage {
     name = "custom-jupyter";
     tag = "latest";
-    contents = [ pkgs.cacert ];
+    contents = [ pkgs.cacert ] ++ pythonPackages ++ [ pkgs.python3 ];
     config = {
       Cmd = [
         "${pkgs.python3}/bin/jupyter"

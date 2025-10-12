@@ -77,7 +77,7 @@
 {
   virtualisation.oci-containers.containers = {
     "jupyter" = {
-      image = import ./jupyter-image.nix { inherit pkgs; };
+      image = "jupyter/minimal-notebook:latest";
       ports = [ "8888:8888" ];
       volumes = [
         "/home/warby/Workspace/Jupyter:/home/jovyan/work"
