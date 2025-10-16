@@ -29,8 +29,8 @@
          "@wheel"
        ];
 
-       max-jobs = 4;
-       cores = 4;
+       max-jobs = 3;
+       cores = 3;
 
        substituters = [
          "https://cache.nixos.org"
@@ -56,6 +56,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Use CachyOS kernel for better desktop responsiveness and performance
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
 
   # Network configuration
@@ -63,7 +64,7 @@
   networking.networkmanager.enable = true;
 
   # Internationalization
-  time.timeZone = "America/New_York";
+  time.timeZone = "America/Chicago";
   i18n.defaultLocale = "en_US.UTF-8";
 
   # --- CORRECTED DESKTOP ENVIRONMENT ---
@@ -159,6 +160,9 @@
       opencode
       vesktop
 
+      # Development tools
+      vscode # VS Code for development work
+
       # System utilities
       gparted
       xwayland
@@ -226,6 +230,17 @@
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
 
+  # Disable systemd suspend/hibernation system-wide
+  systemd.sleep.extraConfig = ''
+    AllowSuspend=no
+    AllowHibernation=no
+    AllowHybridSleep=no
+    AllowSuspendThenHibernate=no
+  '';
+
+  # GNOME power management settings to prevent automatic suspend and lock screen
+  services.gnome.gnome-settings-daemon.enable = true;
+
   # Enable Wake-on-LAN
   networking.interfaces.enp0s31f6.wakeOnLan.enable = true;
 
@@ -236,6 +251,9 @@
     "radeon.si_support=0"
     "radeon.cik_support=0"
   ];
+
+  # Enable sched-ext schedulers for better responsiveness with CachyOS kernel
+  services.scx.enable = true;
 
   # Environment variables for AMD graphics
   environment.sessionVariables = {

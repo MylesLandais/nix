@@ -64,8 +64,7 @@
     go
     elixir
     gleam
-    lua
-    luajit
+    lua5_2
 
     # Development utilities
     docker-compose
@@ -118,7 +117,6 @@
     # Web browsers and tools
     firefox
     ungoogled-chromium
-    brave
     wget
     curl
     httpie

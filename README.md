@@ -1,6 +1,11 @@
 # NixOS dotfiles
 This repo contains the nix configurations for my main workstations
 
+## TODO:
+- missing package gemini-cli
+- feat:
+ with api secrets and inject .env api keys
+
 ## Structure
 
 Under hosts I have the hardware and basic config of each of my hosts, these are divided by their hostname.

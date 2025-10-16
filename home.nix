@@ -87,6 +87,12 @@ cert: false
       # EDITOR = "emacs";
     };
 
+    # Shell aliases for build-time sleep inhibition
+    shellAliases = {
+      nixos-rebuild-awake = "gnome-session-inhibit --inhibit idle sudo nixos-rebuild";
+      nix-build-awake = "gnome-session-inhibit --inhibit idle nix build";
+    };
+
     packages = with pkgs; [
       # jetbrains.goland
       bind

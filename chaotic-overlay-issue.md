@@ -1,3 +1,14 @@
+# Chaotic Overlay Configuration Issue
+
+## Problem Description
+
+The chaotic overlay in `flake.nix` is attempting to reference the `system` variable, which is not defined in the scope where the overlay is created. This causes an "undefined variable 'system'" error when Nix attempts to evaluate the flake.
+
+The issue occurs because the `chaotic-overlay` is defined in the first `let` block, but `system` is only defined in the subsequent `let` block. In Nix, variables are only accessible within their own `let` block or after their definition.
+
+## Current flake.nix Configuration
+
+```nix
 # ============================================================================
 # NixOS Flake Configuration - Agent Sandbox Infrastructure
 # ============================================================================
@@ -68,24 +79,19 @@
       ...
     }@inputs:
     let
-      system = "x86_64-linux";
       # Add Chaotic Nyx overlay for CachyOS kernel access
       chaotic-overlay = final: prev: {
-        linuxPackages_cachyos = chaotic.packages.${system}.linux_cachyos;
+        linuxPackages_cachyos = chaotic.packages.${system}.linuxPackages_cachyos;
       };
     in
     let
+      system = "x86_64-linux";
       username = "warby";
       overlay = final: prev: {
         libretro-thepowdertoy = prev.libretro-thepowdertoy.overrideAttrs (oldAttrs: {
           cmakeFlags = (oldAttrs.cmakeFlags or []) ++ [
             "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
             "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
-          ];
-        });
-        snes9x-gtk = prev.snes9x-gtk.overrideAttrs (oldAttrs: {
-          cmakeFlags = (oldAttrs.cmakeFlags or []) ++ [
-            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
           ];
         });
       };
@@ -136,5 +142,31 @@
           }
         ];
       };
-};
+    };
 }
+```
+
+## Error Message
+
+```
+error: undefined variable 'system'
+
+       at /home/warby/Workspace/Nixos/flake.nix:72:52:
+
+           71 |       # Add Chaotic Nyx overlay for CachyOS kernel access
+           72 |       chaotic-overlay = final: prev: {
+           73 |         linuxPackages_cachyos = chaotic.packages.${system}.linuxPackages_cachyos;
+             |                                                    ^
+           74 |       };
+```
+
+## Root Cause
+
+The `system` variable is defined in the second `let` block (line 77), but the `chaotic-overlay` is defined in the first `let` block (lines 71-74). In Nix, variables defined in a `let` block are only accessible within that block and subsequent expressions, but not in nested `let` blocks that come before their definition.
+
+## Potential Solutions
+
+1. Move the `system` definition before the `chaotic-overlay` definition.
+2. Define `system` in the same `let` block as `chaotic-overlay`.
+3. Pass `system` as a parameter to the overlay function.
+4. Restructure the `let` blocks to ensure proper scoping.
