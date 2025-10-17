@@ -61,14 +61,13 @@
         home-manager.users."${username}" = {
           imports = [
             ./home.nix
-            ./hosts/dell-potato/etc/nixos/home-manager/home.nix
           ];
           home.stateVersion = "24.11";
         };
       };
     in
     {
-      nixosConfigurations.test = nixpkgs.lib.nixosSystem {
+      nixosConfigurations."dell-potato" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         inherit pkgs;
         specialArgs = {
