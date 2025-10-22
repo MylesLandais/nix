@@ -1,36 +1,9 @@
-# ============================================================================
-# AMD Graphics Module for Dell OptiPlex
-# ============================================================================
-#
-# This module configures AMD discrete graphics support for the Dell OptiPlex.
-# Based on the hardware detection, this system has Intel integrated graphics
-# (HD Graphics 530, device ID 0x1912) but may have AMD discrete GPU capability.
-#
-# Since no AMD GPU was detected in the current hardware scan, this module
-# provides configuration for when an AMD discrete GPU is added to the system.
-#
-# HARDWARE SUPPORT:
-# =================
-# - AMD Radeon RX series GPUs (Polaris, Vega, Navi architectures)
-# - OpenCL support via ROCm
-# - Vulkan support via RADV
-# - VA-API for hardware-accelerated video decoding
-#
-# KERNEL PARAMETERS:
-# =================
-# - amdgpu.si_support=1: Enable Southern Islands (GCN 1.0) support
-# - amdgpu.cik_support=1: Enable Sea Islands/Cape Verde (GCN 1.1) support
-# - radeon.si_support=0: Disable legacy radeon driver for SI GPUs
-# - radeon.cik_support=0: Disable legacy radeon driver for CIK GPUs
-#
-# USAGE:
-# ======
-# Import this module in dell-potato configuration when AMD GPU is present.
-# The module will automatically detect and configure AMD graphics drivers.
-#
-# ============================================================================
-
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   # AMD GPU configuration - conditionally enabled based on hardware detection
@@ -99,8 +72,6 @@
   };
 
   # Enable early KMS for AMD graphics
-  boot.initrd.kernelModules = [ "amdgpu" ];
-
   # Power management for AMD GPUs
   services.udev.extraRules = ''
     # Set AMD GPU power profile to performance mode

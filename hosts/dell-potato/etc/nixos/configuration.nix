@@ -1,6 +1,11 @@
 # /etc/nixos/configuration.nix
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -14,54 +19,67 @@
     ../../../../modules/dev.nix
     ../../../../modules/python.nix
   ];
-   nix = {
-     settings.experimental-features = [
-       "nix-command"
-       "flakes"
-     ];
+  nix = {
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
 
-     optimise.automatic = true;
+    optimise.automatic = true;
 
-     settings = {
-       trusted-users = [
-         "root"
-         "warby"
-         "@wheel"
-       ];
+    settings = {
+      trusted-users = [
+        "root"
+        "warby"
+        "@wheel"
+      ];
 
-       max-jobs = 3;
-       cores = 3;
+      max-jobs = 3;
+      cores = 3;
 
-       substituters = [
-         "https://cache.nixos.org"
-         "https://nyx.chaotic.cx"
-       ];
+      substituters = [
+        "https://cache.nixos.org"
+        "https://nyx.chaotic.cx"
+      ];
 
-       trusted-public-keys = [
-         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-         "nyx.chaotic.cx-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
-       ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nyx.chaotic.cx-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
+      ];
 
-       sandbox = true;
-       auto-optimise-store = true;
-     };
+      sandbox = true;
+      auto-optimise-store = true;
+    };
 
-     gc = {
-       automatic = true;
-       dates = "weekly";
-       options = "--delete-older-than 30d";
-     };
-   };
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
+    };
+  };
   # Boot configuration
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
 
-  # Use CachyOS kernel for better desktop responsiveness and performance
-  boot.kernelPackages = pkgs.linuxPackages_cachyos;
+    kernelParams = [
+      "amdgpu.si_support=1"
+      "amdgpu.cik_support=1"
+      "radeon.si_support=0"
+      "radeon.cik_support=0"
+    ];
+
+    # Use CachyOS kernel for better desktop responsiveness and performance
+    kernelPackages = pkgs.linuxPackages_cachyos;
+  };
 
   # Network configuration
-  networking.hostName = "dell-potato";
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = "dell-potato";
+    networkmanager.enable = true;
+  };
 
   # Internationalization
   time.timeZone = "America/Chicago";
@@ -71,9 +89,30 @@
   # You had both GNOME and KDE Plasma enabled, which causes conflicts.
   # Since you are using GDM (GNOME's Display Manager), KDE has been removed
   # to ensure a stable desktop session.
-  services.xserver.enable = true;
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+  services = {
+    xserver.enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+    pulseaudio.enable = false;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+    sunshine.enable = true;
+    # GNOME power management settings to prevent automatic suspend and lock screen
+    gnome.gnome-settings-daemon.enable = true;
+    # Enable sched-ext schedulers for better responsiveness with CachyOS kernel
+    scx.enable = true;
+    openssh = {
+      enable = true;
+      settings = {
+        PasswordAuthentication = true;
+        PermitRootLogin = "no";
+      };
+    };
+  };
 
   # --- XDG PORTAL CONFIGURATION FOR GNOME ---
   # This is required for modern applications, including RustDesk screen sharing,
@@ -84,33 +123,28 @@
   };
 
   # Audio configuration
-  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
 
   # Graphics support - Intel integrated + AMD discrete GPU (when present)
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [
-      mesa
-      intel-media-driver  # Intel VA-API driver
-      vaapiVdpau         # VA-API/VDPAU wrapper
-      libvdpau-va-gl     # VDPAU driver with OpenGL/VAAPI backend
+  hardware = {
+    enableRedistributableFirmware = true;
+    cpu.intel.updateMicrocode = true;
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+      extraPackages = with pkgs; [
+        mesa
+        intel-media-driver # Intel VA-API driver
+        vaapiVdpau # VA-API/VDPAU wrapper
+        libvdpau-va-gl # VDPAU driver with OpenGL/VAAPI backend
 
-      # AMD-specific packages (conditionally loaded)
-      rocmPackages.clr.icd  # ROCm OpenCL
-      libva                # VA-API
-      vulkan-loader        # Vulkan ICD
-    ];
+        # AMD-specific packages (conditionally loaded)
+        rocmPackages.clr.icd # ROCm OpenCL
+        libva # VA-API
+        vulkan-loader # Vulkan ICD
+      ];
+    };
   };
-  hardware.enableRedistributableFirmware = true;
-  hardware.cpu.intel.updateMicrocode = true;
 
   # User configuration
   users.users.warby = {
@@ -128,132 +162,90 @@
     ];
   };
 
-    users.groups.libvirtd.members = [ "warby" ];
-    users.groups.docker.members = [ "warby" ];
+  users.groups.libvirtd.members = [ "warby" ];
+  users.groups.docker.members = [ "warby" ];
 
-    # Override TZ for containers to match potato
-    virtualisation.podman.enable = true;
-    virtualisation.docker.enable = lib.mkForce true;
-    virtualisation.oci-containers.containers.portainer.environment.TZ = "America/New_York";
-    virtualisation.oci-containers.containers."code-server".environment.TZ = "America/New_York";
-
+  # Override TZ for containers to match potato
+  virtualisation = {
+    docker.enable = true;
+    oci-containers = {
+      containers = {
+        portainer.environment.TZ = "America/New_York";
+        "code-server".environment.TZ = "America/New_York";
+      };
+    };
+  };
 
   # Allow unfree packages globally (handled in flake.nix)
 
   # Core system packages
   # Changed 'rustdesk' to 'rustdesk-flutter' for better stability.
-    environment.systemPackages = with pkgs; [
-      # Essential system tools
-      vim
-      wget
-      curl
-      git
-      htop
-      rustdesk-flutter # <-- Corrected package
-      openssl
+  environment.systemPackages = with pkgs; [
+    # Essential system tools
+    vim
+    wget
+    curl
+    git
+    htop
+    rustdesk-flutter # <-- Corrected package
+    openssl
 
-      # Web browsers
-      firefox
-      ungoogled-chromium
-      brave
-      ghostty
-      opencode
-      vesktop
+    # Web browsers
+    firefox
+    ungoogled-chromium
+    brave
+    ghostty
+    opencode
+    vesktop
 
-      # Development tools
-      vscode # VS Code for development work
+    # Development tools
+    vscode # VS Code for development work
 
-      # System utilities
-      gparted
-      xwayland
-      xpra
+    # System utilities
+    gparted
+    xwayland
+    xpra
 
-      # AMD graphics debugging tools
-      glxinfo
-      vulkan-tools
-      clinfo
-      amdgpu_top
-      libva-utils
-    ];
-
-  # --- SUNSHINE GAME STREAMING SERVICE ---
-  # Enable Sunshine for unattended remote desktop access via Moonlight client
-  services.sunshine.enable = true;
-
-  # --- LEGACY RUSTDESK CONFIGURATION (DISABLED) ---
-  # Keeping for reference, but Sunshine should provide better Wayland/GNOME compatibility
-  # systemd.services.xpra = {
-  #   description = "Xpra Virtual Display Server";
-  #   wantedBy = [ "multi-user.target" ];
-  #   after = [ "network-online.target" ];
-  #   serviceConfig = {
-  #     Type = "simple";
-  #     ExecStart = "${pkgs.xpra}/bin/xpra start :100 --start-child=xterm --bind-tcp=0.0.0.0:10000 --no-daemon";
-  #     Restart = "always";
-  #     User = "root";
-  #   };
-  # };
-
-  # systemd.services.rustdesk = {
-  #   description = "RustDesk Remote Access Service";
-  #   wantedBy = [ "multi-user.target" ];
-  #   after = [ "xpra.service" ];
-  #   requires = [ "xpra.service" ];
-  #   serviceConfig = {
-  #     Type = "simple";
-  #     ExecStart = "${pkgs.rustdesk-flutter}/bin/rustdesk --service --display :100";
-  #     Restart = "always";
-  #     User = "root"; # Necessary for access on the login screen
-  #     Environment = "DISPLAY=:100 WAYLAND_DISPLAY= XDG_SESSION_TYPE=";
-  #   };
-  # };
-
-  # SSH server configuration
-  services.openssh = {
-    enable = true;
-    settings = {
-      PasswordAuthentication = true;
-      PermitRootLogin = "no";
-    };
-  };
+    # AMD graphics debugging tools
+    glxinfo
+    vulkan-tools
+    clinfo
+    amdgpu_top
+    libva-utils
+  ];
 
   # Disable SSH askPassword conflicts
   programs.ssh.askPassword = "";
 
   # Firewall configuration - open ports for Portainer (9000) and code-server (8080)
-  networking.firewall.allowedTCPPorts = [ 9000 8080 ];
+  networking.firewall.allowedTCPPorts = [
+    9000
+    8080
+  ];
 
   # Power management - prevent sleep and enable Wake-on-LAN
   powerManagement.enable = lib.mkForce false;
-  systemd.targets.sleep.enable = false;
-  systemd.targets.suspend.enable = false;
-  systemd.targets.hibernate.enable = false;
-  systemd.targets.hybrid-sleep.enable = false;
+  systemd = {
+    targets = {
+      sleep.enable = false;
+      suspend.enable = false;
+      hibernate.enable = false;
+      hybrid-sleep.enable = false;
+    };
+    sleep.extraConfig = ''
+      AllowSuspend=no
+      AllowHibernation=no
+      AllowHybridSleep=no
+      AllowSuspendThenHibernate=no
+    '';
+  };
 
   # Disable systemd suspend/hibernation system-wide
-  systemd.sleep.extraConfig = ''
-    AllowSuspend=no
-    AllowHibernation=no
-    AllowHybridSleep=no
-    AllowSuspendThenHibernate=no
-  '';
-
-  # GNOME power management settings to prevent automatic suspend and lock screen
-  services.gnome.gnome-settings-daemon.enable = true;
 
   # Enable Wake-on-LAN
   networking.interfaces.enp0s31f6.wakeOnLan.enable = true;
 
   # AMD graphics kernel parameters (for when AMD GPU is present)
-  boot.kernelParams = [
-    "amdgpu.si_support=1"
-    "amdgpu.cik_support=1"
-    "radeon.si_support=0"
-    "radeon.cik_support=0"
-  ];
-
-  # Enable sched-ext schedulers for better responsiveness with CachyOS kernel
-  services.scx.enable = true;
 
   # Environment variables for AMD graphics
   environment.sessionVariables = {
@@ -264,52 +256,56 @@
   # System state version
   system.stateVersion = "24.11";
 
-   security.pki.certificates = [
-     ''-----BEGIN CERTIFICATE-----
-MIIFCTCCAvGgAwIBAgIUftWnYe1SkoudcxwbAhmr4fw6vMAwDQYJKoZIhvcNAQEL
-BQAwFDESMBAGA1UEAwwJbG9jYWxob3N0MB4XDTI1MTAwNTE3MDA0NVoXDTI2MTAw
-NTE3MDA0NVowFDESMBAGA1UEAwwJbG9jYWxob3N0MIICIjANBgkqhkiG9w0BAQEF
-AAOCAg8AMIICCgKCAgEAx0/l4tHNRrVXddQmfsO/rNJNgVK6fvgzjw2l7Ya11yQX
-UYpjklRiOEyzmSYwf2c8X/AmMjR6Q6HQbfp2MOD/gz7UXcIq4KyagABHLgmWUTiQ
-BNiNOYpBEnS2LtNtj1nUXJ8Ps/c/illwS8wj7wY7f8pcF9iWi6x0b6JRxFtkwL8n
-JhePwCninVAEeUGluLQHuIYbFd8jmGhrECKEyUlKiYy00EvvPAZY37un2BY/if0s
-yXAhFn/ON6MMRRqLQnEr8S0OGjINDnkjVjPLJn7NDkB6+fdSzvDd/fHBA1dR2u2h
-DLZCIfHNWoA80+3qwN+HWihON+fMYdpYokWs9IxLGRPKS5fIeUZPBY1zG1aYWppw
-4vQOSRdg8sfoD4IqgS7538PXI5DyMahw4qW+uJqBLNrvr6vMXRBIc7FgGZn5Tszd
-27GdIIUGgfdQZPt2HbWMlRvGjg2rrEIAetEdmpYDRTTWmdBNkZcJLhzqE9tpmvmD
-/W2OmpPAx2JkjRirIU4SnPorXfhy7ZGEtZtlRt9CSE0lB9AnLHGWigWn+IFFncW5
-AP6GEij6HRLs/IR0eJkftpj/gWqjiHbUvRKYFQJlvIrZAvGcSzcshDFIPLGCb11d
-JvumcPKuqCuWUNn+lXNTssTwqbtx8NRnNmJIF4zybg2Le0NQtghEoHDYmSSyuNUC
-AwEAAaNTMFEwHQYDVR0OBBYEFOzGpYp6/rieTdJG9/fyBTdFozP6MB8GA1UdIwQY
-MBaAFOzGpYp6/rieTdJG9/fyBTdFozP6MA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZI
-hvcNAQELBQADggIBAAYOYdd8782srMUSAZD5LEPveV3f2JRo1l36TnArXMfpYSq2
-6tykDZPE6u22Sr/vr/5uZZqh+K3eTSijzCKeyT8qCAyQ+Piaj3jy4eZu8oWPDqnY
-RDBK3jC0to6MvpfeX9pg9EhsMWteA0zADu0FIJ750lPduTamqTScsezbEdsjiwvj
-9VFhb1fEZNoeKbb/KefkIyHnQcR8ge3s/2cAXZp388c6nzeL5m2v0o1xMk8u+PDu
-KcMVMXn6GsPnwadSl6WVD22Bmob0sKTx2GCkscDBdm7ophYBQ6stg4JDViNBUjSJ
-SqcVs2TRLAV9Jnmg2XL5l9idLOtdKfUHT5botQQ6FPSD6Og0JDXKc3NbNhvzIRKj
-YzqBSzod6kCS84lZXlS+CEiwP5PfVtZgnJ8gsJGjCzi4iHJWfwyrSMA+jPfu+KaX
-RL2vlBPLV80euh/Kl+YePocJuJlrN0hYQLOmNYd0JvhWH14bkcMimXqMizL9uu81
-izHFF6/mgkfPkrhfzrhdlJ6HSgpahm0ejKCSbIJE03uxkirkXt5SoQaUmWAyIfLV
-HGlRkeBhHNZVSB/YQDFsWo66R08EOINFRrtxU7XSlhxwwMkOMSjj4ArmOycQU/Ej
-giADdXELAdf3NgclxpZfwPGubqiNrJFUVc7NqO8KTBkz8xiUA2scPAoN92Ik
------END CERTIFICATE-----''
-   ];
+  security.pki.certificates = [
+    ''
+      -----BEGIN CERTIFICATE-----
+      MIIFCTCCAvGgAwIBAgIUftWnYe1SkoudcxwbAhmr4fw6vMAwDQYJKoZIhvcNAQEL
+      BQAwFDESMBAGA1UEAwwJbG9jYWxob3N0MB4XDTI1MTAwNTE3MDA0NVoXDTI2MTAw
+      NTE3MDA0NVowFDESMBAGA1UEAwwJbG9jYWxob3N0MIICIjANBgkqhkiG9w0BAQEF
+      AAOCAg8AMIICCgKCAgEAx0/l4tHNRrVXddQmfsO/rNJNgVK6fvgzjw2l7Ya11yQX
+      UYpjklRiOEyzmSYwf2c8X/AmMjR6Q6HQbfp2MOD/gz7UXcIq4KyagABHLgmWUTiQ
+      BNiNOYpBEnS2LtNtj1nUXJ8Ps/c/illwS8wj7wY7f8pcF9iWi6x0b6JRxFtkwL8n
+      JhePwCninVAEeUGluLQHuIYbFd8jmGhrECKEyUlKiYy00EvvPAZY37un2BY/if0s
+      yXAhFn/ON6MMRRqLQnEr8S0OGjINDnkjVjPLJn7NDkB6+fdSzvDd/fHBA1dR2u2h
+      DLZCIfHNWoA80+3qwN+HWihON+fMYdpYokWs9IxLGRPKS5fIeUZPBY1zG1aYWppw
+      4vQOSRdg8sfoD4IqgS7538PXI5DyMahw4qW+uJqBLNrvr6vMXRBIc7FgGZn5Tszd
+      27GdIIUGgfdQZPt2HbWMlRvGjg2rrEIAetEdmpYDRTTWmdBNkZcJLhzqE9tpmvmD
+      /W2OmpPAx2JkjRirIU4SnPorXfhy7ZGEtZtlRt9CSE0lB9AnLHGWigWn+IFFncW5
+      AP6GEij6HRLs/IR0eJkftpj/gWqjiHbUvRKYFQJlvIrZAvGcSzcshDFIPLGCb11d
+      JvumcPKuqCuWUNn+lXNTssTwqbtx8NRnNmJIF4zybg2Le0NQtghEoHDYmSSyuNUC
+      AwEAAaNTMFEwHQYDVR0OBBYEFOzGpYp6/rieTdJG9/fyBTdFozP6MB8GA1UdIwQY
+      MBaAFOzGpYp6/rieTdJG9/fyBTdFozP6MA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZI
+      hvcNAQELBQADggIBAAYOYdd8782srMUSAZD5LEPveV3f2JRo1l36TnArXMfpYSq2
+      6tykDZPE6u22Sr/vr/5uZZqh+K3eTSijzCKeyT8qCAyQ+Piaj3jy4eZu8oWPDqnY
+      RDBK3jC0to6MvpfeX9pg9EhsMWteA0zADu0FIJ750lPduTamqTScsezbEdsjiwvj
+      9VFhb1fEZNoeKbb/KefkIyHnQcR8ge3s/2cAXZp388c6nzeL5m2v0o1xMk8u+PDu
+      KcMVMXn6GsPnwadSl6WVD22Bmob0sKTx2GCkscDBdm7ophYBQ6stg4JDViNBUjSJ
+      SqcVs2TRLAV9Jnmg2XL5l9idLOtdKfUHT5botQQ6FPSD6Og0JDXKc3NbNhvzIRKj
+      YzqBSzod6kCS84lZXlS+CEiwP5PfVtZgnJ8gsJGjCzi4iHJWfwyrSMA+jPfu+KaX
+      RL2vlBPLV80euh/Kl+YePocJuJlrN0hYQLOmNYd0JvhWH14bkcMimXqMizL9uu81
+      izHFF6/mgkfPkrhfzrhdlJ6HSgpahm0ejKCSbIJE03uxkirkXt5SoQaUmWAyIfLV
+      HGlRkeBhHNZVSB/YQDFsWo66R08EOINFRrtxU7XSlhxwwMkOMSjj4ArmOycQU/Ej
+      giADdXELAdf3NgclxpZfwPGubqiNrJFUVc7NqO8KTBkz8xiUA2scPAoN92Ik
+      -----END CERTIFICATE-----''
+  ];
 
-   security.sudo.extraRules = [
-     {
-       users = [ "warby" ];
-       commands = [
-         { command = "ALL"; options = [ "NOPASSWD" ]; }
-       ];
-     }
-   ];
+  security.sudo.extraRules = [
+    {
+      users = [ "warby" ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 
   programs.chromium = {
     enable = true;
     extensions = [
-      "nngceckbapebfimnlniiiahkandclblb"  # Bitwarden
-      "djnghjlejbfgnbnmjfgbdaebfbiklpha"  # Kanagawa
+      "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
+      "djnghjlejbfgnbnmjfgbdaebfbiklpha" # Kanagawa
     ];
   };
 

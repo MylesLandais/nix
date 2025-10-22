@@ -9,23 +9,23 @@
   # Media packages
   environment.systemPackages = with pkgs; [
     # Core media ripping tools
-    makemkv          # DVD/Blu-ray to MKV converter
-    handbrake        # Video transcoding and compression
-    libdvdcss        # DVD decryption library
-    libdvdnav        # DVD navigation library
-    libdvdread       # DVD reading library
-    lsdvd            # DVD information tool
-    mkvtoolnix-cli   # MKV manipulation tools (CLI)
-    
+    makemkv # DVD/Blu-ray to MKV converter
+    handbrake # Video transcoding and compression
+    libdvdcss # DVD decryption library
+    libdvdnav # DVD navigation library
+    libdvdread # DVD reading library
+    lsdvd # DVD information tool
+    mkvtoolnix-cli # MKV manipulation tools (CLI)
+
     # Media players (mpv preferred over VLC)
-    mpv              # Lightweight, customizable media player
-    vlc              # Fallback media player
-    
+    mpv # Lightweight, customizable media player
+    vlc # Fallback media player
+
     # Additional media utilities
-    mediainfo        # Media file information
-    ffmpeg           # Video/audio processing
-    dvdbackup        # DVD backup utility
-    
+    mediainfo # Media file information
+    ffmpeg # Video/audio processing
+    dvdbackup # DVD backup utility
+
     # Optional: GUI tools for desktop use
     # mkvtoolnix     # GUI version of MKV tools
     # handbrake      # GUI version (if different from CLI)
@@ -35,7 +35,7 @@
   hardware = {
     # Enable redistributable firmware for hardware support (avoids unfree)
     enableRedistributableFirmware = true;
-    
+
     # Graphics/video support
     graphics.enable = true;
   };
@@ -47,11 +47,11 @@
   };
 
   # User permissions for media operations
-  users.users.warby.extraGroups = [ 
-    "cdrom"     # Access to optical drives
-    "optical"   # Additional optical drive access
-    "video"     # Video device access
-    "audio"     # Audio device access
+  users.users.warby.extraGroups = [
+    "cdrom" # Access to optical drives
+    "optical" # Additional optical drive access
+    "video" # Video device access
+    "audio" # Audio device access
   ];
 
   # Create media directories with proper permissions

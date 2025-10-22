@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -48,7 +53,7 @@ in
       description = "Sunshine game streaming user";
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
     # Add user to necessary groups for screen capture
     users.users.${cfg.user}.extraGroups = [
@@ -94,7 +99,7 @@ in
           "/var/lib/sunshine"
         ];
         PrivateTmp = true;
-        PrivateDevices = false;  # Need access to video devices
+        PrivateDevices = false; # Need access to video devices
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
@@ -109,16 +114,16 @@ in
     # Firewall configuration
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [
-        47984  # HTTP
-        47989  # HTTPS
-        47990  # Web UI
-        48010  # RTSP
+        47984 # HTTP
+        47989 # HTTPS
+        47990 # Web UI
+        48010 # RTSP
       ];
       allowedUDPPorts = [
-        47998  # Video
-        47999  # Control
-        48000  # Audio
-        48002  # Microphone
+        47998 # Video
+        47999 # Control
+        48000 # Audio
+        48002 # Microphone
       ];
     };
 
