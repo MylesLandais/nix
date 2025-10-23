@@ -23,22 +23,14 @@ in
               ollama = {
                 __raw = ''
                   function()
-                      local function read_file(path)
-                      local file = io.open(path, "r")
-                      if not file then return nil end
-                      local content = file:read("*a")
-                      file:close()
-                      return content:gsub("^%s*(.-)%s*$", "%1")
-                      end
-                      local key = read_file("/run/user/1000/agenix/ollama")
                     return require('codecompanion.adapters').extend('ollama', {
                         env = {
                             url = "https://ollama.com";
-                            api_key = key;
+                            api_key = builtins.readFile ollama_key_path;
                         },
                         headers = { 
                           ["Content-Type"] = "application/json",
-                          ["Authorization"] = "Bearer " .. key,
+                          ["Authorization"] = "Bearer " .. builtins.readFile ollama_key_path,
                         },
                         schema = {
                             model = {

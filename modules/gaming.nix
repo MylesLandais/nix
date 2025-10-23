@@ -15,8 +15,8 @@
     ];
   };
 
-  # Video driver configuration
-  services.xserver.videoDrivers = [ "modesetting" ];
+  # Video driver configuration (updated for NVIDIA compatibility)
+  services.xserver.videoDrivers = [ "nvidia" ]; # Use NVIDIA drivers as per previous configuration
 
   # Steam gaming platform
   programs = {
@@ -44,8 +44,13 @@
     mangohud # Performance overlay
     gamemode # CPU/GPU optimization
 
-    # RetroArch ecosystem
-    retroarchFull # Full RetroArch with all cores
+    # RetroArch with minimal cores (bsnes and mgba)
+    (retroarch.override {
+      cores = with libretro; [
+        bsnes # Super Nintendo core
+        mgba # Game Boy Advance core
+      ];
+    })
     libretro.swanstation # PS1 core (modern)
     libretro.beetle-psx # PS1 core (accurate)
     snes9x-gtk # Super Nintendo

@@ -57,8 +57,9 @@
           overlay
         ];
       };
+      vars = import ./vars.nix;
       hm_user_cfg = {
-        home-manager.users."${username}" = {
+        home-manager.users."${vars.username}" = {
           imports = [
             ./home.nix
           ];
@@ -71,7 +72,7 @@
         system = "x86_64-linux";
         inherit pkgs;
         specialArgs = {
-          inherit inputs;
+          inherit inputs vars;
         };
         modules = [
           ./hosts/cerberus/configuration.nix
@@ -90,7 +91,7 @@
                   hostName = "cerberus";
                   username = "warby";
                 };
-                inherit inputs system pkgs;
+                inherit inputs system pkgs vars;
               };
             };
           }

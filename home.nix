@@ -49,9 +49,10 @@
   # manage.
 
   imports = [
-    ##./hypr.nix
-    ## ./nixvim
-    ##./hyprpanel.nix
+    ./hypr.nix
+    ./hyprland.nix
+    ./nixvim
+    ./hyprpanel.nix
     ./modules/pro.nix                    # Professional creative tools
     inputs.stylix.homeModules.stylix     # System theming
     inputs.tokyonight.homeManagerModules.default  # Color schemes

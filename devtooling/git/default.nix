@@ -13,8 +13,8 @@
     programs.git = {
       enable = true;
       package = pkgs.git;
-      userName = "FKouhai";
-      userEmail = "frandres00@gmail.com";
+      userName = vars.username;
+      userEmail = vars.userEmail;
       delta = {
         enable = true;
         options = {
