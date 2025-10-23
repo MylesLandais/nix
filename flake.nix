@@ -67,14 +67,14 @@
       };
     in
     {
-      nixosConfigurations."dell-potato" = nixpkgs.lib.nixosSystem {
+      nixosConfigurations."cerberus" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         inherit pkgs;
         specialArgs = {
           inherit inputs;
         };
         modules = [
-          ./hosts/dell-potato/etc/nixos/configuration.nix
+          ./hosts/cerberus/configuration.nix
           ./modules/gaming.nix
           agenix.nixosModules.default
           chaotic.nixosModules.default
@@ -87,7 +87,7 @@
               backupFileExtension = "backup";
               extraSpecialArgs = {
                 vars = {
-                  hostName = "dell-potato";
+                  hostName = "cerberus";
                   username = "warby";
                 };
                 inherit inputs system pkgs;
