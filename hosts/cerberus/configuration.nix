@@ -10,6 +10,10 @@
       ./hardware-configuration.nix
     ];
 
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -17,7 +21,6 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -53,7 +56,6 @@
   programs.hyprland.enable = true;
 
   # NVIDIA Configuration
-  nixpkgs.config.allowUnfree = true;
 
   hardware.graphics = {
     enable = true;
@@ -111,8 +113,26 @@ xdg.portal = {
   };
 };
 
+  services.samba = {
+    enable = true;
+    openFirewall = true;
+  };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
+
+  security.polkit.enable = true;
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if ((action.id == "org.freedesktop.udisks2.filesystem-mount-system" ||
+           action.id == "org.freedesktop.udisks2.filesystem-mount") &&
+          subject.isInGroup("wheel")) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
+
+  # Define a user account. Don’t forget to set a password with ‘passwd’.
   users.users.warby = {
     isNormalUser = true;
     description = "warby";
@@ -121,7 +141,8 @@ xdg.portal = {
       neovim
       vesktop
       mpv
-    #  thunderbird
+      gemini-cli
+ #  thunderbird
     ];
   };
 
@@ -135,35 +156,22 @@ xdg.portal = {
     vulkan-tools
     vulkan-validation-layers
     egl-wayland
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    git
+    papirus-icon-theme
+    kdePackages.breeze-icons
+    adwaita-icon-theme
+    cifs-utils
+    ntfs3g
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
+
+  # To mount your Windows partitions, you can add entries to fileSystems.
+  # For example:
+  # fileSystems."/mnt/windows" = {
+  #   device = "/dev/disk/by-uuid/YOUR-WINDOWS-PARTITION-UUID";
+  #   fsType = "ntfs";
+  #   options = [ "rw,uid=1000,gid=100,umask=007,fmask=117" ];
+  # };
 
 }

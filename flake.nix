@@ -1,101 +1,47 @@
 {
+  description = "Cerberus NixOS Flake";
+
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/master"; # Core packages
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable"; # Additional packages with CachyOS kernel
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs"; # Pin to same nixpkgs
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-    agenix = {
-      url = "github:ryantm/agenix";
-      inputs.nixpkgs.follows = "nixpkgs"; # Pin to same nixpkgs
+    stylix.url = "github:danth/stylix";
+    tokyonight.url = "github:mrjones2014/tokyonight.nix";
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
     };
-    tokyonight = {
-      url = "github:mrjones2014/tokyonight.nix"; # Terminal themes
-    };
-    stylix = {
-      url = "github:danth/stylix"; # System theming
-    };
+    # Add other inputs (e.g., goose-ai) as needed
   };
 
-  outputs =
-    {
-      self,
-      chaotic,
-      home-manager,
-      nixpkgs,
-      agenix,
-      stylix,
-      tokyonight,
-      ...
-    }@inputs:
-    let
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+    let vars = import ./vars.nix; in {
+    nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-    in
-    let
-      username = "warby";
-      overlay = final: prev: {
-        libretro-thepowdertoy = prev.libretro-thepowdertoy.overrideAttrs (oldAttrs: {
-          cmakeFlags = (oldAttrs.cmakeFlags or [ ]) ++ [
-            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-            "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
+      modules = [
+        ./hosts/cerberus/configuration.nix
+        ./modules/gnome-keyring.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = false;
+            extraSpecialArgs = { inherit inputs vars; };
+            users.warby = import ./home.nix;
+          };
+          networking.hostName = vars.hostName;
+        }
+        {
+          nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
+        }
+        {
+          nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+            "nvidia-x11"
+            # Extend this list functionally if other unfree pkgs are needed later, e.g., "steam"
           ];
-        });
-        snes9x-gtk = prev.snes9x-gtk.overrideAttrs (oldAttrs: {
-          cmakeFlags = (oldAttrs.cmakeFlags or [ ]) ++ [
-            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-          ];
-        });
-      };
-      pkgs = import nixpkgs {
-        inherit system;
-        config = {
-          allowUnfree = true;
-          permittedInsecurePackages = [ "mbedtls-2.28.10" ];
-        };
-        overlays = [
-          overlay
-        ];
-      };
-      vars = import ./vars.nix;
-      hm_user_cfg = {
-        home-manager.users."${vars.username}" = {
-          imports = [
-            ./home.nix
-          ];
-          home.stateVersion = "24.11";
-        };
-      };
-    in
-    {
-      nixosConfigurations."cerberus" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        inherit pkgs;
-        specialArgs = {
-          inherit inputs vars;
-        };
-        modules = [
-          ./hosts/cerberus/configuration.nix
-          ./modules/gaming.nix
-          agenix.nixosModules.default
-          chaotic.nixosModules.default
-          home-manager.nixosModules.home-manager
-          hm_user_cfg
-          {
-            home-manager = {
-              useUserPackages = true;
-              useGlobalPkgs = true;
-              backupFileExtension = "backup";
-              extraSpecialArgs = {
-                vars = {
-                  hostName = "cerberus";
-                  username = "warby";
-                };
-                inherit inputs system pkgs vars;
-              };
-            };
-          }
-        ];
-      };
+        }
+      ];
     };
+  };
 }

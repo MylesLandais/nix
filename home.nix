@@ -41,6 +41,7 @@
   vars,
   config,
   inputs,
+  self,
   ...
 }:
 {
@@ -51,7 +52,7 @@
   imports = [
     ./hypr.nix
     ./hyprland.nix
-    ./nixvim
+    # ./nixvim  # Temporarily disabled
     ./hyprpanel.nix
     ./modules/pro.nix                    # Professional creative tools
     inputs.stylix.homeModules.stylix     # System theming
@@ -71,6 +72,11 @@
           font-family = "JetBrainsMono Nerd Font"
           '';
 
+        "${config.xdg.configHome}/electron-flags.conf".text = ''
+--ozone-platform=wayland
+--enable-features=WaylandWindowDecorations
+        '';
+
           ".config/code-server/config.yaml".text = ''
 bind-addr: 0.0.0.0:8080
 auth: password
@@ -85,6 +91,7 @@ cert: false
     };
 
     sessionVariables = {
+      TERMINAL = "ghostty";
       # EDITOR = "emacs";
     };
 
@@ -106,13 +113,13 @@ cert: false
       fastfetch
       fd
       ffmpeg
+      font-awesome
       fishPlugins.forgit
       gamemode
       gcc
       gh
       git-lfs
-      gnome-keyring
-      gnome-secrets
+      ghostty
       gnome-themes-extra
       gpgme
       gtk-engine-murrine
@@ -127,7 +134,8 @@ cert: false
        libnotify
        markdown-oxide
        matugen
-       mpv
+       nerd-fonts._0xproto
+       nerd-fonts.droid-sans-mono
        nix-search-tv
        nixos-generators
        nwg-look
@@ -135,7 +143,7 @@ cert: false
        opencloud-desktop
        pavucontrol
        playerctl
-       plex-desktop
+        plex-desktop
        plex-mpv-shim
        pulseaudio
        pulseaudio-ctl
@@ -155,6 +163,17 @@ cert: false
       vulkan-tools
       wl-clipboard
       zed-editor
+      grim
+      slurp
+      hyprpicker
+      (pkgs.hyprshot.overrideAttrs (oldAttrs: {
+        postInstall = (oldAttrs.postInstall or "") + ''
+          wrapProgram $out/bin/hyprshot \
+            --set HYPRSHOT_DIR "/home/${vars.username}/Pictures/Screenshots" \
+            --set BORDER_COLOR "#c4b28aff" \
+            --set BACKGROUND_COLOR "#18161600"
+        '';
+      }))
     ];
     pointerCursor = {
       gtk.enable = true;
@@ -208,6 +227,13 @@ cert: false
         };
       };
     };
+    mpv = {
+      enable = true;
+      # Add your custom mpv configuration here
+      # config = {
+      #   "volume" = "70";
+      # };
+    };
         brave = {
           enable = true;
           commandLineArgs = [
@@ -237,8 +263,9 @@ cert: false
           ms-vscode-remote.remote-containers
           ms-vscode-remote.remote-ssh
           redhat.vscode-yaml
-          # kilocode.kilo-code  # Not in nixpkgs; install manually from marketplace
-          # quinn.vscode-kanagawa  # Not in nixpkgs; install manually from marketplace
+        ] ++ [ 
+          pkgs.vscode-marketplace.kilocode.kilo-code
+    # pkgs.vscode-marketplace.quinn.vscode-kanagawa; # Temporarily disabled - not available
         ];
         userSettings = {
           "workbench.colorTheme" = "Kanagawa";  # Set after manual extension install

@@ -1,15 +1,11 @@
 {
-  self,
   lib,
   pkgs,
-  inputs,
   config,
   ...
 }:
 {
   imports = [
-    # import home manager module
-    inputs.nixvim.homeModules.nixvim
     # import plugin config
     ./plugins/lualine
     ./plugins/packer
@@ -43,6 +39,7 @@
   options = {
     nixvimcfg.enable = lib.mkEnableOption "Enable nixvim config module";
   };
+  
   config = lib.mkIf config.nixvimcfg.enable {
     avante.enable = lib.mkDefault true;
     blink.enable = lib.mkDefault false;
@@ -144,14 +141,10 @@
               statement_style = {
                 bold = true;
               };
-
             };
-
           };
-
         };
       };
     };
   };
-
 }

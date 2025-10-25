@@ -58,9 +58,12 @@
         "noshadow,class:(GLava)"
         "noinitialfocus,title:(GLava)"
       ];
+      # Configure your monitors here
+      # See https://wiki.hyprland.org/Configuring/Monitors/
+      # monitor = <name>,<resolution>,<position>,<scale>
       monitor = [
-        "${vars.mainMonitor.name},${vars.mainMonitor.width}x${vars.mainMonitor.height}@${vars.mainMonitor.refresh},0x0,1"
-        "${vars.secondaryMonitor.name},${vars.secondaryMonitor.width}x${vars.secondaryMonitor.height}@${vars.secondaryMonitor.refresh},2560x0,1"
+        "${vars.mainMonitor.name},${toString vars.mainMonitor.width}x${toString vars.mainMonitor.height}@${toString vars.mainMonitor.refresh},0x0,1"
+        "${vars.secondaryMonitor.name},${toString vars.secondaryMonitor.width}x${toString vars.secondaryMonitor.height}@${toString vars.secondaryMonitor.refresh},2560x0,1"
       ];
       env = [
         "LIBVA_DRIVER_NAME,nvidia"
@@ -75,10 +78,10 @@
         "ELECTRON_OZONE_PLATFORM_HINT,auto"
         "XDG_CURRENT_DESKTOP,Hyprland"
         "XDG_SESSION_DESKTOP,Hyprland"
-        "XDG_CONFIG_HOME=${config.xdg.configHome}",
-        "BROWSER=brave",
-        "XCURSOR_SIZE=22",
-        "EDITOR=nvim",
+        "XDG_CONFIG_HOME=${config.xdg.configHome}"
+        "BROWSER=brave"
+        "XCURSOR_SIZE=22"
+        "EDITOR=nvim"
         "QT_STYLE_OVERRIDE=''"
       ];
       "$mod" = "SUPER";
@@ -104,7 +107,12 @@
         "$mod, N, exec, swaync-client -t -sw"
         "$mod, V, togglefloating,"
         "$mod, R, exec, fuzzel"
-        "$mod, S, exec, hyprshot -m region"
+        # Hyprshot keybinds
+        ", PRINT, exec, hyprshot -m output"  # Full monitor screenshot
+        "$mod, S, exec, hyprshot -m region"  # Region selection
+        "CTRL, PRINT, exec, hyprshot -m window"  # Active window
+        "CTRL SHIFT, PRINT, exec, hyprshot -m region --clipboard-only"  # Region to clipboard only (no save)
+
         "$mod SHIFT, R, exec, wlogout"
         "$mod, D, exec, vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto "
         "$mod, H, movefocus, l"
