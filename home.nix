@@ -106,8 +106,6 @@ cert: false
       bind
       bitwarden-desktop
       btop
-      calibre
-      calibre-web
       coreutils
       nemo
       fastfetch
@@ -143,11 +141,11 @@ cert: false
        opencloud-desktop
        pavucontrol
        playerctl
-        plex-desktop
        plex-mpv-shim
        pulseaudio
        pulseaudio-ctl
        pulsemixer
+       qt6ct
        revive
        ripgrep
        sassc
@@ -279,8 +277,7 @@ cert: false
 
   qt = {
     enable = true;
-    platformTheme.name = "gtk";
-    style.name = "qt6gtk2";
+    platformTheme.name = "qt5ct";
   };
   stylix = {
     autoEnable = false;

@@ -10,6 +10,13 @@ let
     url = "https://github.com/NixOS/nixos-artwork/raw/master/wallpapers/nix-wallpaper-nineish-catppuccin-mocha.png";
     sha256 = "0spm657lc098hdyq9fm2i667d8zdgvs75h2an7wm4hvr4x52lmnf";
   };
+  hyprpaperConf = pkgs.writeText "hyprpaper.conf" ''
+    ipc = on
+    splash = false
+    preload = ${wallpaper}
+    wallpaper = ${vars.mainMonitor.name},${wallpaper}
+    wallpaper = ${vars.secondaryMonitor.name},${wallpaper}
+  '';
   add_record_player = pkgs.writeShellApplication {
     name = "add_record_player";
     text = ''
@@ -39,19 +46,7 @@ in
     pkgs.gnome-settings-daemon
     pkgs.libsecret
   ];
-  services.hyprpaper = {
-    enable = true;
-    package = pkgs.hyprpaper;
-    settings = {
-      ipc = "on";
-      splash = false;
-      preload = [ wallpaper ];
-      wallpaper = [
-        "${vars.mainMonitor.name},${wallpaper}"
-        "${vars.secondaryMonitor.name},${wallpaper}"
-      ];
-    };
-  };
+  home.file.".config/hypr/hyprpaper.conf".source = hyprpaperConf;
   programs.kitty = {
     enable = true;
     settings = {

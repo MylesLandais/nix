@@ -15,8 +15,8 @@
 
   # System packages for compatibility
   environment.systemPackages = with pkgs; [
-    gnome.gnome-keyring
-    gnome.libgnome-keyring  # Legacy support for apps like VS Code
+    gnome-keyring
+    libgnome-keyring  # Legacy support for apps like VS Code
     libsecret  # For secret-tool CLI if needed for testing
   ];
 

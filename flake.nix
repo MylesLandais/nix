@@ -16,9 +16,20 @@
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
-    let vars = import ./vars.nix; in {
-    nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
+    let
       system = "x86_64-linux";
+      vars = import ./vars.nix;
+      pkgs = import nixpkgs {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+        overlays = [ inputs.nix-vscode-extensions.overlays.default ];
+      };
+    in {
+    nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = { inherit inputs vars pkgs; };
       modules = [
         ./hosts/cerberus/configuration.nix
         ./modules/gnome-keyring.nix
@@ -31,8 +42,6 @@
             users.warby = import ./home.nix;
           };
           networking.hostName = vars.hostName;
-          nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
-          nixpkgs.config.allowUnfreePredicate = pkg: pkg.pname == "nvidia-x11";
         }
       ];
     };
