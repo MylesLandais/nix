@@ -6,6 +6,10 @@
   ...
 }:
 let
+  wallpaper = pkgs.fetchurl {
+    url = "https://github.com/NixOS/nixos-artwork/raw/master/wallpapers/nix-wallpaper-nineish-catppuccin-mocha.png";
+    sha256 = "0spm657lc098hdyq9fm2i667d8zdgvs75h2an7wm4hvr4x52lmnf";
+  };
   add_record_player = pkgs.writeShellApplication {
     name = "add_record_player";
     text = ''
@@ -41,10 +45,10 @@ in
     settings = {
       ipc = "on";
       splash = false;
-      preload = [ vars.wallpaper ];
+      preload = [ wallpaper ];
       wallpaper = [
-        "${vars.mainMonitor.name},${vars.wallpaper}"
-        "${vars.secondaryMonitor.name},${vars.wallpaper}"
+        "${vars.mainMonitor.name},${wallpaper}"
+        "${vars.secondaryMonitor.name},${wallpaper}"
       ];
     };
   };
