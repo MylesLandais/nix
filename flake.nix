@@ -31,15 +31,8 @@
             users.warby = import ./home.nix;
           };
           networking.hostName = vars.hostName;
-        }
-        {
           nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
-        }
-        {
-          nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-            "nvidia-x11"
-            # Extend this list functionally if other unfree pkgs are needed later, e.g., "steam"
-          ];
+          nixpkgs.config.allowUnfreePredicate = pkg: pkg.pname == "nvidia-x11";
         }
       ];
     };
