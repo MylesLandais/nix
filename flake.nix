@@ -13,6 +13,7 @@
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
     };
+    nur.url = "github:nix-community/NUR";
   };
 
   outputs =
@@ -21,6 +22,7 @@
       chaotic,
       nixpkgs,
       home-manager,
+      nur,
       ...
     }@inputs:
     let
@@ -41,7 +43,7 @@
 
       nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
         inherit system pkgs;
-        specialArgs = { inherit inputs vars; };
+        specialArgs = { inherit inputs vars nur; };
         modules = with pkgs; [
           ./hosts/cerberus/configuration.nix
           chaotic.nixosModules.default
@@ -52,7 +54,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = false;
-              extraSpecialArgs = { inherit inputs vars; };
+              extraSpecialArgs = { inherit inputs vars nur; };
               users.warby = import ./home.nix;
             };
             networking.hostName = vars.hostName;

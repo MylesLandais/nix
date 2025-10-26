@@ -42,6 +42,7 @@
   config,
   inputs,
   self,
+  nur,
   ...
 }:
 {
@@ -256,7 +257,7 @@
       enable = true;
       profiles.default = {
         isDefault = true;
-        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
+        extensions.packages = with nur.repos.rycee.firefox-addons; [
           ublock-origin
           plasma-integration
         ];
