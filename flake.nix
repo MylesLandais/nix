@@ -25,7 +25,6 @@
     }@inputs:
     let
       system = "x86_64-linux";
-      vars = import ./vars.nix;
       pkgs = import nixpkgs {
         inherit system;
         config = {
@@ -33,14 +32,15 @@
         };
         overlays = [ inputs.nix-vscode-extensions.overlays.default ];
       };
+      vars = import ./vars.nix { inherit pkgs; };
     in
     {
       nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit inputs vars pkgs; };
-        modules = [
-          chaotic.nixosModules.default
+        inherit system pkgs;
+        specialArgs = { inherit inputs vars; };
+        modules = with pkgs; [
           ./hosts/cerberus/configuration.nix
+          chaotic.nixosModules.default
           ./modules/gnome-keyring.nix
           home-manager.nixosModules.home-manager
           {
