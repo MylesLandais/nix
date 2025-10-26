@@ -256,9 +256,9 @@
       enable = true;
       profiles.default = {
         isDefault = true;
-        extensions.packages = [
-          { id = "uBlock0@raymondhill.net"; }
-          { id = "{446900e4-71c2-419f-a6a7-df9c091e268b}"; }
+        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
+          ublock-origin
+          plasma-integration
         ];
       };
     };
