@@ -96,8 +96,8 @@
         backend = "docker";
         containers = {
           "code-server" = {
-            image = config.dev.containers.codeServer.image;
-            ports = config.dev.containers.codeServer.ports;
+            inherit (config.dev.containers.codeServer) image;
+            inherit (config.dev.containers.codeServer) ports;
             volumes = [
               "/var/run/docker.sock:/var/run/docker.sock"
               "/var/lib/code-server-${config.networking.hostName}:/config"
@@ -121,8 +121,8 @@
             autoStart = true;
           };
           "portainer" = {
-            image = config.dev.containers.portainer.image;
-            ports = config.dev.containers.portainer.ports;
+            inherit (config.dev.containers.portainer) image;
+            inherit (config.dev.containers.portainer) ports;
             volumes = [
               "/var/run/docker.sock:/var/run/docker.sock"
               "/var/lib/portainer-${config.networking.hostName}:/data"
@@ -133,8 +133,8 @@
             autoStart = true;
           };
           "chrome-remote" = {
-            image = config.dev.containers.chromeRemote.image;
-            ports = config.dev.containers.chromeRemote.ports;
+            inherit (config.dev.containers.chromeRemote) image;
+            inherit (config.dev.containers.chromeRemote) ports;
             volumes = [
               "/dev/shm:/dev/shm"
               "/var/lib/chrome-remote-${config.networking.hostName}:/home/seluser/.config/google-chrome"

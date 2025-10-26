@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  vars,
   ...
 }:
 {
@@ -10,11 +11,25 @@
   };
 
   config = lib.mkIf config.git.enable {
-    programs.git = {
-      enable = true;
-      package = pkgs.git;
-      userName = vars.username;
-      userEmail = vars.userEmail;
+    programs = {
+      git = {
+        enable = true;
+        package = pkgs.git;
+        settings = {
+          user = {
+            name = vars.username;
+            email = vars.userEmail;
+            signingkey = "~/.ssh/bw.pub";
+          };
+
+          commit.gpgsign = true;
+          gpg.format = "ssh";
+          signing = {
+            format = "ssh";
+            key = "~/.ssh/bw.pub";
+          };
+        };
+      };
       delta = {
         enable = true;
         options = {
@@ -29,15 +44,6 @@
           };
           features = "decorations";
         };
-      };
-      extraConfig = {
-        commit.gpgsign = true;
-        gpg.format = "ssh";
-        user.signingkey = "~/.ssh/bw.pub";
-      };
-      signing = {
-        format = "ssh";
-        key = "~/.ssh/bw.pub";
       };
     };
   };

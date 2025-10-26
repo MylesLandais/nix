@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,10 +15,16 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs =
+    {
+      self,
+      chaotic,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
     let
       system = "x86_64-linux";
-      vars = import ./vars.nix;
       pkgs = import nixpkgs {
         inherit system;
         config = {
@@ -25,24 +32,27 @@
         };
         overlays = [ inputs.nix-vscode-extensions.overlays.default ];
       };
-    in {
-    nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
-      inherit system;
-      specialArgs = { inherit inputs vars pkgs; };
-      modules = [
-        ./hosts/cerberus/configuration.nix
-        ./modules/gnome-keyring.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = false;
-            extraSpecialArgs = { inherit inputs vars; };
-            users.warby = import ./home.nix;
-          };
-          networking.hostName = vars.hostName;
-        }
-      ];
+      vars = import ./vars.nix { inherit pkgs; };
+    in
+    {
+      nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
+        inherit system pkgs;
+        specialArgs = { inherit inputs vars; };
+        modules = with pkgs; [
+          ./hosts/cerberus/configuration.nix
+          chaotic.nixosModules.default
+          ./modules/gnome-keyring.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = false;
+              extraSpecialArgs = { inherit inputs vars; };
+              users.warby = import ./home.nix;
+            };
+            networking.hostName = vars.hostName;
+          }
+        ];
+      };
     };
-  };
 }
