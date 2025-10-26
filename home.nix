@@ -256,7 +256,7 @@
       enable = true;
       profiles.default = {
         isDefault = true;
-        extensions = [
+        extensions.packages = [
           { id = "uBlock0@raymondhill.net"; }
           { id = "{446900e4-71c2-419f-a6a7-df9c091e268b}"; }
         ];
