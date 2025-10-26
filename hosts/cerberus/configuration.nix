@@ -2,13 +2,20 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  extra-types,
+  ...
+}:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   nix.extraOptions = ''
     experimental-features = nix-command flakes
@@ -19,7 +26,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_cachyos;
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -105,13 +112,13 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
-xdg.portal = {
-  enable = true;
-  extraPortals = with pkgs.kdePackages; [ xdg-desktop-portal-kde ];
-  config = {
-    kde.default = [ "kde" ];
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs.kdePackages; [ xdg-desktop-portal-kde ];
+    config = {
+      kde.default = [ "kde" ];
+    };
   };
-};
 
   services.samba = {
     enable = true;
@@ -133,21 +140,26 @@ xdg.portal = {
   '';
 
   # Define a user account. Don’t forget to set a password with ‘passwd’.
+  users.defaultUserShell = pkgs.fish;
   users.users.warby = {
     isNormalUser = true;
     description = "warby";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [
       neovim
       vesktop
       mpv
       gemini-cli
- #  thunderbird
+      #  thunderbird
     ];
   };
 
   # Install firefox.
   programs.firefox.enable = true;
+  programs.fish.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
