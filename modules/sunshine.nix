@@ -49,7 +49,7 @@ in
     # Create user and group
     users.users.${cfg.user} = {
       isSystemUser = true;
-      group = cfg.group;
+      inherit (cfg) group;
       description = "Sunshine game streaming user";
     };
 
