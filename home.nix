@@ -54,9 +54,10 @@
     ./hyprland.nix
     # ./nixvim  # Temporarily disabled
     ./hyprpanel.nix
-    ./modules/pro.nix                    # Professional creative tools
-    inputs.stylix.homeModules.stylix     # System theming
-    inputs.tokyonight.homeManagerModules.default  # Color schemes
+    ./modules/pro.nix # Professional creative tools
+    ./shelltools
+    inputs.stylix.homeModules.stylix # System theming
+    inputs.tokyonight.homeManagerModules.default # Color schemes
   ];
 
   home = {
@@ -65,31 +66,28 @@
     homeDirectory = "/home/${vars.username}";
     stateVersion = "24.11"; # Please read the comment before changing.
     file = {
-        "${config.xdg.configHome}/ghostty/config".text = ''
-          theme = "Kanagawa Dragon"
-          background-opacity = 0.9
-          window-decoration = false
-          font-family = "JetBrainsMono Nerd Font"
-          '';
+      "${config.xdg.configHome}/ghostty/config".text = ''
+        theme = "Kanagawa Dragon"
+        background-opacity = 0.9
+        window-decoration = false
+        font-family = "JetBrainsMono Nerd Font"
+      '';
 
-        "${config.xdg.configHome}/electron-flags.conf".text = ''
---ozone-platform=wayland
---enable-features=WaylandWindowDecorations
-        '';
+      "${config.xdg.configHome}/electron-flags.conf".text = ''
+        --ozone-platform=wayland
+        --enable-features=WaylandWindowDecorations
+      '';
 
-          ".config/code-server/config.yaml".text = ''
-bind-addr: 0.0.0.0:8080
-auth: password
-password: admin  # Matches container env; secure with agenix
-cert: false
-          '';
-
-
-
-
+      ".config/code-server/config.yaml".text = ''
+        bind-addr: 0.0.0.0:8080
+        auth: password
+        password: admin  # Matches container env; secure with agenix
+        cert: false
+      '';
 
     };
 
+    shelltools.enable = true;
     sessionVariables = {
       TERMINAL = "ghostty";
       # EDITOR = "emacs";
@@ -102,69 +100,53 @@ cert: false
     };
 
     packages = with pkgs; [
-      # jetbrains.goland
+      # Additions for declarative archive handling in Nemo and CLI
       bind
       bitwarden-desktop
       btop
       coreutils
-      nemo
       fastfetch
       fd
       ffmpeg
-      font-awesome
+      file-roller # GNOME archive manager
       fishPlugins.forgit
+      font-awesome
       gamemode
       gcc
+      gemini-cli
       gh
-      git-lfs
       ghostty
+      git-lfs
       gnome-themes-extra
       gpgme
+      grim
       gtk-engine-murrine
       hack-font
       heroic
+      hyprpicker
       jetbrains-mono
       jq
-       kanagawa-gtk-theme
-       kanagawa-icon-theme
-       lazydocker
-       lazygit
-       libnotify
-       markdown-oxide
-       matugen
-       nerd-fonts._0xproto
-       nerd-fonts.droid-sans-mono
-       nix-search-tv
-       nixos-generators
-       nwg-look
-       obsidian
-       opencloud-desktop
-       pavucontrol
-       playerctl
-       plex-mpv-shim
-       pulseaudio
-       pulseaudio-ctl
-       pulsemixer
-       qt6ct
-       revive
-       ripgrep
-       sassc
-       statix
-       terraform-ls
-       tflint
-       tldr
-      treefmt
-      ttyd
-      vesktop
-      vhs
-      virtualgl
-      vulkan-tools
-      wl-clipboard
-      zed-editor
-      grim
-      slurp
-      hyprpicker
-      (pkgs.hyprshot.overrideAttrs (oldAttrs: {
+      kanagawa-gtk-theme
+      kanagawa-icon-theme
+      lazydocker
+      lazygit
+      libnotify
+      markdown-oxide
+      matugen
+      nemo
+      nemo-fileroller # Nemo extension for context menu integration
+      nerd-fonts._0xproto
+      nerd-fonts.droid-sans-mono
+      nix-search-tv
+      nixos-generators
+      nodejs_20 # Required for discord-ai-bot-lmstudio project (Node.js >=20.11.0)
+      nwg-look
+      obsidian
+      opencloud-desktop
+      opencode
+      p7zip # Provides '7z' for .zip, .7z, etc.
+      pavucontrol
+      (hyprshot.overrideAttrs (oldAttrs: {
         postInstall = (oldAttrs.postInstall or "") + ''
           wrapProgram $out/bin/hyprshot \
             --set HYPRSHOT_DIR "/home/${vars.username}/Pictures/Screenshots" \
@@ -172,18 +154,30 @@ cert: false
             --set BACKGROUND_COLOR "#18161600"
         '';
       }))
-
-     # Additions for declarative archive handling in Nemo and CLI
-     p7zip          # Provides '7z' for .zip, .7z, etc.
-     unzip          # Basic .zip support
-     # unrar        # Uncomment for .rar (requires allowUnfree = true;)
-     file-roller    # GNOME archive manager
-     nemo-fileroller # Nemo extension for context menu integration
-
-     # Addition for missing opencode command (terminal AI coding agent)
-     opencode
-     nodejs_20  # Required for discord-ai-bot-lmstudio project (Node.js >=20.11.0)
-   ];
+      playerctl
+      plex-mpv-shim
+      pulseaudio
+      pulseaudio-ctl
+      pulsemixer
+      qt6ct
+      revive
+      ripgrep
+      sassc
+      slurp
+      statix
+      terraform-ls
+      tflint
+      tldr
+      treefmt
+      ttyd
+      unzip # Basic .zip support
+      vesktop
+      vhs
+      virtualgl
+      vulkan-tools
+      wl-clipboard
+      zed-editor
+    ];
     pointerCursor = {
       gtk.enable = true;
       package = pkgs.bibata-cursors;
@@ -196,14 +190,14 @@ cert: false
     enable = true;
     mimeApps = {
       enable = true;
-        defaultApplications = {
-          "text/html" = [ "brave-browser.desktop" ];
-          "x-scheme-handler/http" = [ "brave-browser.desktop" ];
-          "x-scheme-handler/https" = [ "brave-browser.desktop" ];
-          "x-scheme-handler/about" = [ "brave-browser.desktop" ];
-          "x-scheme-handler/unknown" = [ "brave-browser.desktop" ];
-          "x-scheme-handler/discord" = [ "vesktop.desktop" ];
-        };
+      defaultApplications = {
+        "text/html" = [ "brave-browser.desktop" ];
+        "x-scheme-handler/http" = [ "brave-browser.desktop" ];
+        "x-scheme-handler/https" = [ "brave-browser.desktop" ];
+        "x-scheme-handler/about" = [ "brave-browser.desktop" ];
+        "x-scheme-handler/unknown" = [ "brave-browser.desktop" ];
+        "x-scheme-handler/discord" = [ "vesktop.desktop" ];
+      };
     };
   };
 
@@ -228,10 +222,10 @@ cert: false
           inner-pad = 6;
         };
         colors = {
-          background = "0d0c0cfa";  # base00 with alpha
-          text = "c5c9c5ff";      # base05
-          border = "c4b28aff";     # base0A
-          selection = "8ba4b0ff";  # base0D
+          background = "0d0c0cfa"; # base00 with alpha
+          text = "c5c9c5ff"; # base05
+          border = "c4b28aff"; # base0A
+          selection = "8ba4b0ff"; # base0D
           selection-text = "0d0c0cff"; # base00
         };
       };
@@ -243,41 +237,44 @@ cert: false
       #   "volume" = "70";
       # };
     };
-        brave = {
-          enable = true;
-          commandLineArgs = [
-            "--enable-features=WebUIDarkMode"
-            "--force-dark-mode"
-          ];
-          extensions = [
-            { id = "akibfjgmcjogdlefokjmhblcibgkndog"; }  # Shazam
-            { id = "djnghjlejbfgnbnmjfgbdaeafbiklpha"; }  # Kanagawa Theme
-            { id = "nngceckbapebfimnlniiiahkandclblb"; }  # Bitwarden
-            { id = "mmioliijnhnoblpgimnlajmefafdfilb"; }  # SponsorBlock
-          ];
-        };
+    brave = {
+      enable = true;
+      commandLineArgs = [
+        "--enable-features=WebUIDarkMode"
+        "--force-dark-mode"
+      ];
+      extensions = [
+        { id = "akibfjgmcjogdlefokjmhblcibgkndog"; } # Shazam
+        { id = "djnghjlejbfgnbnmjfgbdaeafbiklpha"; } # Kanagawa Theme
+        { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
+        { id = "mmioliijnhnoblpgimnlajmefafdfilb"; } # SponsorBlock
+      ];
+    };
     firefox = {
-        enable = true;
-        profiles.default = {
-            isDefault = true;
-        };
+      enable = true;
+      profiles.default = {
+        isDefault = true;
+      };
     };
 
     vscode = {
       enable = true;
       package = pkgs.vscode;
       profiles.default = {
-        extensions = with pkgs.vscode-extensions; [
-          bbenoist.nix
-          ms-vscode-remote.remote-containers
-          ms-vscode-remote.remote-ssh
-          redhat.vscode-yaml
-        ] ++ [ 
-          pkgs.vscode-marketplace.kilocode.kilo-code
-    # pkgs.vscode-marketplace.quinn.vscode-kanagawa; # Temporarily disabled - not available
-        ];
+        extensions =
+          with pkgs.vscode-extensions;
+          [
+            bbenoist.nix
+            ms-vscode-remote.remote-containers
+            ms-vscode-remote.remote-ssh
+            redhat.vscode-yaml
+          ]
+          ++ [
+            pkgs.vscode-marketplace.kilocode.kilo-code
+            # pkgs.vscode-marketplace.quinn.vscode-kanagawa; # Temporarily disabled - not available
+          ];
         userSettings = {
-          "workbench.colorTheme" = "Kanagawa";  # Set after manual extension install
+          "workbench.colorTheme" = "Kanagawa"; # Set after manual extension install
           "editor.fontFamily" = "JetBrains Mono Nerd Font";
           "terminal.integrated.fontFamily" = "JetBrains Mono Nerd Font";
           # "kilo-code.apiKey" = "your-kilo-code-api-key";  # Set after manual install
