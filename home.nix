@@ -172,7 +172,18 @@ cert: false
             --set BACKGROUND_COLOR "#18161600"
         '';
       }))
-    ];
+
+     # Additions for declarative archive handling in Nemo and CLI
+     p7zip          # Provides '7z' for .zip, .7z, etc.
+     unzip          # Basic .zip support
+     # unrar        # Uncomment for .rar (requires allowUnfree = true;)
+     file-roller    # GNOME archive manager
+     nemo-fileroller # Nemo extension for context menu integration
+
+     # Addition for missing opencode command (terminal AI coding agent)
+     opencode
+     nodejs_20  # Required for discord-ai-bot-lmstudio project (Node.js >=20.11.0)
+   ];
     pointerCursor = {
       gtk.enable = true;
       package = pkgs.bibata-cursors;

@@ -12,7 +12,6 @@
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
     };
-    # Add other inputs (e.g., goose-ai) as needed
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
