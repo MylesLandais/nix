@@ -19,14 +19,14 @@
           user = {
             name = vars.username;
             email = vars.userEmail;
-            signingkey = "~/.ssh/bw.pub";
+            signingkey = "~/.ssh/id_ed25519.pub";
           };
 
           commit.gpgsign = true;
           gpg.format = "ssh";
           signing = {
             format = "ssh";
-            key = "~/.ssh/bw.pub";
+            key = "~/.ssh/id_ed25519.pub";
           };
         };
       };

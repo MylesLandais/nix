@@ -21,9 +21,7 @@
     devtooling.enable = lib.mkEnableOption "Enable devtooling module";
   };
   config = lib.mkIf config.devtooling.enable {
-    elixir.enable = lib.mkDefault true;
     git.enable = lib.mkDefault true;
-    gleam.enable = lib.mkDefault true;
     go.enable = lib.mkDefault false;
     kubernetes.enable = lib.mkDefault false;
     lua.enable = lib.mkDefault false;

@@ -12,10 +12,13 @@ let
       rev = "9d2cdedd73d64a068214482902adea3d02783ba8";
       hash = "sha256-//4BiRF1W5W2rEbw6MupiyDOjvcveqGtYjJ1mZfck9U=";
     };
-    buildInputs = [ ];
+    buildInputs = [ pkgs.imagemagick ];
     installPhase = ''
       mkdir -p $out/share/wallpapers
       cp -r ${src}/wallpapers/* $out/share/wallpapers
+    '';
+    buildPhase=''
+      echo ""
     '';
   };
 in
