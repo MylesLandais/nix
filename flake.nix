@@ -42,9 +42,14 @@
       };
 
       nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
-        inherit system pkgs;
-        specialArgs = { inherit inputs vars nur; };
-        modules = with pkgs; [
+        inherit system;
+        specialArgs = { inherit inputs vars; };
+        modules = [
+          ({ config, pkgs, ... }: {
+            nixpkgs.overlays = [
+              nur.overlay
+            ];
+          })
           ./hosts/cerberus/configuration.nix
           chaotic.nixosModules.default
           ./modules/gnome-keyring.nix
@@ -54,7 +59,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = false;
-              extraSpecialArgs = { inherit inputs vars nur; };
+              extraSpecialArgs = { inherit inputs vars; };
               users.warby = import ./home.nix;
             };
             networking.hostName = vars.hostName;
