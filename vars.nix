@@ -1,8 +1,9 @@
 {
   pkgs,
+  ...
 }:
 let
-  wp = pkgs.stdenv.mkDerivation (rec {
+  wp = pkgs.stdenv.mkDerivation rec {
     pname = "wallpapers";
     version = "v1.0.0";
     src = pkgs.fetchFromGitHub {
@@ -16,7 +17,7 @@ let
       mkdir -p $out/share/wallpapers
       cp -r ${src}/wallpapers/* $out/share/wallpapers
     '';
-  });
+  };
 in
 {
   hostName = "cerberus-nix";
