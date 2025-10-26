@@ -56,12 +56,13 @@
     ./hyprpanel.nix
     ./modules/pro.nix # Professional creative tools
     ./shelltools
+    ./devtooling
     inputs.stylix.homeModules.stylix # System theming
     inputs.tokyonight.homeManagerModules.default # Color schemes
   ];
 
   home = {
-    username = vars.username;
+    inherit (vars) username;
     enableNixpkgsReleaseCheck = false;
     homeDirectory = "/home/${vars.username}";
     stateVersion = "24.11"; # Please read the comment before changing.
@@ -87,7 +88,6 @@
 
     };
 
-    shelltools.enable = true;
     sessionVariables = {
       TERMINAL = "ghostty";
       # EDITOR = "emacs";
@@ -186,6 +186,8 @@
     };
   };
 
+  devtooling.enable = true;
+  shelltools.enable = true;
   xdg = {
     enable = true;
     mimeApps = {
@@ -270,7 +272,7 @@
             redhat.vscode-yaml
           ]
           ++ [
-            pkgs.vscode-marketplace.kilocode.kilo-code
+            kilocode.kilo-code
             # pkgs.vscode-marketplace.quinn.vscode-kanagawa; # Temporarily disabled - not available
           ];
         userSettings = {
