@@ -35,6 +35,10 @@
       vars = import ./vars.nix { inherit pkgs; };
     in
     {
+      packages.${system} = {
+        sillytavern = import ./sillytavern.nix { inherit (pkgs) lib buildNpmPackage fetchFromGitHub nodejs git; };
+      };
+
       nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
         inherit system pkgs;
         specialArgs = { inherit inputs vars; };
@@ -42,6 +46,7 @@
           ./hosts/cerberus/configuration.nix
           chaotic.nixosModules.default
           ./modules/gnome-keyring.nix
+          ./modules/sillytavern.nix
           home-manager.nixosModules.home-manager
           {
             home-manager = {

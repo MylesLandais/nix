@@ -31,16 +31,23 @@ in
   wallpaper = "${wp}/share/wallpapers/nix-wallpaper-nineish-catppuccin-mocha.png";
 
   mainMonitor = {
-    name = "DP-1";
+    name = "desc:Dell Inc. Dell S2716DG ##ASPYT+r5vCzd";
     width = 2560;
     height = 1440;
-    refresh = 144;
+    refresh = 59.95;
   };
 
   secondaryMonitor = {
-    name = "HDMI-A-1";
+    name = "desc:Dell Inc. DELL P2422H 46Z5YB3";
     width = 1920;
     height = 1080;
-    refresh = 60;
+    refresh = 60.0;
+  };
+
+  tertiaryMonitor = {
+    name = "desc:Dell Inc. DELL P2422H 62K3NK3";
+    width = 1920;
+    height = 1080;
+    refresh = 60.0;
   };
 }

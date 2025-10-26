@@ -62,8 +62,9 @@
       # See https://wiki.hyprland.org/Configuring/Monitors/
       # monitor = <name>,<resolution>,<position>,<scale>
       monitor = [
-        "${vars.mainMonitor.name},${toString vars.mainMonitor.width}x${toString vars.mainMonitor.height}@${toString vars.mainMonitor.refresh},0x0,1"
-        "${vars.secondaryMonitor.name},${toString vars.secondaryMonitor.width}x${toString vars.secondaryMonitor.height}@${toString vars.secondaryMonitor.refresh},2560x0,1"
+        "${vars.mainMonitor.name},${toString vars.mainMonitor.width}x${toString vars.mainMonitor.height}@${toString vars.mainMonitor.refresh},7820x1080,1"
+        "${vars.secondaryMonitor.name},${toString vars.secondaryMonitor.width}x${toString vars.secondaryMonitor.height}@${toString vars.secondaryMonitor.refresh},10380x1080,1"
+        "${vars.tertiaryMonitor.name},${toString vars.tertiaryMonitor.width}x${toString vars.tertiaryMonitor.height}@${toString vars.tertiaryMonitor.refresh},5900x1080,1"
       ];
       env = [
         "LIBVA_DRIVER_NAME,nvidia"
@@ -86,6 +87,7 @@
       ];
       "$mod" = "SUPER";
       "exec-once" = [
+        "dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && systemctl --user stop hyprland-session.target && systemctl --user start hyprland-session.target"
         "hyprpanel &"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
         "hyprpaper &"

@@ -125,6 +125,11 @@
     openFirewall = true;
   };
 
+  services.sillytavern = {
+    enable = true;
+    dataDir = "/mnt/smb/sillytavern"; # SMB mount path - ensure this is mounted before enabling
+  };
+
   services.gvfs.enable = true;
   services.udisks2.enable = true;
 
