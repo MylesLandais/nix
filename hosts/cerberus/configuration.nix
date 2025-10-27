@@ -128,6 +128,7 @@
   services.sillytavern = {
     enable = true;
     dataDir = "/mnt/smb/sillytavern"; # SMB mount path - ensure this is mounted before enabling
+    useContainer = true;
   };
 
   services.gvfs.enable = true;
