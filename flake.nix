@@ -47,7 +47,7 @@
         modules = [
           ({ config, pkgs, ... }: {
             nixpkgs.overlays = [
-              nur.overlay
+              nur.overlays.default
             ];
           })
           ./hosts/cerberus/configuration.nix

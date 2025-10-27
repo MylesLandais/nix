@@ -162,6 +162,19 @@
     ];
   };
 
+  # Allow passwordless sudo for nixos-rebuild during development
+  security.sudo.extraRules = [
+    {
+      users = [ "warby" ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/nixos-rebuild";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
+
   # Install firefox.
   programs.firefox.enable = true;
   programs.fish.enable = true;
