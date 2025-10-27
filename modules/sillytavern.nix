@@ -50,6 +50,11 @@ in
     };
   };
 
+  imports = [
+    # Import the upstream module when not using container
+    (mkIf (!cfg.useContainer) <nixpkgs/nixos/modules/services/web-apps/sillytavern.nix>)
+  ];
+
   config = mkIf cfg.enable (mkMerge [
     {
       # Create system user
