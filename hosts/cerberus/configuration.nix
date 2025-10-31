@@ -21,6 +21,9 @@
     experimental-features = nix-command flakes
   '';
 
+  # Allow unfree packages (e.g., NVIDIA drivers)
+  nixpkgs.config.allowUnfree = true;
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -125,11 +128,15 @@
     openFirewall = true;
   };
 
-  # services.sillytavern = {
-  #   enable = true;
-  #   dataDir = "/mnt/smb/sillytavern"; # SMB mount path - ensure this is mounted before enabling
-  #   useContainer = true;
-  # };
+  services.sillytavern-container = {
+    enable = true;
+    hostAddress = "0.0.0.0";  # Allow network access for multiple users
+    port = 8000;
+    enableMultiUser = true;    # Enable user account management
+    openFirewall = true;       # Open firewall for external access
+    useContainer = true;       # Use Podman container
+    imageTag = "latest";       # Consider pinning digest for production
+  };
 
   services.gvfs.enable = true;
   services.udisks2.enable = true;

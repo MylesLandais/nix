@@ -53,7 +53,7 @@
           ./hosts/cerberus/configuration.nix
           chaotic.nixosModules.default
           ./modules/gnome-keyring.nix
-          # ./modules/sillytavern.nix
+          ./modules/sillytavern.nix
           home-manager.nixosModules.home-manager
           {
             home-manager = {

@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "sillytavern";
-  version = "1.12.12";
+  version = "1.13.5";
 
   src = fetchFromGitHub {
     owner = "SillyTavern";
     repo = "SillyTavern";
-    rev = "v${version}";
-    hash = "sha256-uy7NxI8SkGZvSle2thjz3W2df7OxdlgKvHMFXlV+bI0=";
+    rev = "release";
+    hash = "sha256-0nz05vw11im58cqnqcv4ny2p478av88v306akqkjg7z6jzsp5znx";
   };
 
-  npmDepsHash = "sha256-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"; # TODO: Run nix build and get actual hash
+  npmDepsHash = "sha256-0nz05vw11im58cqnqcv4ny2p478av88v306akqkjg7z6jzsp5znx";
 
   nativeBuildInputs = [ nodejs git ];
 
