@@ -84,9 +84,11 @@ in
         group = cfg.group;
         home = cfg.dataDir;
         createHome = true;
+        extraGroups = [ "sillytavern-users" ];  # Add to shared group
       };
 
       users.groups.${cfg.group} = {};
+      users.groups.sillytavern-users = {};  # Ensure shared group exists
 
       # Firewall
       networking.firewall = mkIf cfg.openFirewall {
@@ -95,7 +97,30 @@ in
 
       # Activation script for initial setup
       system.activationScripts.sillytavernSetup = ''
+        # Create base directories
         mkdir -p ${cfg.dataDir}/{data,config,plugins,extensions}
+        
+        # Create the complete default-user directory structure that SillyTavern expects
+        mkdir -p ${cfg.dataDir}/data/default-user
+        mkdir -p ${cfg.dataDir}/data/default-user/"User Avatars"
+        mkdir -p ${cfg.dataDir}/data/default-user/"User Icons"
+        mkdir -p ${cfg.dataDir}/data/default-user/backgrounds
+        mkdir -p ${cfg.dataDir}/data/default-user/characters
+        mkdir -p ${cfg.dataDir}/data/default-user/chats
+        mkdir -p ${cfg.dataDir}/data/default-user/groups
+        mkdir -p ${cfg.dataDir}/data/default-user/group chats
+        mkdir -p ${cfg.dataDir}/data/default-user/instruct
+        mkdir -p ${cfg.dataDir}/data/default-user/context
+        mkdir -p ${cfg.dataDir}/data/default-user/themes
+        mkdir -p ${cfg.dataDir}/data/default-user/worlds
+        mkdir -p ${cfg.dataDir}/data/default-user/personas
+        mkdir -p ${cfg.dataDir}/data/default-user/movingUI
+        mkdir -p ${cfg.dataDir}/data/default-user/QuickReplies
+        mkdir -p ${cfg.dataDir}/data/default-user/OpenAI Settings
+        mkdir -p ${cfg.dataDir}/data/default-user/NovelAI Settings
+        mkdir -p ${cfg.dataDir}/data/default-user/KoboldAI Settings
+        mkdir -p ${cfg.dataDir}/data/default-user/TextGen Settings
+        
         # Create config with proper whitelist settings
         cat > ${cfg.dataDir}/config/config.yaml << EOF
 # SillyTavern Configuration
@@ -105,7 +130,7 @@ in
 dataRoot: ./data
 
 # Server settings
-port: ${toString cfg.port}
+port: 8000
 listen: false
 listenAddress:
   ipv4: 0.0.0.0
@@ -121,6 +146,7 @@ whitelist:
   - ::1
   - 127.0.0.1
   - 10.88.0.1  # Podman network IP
+  - 10.88.0.0/16  # Podman network range
 
 # Basic authentication
 basicAuthMode: false
@@ -145,7 +171,26 @@ sessionTimeout: -1
 disableCsrfProtection: false
 securityOverride: false
 EOF
+        # Set proper ownership - CRITICAL: Must be done AFTER all directories are created
         chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
+        
+        # Set permissions to allow container user to write
+        # The container runs as node user (typically UID 1000)
+        # We need to make directories writable by the group or use broader permissions
+        chmod -R u+rwX,g+rwX,o+rX ${cfg.dataDir}/data
+        
+        # Log what was created for debugging
+        echo "SillyTavern setup completed. Directory structure:"
+        ls -la ${cfg.dataDir}/data/
+        echo ""
+        echo "Default user directory:"
+        ls -la ${cfg.dataDir}/data/default-user/ || echo "default-user directory check failed"
+        echo ""
+        echo "Permissions on data directory:"
+        ls -ld ${cfg.dataDir}/data
+        echo ""
+        echo "Permissions on default-user directory:"
+        ls -ld ${cfg.dataDir}/data/default-user
       '';
     }
 
@@ -168,7 +213,9 @@ EOF
         } // lib.optionalAttrs cfg.enableMultiUser {
           SILLYTAVEN_ENABLE_MULTIUSER = "true";
         };
-        user = "${toString config.users.users.${cfg.user}.uid}:${toString config.users.groups.${cfg.group}.gid}";
+        # Run as root in container to avoid permission issues
+        # The application will drop privileges internally if needed
+        user = "root:root";
         autoStart = true;
         # Extra options for better performance with multiple users
         extraOptions = [
