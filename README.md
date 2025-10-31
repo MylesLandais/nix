@@ -2,30 +2,30 @@
 
 This repository contains the complete NixOS configuration for my workstations, with a focus on declarative system management and containerized services.
 
-## 🚀 **Current Status**
+## Current Status
 
-### ✅ **Working Services**
+### Working Services
 - **SillyTavern**: Fully functional LLM frontend running on port 8765
   - Containerized deployment using Podman
   - Proper security configuration with whitelist
   - Multi-user support ready
   - Health monitoring and logging
 
-### 🏗️ **System Architecture**
+### System Architecture
 
 ```
 nix/
-├── 📁 docs/                    # Documentation
-│   └── 📁 sillytavern/         # SillyTavern-specific docs
+├── docs/                    # Documentation
+│   └── sillytavern/         # SillyTavern-specific docs
 │       ├── deployment-guide.md
 │       ├── dev-guide.md
 │       ├── implementation-summary.md
 │       └── infrastructure-architecture.md
-├── 📁 hosts/                   # Host-specific configurations
-│   └── 📁 cerberus/           # Main workstation config
+├── hosts/                   # Host-specific configurations
+│   └── cerberus/           # Main workstation config
 │       ├── configuration.nix
 │       └── hardware-configuration.nix
-├── 📁 modules/                 # Reusable NixOS modules
+├── modules/                 # Reusable NixOS modules
 │   ├── sillytavern.nix        # SillyTavern service module
 │   ├── agenix.nix
 │   ├── dev.nix
@@ -36,23 +36,23 @@ nix/
 │   ├── python.nix
 │   ├── sunshine.nix
 │   └── [other modules...]
-├── 📁 devtooling/              # Development tool configurations
-├── 📁 gtk/                     # GTK theme configurations
-├── 📁 nixvim/                  # Neovim configuration
-├── 📁 prompt/                  # Shell prompt configurations
-├── 📁 shelltools/              # Command-line tools
-├── 📁 secrets/                 # Encrypted secrets (agenix)
-├── 📄 flake.nix                # Main flake configuration
-├── 📄 home.nix                 # Home Manager configuration
-├── 📄 vars.nix                 # Global variables
-├── 📄 hyprland.nix             # Hyprland WM configuration
-├── 📄 treefmt.toml             # Code formatting
-└── 📄 .gitignore               # Git exclusions
+├── devtooling/              # Development tool configurations
+├── gtk/                     # GTK theme configurations
+├── nixvim/                  # Neovim configuration
+├── prompt/                  # Shell prompt configurations
+├── shelltools/              # Command-line tools
+├── secrets/                 # Encrypted secrets (agenix)
+├── flake.nix                # Main flake configuration
+├── home.nix                 # Home Manager configuration
+├── vars.nix                 # Global variables
+├── hyprland.nix             # Hyprland WM configuration
+├── treefmt.toml             # Code formatting
+└── .gitignore               # Git exclusions
 ```
 
-## 🎯 **Key Features**
+## Key Features
 
-### **SillyTavern Service**
+### SillyTavern Service
 - **Port**: 8765 (changed from 8000 to avoid conflicts)
 - **Access**: http://127.0.0.1:8765/
 - **Container**: Podman with dedicated system user
@@ -60,19 +60,19 @@ nix/
 - **Data Persistence**: `/var/lib/sillytavern`
 - **Health Checks**: Built-in monitoring with 60s startup period
 
-### **Development Environment**
+### Development Environment
 - **Neovim**: Configured with nixvim and extensive plugin ecosystem
 - **Shell**: Zsh with starship prompt and useful tools
 - **Languages**: Go, Rust, Elixir, Python, Lua, Kubernetes tooling
 - **Git**: Proper configuration with signing and useful aliases
 
-### **Desktop Environment**
+### Desktop Environment
 - **Window Manager**: Hyprland with multi-monitor support
 - **Display**: NVIDIA proprietary drivers with Wayland support
 - **Theme**: Catppuccin Mocha with consistent styling
 - **Applications**: Ghostty terminal, VSCode, MPV, Nemo file manager
 
-## 🛠️ **Usage**
+## Usage
 
 ### **System Updates**
 ```bash
@@ -110,22 +110,22 @@ nix build .#package-name
 home-manager switch --flake ".#cerberus"
 ```
 
-## 📚 **Documentation**
+## Documentation
 
-### **SillyTavern**
+### SillyTavern
 - [Deployment Guide](docs/sillytavern/deployment-guide.md) - Complete setup instructions
 - [Development Guide](docs/sillytavern/dev-guide.md) - Development and customization
 - [Implementation Summary](docs/sillytavern/implementation-summary.md) - Technical details
 - [Infrastructure Architecture](docs/sillytavern/infrastructure-architecture.md) - System design
 
-### **Module Development**
+### Module Development
 - Each module in `modules/` is self-contained and documented
 - Use `modules/sillytavern.nix` as a reference for new service modules
 - Follow the established patterns for options and configuration
 
-## 🔧 **Configuration Options**
+## Configuration Options
 
-### **SillyTavern Module**
+### SillyTavern Module
 ```nix
 services.sillytavern-container = {
   enable = true;
