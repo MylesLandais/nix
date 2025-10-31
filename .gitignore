@@ -1,1 +1,42 @@
+# Nix build results
 result
+result-*
+
+# Build artifacts and temporary files
+*.txt.bak
+*.log
+build_output*.txt
+history.md
+issue_resolutions.md
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment and secrets
+.env
+.env.*
+*.age
+secrets/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Documentation build artifacts
+docs/_build/
+site/
+
+# Cache directories
+.cache/
+__pycache__/
+node_modules/
+
+# Backup files
+*.bak
+*.backup
