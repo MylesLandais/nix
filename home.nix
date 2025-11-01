@@ -86,6 +86,14 @@
         cert: false
       '';
 
+      ".config/code-server/settings.json".text = ''
+        {
+          "workbench.colorTheme": "Kanagawa",
+          "editor.fontFamily": "JetBrains Mono Nerd Font",
+          "terminal.integrated.fontFamily": "JetBrains Mono Nerd Font"
+        }
+      '';
+
     };
 
     sessionVariables = {
@@ -277,7 +285,6 @@
           ]
           ++ [
             kilocode.kilo-code
-            # pkgs.vscode-marketplace.quinn.vscode-kanagawa; # Temporarily disabled - not available
           ];
         userSettings = {
           "workbench.colorTheme" = "Kanagawa"; # Set after manual extension install

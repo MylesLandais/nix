@@ -15,6 +15,8 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ../../modules/gaming.nix
+    ../../modules/dev.nix
   ];
 
   nix.extraOptions = ''
@@ -65,6 +67,21 @@
   # Enable Hyprland
   programs.hyprland.enable = true;
 
+  # SDDM Display Manager with Wayland support (friend's working config)
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+    theme = lib.mkForce "sddm-astronaut-theme";
+    extraPackages = with pkgs; [
+      sddm-astronaut
+    ];
+    settings = {
+      Theme = {
+        Current = "sddm-astronaut-theme";
+      };
+    };
+  };
+
   # NVIDIA Configuration
 
   hardware.graphics = {
@@ -83,7 +100,7 @@
     package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
 
-  boot.kernelParams = [ "nvidia_drm.modeset=1" ];
+  boot.kernelParams = [ "nvidia_drm.modeset=1" "usbcore.autosuspend=-1" ];
 
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
@@ -141,6 +158,17 @@
   services.gvfs.enable = true;
   services.udisks2.enable = true;
 
+  # USB power management fixes to prevent device resets during login
+  services.udev.extraRules = ''
+    # Prevent USB controller resets during session changes
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{power/autosuspend}="0"
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="on"
+    
+    # Ensure input devices stay powered
+    SUBSYSTEM=="input", ATTR{power/autosuspend}="0"
+    SUBSYSTEM=="input", ATTR{power/control}="on"
+  '';
+
   security.polkit.enable = true;
   security.polkit.extraConfig = ''
     polkit.addRule(function(action, subject) {
@@ -152,14 +180,19 @@
     });
   '';
 
-  # Define a user account. Don’t forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.defaultUserShell = pkgs.fish;
+  
+  # Create sillytavern-users group for shared data access
+  users.groups.sillytavern-users = {};
+  
   users.users.warby = {
     isNormalUser = true;
     description = "warby";
     extraGroups = [
       "networkmanager"
       "wheel"
+      "sillytavern-users"  # Add to sillytavern-users group
     ];
     packages = with pkgs; [
       neovim
@@ -197,7 +230,9 @@
     git
     papirus-icon-theme
     kdePackages.breeze-icons
+    kdePackages.qtmultimedia
     adwaita-icon-theme
+    sddm-astronaut
     cifs-utils
     ntfs3g
   ];
