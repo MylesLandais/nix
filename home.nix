@@ -55,6 +55,7 @@
     # ./nixvim  # Temporarily disabled
     ./hyprpanel.nix
     ./modules/pro.nix # Professional creative tools
+    ./modules/firefox.nix # Firefox configuration
     ./shelltools
     ./devtooling
     inputs.stylix.homeModules.stylix # System theming
@@ -213,6 +214,7 @@
 
   programs = {
     home-manager.enable = true;
+    firefox.enable = true;
     git = {
       delta.tokyonight.enable = false;
       lfs.enable = true;
@@ -259,16 +261,6 @@
         { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
         { id = "mmioliijnhnoblpgimnlajmefafdfilb"; } # SponsorBlock
       ];
-    };
-    firefox = {
-      enable = true;
-      profiles.default = {
-        isDefault = true;
-        extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
-          ublock-origin
-          plasma-integration
-        ];
-      };
     };
 
     vscode = {

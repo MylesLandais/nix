@@ -33,7 +33,7 @@ in
           noscript
         ];
         
-        # Firefox preferences
+        # Firefox preferences - STABILITY FOCUSED
         settings = cfg.preferences // {
           # Tab configuration - tabs on the left (Firefox 136 vertical tabs)
           "sidebar.revamp" = true;                    # Enable sidebar revamp
@@ -49,25 +49,25 @@ in
           "media.gmp-widevinecdm.enabled" = true;
           "media.gmp-widevinecdm.visible" = true;
           
-          # Privacy and security settings
+          # Privacy and security settings - BALANCED FOR STABILITY
           "privacy.trackingprotection.enabled" = true;
           "privacy.trackingprotection.socialtracking.enabled" = true;
-          "privacy.resistFingerprinting" = true;
-          "privacy.firstparty.isolate" = true;
+          "privacy.resistFingerprinting" = false;     # DISABLED - can cause rendering issues
+          "privacy.firstparty.isolate" = false;        # DISABLED - can break logins
           "privacy.donottrackheader.enabled" = true;
           
-          # Disable saving functionality
-          "signon.rememberSignons" = false;
-          "signon.autofillForms" = false;
-          "browser.formfill.enable" = false;
-          "browser.download.useDownloadDir" = false;
-          "browser.download.folderList" = 2;
-          "browser.download.manager.showWhenStarting" = false;
+          # Login and form settings - LESS RESTRICTIVE
+          "signon.rememberSignons" = true;           # ENABLED - for login stability
+          "signon.autofillForms" = true;             # ENABLED - for convenience
+          "browser.formfill.enable" = true;             # ENABLED - for form stability
+          "browser.download.useDownloadDir" = true;     # ENABLED - for normal behavior
+          "browser.download.folderList" = 1;            # Default download folder
+          "browser.download.manager.showWhenStarting" = true;
           
-          # Disable history and session restore
-          "browser.history_expire_days" = 0;
-          "browser.history_expire_days.mirror" = 0;
-          "browser.sessionstore.resume_from_crash" = false;
+          # History and session restore - ENABLED FOR STABILITY
+          "browser.history_expire_days" = 90;           # Keep history for 90 days
+          "browser.history_expire_days.mirror" = 90;
+          "browser.sessionstore.resume_from_crash" = true;  # ENABLED - crash recovery
           "browser.sessionstore.resume_session_once" = false;
           
           # Security settings
@@ -76,11 +76,11 @@ in
           "security.tls.version.min" = 3;
           "security.tls.version.max" = 4;
           
-          # Performance settings
-          "browser.cache.disk.enable" = false;
+          # Performance settings - BALANCED CACHING
+          "browser.cache.disk.enable" = true;          # ENABLED - prevents rendering issues
           "browser.cache.memory.enable" = true;
-          "browser.cache.disk.capacity" = 0;
-          "browser.cache.disk.smart_size.enabled" = false;
+          "browser.cache.disk.capacity" = 256000;      # 256MB disk cache
+          "browser.cache.disk.smart_size.enabled" = true; # ENABLED - auto-manage cache
           "browser.cache.disk.smart_size.first_run" = false;
           
           # UI/UX settings
@@ -114,10 +114,10 @@ in
           "ui.systemUsesDarkTheme" = true;
           "devtools.theme" = "dark";
           
-          # Experimental features
+          # Experimental features - CONSERVATIVE
           "gfx.webrender.all" = true;
-          "layers.acceleration.force-enabled" = true;
-          "media.hardware-video-decoding.force-enabled" = true;
+          "layers.acceleration.force-enabled" = false;    # DISABLED - can cause issues
+          "media.hardware-video-decoding.force-enabled" = false; # DISABLED - can cause issues
           
           # Disable telemetry and data collection
           "toolkit.telemetry.enabled" = false;
@@ -195,5 +195,10 @@ in
         };
       };
     };
+
+    # Add Bitwarden desktop to user packages for native messaging
+    home.packages = with pkgs; [
+      bitwarden-desktop
+    ];
   };
 }

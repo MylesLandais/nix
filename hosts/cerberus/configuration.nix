@@ -217,8 +217,76 @@
   ];
 
   # Install firefox.
-  programs.firefox.enable = true;
   programs.fish.enable = true;
+  
+  # Firefox system-wide configuration
+  environment.etc."firefox/policies/policies.json".text = builtins.toJSON {
+    policies = {
+      # Enable DRM content
+      EnableMediaDRM = true;
+      
+      # Disable all saving functionality
+      DisablePasswordManager = true;
+      DisableDownloadSave = true;
+      DisableSavePage = true;
+      DisableFormHistory = true;
+      DisableBuiltinPDFViewer = false;
+      
+      # Extension management
+      ExtensionSettings = {
+        "ublock-origin@raymondhill.net" = {
+          installation_mode = "force_installed";
+          default_area = "navbar";
+        };
+        "bitwarden@browser" = {
+          installation_mode = "force_installed";
+          default_area = "navbar";
+        };
+      };
+      
+      # Security and privacy policies
+      DisableFirefoxAccounts = false;
+      DisableFirefoxStudies = true;
+      DisablePocket = true;
+      DisableTelemetry = true;
+      DisableFeedbackCommands = true;
+      DisableDefaultBrowserCheck = true;
+      
+      # Network and security
+      DNSOverHTTPS = {
+        Enabled = true;
+        ProviderURL = "https://dns.quad9.net/dns-query";
+      };
+      
+      # Homepage and new tab
+      Homepage = {
+        URL = "about:home";
+        Locked = true;
+      };
+      NewTabPage = "about:home";
+      
+      # Browser behavior
+      Bookmarks = {
+        Enabled = false;
+      };
+      
+      # Update policies
+      AppAutoUpdate = false;
+      BackgroundAppUpdate = false;
+    };
+  };
+
+  # Native messaging host for Bitwarden
+  environment.etc."firefox/native-messaging-hosts/bitwarden.json".text = ''
+    {
+      "name": "com.8bit.bitwarden",
+      "description": "Bitwarden desktop integration",
+      "path": "${pkgs.bitwarden-desktop}/bin/bitwarden-desktop",
+      "type": "stdio",
+      "allowed_extensions": ["{446900e4-71c2-419f-a6a7-df9c091e268b}"]
+    }
+  '';
+  
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -235,6 +303,7 @@
     sddm-astronaut
     cifs-utils
     ntfs3g
+    bitwarden-desktop
   ];
 
   system.stateVersion = "25.05"; # Did you read the comment?
