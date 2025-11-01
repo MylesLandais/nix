@@ -41,7 +41,7 @@
     protontricks # Winetricks for Proton
     mangohud # Performance overlay
     gamemode # CPU/GPU optimization
-
+    runelite
     # RetroArch with minimal cores (bsnes and mgba)
     (retroarch.overrideAttrs (old: {
       passthru = old.passthru // {
