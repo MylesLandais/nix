@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 
@@ -75,8 +76,8 @@
     environment.systemPackages = with pkgs; [
       podman-compose
       lazydocker
+      inputs.kiro.packages.${system}.default
     ];
-
     # Add user to podman group
     users.groups.podman.members = [ "warby" ];
   };
