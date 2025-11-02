@@ -50,4 +50,11 @@ in
     height = 1080;
     refresh = 60.0;
   };
+
+  fourthMonitor = {
+    name = "desc:Samsung Electric Company SAMSUNG 0x01000E00";
+    width = 1920;
+    height = 1080;
+    refresh = 29.97;
+  };
 }

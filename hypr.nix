@@ -39,6 +39,8 @@ in
       wallpaper = [
         "${vars.mainMonitor.name},${vars.wallpaper}"
         "${vars.secondaryMonitor.name},${vars.wallpaper}"
+        "${vars.tertiaryMonitor.name},${vars.wallpaper}"
+        "${vars.fourthMonitor.name},${vars.wallpaper}"
       ];
     };
   };
