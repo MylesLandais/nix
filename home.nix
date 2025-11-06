@@ -99,7 +99,7 @@
 
     sessionVariables = {
       TERMINAL = "ghostty";
-      # EDITOR = "emacs";
+      EDITOR = "nvim";
     };
 
     # Shell aliases for build-time sleep inhibition
