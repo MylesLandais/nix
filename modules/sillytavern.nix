@@ -195,8 +195,6 @@ EOF
     }
 
     (mkIf cfg.useContainer {
-      # Ensure Podman is available
-      virtualisation.podman.enable = true;
       
       # OCI container configuration
       virtualisation.oci-containers.containers.sillytavern = {
