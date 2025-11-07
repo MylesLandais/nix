@@ -35,16 +35,13 @@
   };
 
   config = lib.mkIf config.dev.enable {
-    # Enable Podman for container management
     virtualisation = {
-      podman = {
+      docker = {
         enable = true;
-        dockerCompat = true;
-        dockerSocket.enable = true;
       };
       
       oci-containers = {
-        backend = "podman";
+        backend = "docker";
         containers = {
           "code-server" = {
             image = config.dev.containers.codeServer.image;
@@ -76,7 +73,7 @@
     environment.systemPackages = with pkgs; [
       podman-compose
       lazydocker
-      inputs.kiro.packages.${system}.default
+      # inputs.kiro.packages.${system}.default  # TODO: Add kiro input to flake.nix if needed
     ];
     # Add user to podman group
     users.groups.podman.members = [ "warby" ];
