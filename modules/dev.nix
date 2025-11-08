@@ -113,11 +113,8 @@
 
     # Add useful packages
     environment.systemPackages = with pkgs; [
-      podman-compose
       lazydocker
       # inputs.kiro.packages.${system}.default  # TODO: Add kiro input to flake.nix if needed
     ];
-    # Add user to podman group
-    users.groups.podman.members = [ "warby" ];
   };
 }
