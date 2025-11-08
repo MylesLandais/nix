@@ -179,6 +179,7 @@
       tflint
       tldr
       treefmt
+      tree
       ttyd
       unzip # Basic .zip support
       vesktop
