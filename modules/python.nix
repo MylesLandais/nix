@@ -1,18 +1,8 @@
+{ config, pkgs, ... }:
 {
-  virtualisation.oci-containers.containers = {
-    "jupyter" = {
-      image = "jupyter/minimal-notebook:latest";
-      ports = [ "8888:8888" ];
-      volumes = [
-        "/home/warby/Workspace/Jupyter:/home/jovyan/work"
-      ];
-      environment = {
-        TZ = "America/New_York";
-        JUPYTER_TOKEN = "devsandbox123";
-      };
-      autoStart = true;
-    };
+  virtualisation.oci-containers.containers.jupyter = {
+    autoStart = true;
+    image = "jupyter/base-notebook";
+    ports = [ "8888:8888" ];
   };
-
-  networking.firewall.allowedTCPPorts = [ 8888 ];
 }

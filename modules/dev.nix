@@ -79,7 +79,7 @@
             };
           };
           jupyter = {
-            image = "quay.io/jupyter/pytorch-notebook:cuda12-python-3.11.8";
+            image = "quay.io/jupyter/pytorch-notebook:cuda12-python-3.11.9";
             autoStart = true;
 
             ports = [

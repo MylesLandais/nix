@@ -15,13 +15,43 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./configuration-fixes.nix
     ../../modules/gaming.nix
     ../../modules/dev.nix
   ];
 
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes
-  '';
+  nix = {
+    settings = {
+      substituters = [
+        "https://nix-community.cachix.org/"
+        "https://chaotic-nyx.cachix.org/"
+        "https://cache.nixos.org/"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8"
+      ];
+
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      trusted-users = [
+        "root"
+        "warby"
+        "@wheel"
+      ];
+    };
+
+    optimise.automatic = true;
+
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 3d";
+    };
+  };
 
   # Allow unfree packages (e.g., NVIDIA drivers)
   nixpkgs.config.allowUnfree = true;
@@ -66,6 +96,9 @@
 
   # Enable Hyprland
   programs.hyprland.enable = true;
+  
+  # Ensure proper session handoff
+  services.displayManager.sessionPackages = [ pkgs.hyprland ];
 
   # SDDM Display Manager with Wayland support (friend's working config)
   services.displayManager.sddm = {
@@ -93,14 +126,14 @@
 
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = false;
+    powerManagement.enable = true;  # Enable power management as per fixes
     powerManagement.finegrained = false;
-    open = true;
+    open = false;  # Use proprietary driver as per fixes
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
+    package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
 
-  boot.kernelParams = [ "nvidia_drm.modeset=1" "usbcore.autosuspend=-1" ];
+  boot.kernelParams = [ "usbcore.autosuspend=-1" ];  # Remove nvidia_drm.modeset=1 as per fixes
 
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
@@ -159,6 +192,7 @@
   services.udisks2.enable = true;
 
   # USB power management fixes to prevent device resets during login
+  # Note: This is also defined in configuration-fixes.nix, but keeping it here for redundancy
   services.udev.extraRules = ''
     # Prevent USB controller resets during session changes
     ACTION=="add", SUBSYSTEM=="usb", ATTR{power/autosuspend}="0"
@@ -168,6 +202,25 @@
     SUBSYSTEM=="input", ATTR{power/autosuspend}="0"
     SUBSYSTEM=="input", ATTR{power/control}="on"
   '';
+
+  # Add environment variables for better NVIDIA/Wayland compatibility
+  environment.sessionVariables = {
+    WLR_NO_HARDWARE_CURSORS = "1";
+    LIBVA_DRIVER_NAME = "nvidia";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    GBM_BACKEND = "nvidia-drm";
+  };
+
+  # Systemd user session improvements for Hyprland
+  systemd.user.services.hyprland-session = {
+    description = "Hyprland Wayland Session";
+    partOf = [ "graphical-session.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+      ExecStart = "${pkgs.systemd}/bin/systemctl --user import-environment DISPLAY WAYLAND_DISPLAY HYPRLAND_INSTANCE_SIGNATURE XDG_CURRENT_DESKTOP";
+    };
+  };
 
   security.polkit.enable = true;
   security.polkit.extraConfig = ''
@@ -192,7 +245,8 @@
     extraGroups = [
       "networkmanager"
       "wheel"
-      "sillytavern-users"  # Add to sillytavern-users group
+      "sillytavern-users"
+      "sillytavern" # Add to sillytavern-users group
     ];
     packages = with pkgs; [
       neovim
@@ -304,6 +358,7 @@
     cifs-utils
     ntfs3g
     bitwarden-desktop
+    nvidia-vaapi-driver
   ];
 
   system.stateVersion = "25.05"; # Did you read the comment?

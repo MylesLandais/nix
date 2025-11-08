@@ -7,13 +7,13 @@
 
 {
   # Graphics support for 3D gaming
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver # Hardware-accelerated video decoding
-      vaapiIntel # VAAPI support for Intel GPUs
-    ];
-  };
+  # hardware.graphics = {
+  #   enable = true;
+  #  extraPackages = with pkgs; [
+  #    intel-media-driver # Hardware-accelerated video decoding
+  #    vaapiIntel # VAAPI support for Intel GPUs
+  #  ];
+  #};
 
   # Video driver configuration (updated for NVIDIA compatibility)
   services.xserver.videoDrivers = [ "nvidia" ]; # Use NVIDIA drivers as per previous configuration
