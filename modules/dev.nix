@@ -39,7 +39,7 @@
       docker = {
         enable = true;
       };
-      
+
       oci-containers = {
         backend = "docker";
         containers = {
@@ -76,6 +76,32 @@
             ];
             environment = {
               NEO4J_AUTH = "neo4j/password"; # Big ups default creds TT
+            };
+          };
+          jupyter = {
+            image = "quay.io/jupyter/pytorch-notebook:cuda12-python-3.11.8";
+            autoStart = true;
+
+            ports = [
+              "8888:8888"
+            ];
+
+            # GPU support for NVIDIA
+            extraOptions = [
+              "--gpus=all"
+              "--ipc=host"
+            ];
+
+            volumes = [
+              "/home/warby/Workspace:/home/jovyan/work:rw"
+              "/home/warby/.jupyter:/home/jovyan/.jupyter:rw"
+            ];
+
+            environment = {
+              JUPYTER_ENABLE_LAB = "yes";
+              TZ = "America/New_York";
+              PUID = "1000";
+              PGID = "1000";
             };
           };
         };
