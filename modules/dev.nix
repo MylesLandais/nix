@@ -35,6 +35,9 @@
   };
 
   config = lib.mkIf config.dev.enable {
+
+    hardware.nvidia-container-toolkit.enable = true;
+
     virtualisation = {
       docker = {
         enable = true;
@@ -88,7 +91,7 @@
 
             # GPU support for NVIDIA
             extraOptions = [
-              "--gpus=all"
+              "--device=nvidia.com/gpu=all"
               "--ipc=host"
             ];
 
