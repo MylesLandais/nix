@@ -62,6 +62,22 @@
             # It uses environment variables for configuration
             autoStart = true;
           };
+          neo4j = {
+            image = "neo4j:latest";
+            ports = [
+              "7474:7474"
+              "7687:7687"
+            ];
+            volumes = [
+              "/var/lib/neo4j/data:/data"
+              "/var/lib/neo4j/logs:/logs"
+              "/var/lib/neo4j/import:/var/lib/neo4j/import"
+              "/var/lib/neo4j/plugins:/plugins"
+            ];
+            environment = {
+              NEO4J_AUTH = "neo4j/password"; # Big ups default creds TT
+            };
+          };
         };
       };
     };
