@@ -123,6 +123,7 @@
       gamemode
       gcc
       gemini-cli
+      goose-cli
       gh
       ghostty
       git-lfs
@@ -168,7 +169,7 @@
       pulseaudio
       pulseaudio-ctl
       pulsemixer
-      qt6ct
+      qt6Packages.qt6ct
       revive
       ripgrep
       sassc
