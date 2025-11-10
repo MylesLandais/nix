@@ -56,8 +56,9 @@
     snes9x-gtk # Super Nintendo
     mednafen # Multi-system emulator
     pcsx2 # PlayStation 2
-          # rpcs3 # PlayStation 3
+    rpcs3 # PlayStation 3
           # Temporarily disabled due to build failure:
           # Error: builder failed with exit code 2 (C++ compilation errors)
+    ryubing
   ];
 }
