@@ -84,9 +84,22 @@ in
         "noinitialfocus,title:(GLava)"
       ];
       monitor = [
-        "${vars.mainMonitor.name},${toString vars.mainMonitor.width}x${toString vars.mainMonitor.height}@${toString vars.mainMonitor.refresh},7820x1080,1"
-        "${vars.secondaryMonitor.name},${toString vars.secondaryMonitor.width}x${toString vars.secondaryMonitor.height}@${toString vars.secondaryMonitor.refresh},10380x1080,1"
-        "${vars.tertiaryMonitor.name},${toString vars.tertiaryMonitor.width}x${toString vars.tertiaryMonitor.height}@${toString vars.tertiaryMonitor.refresh},5900x1080,1"
+        # Bottom row - Three Dell monitors at y=2160
+        "${vars.tertiaryMonitor.name},${toString vars.tertiaryMonitor.width}x${toString vars.tertiaryMonitor.height}@${toString vars.tertiaryMonitor.refresh},5900x2160,1"  # Left Dell
+        "${vars.mainMonitor.name},${toString vars.mainMonitor.width}x${toString vars.mainMonitor.height}@${toString vars.mainMonitor.refresh},7820x2160,1"      # Middle Dell (Main)
+        "${vars.secondaryMonitor.name},${toString vars.secondaryMonitor.width}x${toString vars.secondaryMonitor.height}@${toString vars.secondaryMonitor.refresh},10380x2160,1"  # Right Dell
+        # Top row - Samsung monitor centered above middle
+        "${vars.fourthMonitor.name},${toString vars.fourthMonitor.width}x${toString vars.fourthMonitor.height}@${toString vars.fourthMonitor.refresh},8140x1080,1"  # Samsung (Top)
+      ];
+      # Simplified workspace rules - let Hyprland handle initial assignment
+      # Workspaces will be created dynamically and stick to the monitor where they're first opened
+      # This approach works better with hyprpanel's workspace display
+      workspace = [
+        # Only assign workspace 10 to Samsung (top monitor) as it's isolated
+        "1,monitor:${vars.tertiaryMonitor.name}"
+        "2,monitor:${vars.mainMonitor.name}"
+        "3,monitor:${vars.secondaryMonitor.name}"
+        "10,monitor:${vars.fourthMonitor.name}"
       ];
       env = [
         "LIBVA_DRIVER_NAME,nvidia"
@@ -156,7 +169,7 @@ in
             "$mod, code:1${toString i},workspace, ${toString ws}"
             "$mod SHIFT, code:1${toString i},movetoworkspace, ${toString ws}"
           ]
-        ) 9
+        ) 10  # Extended from 9 to 10 workspaces
       ));
     };
   };
@@ -185,23 +198,4 @@ in
     pkgs.gnome-settings-daemon
     pkgs.libsecret
   ];
-
-  # Kitty Terminal Configuration
-  programs.kitty = {
-    enable = true;
-    settings = {
-      font_family = "Hack Nerd Font";
-      bold_font = "auto";
-      italic_font = "auto";
-      bold_italic_font = "auto";
-      enable_audio_bell = false;
-      scrollback_lines = -1;
-      tab_bar_edge = "top";
-      allow_remote_control = "yes";
-    };
-    shellIntegration = {
-      enableZshIntegration = true;
-    };
-    themeFile = "kanagawa";
-  };
 }

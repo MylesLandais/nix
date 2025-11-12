@@ -41,6 +41,7 @@
         workspaces = {
           show_numbered = true;
           show_icons = false;
+          amount = 10;  # Explicitly set to 10 workspaces
         };
         windowtitle = {
           class_name = false;
