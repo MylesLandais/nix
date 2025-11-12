@@ -51,7 +51,6 @@
 
   imports = [
     ./hypr.nix
-    ./hyprland.nix
     # ./nixvim  # Temporarily disabled
     ./hyprpanel.nix
     ./modules/pro.nix # Professional creative tools
@@ -182,6 +181,7 @@
       tree
       ttyd
       unzip # Basic .zip support
+      unrar
       vesktop
       vhs
       virtualgl

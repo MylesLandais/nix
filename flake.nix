@@ -14,6 +14,7 @@
       url = "github:nix-community/nix-vscode-extensions";
     };
     nur.url = "github:nix-community/NUR";
+    nixified-ai.url = "github:nixified-ai/flake";
   };
 
   outputs =
@@ -37,10 +38,6 @@
       vars = import ./vars.nix { inherit pkgs; };
     in
     {
-      packages.${system} = {
-        sillytavern = import ./sillytavern.nix { inherit (pkgs) lib buildNpmPackage fetchFromGitHub nodejs git; };
-      };
-
       nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs vars; };
@@ -52,8 +49,10 @@
           })
           ./hosts/cerberus/configuration.nix
           chaotic.nixosModules.default
+          # inputs.nixified-ai.nixosModules.comfyui 
+          # TODO Broken Input // pending removal
           ./modules/gnome-keyring.nix
-          ./modules/sillytavern.nix
+          #./modules/sillytavern.nix
           home-manager.nixosModules.home-manager
           {
             home-manager = {

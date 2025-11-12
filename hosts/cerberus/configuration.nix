@@ -96,7 +96,7 @@
 
   # Enable Hyprland
   programs.hyprland.enable = true;
-  
+
   # Ensure proper session handoff
   services.displayManager.sessionPackages = [ pkgs.hyprland ];
 
@@ -144,9 +144,6 @@
     variant = "";
   };
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -178,16 +175,6 @@
     openFirewall = true;
   };
 
-  services.sillytavern-container = {
-    enable = true;
-    hostAddress = "0.0.0.0";  # Allow network access for multiple users
-    port = 8000;
-    enableMultiUser = true;    # Enable user account management
-    openFirewall = true;       # Open firewall for external access
-    useContainer = true;       # Use Podman container
-    imageTag = "latest";       # Consider pinning digest for production
-  };
-
   services.gvfs.enable = true;
   services.udisks2.enable = true;
 
@@ -197,7 +184,7 @@
     # Prevent USB controller resets during session changes
     ACTION=="add", SUBSYSTEM=="usb", ATTR{power/autosuspend}="0"
     ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="on"
-    
+
     # Ensure input devices stay powered
     SUBSYSTEM=="input", ATTR{power/autosuspend}="0"
     SUBSYSTEM=="input", ATTR{power/control}="on"
@@ -235,25 +222,21 @@
 
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.defaultUserShell = pkgs.fish;
-  
-  # Create sillytavern-users group for shared data access
-  users.groups.sillytavern-users = {};
-  
+
   users.users.warby = {
     isNormalUser = true;
     description = "warby";
     extraGroups = [
       "networkmanager"
       "wheel"
-      "sillytavern-users"
-      "sillytavern" # Add to sillytavern-users group
+      # "sillytavern-users"
+      # "sillytavern" # Add to sillytavern-users group
     ];
     packages = with pkgs; [
       neovim
       vesktop
       mpv
       gemini-cli
-      #  thunderbird
     ];
   };
 
@@ -272,20 +255,20 @@
 
   # Install firefox.
   programs.fish.enable = true;
-  
+
   # Firefox system-wide configuration
   environment.etc."firefox/policies/policies.json".text = builtins.toJSON {
     policies = {
       # Enable DRM content
       EnableMediaDRM = true;
-      
+
       # Disable all saving functionality
       DisablePasswordManager = true;
       DisableDownloadSave = true;
       DisableSavePage = true;
       DisableFormHistory = true;
       DisableBuiltinPDFViewer = false;
-      
+
       # Extension management
       ExtensionSettings = {
         "ublock-origin@raymondhill.net" = {
@@ -297,7 +280,7 @@
           default_area = "navbar";
         };
       };
-      
+
       # Security and privacy policies
       DisableFirefoxAccounts = false;
       DisableFirefoxStudies = true;
@@ -305,25 +288,25 @@
       DisableTelemetry = true;
       DisableFeedbackCommands = true;
       DisableDefaultBrowserCheck = true;
-      
+
       # Network and security
       DNSOverHTTPS = {
         Enabled = true;
         ProviderURL = "https://dns.quad9.net/dns-query";
       };
-      
+
       # Homepage and new tab
       Homepage = {
         URL = "about:home";
         Locked = true;
       };
       NewTabPage = "about:home";
-      
+
       # Browser behavior
       Bookmarks = {
         Enabled = false;
       };
-      
+
       # Update policies
       AppAutoUpdate = false;
       BackgroundAppUpdate = false;
@@ -340,7 +323,7 @@
       "allowed_extensions": ["{446900e4-71c2-419f-a6a7-df9c091e268b}"]
     }
   '';
-  
+
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
