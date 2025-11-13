@@ -91,15 +91,17 @@ in
         # Top row - Samsung monitor centered above middle
         "${vars.fourthMonitor.name},${toString vars.fourthMonitor.width}x${toString vars.fourthMonitor.height}@${toString vars.fourthMonitor.refresh},8140x1080,1"  # Samsung (Top)
       ];
-      # Simplified workspace rules - let Hyprland handle initial assignment
-      # Workspaces will be created dynamically and stick to the monitor where they're first opened
-      # This approach works better with hyprpanel's workspace display
       workspace = [
-        # Only assign workspace 10 to Samsung (top monitor) as it's isolated
-        "1,monitor:${vars.tertiaryMonitor.name}"
-        "2,monitor:${vars.mainMonitor.name}"
-        "3,monitor:${vars.secondaryMonitor.name}"
-        "10,monitor:${vars.fourthMonitor.name}"
+        "1,monitor:${vars.tertiaryMonitor.name},default:true"
+        "2,monitor:${vars.mainMonitor.name},default:true"
+        "3,monitor:${vars.secondaryMonitor.name},default:true"
+        "4,monitor:${vars.tertiaryMonitor.name}"
+        "5,monitor:${vars.mainMonitor.name}"
+        "6,monitor:${vars.secondaryMonitor.name}"
+        "7,monitor:${vars.tertiaryMonitor.name}"
+        "8,monitor:${vars.mainMonitor.name}"
+        "9,monitor:${vars.secondaryMonitor.name}"
+        "10,monitor:${vars.fourthMonitor.name},default:true"
       ];
       env = [
         "LIBVA_DRIVER_NAME,nvidia"
