@@ -1,6 +1,5 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# Edit this configuration file to define system installations.
+# Refer to the configuration.nix(5) man page and NixOS manual for help.
 
 {
   config,
@@ -13,7 +12,7 @@
 
 {
   imports = [
-    # Include the results of the hardware scan.
+    # Include hardware scan results.
     ./hardware-configuration.nix
     ./configuration-fixes.nix
     ../../modules/gaming.nix
@@ -56,26 +55,20 @@
   # Allow unfree packages (e.g., NVIDIA drivers)
   nixpkgs.config.allowUnfree = true;
 
-  # Bootloader.
+  # Bootloader configuration
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Use latest kernel.
+  # Use latest kernel
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
-
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
+  # Set time zone
   time.timeZone = "America/Chicago";
 
-  # Select internationalisation properties.
+  # Internationalisation properties
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -90,8 +83,7 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
+  # Enable X11 windowing system
   services.xserver.enable = true;
 
   # Enable Hyprland
@@ -100,14 +92,12 @@
   # Ensure proper session handoff
   services.displayManager.sessionPackages = [ pkgs.hyprland ];
 
-  # SDDM Display Manager with Wayland support (friend's working config)
+  # SDDM Display Manager with Wayland support
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
     theme = lib.mkForce "sddm-astronaut-theme";
-    extraPackages = with pkgs; [
-      sddm-astronaut
-    ];
+    extraPackages = with pkgs; [ sddm-astronaut ];
     settings = {
       Theme = {
         Current = "sddm-astronaut-theme";
@@ -116,7 +106,6 @@
   };
 
   # NVIDIA Configuration
-
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -126,14 +115,14 @@
 
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = true;  # Enable power management as per fixes
+    powerManagement.enable = true;  # Enable power management
     powerManagement.finegrained = false;
-    open = false;  # Use proprietary driver as per fixes
+    open = false;  # Use proprietary driver
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
 
-  boot.kernelParams = [ "usbcore.autosuspend=-1" ];  # Remove nvidia_drm.modeset=1 as per fixes
+  boot.kernelParams = [ "usbcore.autosuspend=-1" ];  # Disable USB autosuspend
 
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
@@ -144,7 +133,7 @@
     variant = "";
   };
 
-  # Enable sound with pipewire.
+  # Enable sound with pipewire
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -152,16 +141,9 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  # Enable touchpad support
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs.kdePackages; [ xdg-desktop-portal-kde ];
@@ -178,19 +160,15 @@
   services.gvfs.enable = true;
   services.udisks2.enable = true;
 
-  # USB power management fixes to prevent device resets during login
-  # Note: This is also defined in configuration-fixes.nix, but keeping it here for redundancy
+  # USB power management fixes
   services.udev.extraRules = ''
-    # Prevent USB controller resets during session changes
     ACTION=="add", SUBSYSTEM=="usb", ATTR{power/autosuspend}="0"
     ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="on"
-
-    # Ensure input devices stay powered
     SUBSYSTEM=="input", ATTR{power/autosuspend}="0"
     SUBSYSTEM=="input", ATTR{power/control}="on"
   '';
 
-  # Add environment variables for better NVIDIA/Wayland compatibility
+  # Environment variables for NVIDIA/Wayland compatibility
   environment.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = "1";
     LIBVA_DRIVER_NAME = "nvidia";
@@ -209,6 +187,60 @@
     };
   };
 
+  # Merged configurations from configuration-fixes.nix
+  {
+    # Fix: Add explicit display manager (SDDM with Wayland support)
+    services.displayManager.sddm = {
+      enable = lib.mkDefault true;
+      wayland.enable = lib.mkDefault true;
+    };
+
+    # Fix: Disable USB autosuspend to prevent device resets
+    boot.kernelParams = [ "usbcore.autosuspend=-1" ];
+
+    services.udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{power/autosuspend}="0"
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="on"
+      SUBSYSTEM=="input", ATTR{power/autosuspend}="0"
+      SUBSYSTEM=="input", ATTR{power/control}="on"
+    '';
+
+    # Fix: Alternative NVIDIA configuration
+    hardware.nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = true;
+      powerManagement.finegrained = false;
+      open = false;
+      nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
+
+    # Fix: Improve Hyprland session management
+    services.displayManager.sessionPackages = [ pkgs.hyprland ];
+
+    # Environment variables for NVIDIA/Wayland compatibility
+    environment.sessionVariables = {
+      WLR_NO_HARDWARE_CURSORS = "1";
+      LIBVA_DRIVER_NAME = "nvidia";
+      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+      GBM_BACKEND = "nvidia-drm";
+    };
+
+    # Fix: Systemd user session improvements
+    systemd.user.services.hyprland-session = {
+      description = "Hyprland Wayland Session";
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = "yes";
+        ExecStart = "${pkgs.systemd}/bin/systemctl --user import-environment DISPLAY WAYLAND_DISPLAY HYPRLAND_INSTANCE_SIGNATURE XDG_CURRENT_DESKTOP";
+      };
+    };
+
+    # Workaround for nvidia-container-toolkit issue
+    systemd.services.nvidia-container-toolkit-cdi-generator.serviceConfig.ExecStartPre = lib.mkForce null;
+  };
+
   security.polkit.enable = true;
   security.polkit.extraConfig = ''
     polkit.addRule(function(action, subject) {
@@ -220,7 +252,7 @@
     });
   '';
 
-  # Define a user account. Don't forget to set a password with 'passwd'.
+  # Define a user account
   users.defaultUserShell = pkgs.fish;
 
   users.users.warby = {
@@ -229,8 +261,6 @@
     extraGroups = [
       "networkmanager"
       "wheel"
-      # "sillytavern-users"
-      # "sillytavern" # Add to sillytavern-users group
     ];
     packages = with pkgs; [
       neovim
