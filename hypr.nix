@@ -31,10 +31,30 @@ in
     add_record_player
   ];
 
+  # ---------------------------------------------------------
+  # XDG portal configuration - ensure a file picker backend is available
+  # and prefer the GTK portal for file chooser requests (used by Electron/GTK apps)
+  # ---------------------------------------------------------
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-hyprland
+      pkgs.xdg-desktop-portal-gtk
+    ];
+    config = {
+      common = {
+        default = [ "gtk" ];
+      };
+      hyprland = {
+        default = [ "gtk" "hyprland" ];
+      };
+    };
+  };
+
   # Hyprland Window Manager Configuration
   wayland.windowManager.hyprland = {
     enable = true;
-    portalPackage = pkgs.xdg-desktop-portal-hyprland;
+    # portalPackage is managed via `xdg.portal` above so we don't set it here
     settings = {
       general = {
         gaps_in = 5;
@@ -116,8 +136,10 @@ in
         "ELECTRON_OZONE_PLATFORM_HINT,auto"
         "XDG_CURRENT_DESKTOP,Hyprland"
         "XDG_SESSION_DESKTOP,Hyprland"
-        "XDG_CONFIG_HOME=${config.xdg.configHome}"
-        "BROWSER=brave"
+  "XDG_CONFIG_HOME=${config.xdg.configHome}"
+  "BROWSER=Firefox"
+  # Force GTK apps to use the xdg portal for file choosers
+  "GTK_USE_PORTAL,1"
         "XCURSOR_SIZE=22"
         "EDITOR=nvim"
         "QT_STYLE_OVERRIDE=''"
