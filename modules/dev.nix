@@ -65,6 +65,25 @@
             # It uses environment variables for configuration
             autoStart = true;
           };
+
+          qdrant = {
+            image = "qdrant/qdrant:latest";
+            autoStart = true;
+            ports = [
+              "6333:6333" # HTTP API / Monitoring
+              "6334:6334" # gRPC API
+            ];
+            volumes = [
+              "/var/lib/qdrant/storage:/qdrant/storage"
+              # Optional: If you want custom config, uncomment and create the file
+              # "/var/lib/qdrant/config.yaml:/qdrant/config/production.yaml"
+            ];
+            environment = {
+              # Default logging level
+              QDRANT__LOG_LEVEL = "INFO";
+            };
+          };
+
           neo4j = {
             image = "neo4j:latest";
             ports = [
@@ -87,7 +106,7 @@
             autoStart = true;
             ports = [ "8188:8188" ];
             extraOptions = [
-              "--device=nvidia.com/gpu=all" # Pass through all NVIDIA GPUs
+              "--gpus=all"             # Pass through all NVIDIA GPUs
               "--ipc=host"             # Enable faster tensor operations
             ];
             volumes = [
@@ -115,7 +134,7 @@
 
             # GPU support for NVIDIA
             extraOptions = [
-              "--device=nvidia.com/gpu=all"
+              "--gpus=all"
               "--ipc=host"
             ];
 
@@ -146,5 +165,9 @@
       lazydocker
       # inputs.kiro.packages.${system}.default  # TODO: Add kiro input to flake.nix if needed
     ];
+
+    # FIX: Workaround for nvidia-container-toolkit issue
+    # https://github.com/NixOS/nixpkgs/issues/463525
+    systemd.services.nvidia-container-toolkit-cdi-generator.serviceConfig.ExecStartPre = lib.mkForce null;
   };
 }

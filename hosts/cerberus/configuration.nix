@@ -187,59 +187,8 @@
     };
   };
 
-  # Merged configurations from configuration-fixes.nix
-  {
-    # Fix: Add explicit display manager (SDDM with Wayland support)
-    services.displayManager.sddm = {
-      enable = lib.mkDefault true;
-      wayland.enable = lib.mkDefault true;
-    };
-
-    # Fix: Disable USB autosuspend to prevent device resets
-    boot.kernelParams = [ "usbcore.autosuspend=-1" ];
-
-    services.udev.extraRules = ''
-      ACTION=="add", SUBSYSTEM=="usb", ATTR{power/autosuspend}="0"
-      ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="on"
-      SUBSYSTEM=="input", ATTR{power/autosuspend}="0"
-      SUBSYSTEM=="input", ATTR{power/control}="on"
-    '';
-
-    # Fix: Alternative NVIDIA configuration
-    hardware.nvidia = {
-      modesetting.enable = true;
-      powerManagement.enable = true;
-      powerManagement.finegrained = false;
-      open = false;
-      nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
-    };
-
-    # Fix: Improve Hyprland session management
-    services.displayManager.sessionPackages = [ pkgs.hyprland ];
-
-    # Environment variables for NVIDIA/Wayland compatibility
-    environment.sessionVariables = {
-      WLR_NO_HARDWARE_CURSORS = "1";
-      LIBVA_DRIVER_NAME = "nvidia";
-      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-      GBM_BACKEND = "nvidia-drm";
-    };
-
-    # Fix: Systemd user session improvements
-    systemd.user.services.hyprland-session = {
-      description = "Hyprland Wayland Session";
-      partOf = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = "yes";
-        ExecStart = "${pkgs.systemd}/bin/systemctl --user import-environment DISPLAY WAYLAND_DISPLAY HYPRLAND_INSTANCE_SIGNATURE XDG_CURRENT_DESKTOP";
-      };
-    };
-
-    # Workaround for nvidia-container-toolkit issue
-    systemd.services.nvidia-container-toolkit-cdi-generator.serviceConfig.ExecStartPre = lib.mkForce null;
-  };
+  # Workaround for nvidia-container-toolkit issue
+  systemd.services.nvidia-container-toolkit-cdi-generator.serviceConfig.ExecStartPre = lib.mkForce null;
 
   security.polkit.enable = true;
   security.polkit.extraConfig = ''
