@@ -146,6 +146,7 @@
       nemo-fileroller # Nemo extension for context menu integration
       nerd-fonts._0xproto
       nerd-fonts.droid-sans-mono
+      nerd-fonts.maple-mono
       nix-search-tv
       nixos-generators
       nodejs_20 # Required for discord-ai-bot-lmstudio project (Node.js >=20.11.0)
@@ -246,10 +247,19 @@
     };
     mpv = {
       enable = true;
-      # Add your custom mpv configuration here
-      # config = {
-      #   "volume" = "70";
-      # };
+      config = {
+        gpu-context = "wayland";
+        hwdec = "auto-copy";
+        hwdec-codecs = "all";
+        hr-seek-framedrop = "no";
+        profile = "gpu-hq";
+        gpu-api = "vulkan";
+        screenshot-format = "png";
+        screenshot-high-bit-depth = "yes";
+        screenshot-png-compression = "0";
+        screenshot-directory = "~/Pictures/mpv/";
+        screenshot-template = "%F - [%P] (%#01n)";
+      };
     };
     brave = {
       enable = true;
