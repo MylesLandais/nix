@@ -1,40 +1,3 @@
-# ============================================================================
-# Home Manager Configuration - User Environment Setup
-# ============================================================================
-#
-# This file configures the user environment using Home Manager, providing
-# a declarative way to manage user-specific packages, dotfiles, and settings.
-#
-# STRUCTURE:
-# ==========
-# - imports: Modular configurations and external modules
-# - home: Core user information and state management
-# - programs: Application-specific configurations
-# - xdg: XDG Base Directory compliance
-# - qt/stylix: Theming and appearance
-#
-# MODULAR IMPORTS:
-# ================
-# - ./modules/pro.nix: Professional creative tools
-# - stylix: System-wide theming
-# - tokyonight: Color scheme for supported applications
-#
-# KEY FEATURES:
-# =============
-# - User packages: Comprehensive toolset for development and productivity
-# - Browser configuration: Brave with extensions and custom preferences
-# - Terminal theming: Ghostty with Kanagawa theme
-# - File associations: Default applications for various MIME types
-# - GTK theming: Kanagawa theme with Bibata cursors
-#
-# MAINTENANCE:
-# ============
-# - Update home.stateVersion when upgrading NixOS versions
-# - Use home-manager switch to apply changes
-# - Backup existing configs before major changes
-#
-# ============================================================================
-
 {
   pkgs,
   lib,
@@ -45,10 +8,6 @@
   ...
 }:
 {
-
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
-
   imports = [
     ./hypr.nix
     # ./nixvim  # Temporarily disabled
@@ -294,9 +253,11 @@
             ms-vscode-remote.remote-ssh
             redhat.vscode-yaml
             kilocode.kilo-code
+            mkhl.direnv
+            qufiwefefwoyn.kanagawa
           ];
         userSettings = {
-          # "workbench.colorTheme" = "Kanagawa"; # TODO: Fix Missing Theme and Extension
+          "workbench.colorTheme" = "Kanagawa"; # TODO: Fix Missing Theme and Extension
           "editor.fontFamily" = "'Maple Mono', 'JetBrains Mono', monospace"; # TODO: Test/Verify Maple font is available
           "terminal.integrated.fontFamily" = "'Maple Mono', 'JetBrains Mono', monospace";
           "editor.fontSize" = 16;
