@@ -254,10 +254,9 @@
             redhat.vscode-yaml
             kilocode.kilo-code
             mkhl.direnv
-            qufiwefefwoyn.kanagawa
           ];
         userSettings = {
-          "workbench.colorTheme" = "Kanagawa"; # TODO: Fix Missing Theme and Extension
+          #"workbench.colorTheme" = "Kanagawa"; # TODO: Fix Missing Theme and Extension
           "editor.fontFamily" = "'Maple Mono', 'JetBrains Mono', monospace"; # TODO: Test/Verify Maple font is available
           "terminal.integrated.fontFamily" = "'Maple Mono', 'JetBrains Mono', monospace";
           "editor.fontSize" = 16;
