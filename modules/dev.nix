@@ -106,8 +106,8 @@
             autoStart = true;
             ports = [ "8188:8188" ];
             extraOptions = [
-              "--gpus=all"             # Pass through all NVIDIA GPUs
-              "--ipc=host"             # Enable faster tensor operations
+              "--device=nvidia.com/gpu=all"             
+              "--ipc=host"             
             ];
             volumes = [
               "/home/warby/ComfyUI/user:/app/ComfyUI/user"          # Workflows, settings
@@ -134,12 +134,12 @@
 
             # GPU support for NVIDIA
             extraOptions = [
-              "--gpus=all"
+              "--device=nvidia.com/gpu=all"
               "--ipc=host"
             ];
 
             volumes = [
-              "/home/warby/Workspace:/home/jovyan/work:rw"
+              "/home/warby/Workspace/jupyter:/home/jovyan/workspace:rw"
               "/home/warby/.jupyter:/home/jovyan/.jupyter:rw"
             ];
 
@@ -150,6 +150,23 @@
               PGID = "1000";
             };
           };
+
+          vllm = {
+            image = "vllm/vllm-openai:latest";
+            autoStart = false;
+            ports = [ "8000:8000" ];
+            extraOptions = [
+              "--device=nvidia.com/gpu=all"
+              "--ipc=host"
+            ];
+            volumes = [
+              "/home/warby/.cache/huggingface:/root/.cache/huggingface"
+            ];
+            environment = {
+              TZ = "America/New_York";
+            };
+            cmd = [ "--model" "Qwen/Qwen2.5-0.5B" ];
+          };
         };
       };
     };
@@ -157,6 +174,7 @@
     # Open firewall for code-server port
     networking.firewall.allowedTCPPorts = [
       config.dev.containers.codeServer.port
+      8000
       8188
     ];
 

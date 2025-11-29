@@ -61,17 +61,22 @@
     inputs.tokyonight.homeManagerModules.default # Color schemes
   ];
 
+  fonts.fontconfig.enable = true;
+
   home = {
     inherit (vars) username;
     enableNixpkgsReleaseCheck = false;
     homeDirectory = "/home/${vars.username}";
     stateVersion = "24.11"; # Please read the comment before changing.
+
+
+
     file = {
       "${config.xdg.configHome}/ghostty/config".text = ''
         theme = "Kanagawa Dragon"
         background-opacity = 0.9
         window-decoration = false
-        font-family = "JetBrainsMono Nerd Font"
+        font-family = "'Maple Mono NF', JetBrainsMono Nerd Font'"
       '';
 
       "${config.xdg.configHome}/electron-flags.conf".text = ''
@@ -106,6 +111,7 @@
       nixos-rebuild-awake = "gnome-session-inhibit --inhibit idle sudo nixos-rebuild";
       nix-build-awake = "gnome-session-inhibit --inhibit idle nix build";
     };
+
 
     packages = with pkgs; [
       # Additions for declarative archive handling in Nemo and CLI
@@ -146,7 +152,8 @@
       nemo-fileroller # Nemo extension for context menu integration
       nerd-fonts._0xproto
       nerd-fonts.droid-sans-mono
-      nerd-fonts.maple-mono
+      maple-mono.truetype
+      maple-mono.NF-unhinted
       nix-search-tv
       nixos-generators
       nodejs_20 # Required for discord-ai-bot-lmstudio project (Node.js >=20.11.0)
@@ -286,15 +293,20 @@
             ms-vscode-remote.remote-containers
             ms-vscode-remote.remote-ssh
             redhat.vscode-yaml
-          ]
-          ++ [
             kilocode.kilo-code
           ];
         userSettings = {
-          "workbench.colorTheme" = "Kanagawa"; # Set after manual extension install
-          "editor.fontFamily" = "JetBrains Mono Nerd Font";
-          "terminal.integrated.fontFamily" = "JetBrains Mono Nerd Font";
-          # "kilo-code.apiKey" = "your-kilo-code-api-key";  # Set after manual install
+          # "workbench.colorTheme" = "Kanagawa"; # TODO: Fix Missing Theme and Extension
+          "editor.fontFamily" = "'Maple Mono', 'JetBrains Mono', monospace"; # TODO: Test/Verify Maple font is available
+          "terminal.integrated.fontFamily" = "'Maple Mono', 'JetBrains Mono', monospace";
+          "editor.fontSize" = 16;
+          "editor.fontWeight" = "500";
+          "editor.lineHeight" = 1.6;
+          "editor.letterSpacing" = 1; 
+          "terminal.integrated.fontSize" = 16;
+          "terminal.integrated.lineHeight" = 1.5;
+          "terminal.integrated.letterSpacing" = 1;
+          "editor.fontLigatures" = false;
         };
       };
     };
