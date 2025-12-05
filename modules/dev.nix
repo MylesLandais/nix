@@ -14,7 +14,7 @@
     };
 
     containers = {
-      codeServer = {
+      codeServer  = {
         image = lib.mkOption {
           type = lib.types.str;
           default = "linuxserver/code-server:latest";
@@ -106,8 +106,8 @@
             autoStart = true;
             ports = [ "8188:8188" ];
             extraOptions = [
-              "--device=nvidia.com/gpu=all"             
-              "--ipc=host"             
+              "--device=nvidia.com/gpu=all"
+              "--ipc=host"
             ];
             volumes = [
               "/home/warby/ComfyUI/user:/app/ComfyUI/user"          # Workflows, settings
@@ -140,14 +140,14 @@
 
             volumes = [
               "/home/warby/Workspace/jupyter:/home/jovyan/workspace:rw"
-              "/home/warby/.jupyter:/home/jovyan/.jupyter:rw"
             ];
 
             environment = {
               JUPYTER_ENABLE_LAB = "yes";
-              TZ = "America/New_York";
+              TZ = "America/Chicago";
               PUID = "1000";
               PGID = "1000";
+              JUPYTER_TOKEN = ""; # - [ ] TODO: Risk - Default / Auth Disabled
             };
           };
 
