@@ -63,6 +63,7 @@
     sessionVariables = {
       TERMINAL = "ghostty";
       EDITOR = "nvim";
+      GDK_BACKEND = "wayland,x11";
     };
 
     # Shell aliases for build-time sleep inhibition
@@ -110,6 +111,10 @@
       nemo
       nemo-fileroller # Nemo extension for context menu integration
       nerd-fonts._0xproto
+      xfce.ristretto # Image viewer
+      shared-mime-info # MIME utilities
+      webp-pixbuf-loader # WebP thumbnail support
+      xdg-utils # XDG utilities
       nerd-fonts.droid-sans-mono
       maple-mono.truetype
       maple-mono.NF-unhinted
@@ -177,6 +182,14 @@
         "x-scheme-handler/about" = [ "firefox.desktop" ];
         "x-scheme-handler/unknown" = [ "firefox.desktop" ];
         "x-scheme-handler/discord" = [ "vesktop.desktop" ];
+        "image/png" = [ "org.xfce.ristretto.desktop" ];
+        "image/jpeg" = [ "org.xfce.ristretto.desktop" ];
+        "image/gif" = [ "org.xfce.ristretto.desktop" ];
+        "image/webp" = [ "org.xfce.ristretto.desktop" ];
+        "image/avif" = [ "org.xfce.ristretto.desktop" ];
+        "image/heic" = [ "org.xfce.ristretto.desktop" ];
+        "image/bmp" = [ "org.xfce.ristretto.desktop" ];
+        "image/tiff" = [ "org.xfce.ristretto.desktop" ];
       };
     };
   };
@@ -286,6 +299,13 @@
       gtk.enable = true;
       mpv.enable = true;
       vesktop.enable = true;
+    };
+  };
+
+  dconf.settings = {
+    "org/nemo/preferences" = {
+      show-image-thumbnails = "always";
+      thumbnail-limit = lib.hm.gvariant.mkUint64 2147483648; # 2 GB
     };
   };
 }
