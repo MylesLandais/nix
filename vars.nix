@@ -25,7 +25,7 @@ in
 {
   hostName = "cerberus-nix";
   username = "warby";
-  userEmail = "warby@example.com";
+  userEmail = "myles.landais@protonmail.com";
 
   isDesktop = true;
   wallpaper = "${wp}/share/wallpapers/nix-wallpaper-nineish-catppuccin-mocha.png";
