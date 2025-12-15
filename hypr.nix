@@ -29,6 +29,9 @@ in
   # Home packages
   home.packages = [
     add_record_player
+    # Thumbnail backend packages for tumbler
+    pkgs.ffmpegthumbnailer  # video thumbnails
+    pkgs.poppler            # PDF thumbnails
   ];
 
   # ---------------------------------------------------------
@@ -102,6 +105,10 @@ in
         "move 100%-w-20,class:(GLava)"
         "noshadow,class:(GLava)"
         "noinitialfocus,title:(GLava)"
+      ];
+      windowrulev2 = [
+        "opacity 1.0 override 1.0 override,class:^(Brave-browser)$"
+        "noblur,class:^(Brave-browser)$"
       ];
       monitor = [
         # Bottom row - Three Dell monitors at y=2160

@@ -104,7 +104,6 @@
       };
     };
   };
-
   # NVIDIA Configuration
   hardware.graphics = {
     enable = true;
@@ -159,6 +158,7 @@
 
   services.gvfs.enable = true;
   services.udisks2.enable = true;
+  services.tumbler.enable = true;
 
   # USB power management fixes
   services.udev.extraRules = ''
@@ -216,7 +216,6 @@
       neovim
       vesktop
       mpv
-      gemini-cli
     ];
   };
 
