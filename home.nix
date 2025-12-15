@@ -43,6 +43,15 @@
         --enable-features=WaylandWindowDecorations
       '';
 
+      "${config.xdg.configHome}/brave-flags.conf".text = ''
+        --ozone-platform-hint=auto
+        --enable-features=WaylandWindowDecorations
+        --enable-wayland-ime
+        --disable-features=WaylandWpColorManagerV1
+        --enable-features=WebUIDarkMode
+        --force-dark-mode
+      '';
+
       ".config/code-server/config.yaml".text = ''
         bind-addr: 0.0.0.0:8080
         auth: password
@@ -160,6 +169,7 @@
       vulkan-tools
       wl-clipboard
       zed-editor
+      code-cursor-fhs
     ];
     pointerCursor = {
       gtk.enable = true;
@@ -243,6 +253,10 @@
     brave = {
       enable = true;
       commandLineArgs = [
+        "--ozone-platform-hint=auto"
+        "--enable-features=WaylandWindowDecorations"
+        "--enable-wayland-ime"
+        "--disable-features=WaylandWpColorManagerV1"
         "--enable-features=WebUIDarkMode"
         "--force-dark-mode"
       ];
