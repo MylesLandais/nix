@@ -124,33 +124,6 @@
           #   };
           # };
 
-          jupyter = {
-            image = "quay.io/jupyter/pytorch-notebook:cuda12-python-3.11.9";
-            autoStart = true;
-
-            ports = [
-              "8888:8888"
-            ];
-
-            # GPU support for NVIDIA
-            extraOptions = [
-              "--device=nvidia.com/gpu=all"
-              "--ipc=host"
-            ];
-
-            volumes = [
-              "/home/warby/Workspace/jupyter:/home/jovyan/workspace:rw"
-            ];
-
-            environment = {
-              JUPYTER_ENABLE_LAB = "yes";
-              TZ = "America/Chicago";
-              PUID = "1000";
-              PGID = "1000";
-              JUPYTER_TOKEN = ""; # - [ ] TODO: Risk - Default / Auth Disabled
-            };
-          };
-
           vllm = {
             image = "vllm/vllm-openai:latest";
             autoStart = false;
