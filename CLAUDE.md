@@ -151,54 +151,96 @@ Good: "Run nix check. Fix any errors. Then commit."
 
 Keep explanations brief and focused on implementation rationale. Prioritize clarity over completeness in all written content. When in doubt, prefer fewer words over more explanation. Reference the [Conventional Commits Specification](https://www.conventionalcommits.org/) for edge cases.
 
-## Nix Development Validation Rules (MANDATORY)
+## Nix Development Workflow
 
-When modifying any .nix files, flake.nix, flake.lock, or home-manager configuration:
+All changes follow this sequence: Edit → Validate with /nix-check → Commit → Apply with /nix-switch
 
-### Before Committing
+Do not skip /nix-check. Do not commit unvalidated changes. Do not apply changes to live system without validation.
 
-YOU MUST run `/nix-check` to validate all changes:
+### Where to Make Changes
 
-1. Syntax and formatting validation (`nix flake check`, `nix fmt`)
-2. Code quality linting (`statix check`)
-3. Dry-run rebuild test (`nixos-rebuild dry-activate --show-trace`)
+System configuration (kernel, boot, security, hardware, firewall, services): hosts/cerberus/configuration.nix
 
-If `/nix-check` reports errors:
-- Analyze each error with file path and line number
-- Propose precise fixes
-- Apply fixes and re-run `/nix-check`
-- Repeat until all checks pass
-- NEVER commit unvalidated Nix changes
+User environment (shell, git config, dotfiles, programs): home.nix or devtooling/ modules
 
-### Applying Changes to Live System
+Development tools (git, claude-code, remmina, etc.): devtooling/TOOLNAME/default.nix
 
-After `/nix-check` passes, use `/nix-switch` to apply changes:
+Desktop environment (Hyprland, keybinds, panels): hypr.nix, hyprpanel.nix
 
-1. Requires explicit user confirmation
-2. Tests changes on live system
-3. Rolls back automatically if it detects failures
+System packages available globally: environment.systemPackages in hosts/cerberus/configuration.nix
 
-### Validation Workflow
+User packages and dotfiles: home.packages or home.file in home.nix
 
-```
-Modify .nix file(s)
-         ↓
-    /nix-check (syntax, format, lint, dry-run)
-         ↓
-    Fix any errors and re-run /nix-check
-         ↓
-    All checks pass?
-         ↓
-    git commit (with proper conventional commits message)
-         ↓
-    /nix-switch (apply live rebuild with confirmation)
-```
+Shell functions and aliases: devtooling/shelltools/ (automatically imported)
 
-### Integration with Version Control
+## Common Procedures
 
-- NEVER propose commits for unvalidated Nix changes
-- Always include explanation of "why" in commit body if changes are substantial
-- Use scopes like `feat(hyprland)`, `fix(git)`, `chore(deps)` to indicate affected modules
-- Reference validation results in commit context when resolving complex issues
+### Add a System Package
 
-This ensures stable builds and maintainable configurations.
+Edit hosts/cerberus/configuration.nix. Find environment.systemPackages section. Add package name to list. Run /nix-check. If error "attribute missing", package doesn't exist in nixpkgs; search with nix search nixpkgs package-name. Commit with chore(packages): add package-name. Run /nix-switch.
+
+### Add User Program or Dotfile
+
+Edit home.nix. Find home.packages section or create home.file entry for dotfiles. Use proper XDG paths for config files. Run /nix-check. If home-manager syntax error, error message shows file and line number. Commit appropriately. Run /nix-switch (this applies home-manager changes).
+
+Important: Do NOT run home-manager switch alone. Always use nixos-rebuild switch which handles both system and home-manager.
+
+### Update Git Configuration
+
+Edit devtooling/git/default.nix. Find programs.git.settings section. Add or modify setting (e.g., credential.helper, user.name). Run /nix-check. Commit with chore(git): add or update setting_name. Run /nix-switch.
+
+Important: Git config file at ~/.config/git/config is read-only (symlink to /nix/store). All changes must be in devtooling/git/default.nix.
+
+Verify changes: After rebuild, check with cat ~/.config/git/config or git config --global key_name
+
+### Add Passwordless Sudo Rule
+
+Edit hosts/cerberus/configuration.nix. Find security.sudo.extraRules section. Add new rule with command path and NOPASSWD option. For command path, use /run/current-system/sw/bin/command (not ${pkgs.command} which may not exist). Run /nix-check. If error "attribute missing", the package path syntax is wrong; use plain path instead. Commit with chore(sudo): add NOPASSWD for command_name. Run /nix-switch.
+
+### Fix Build Errors After /nix-check
+
+Read error message and note file path and line number. Common errors: "attribute X missing" means typo or package doesn't exist in nixpkgs. "syntax error" means Nix syntax issue, check brackets and semicolons. "infinite recursion" means circular dependency, check for self-references. "Read-only file system" means trying to edit /nix/store directly; change the .nix module source instead. Fix the issue. Run /nix-check again. Repeat until all phases pass.
+
+### Handle Home-Manager Configuration Not Applying
+
+Changes to home.nix or devtooling/ should appear in ~/.config files after rebuild. If not: Verify rebuild ran by checking target file (e.g., cat ~/.config/git/config). If file is old, rebuild didn't apply changes. Cause is usually running home-manager switch instead of nixos-rebuild switch. Run correct command: sudo nixos-rebuild switch --flake /home/warby/Workspace/nix#cerberus. Wait for rebuild to complete. Check file again. If still not there, check if module is imported in home.nix and devtooling/default.nix. If still failing, run /nix-check for validation errors.
+
+### Shell Not Seeing Changes
+
+Changes to environment, PATH, or other shell variables need shell restart. Verify changes applied: Check config file or run git config --global credential.helper. Restart current shell with exec fish (or bash). Test command again. If still old values, reboot: sudo reboot. After reboot, verify.
+
+Important: Opening a new terminal window does NOT reload. Must restart the current shell with exec.
+
+## Validation Rules (MANDATORY)
+
+Always run /nix-check before committing Nix changes. Always run /nix-switch after committing to apply changes. Do not commit unvalidated changes. Do not apply changes without validation.
+
+## Integration with Version Control
+
+Commit messages follow Conventional Commits format. Explain the why for substantial changes. Use scopes like feat(hyprland), fix(git), chore(sudo) to indicate what changed. Reference validation passing in commit context if resolving complex issues.
+
+## Documentation and Resources
+
+Official references for understanding and debugging this configuration:
+
+Nix Manual: https://nixos.org/manual/nix/stable/ Reference for Nix language, flakes, and command-line tools.
+
+NixOS Manual: https://nixos.org/manual/nixos/stable/ System configuration, modules, and options.
+
+Home Manager Manual: https://home-manager-options.extranix.com/ User environment configuration and available options.
+
+NixOS Wiki - Declarative Package Management: https://nixos.wiki/wiki/Nixpkgs Practical guides for packages and modules.
+
+NixOS & Flakes Book (Community Guide): https://nixos-and-flakes.thiscute.world/ Comprehensive introduction to flakes and modern Nix development.
+
+Statix GitHub: https://github.com/nix-community/statix Nix linting tool documentation and available lints.
+
+Hyprland Documentation: https://wiki.hyprland.org/ Window manager configuration for this system.
+
+Fish Shell Manual: https://fishshell.com/docs/current/ Shell configuration and scripting for shell aliases and functions.
+
+Git Documentation: https://git-scm.com/doc Git config options and credential systems.
+
+Conventional Commits: https://www.conventionalcommits.org/ Commit message format specification (used in this repo).
+
+When troubleshooting: Check the NixOS Manual for module options. Check nixpkgs source for package names and available variants. For build errors, search error message in NixOS Discourse or GitHub issues. For language-specific config (fish, hyprland, etc.), check official docs for that tool.
