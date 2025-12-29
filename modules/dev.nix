@@ -84,22 +84,6 @@
             };
           };
 
-          neo4j = {
-            image = "neo4j:latest";
-            ports = [
-              "7474:7474"
-              "7687:7687"
-            ];
-            volumes = [
-              "/var/lib/neo4j/data:/data"
-              "/var/lib/neo4j/logs:/logs"
-              "/var/lib/neo4j/import:/var/lib/neo4j/import"
-              "/var/lib/neo4j/plugins:/plugins"
-            ];
-            environment = {
-              NEO4J_AUTH = "neo4j/password"; # Big ups default creds TT
-            };
-          };
           # ComfyUI with GPU support
           # comfy = {
           #   image = "ghcr.io/clsferguson/comfyui-docker:latest"; # Using a community-maintained, up-to-date image
