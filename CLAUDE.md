@@ -126,12 +126,30 @@ This commit adds syncthing integration. We added syncthing because we needed
 to sync files. It syncs files between devices. Now files are synced.  # Redundant "what", missing "why"
 ```
 
+## Claude Code Response Format (MANDATORY)
+
+All Claude Code responses to the user MUST follow these rules:
+
+- NEVER use emojis (no ✓, ✅, ⚠️, 🎉, etc.)
+- NEVER use bullet points or numbered lists for general text
+- NEVER use bold, italics, or other decorative formatting
+- NEVER use checkmarks, arrows, or other visual decorations
+- Keep responses brief and direct
+- Use plain text with line breaks for separation
+- Code blocks and command examples are acceptable
+
+Bad: "✅ Phase 1 passed successfully. **Ready for Phase 2:**"
+Good: "Phase 1 passed. Ready for Phase 2."
+
+Bad: "Here are the steps:
+1. Run nix check
+2. Fix errors
+3. Commit"
+Good: "Run nix check. Fix any errors. Then commit."
+
 ## General Guidelines
 
-- Keep explanations brief and focused on implementation rationale
-- Prioritize clarity over completeness in all written content
-- When in doubt, prefer fewer words over more explanation
-- Reference the [Conventional Commits Specification](https://www.conventionalcommits.org/) for edge cases
+Keep explanations brief and focused on implementation rationale. Prioritize clarity over completeness in all written content. When in doubt, prefer fewer words over more explanation. Reference the [Conventional Commits Specification](https://www.conventionalcommits.org/) for edge cases.
 
 ## Nix Development Validation Rules (MANDATORY)
 
