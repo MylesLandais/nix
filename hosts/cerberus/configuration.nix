@@ -383,13 +383,21 @@
     });
   '';
 
-  # Passwordless nixos-rebuild for development
+  # Passwordless commands for development and git operations
   security.sudo.extraRules = [
     {
       users = [ "warby" ];
       commands = [
         {
           command = "/run/current-system/sw/bin/nixos-rebuild";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "${pkgs.git}/bin/git";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "${pkgs.git-credential-libsecret}/bin/git-credential-libsecret";
           options = [ "NOPASSWD" ];
         }
       ];

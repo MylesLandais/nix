@@ -28,6 +28,10 @@
             format = "ssh";
             key = "~/.ssh/id_ed25519.pub";
           };
+
+          # Use credential cache to avoid Polkit/keyring prompts
+          # Credentials cached in memory for 1 hour
+          credential.helper = "cache --timeout=3600";
         };
       };
       delta = {
