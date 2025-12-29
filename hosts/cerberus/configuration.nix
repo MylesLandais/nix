@@ -13,7 +13,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./configuration-fixes.nix
     ../../modules/gaming.nix
     ../../modules/dev.nix
   ];
@@ -383,7 +382,7 @@
     });
   '';
 
-  # Passwordless commands for development and git operations
+  # Passwordless commands for development operations
   security.sudo.extraRules = [
     {
       users = [ "warby" ];
@@ -394,10 +393,6 @@
         }
         {
           command = "${pkgs.git}/bin/git";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "${pkgs.git-credential-libsecret}/bin/git-credential-libsecret";
           options = [ "NOPASSWD" ];
         }
       ];
