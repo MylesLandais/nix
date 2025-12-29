@@ -1,0 +1,134 @@
+# Claude Code Style Guide
+
+This document defines standards for all Claude Code interactions in this repository.
+
+## Commit Message Guidelines (MANDATORY)
+
+Commits MUST follow the [Conventional Commits Specification](https://www.conventionalcommits.org/).
+
+### Structure
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+### Type
+
+Required prefix indicating the nature of changes:
+
+- `feat`: Introduces a new feature (correlates with MINOR in Semantic Versioning)
+- `fix`: Patches a bug (correlates with PATCH in Semantic Versioning)
+- `docs`: Documentation-only changes
+- `style`: Changes that do not affect the meaning of code (formatting, missing semicolons, etc.)
+- `refactor`: Code change that neither fixes a bug nor adds a feature
+- `perf`: Code change that improves performance
+- `test`: Adding missing tests or correcting existing tests
+- `build`: Changes that affect the build system or dependencies
+- `chore`: Other changes that don't modify src or test files (e.g., build config, package updates)
+- `ci`: Changes to CI/CD configuration files and scripts
+
+### Scope (Optional)
+
+Contextual information in parentheses indicating what part of the codebase is affected:
+- Examples: `feat(hyprland)`, `fix(syncthing)`, `chore(deps)`
+
+### Description
+
+- Mandatory short summary after the colon and space
+- Concise, under 72 characters
+- Use imperative mood ("add" not "added")
+- No trailing period
+- Lowercase after colon
+
+### Body (Optional)
+
+- Separated from description by a blank line
+- Explain the motivation and what is being changed (the "why"), not the "what"
+- Include any breaking change information if applicable
+
+### Breaking Changes
+
+Indicate breaking changes with `!` before the colon:
+
+```
+feat(api)!: restructure authentication flow
+```
+
+Or use a footer:
+
+```
+BREAKING CHANGE: authentication tokens now require rotation every 30 days
+```
+
+### General Rules
+
+- NEVER use emojis, bullet points, numbered lists, or superfluous formatting
+- NEVER include AI attribution, decorations, or "Generated with" text
+- Single-line commits are preferred for simple changes
+- Multi-line commits only when explaining complex "why" context
+
+## Examples
+
+### Good Commits
+
+```
+feat: add DPMS monitor script for Hyprland reload
+```
+
+```
+feat(syncthing): add Obsidian vault sync configuration
+
+Configure automatic file synchronization between Cerberus and Hydra server
+with iPad as secondary device. Enable filesystem watching for responsive sync.
+```
+
+```
+fix(ghostty): correct keybind escape sequence
+
+Resolve issue where Shift+Enter was not properly sending newline character
+due to double-escaped backslash in keybind configuration.
+```
+
+```
+docs: add conventional commits style guide
+```
+
+```
+refactor(home-manager): simplify theme configuration
+```
+
+### Bad Commits
+
+```
+add cool new features  # Missing type, unclear scope
+```
+
+```
+🎉 feat: add awesome sauce emoji  # Contains emoji, vague description
+```
+
+```
+feat: add new feature
+
+- Added feature A
+- Added feature B
+- Also fixed thing C  # Bullet points, multiple concerns mixed
+```
+
+```
+feat: add syncthing
+
+This commit adds syncthing integration. We added syncthing because we needed
+to sync files. It syncs files between devices. Now files are synced.  # Redundant "what", missing "why"
+```
+
+## General Guidelines
+
+- Keep explanations brief and focused on implementation rationale
+- Prioritize clarity over completeness in all written content
+- When in doubt, prefer fewer words over more explanation
+- Reference the [Conventional Commits Specification](https://www.conventionalcommits.org/) for edge cases
