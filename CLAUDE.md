@@ -132,3 +132,55 @@ to sync files. It syncs files between devices. Now files are synced.  # Redundan
 - Prioritize clarity over completeness in all written content
 - When in doubt, prefer fewer words over more explanation
 - Reference the [Conventional Commits Specification](https://www.conventionalcommits.org/) for edge cases
+
+## Nix Development Validation Rules (MANDATORY)
+
+When modifying any .nix files, flake.nix, flake.lock, or home-manager configuration:
+
+### Before Committing
+
+YOU MUST run `/nix-check` to validate all changes:
+
+1. Syntax and formatting validation (`nix flake check`, `nix fmt`)
+2. Code quality linting (`statix check`)
+3. Dry-run rebuild test (`nixos-rebuild dry-activate --show-trace`)
+
+If `/nix-check` reports errors:
+- Analyze each error with file path and line number
+- Propose precise fixes
+- Apply fixes and re-run `/nix-check`
+- Repeat until all checks pass
+- NEVER commit unvalidated Nix changes
+
+### Applying Changes to Live System
+
+After `/nix-check` passes, use `/nix-switch` to apply changes:
+
+1. Requires explicit user confirmation
+2. Tests changes on live system
+3. Rolls back automatically if it detects failures
+
+### Validation Workflow
+
+```
+Modify .nix file(s)
+         ↓
+    /nix-check (syntax, format, lint, dry-run)
+         ↓
+    Fix any errors and re-run /nix-check
+         ↓
+    All checks pass?
+         ↓
+    git commit (with proper conventional commits message)
+         ↓
+    /nix-switch (apply live rebuild with confirmation)
+```
+
+### Integration with Version Control
+
+- NEVER propose commits for unvalidated Nix changes
+- Always include explanation of "why" in commit body if changes are substantial
+- Use scopes like `feat(hyprland)`, `fix(git)`, `chore(deps)` to indicate affected modules
+- Reference validation results in commit context when resolving complex issues
+
+This ensures stable builds and maintainable configurations.
