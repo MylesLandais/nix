@@ -15,6 +15,13 @@
     };
     nur.url = "github:nix-community/NUR";
     nixified-ai.url = "github:nixified-ai/flake";
+    thorium.url = "github:Rishabh5321/thorium_flake";
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    cursor-flake = {
+      url = "github:omarcresp/cursor-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    claude-code.url = "github:sadjow/claude-code-nix";
   };
 
   outputs =
@@ -24,6 +31,9 @@
       nixpkgs,
       home-manager,
       nur,
+      thorium,
+      zen-browser,
+      cursor-flake,
       ...
     }@inputs:
     let
@@ -33,7 +43,10 @@
         config = {
           allowUnfree = true;
         };
-        overlays = [ inputs.nix-vscode-extensions.overlays.default ];
+        overlays = [
+          inputs.nix-vscode-extensions.overlays.default
+          inputs.claude-code.overlays.default
+        ];
       };
       vars = import ./vars.nix { inherit pkgs; };
     in

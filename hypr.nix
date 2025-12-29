@@ -107,8 +107,8 @@ in
         "noinitialfocus,title:(GLava)"
       ];
       windowrulev2 = [
-        "opacity 1.0 override 1.0 override,class:^(Brave-browser)$"
-        "noblur,class:^(Brave-browser)$"
+        "opacity 1.0 override 1.0 override,class:^(chromium|Chromium|vivaldi|Vivaldi)$"
+        "noblur,class:^(chromium|Chromium|vivaldi|Vivaldi)$"
       ];
       monitor = [
         # Bottom row - Three Dell monitors at y=2160
@@ -156,6 +156,7 @@ in
         "dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && systemctl --user stop hyprland-session.target && systemctl --user start hyprland-session.target"
         "hyprpanel &"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+        "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         "hyprpaper &"
         "add_record_player"
       ];
@@ -165,7 +166,7 @@ in
       ];
       bind = [
         "$mod, RETURN, exec,ghostty"
-        "$mod, W, exec, brave"
+        "$mod, W, exec, chromium"
         "$mod, C, exec, Cider"
         "$mod, Q, killactive,"
         "$mod, M, exit,"
@@ -229,4 +230,23 @@ in
     pkgs.gnome-settings-daemon
     pkgs.libsecret
   ];
+
+  # Declarative symlink for Ristretto local path access
+  home.file."Hydra".source = config.lib.file.mkOutOfStoreSymlink 
+    "/run/user/1000/gvfs/smb-share:server=hydra,share=data";
+
+  # Systemd service to auto-mount SMB share
+  systemd.user.services.mount-hydra = {
+    Unit = {
+      Description = "Mount Hydra SMB Share";
+      After = [ "graphical-session.target" "network-online.target" ];
+      Wants = [ "network-online.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.glib}/bin/gio mount smb://hydra/data";
+      Restart = "on-failure";
+      RestartSec = "30s";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
 }

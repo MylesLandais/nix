@@ -5,6 +5,23 @@
   ...
 }:
 
+let
+  # Wrapper script for Sunshine streaming via gamescope (iPad Mini native resolution)
+  steam-sunshine = pkgs.writeShellScriptBin "steam-sunshine" ''
+    # Launch Steam Big Picture inside gamescope for clean Sunshine capture
+    # Resolution: iPad Mini native (2266x1488 @ 60Hz)
+    exec gamescope \
+      --adaptive-sync \
+      --steam \
+      --mangoapp \
+      -W 2266 -H 1488 \
+      -w 2266 -h 1488 \
+      -r 60 \
+      -f \
+      --rt \
+      -- steam -bigpicture
+  '';
+in
 {
   # Graphics support for 3D gaming
   # hardware.graphics = {
@@ -34,6 +51,7 @@
   # Comprehensive gaming and emulation toolset
   environment.systemPackages = with pkgs; [
     # Core gaming tools
+    steam-sunshine # Gamescope wrapper for Sunshine streaming
     gamescope # Compositor for gaming
     lutris # Game library manager
     heroic # Epic/GOG game launcher

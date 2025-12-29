@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    ./claude-code
     ./elixir
     ./git
     ./gleam
@@ -21,6 +22,7 @@
     devtooling.enable = lib.mkEnableOption "Enable devtooling module";
   };
   config = lib.mkIf config.devtooling.enable {
+    claude-code.enable = lib.mkDefault true;
     git.enable = lib.mkDefault true;
     go.enable = lib.mkDefault false;
     kubernetes.enable = lib.mkDefault false;

@@ -22,6 +22,10 @@
         file = ../../secrets/ollama.age;
         owner = "root";
       };
+      anthropic-api-key = {
+        file = ../../secrets/anthropic-api-key.age;
+        owner = "warby";
+      };
     };
   };
 

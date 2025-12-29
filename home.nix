@@ -26,7 +26,7 @@
     inherit (vars) username;
     enableNixpkgsReleaseCheck = false;
     homeDirectory = "/home/${vars.username}";
-    stateVersion = "24.11"; # Please read the comment before changing.
+    stateVersion = "25.05"; # Please read the comment before changing.
 
 
 
@@ -35,7 +35,8 @@
         theme = "Kanagawa Dragon"
         background-opacity = 0.9
         window-decoration = false
-        font-family = "'Maple Mono NF', JetBrainsMono Nerd Font'"
+        font-family = "'Maple Mono NF', JetBrainsMono Nerd Font"
+        keybind = shift+enter=send_text:\n
       '';
 
       "${config.xdg.configHome}/electron-flags.conf".text = ''
@@ -43,14 +44,55 @@
         --enable-features=WaylandWindowDecorations
       '';
 
-      "${config.xdg.configHome}/brave-flags.conf".text = ''
-        --ozone-platform-hint=auto
-        --enable-features=WaylandWindowDecorations
+      "${config.xdg.configHome}/chromium-flags.conf".text = ''
+        --ozone-platform-hint=wayland
         --enable-wayland-ime
-        --disable-features=WaylandWpColorManagerV1
-        --enable-features=WebUIDarkMode
-        --force-dark-mode
       '';
+
+      "${config.xdg.configHome}/vivaldi-flags.conf".text = ''
+        --ozone-platform-hint=wayland
+        --enable-wayland-ime
+      '';
+
+      "${config.xdg.configHome}/thorium-flags.conf".text = ''
+        --ozone-platform-hint=wayland
+        --enable-wayland-ime
+      '';
+
+      "${config.home.homeDirectory}/.local/share/nemo/actions/open-ghostty.nemo_action".text = ''
+        [Nemo Action]
+        Active=true
+        Name=Open in Ghostty
+        Comment=Open Ghostty terminal in the current directory
+        Exec=${pkgs.ghostty}/bin/ghostty --working-directory=%F
+        Icon-Name=com.mitchellh.ghostty
+        Selection=any
+        Extensions=dir;
+        Quote=double
+      '';
+
+      # ".local/share/applications/open-stash-userscript.desktop".text = ''
+      #   [Desktop Entry]
+      #   Name=Install Stash Userscript
+      #   Exec=chromium %u ~/.config/stash/open-media-player.user.js
+      #   Type=Application
+      #   Categories=Utility;
+      # '';
+
+      # "stash/open-media-player.user.js".source =
+      #   let
+      #     rawScript = builtins.fetchurl {
+      #       url = "https://raw.githubusercontent.com/7dJx1qP/stash-userscripts/master/stash_open_media_player.user.js";
+      #       sha256 = "sha256-PLACEHOLDER";
+      #     };
+      #     customizedScript = pkgs.runCommand "stash-open-media-player-custom.user.js" {} ''
+      #       sed '
+      #         s|// @match.*http://localhost:9999/*|// @match               http://localhost:9999/*|
+      #         s|// @match.*https://localhost:9999/*|// @match              https://localhost:9999/*|
+      #       ' ${rawScript} > $out
+      #     '';
+      #   in
+      #     customizedScript;
 
       ".config/code-server/config.yaml".text = ''
         bind-addr: 0.0.0.0:8080
@@ -73,6 +115,7 @@
       TERMINAL = "ghostty";
       EDITOR = "nvim";
       GDK_BACKEND = "wayland,x11";
+      ANTHROPIC_API_KEY = "$ANTHROPIC_API_KEY";
     };
 
     # Shell aliases for build-time sleep inhibition
@@ -127,6 +170,7 @@
       nerd-fonts.droid-sans-mono
       maple-mono.truetype
       maple-mono.NF-unhinted
+      # mpv # External media player - managed via programs.mpv
       nix-search-tv
       nixos-generators
       nodejs_20 # Required for discord-ai-bot-lmstudio project (Node.js >=20.11.0)
@@ -169,7 +213,12 @@
       vulkan-tools
       wl-clipboard
       zed-editor
-      code-cursor-fhs
+       inputs.cursor-flake.packages.${pkgs.stdenv.hostPlatform.system}.default
+      # Chromium-based browsers
+      vivaldi
+      inputs.thorium.packages.${pkgs.stdenv.hostPlatform.system}.thorium-avx2
+      # Firefox-based browser (stable Wayland/NVIDIA, uses DMABUF instead of Mailbox)
+      inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
     pointerCursor = {
       gtk.enable = true;
@@ -200,11 +249,23 @@
         "image/heic" = [ "org.xfce.ristretto.desktop" ];
         "image/bmp" = [ "org.xfce.ristretto.desktop" ];
         "image/tiff" = [ "org.xfce.ristretto.desktop" ];
+        "video/mp4" = [ "mpv.desktop" ];
+        "video/mpeg" = [ "mpv.desktop" ];
+        "video/webm" = [ "mpv.desktop" ];
+        "video/x-matroska" = [ "mpv.desktop" ];
+        "video/quicktime" = [ "mpv.desktop" ];
+        "application/ogg" = [ "mpv.desktop" ];
       };
     };
   };
 
-  programs = {
+   programs = {
+    chromium = {
+      enable = true;
+      extensions = [
+        # { id = "dhdgffkkebhmkhlelgalapkzlidofg"; } # Tampermonkey - TODO: fix ID validation issue
+      ];
+    };
     home-manager.enable = true;
     firefox.enable = true;
     git = {
@@ -248,25 +309,19 @@
         screenshot-png-compression = "0";
         screenshot-directory = "~/Pictures/mpv/";
         screenshot-template = "%F - [%P] (%#01n)";
+        hr-seek = "yes";
+        seek = "exact";
       };
+      extraInput = ''
+        , frame-step ; show-text "Frame forward"
+        . frame-back-step ; show-text "Frame backward"
+        [ ignore ; frame-back-step ; set time-pos ''${time-pos}; set ab-loop-a ''${time-pos}; show-text "A set at ''${time-pos}"
+        ] ignore ; frame-step ; set time-pos ''${time-pos}; set ab-loop-b ''${time-pos}; show-text "B set at ''${time-pos}"
+        l set ab-loop-a no; set ab-loop-b no; show-text "A-B loop cleared"
+      '';
+      scripts = with pkgs.mpvScripts; [ uosc ];
     };
-    brave = {
-      enable = true;
-      commandLineArgs = [
-        "--ozone-platform-hint=auto"
-        "--enable-features=WaylandWindowDecorations"
-        "--enable-wayland-ime"
-        "--disable-features=WaylandWpColorManagerV1"
-        "--enable-features=WebUIDarkMode"
-        "--force-dark-mode"
-      ];
-      extensions = [
-        { id = "akibfjgmcjogdlefokjmhblcibgkndog"; } # Shazam
-        { id = "djnghjlejbfgnbnmjfgbdaeafbiklpha"; } # Kanagawa Theme
-        { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
-        { id = "mmioliijnhnoblpgimnlajmefafdfilb"; } # SponsorBlock
-      ];
-    };
+    # mpv: Frame-accurate A-B looping with uosc for precise video analysis
 
     vscode = {
       enable = true;
@@ -320,6 +375,11 @@
     "org/nemo/preferences" = {
       show-image-thumbnails = "always";
       thumbnail-limit = lib.hm.gvariant.mkUint64 2147483648; # 2 GB
+      "context-menus-show-open-in-terminal" = true;
+    };
+    "org/cinnamon/desktop/default-applications/terminal" = {
+      exec = "${pkgs.ghostty}/bin/ghostty";
+      exec-arg = "--working-directory";
     };
   };
 }
