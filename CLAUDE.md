@@ -219,6 +219,23 @@ Always run /nix-check before committing Nix changes. Always run /nix-switch afte
 
 Commit messages follow Conventional Commits format. Explain the why for substantial changes. Use scopes like feat(hyprland), fix(git), chore(sudo) to indicate what changed. Reference validation passing in commit context if resolving complex issues.
 
+## Task Completion Pattern
+
+After completing a task (especially multi-step work like configuration changes):
+
+Report completion status plainly. Include work summary describing what was changed. Verify changes are tracked in git with commit hash and log. Report any files modified or deployed. If validation or rebuilds ran, confirm they passed.
+
+Offer continuity options using multiple choice questions. Each option should represent a distinct next action, not a phase continuation. Avoid "continue to phase 2" style prompts. Offer choices like: review specific aspect, test functionality, start a new task, or done.
+
+Include verification steps. For Nix changes: Confirm nix-check passed, rebuild succeeded, and files deployed to expected locations. For git work: Show recent commits and verify files are staged. For system changes: Test the functionality that was modified.
+
+Document patterns for future iterations. After complex tasks, consider what could improve the workflow. Update this CLAUDE.md with lessons learned, common gotchas, or new best practices discovered during execution. This ensures continuous improvement and helps future work avoid similar pitfalls.
+
+Examples of completed verification:
+- Git: commit hash, file changes, staging status
+- Nix: validation phases passed, rebuild success, deployment symlinks confirmed
+- System: functionality tested, services running, configuration applied to expected locations
+
 ## Documentation and Resources
 
 Official references for understanding and debugging this configuration:
