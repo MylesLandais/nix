@@ -219,6 +219,8 @@
       inputs.thorium.packages.${pkgs.stdenv.hostPlatform.system}.thorium-avx2
       # Firefox-based browser (stable Wayland/NVIDIA, uses DMABUF instead of Mailbox)
       inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+      # Persistent memory tool for AI agents
+      inputs.beads.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
     pointerCursor = {
       gtk.enable = true;

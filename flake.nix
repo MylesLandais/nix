@@ -22,6 +22,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code.url = "github:sadjow/claude-code-nix";
+    beads.url = "github:steveyegge/beads";
   };
 
   outputs =
@@ -34,6 +35,7 @@
       thorium,
       zen-browser,
       cursor-flake,
+      beads,
       ...
     }@inputs:
     let
