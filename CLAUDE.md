@@ -151,6 +151,24 @@ Good: "Run nix check. Fix any errors. Then commit."
 
 Keep explanations brief and focused on implementation rationale. Prioritize clarity over completeness in all written content. When in doubt, prefer fewer words over more explanation. Reference the [Conventional Commits Specification](https://www.conventionalcommits.org/) for edge cases.
 
+## Documentation Standards (MANDATORY)
+
+File naming rules:
+- NEVER use ALL CAPS filenames (README.md, CHANGELOG.md, CONTRIBUTING.md, LICENSE.md)
+- Use lowercase with hyphens: readme.md, changelog.md, contributing.md, license.md
+- Prefer descriptive lowercase names: setup-guide.md, api-reference.md
+
+Documentation creation rules:
+- NEVER create documentation files unless explicitly requested by the user
+- Do not proactively generate readme files, changelogs, or contributing guides
+- Avoid cluttering repositories with boilerplate documentation
+- If documentation is needed, keep it minimal and focused
+- Prefer inline code comments over separate documentation files when appropriate
+- Consolidate related documentation rather than creating multiple small files
+
+Bad filenames: README.md, CHANGELOG.md, CONTRIBUTING.md, SECURITY.md, CODE_OF_CONDUCT.md
+Good filenames: readme.md, changelog.md, contributing.md, security.md, code-of-conduct.md
+
 ## Nix Development Workflow
 
 All changes follow this sequence: Edit → Validate with /nix-check → Commit → Apply with /nix-switch

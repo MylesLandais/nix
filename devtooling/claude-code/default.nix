@@ -57,6 +57,23 @@
       Bad: "✅ Phase 1 passed. **Ready for Phase 2:**"
       Good: "Phase 1 passed. Ready for Phase 2."
 
+      ## Documentation Standards (MANDATORY)
+
+      File naming rules:
+      - NEVER use ALL CAPS filenames (README.md, CHANGELOG.md, CONTRIBUTING.md, LICENSE.md)
+      - Use lowercase with hyphens: readme.md, changelog.md, contributing.md, license.md
+      - Prefer descriptive lowercase names: setup-guide.md, api-reference.md
+
+      Documentation creation rules:
+      - NEVER create documentation files unless explicitly requested
+      - Do not proactively generate readme files, changelogs, or contributing guides
+      - Avoid cluttering repositories with boilerplate documentation
+      - If documentation is needed, keep it minimal and focused
+      - Prefer inline code comments over separate documentation files when appropriate
+
+      Bad filenames: README.md, CHANGELOG.md, CONTRIBUTING.md, SECURITY.md, CODE_OF_CONDUCT.md
+      Good filenames: readme.md, changelog.md, contributing.md, security.md, code-of-conduct.md
+
       ## Other Notes
 
       Keep output brief. Prioritize clarity. Reference [Conventional Commits](https://www.conventionalcommits.org/) for edge cases.
