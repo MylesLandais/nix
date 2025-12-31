@@ -23,6 +23,7 @@
     };
     claude-code.url = "github:sadjow/claude-code-nix";
     beads.url = "github:steveyegge/beads";
+    antigravity.url = "github:jacopone/antigravity-nix";
   };
 
   outputs =
@@ -36,6 +37,7 @@
       zen-browser,
       cursor-flake,
       beads,
+      antigravity,
       ...
     }@inputs:
     let
@@ -48,6 +50,7 @@
         overlays = [
           inputs.nix-vscode-extensions.overlays.default
           inputs.claude-code.overlays.default
+          inputs.antigravity.overlays.default
         ];
       };
       vars = import ./vars.nix { inherit pkgs; };

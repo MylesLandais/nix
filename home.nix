@@ -221,6 +221,8 @@
       inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
       # Persistent memory tool for AI agents
       inputs.beads.packages.${pkgs.stdenv.hostPlatform.system}.default
+      # Agentic IDE with Chrome integration
+      inputs.antigravity.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
     pointerCursor = {
       gtk.enable = true;
