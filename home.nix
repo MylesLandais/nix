@@ -44,6 +44,11 @@
         --enable-features=WaylandWindowDecorations
       '';
 
+      "${config.xdg.configHome}/chrome-flags.conf".text = ''
+        --ozone-platform-hint=wayland
+        --enable-wayland-ime
+      '';
+
       "${config.xdg.configHome}/chromium-flags.conf".text = ''
         --ozone-platform-hint=wayland
         --enable-wayland-ime
@@ -215,6 +220,7 @@
       zed-editor
        inputs.cursor-flake.packages.${pkgs.stdenv.hostPlatform.system}.default
       # Chromium-based browsers
+      google-chrome
       vivaldi
       inputs.thorium.packages.${pkgs.stdenv.hostPlatform.system}.thorium-avx2
       # Firefox-based browser (stable Wayland/NVIDIA, uses DMABUF instead of Mailbox)
