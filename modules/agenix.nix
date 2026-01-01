@@ -21,10 +21,10 @@
       #   file = ../secrets/code-server-password.age;
       #   owner = "warby";
       # };
-      ollama = {
-        file = ../secrets/ollama.age;
-        owner = "root";
-      };
+      # ollama = {
+      #   file = ../secrets/ollama.age;
+      #   owner = "root";
+      # };
       # anthropic-api-key = {
       #   file = ../secrets/anthropic-api-key.age;
       #   owner = "warby";
