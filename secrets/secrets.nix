@@ -1,6 +1,6 @@
 let
   warby = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQPlTg3O6tXvjOO8+hVGWfu7tr2lzgAdu+EFVNV2BYY landais.myles@gmail.com";
-  system = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQPlTg3O6tXvjOO8+hVGWfu7tr2lzgAdu+EFVNV2BYY landais.myles@gmail.com"; # Using same key for system decryption
+  system = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILDhpdly6hkNcPAH1NVJM3NTrFu9+t5ukf/IRC/uL4KO root@cerberus-nix";
   users = [ warby ];
   systems = [ system ];
 in
