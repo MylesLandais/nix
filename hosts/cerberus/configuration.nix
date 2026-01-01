@@ -15,6 +15,7 @@
     ./hardware-configuration.nix
     ../../modules/gaming.nix
     ../../modules/dev.nix
+    ../../modules/agenix.nix
   ];
 
   # ---------------------------------------------------------------------------
