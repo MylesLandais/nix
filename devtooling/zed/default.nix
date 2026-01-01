@@ -14,7 +14,7 @@
       userSettings = {
         language_models = {
           openai_compatible = {
-            "Z AI" = {
+            "ZAI" = {
               api_url = "https://api.z.ai/api/paas/v4";
               available_models = [
                 {

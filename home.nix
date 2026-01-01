@@ -121,7 +121,7 @@
       EDITOR = "nvim";
       GDK_BACKEND = "wayland,x11";
       ANTHROPIC_API_KEY = "$ANTHROPIC_API_KEY";
-      Z_AI_API_KEY = "$(cat /run/agenix/zai-api-key)";
+      ZAI_API_KEY = "$(cat /run/agenix/zai-api-key)";
     };
 
     # Shell aliases for build-time sleep inhibition
@@ -346,6 +346,7 @@
             ms-vscode-remote.remote-ssh
             redhat.vscode-yaml
             kilocode.kilo-code
+            rooveterinaryinc.roo-cline
             mkhl.direnv
           ];
         userSettings = {
