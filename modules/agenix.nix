@@ -26,6 +26,10 @@
         file = ../../secrets/anthropic-api-key.age;
         owner = "warby";
       };
+      zai-api-key = {
+        file = ../../secrets/zai-api-key.age;
+        owner = "warby";
+      };
     };
   };
 

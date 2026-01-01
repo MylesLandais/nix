@@ -121,6 +121,7 @@
       EDITOR = "nvim";
       GDK_BACKEND = "wayland,x11";
       ANTHROPIC_API_KEY = "$ANTHROPIC_API_KEY";
+      Z_AI_API_KEY = "$(cat /run/agenix/zai-api-key)";
     };
 
     # Shell aliases for build-time sleep inhibition
@@ -354,7 +355,7 @@
           "editor.fontSize" = 16;
           "editor.fontWeight" = "500";
           "editor.lineHeight" = 1.6;
-          "editor.letterSpacing" = 1; 
+          "editor.letterSpacing" = 1;
           "terminal.integrated.fontSize" = 16;
           "terminal.integrated.lineHeight" = 1.5;
           "terminal.integrated.letterSpacing" = 1;

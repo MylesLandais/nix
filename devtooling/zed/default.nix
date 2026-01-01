@@ -12,6 +12,23 @@
     programs.zed-editor = {
       enable = true;
       userSettings = {
+        language_models = {
+          openai_compatible = {
+            "Z AI" = {
+              api_url = "https://api.z.ai/api/paas/v4";
+              available_models = [
+                {
+                  name = "glm-4.7";
+                  display_name = "GLM-4.7 (Z.ai)";
+                  max_tokens = 200000;
+                  capabilities = {
+                    tools = true;
+                  };
+                }
+              ];
+            };
+          };
+        };
         vim_mode = true;
         terminal = {
           alternate_scroll = "off";
