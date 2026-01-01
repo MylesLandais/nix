@@ -24,6 +24,7 @@
     claude-code.url = "github:sadjow/claude-code-nix";
     beads.url = "github:steveyegge/beads";
     antigravity.url = "github:jacopone/antigravity-nix";
+    agenix.url = "github:ryantm/agenix";
   };
 
   outputs =
@@ -38,6 +39,7 @@
       cursor-flake,
       beads,
       antigravity,
+      agenix,
       ...
     }@inputs:
     let
@@ -67,7 +69,8 @@
           })
           ./hosts/cerberus/configuration.nix
           chaotic.nixosModules.default
-          # inputs.nixified-ai.nixosModules.comfyui 
+          inputs.agenix.nixosModules.default
+          # inputs.nixified-ai.nixosModules.comfyui
           # TODO Broken Input // pending removal
           ./modules/gnome-keyring.nix
           #./modules/sillytavern.nix
