@@ -64,6 +64,16 @@
           };
           working_directory = "current_project_directory";
         };
+        agent_servers = {
+          "Opencode" = {
+            type = "custom";
+            command = "opencode";
+            args = [
+              "acp"
+            ];
+            env = {};
+          };
+        };
       };
     };
   };
