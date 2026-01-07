@@ -17,6 +17,18 @@
 
       Enforce consistent commits and output across all projects.
 
+      ## Error Handling
+
+      When a command or task fails, report the error and ask for guidance. Avoid generating documentation or summary files as a workaround for failed execution. If code cannot run, surface the blocker rather than documenting hypothetical outcomes.
+
+      ## Artifact Discipline
+
+      Prefer chat responses over file creation for plans, status updates, and explanations. Create files only when they are source code, configuration, or explicitly requested artifacts. Avoid generating markdown reports, guides, or summaries unless asked.
+
+      ## Environment
+
+      This is a NixOS system. Use `docker compose` (space, not hyphen). Binary paths may differ from standard distributions. Ask about missing commands rather than assuming paths.
+
       ## Commit Messages (MANDATORY)
 
       Follow [Conventional Commits](https://www.conventionalcommits.org/):
@@ -73,6 +85,22 @@
 
       Bad filenames: README.md, CHANGELOG.md, CONTRIBUTING.md, SECURITY.md, CODE_OF_CONDUCT.md
       Good filenames: readme.md, changelog.md, contributing.md, security.md, code-of-conduct.md
+
+      ## Dependency Management (MANDATORY)
+
+      Direct package installation commands are forbidden. Never use pip install or pip3 install.
+
+      Python packages: Use `uv add <package>` to add dependencies and `uv remove <package>` to remove them. This updates pyproject.toml and uv.lock correctly.
+
+      Services and infrastructure: Add or modify services in docker-compose.yml. Use `docker compose up --build` or `docker compose restart <service>` to apply changes.
+
+      Before adding dependencies, inspect the environment. Run `docker compose ps` to see running services. Check pyproject.toml or run `uv pip list` to see current Python packages. Read docker-compose.yml for available services.
+
+      Bad: pip install redis
+      Good: uv add redis
+
+      Bad: manually installing a database
+      Good: adding the service to docker-compose.yml and running docker compose up
 
       ## Other Notes
 
