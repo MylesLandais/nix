@@ -71,7 +71,7 @@ in
     }))
     libretro.swanstation # PS1 core (modern)
     libretro.beetle-psx # PS1 core (accurate)
-    snes9x-gtk # Super Nintendo
+    # snes9x-gtk # Super Nintendo (Temporarily removed to unblock system rebuild)
     mednafen # Multi-system emulator
     pcsx2 # PlayStation 2
     rpcs3 # PlayStation 3

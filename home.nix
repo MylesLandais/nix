@@ -169,7 +169,7 @@
       nemo
       nemo-fileroller # Nemo extension for context menu integration
       nerd-fonts._0xproto
-      xfce.ristretto # Image viewer
+      pkgs.ristretto # Image viewer
       shared-mime-info # MIME utilities
       webp-pixbuf-loader # WebP thumbnail support
       xdg-utils # XDG utilities
@@ -252,14 +252,14 @@
         "x-scheme-handler/about" = [ "firefox.desktop" ];
         "x-scheme-handler/unknown" = [ "firefox.desktop" ];
         "x-scheme-handler/discord" = [ "vesktop.desktop" ];
-        "image/png" = [ "org.xfce.ristretto.desktop" ];
-        "image/jpeg" = [ "org.xfce.ristretto.desktop" ];
-        "image/gif" = [ "org.xfce.ristretto.desktop" ];
-        "image/webp" = [ "org.xfce.ristretto.desktop" ];
-        "image/avif" = [ "org.xfce.ristretto.desktop" ];
-        "image/heic" = [ "org.xfce.ristretto.desktop" ];
-        "image/bmp" = [ "org.xfce.ristretto.desktop" ];
-        "image/tiff" = [ "org.xfce.ristretto.desktop" ];
+        "image/png" = [ "ristretto.desktop" ];
+        "image/jpeg" = [ "ristretto.desktop" ];
+        "image/gif" = [ "ristretto.desktop" ];
+        "image/webp" = [ "ristretto.desktop" ];
+        "image/avif" = [ "ristretto.desktop" ];
+        "image/heic" = [ "ristretto.desktop" ];
+        "image/bmp" = [ "ristretto.desktop" ];
+        "image/tiff" = [ "ristretto.desktop" ];
         "video/mp4" = [ "mpv.desktop" ];
         "video/mpeg" = [ "mpv.desktop" ];
         "video/webm" = [ "mpv.desktop" ];
