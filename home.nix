@@ -36,7 +36,7 @@
         background-opacity = 0.9
         window-decoration = false
         font-family = "'Maple Mono NF', JetBrainsMono Nerd Font"
-        keybind = shift+enter=send_text:\n
+        keybind = shift+enter=send_text:\\n
       '';
 
       "${config.xdg.configHome}/electron-flags.conf".text = ''
