@@ -25,6 +25,7 @@
     beads.url = "github:steveyegge/beads";
     antigravity.url = "github:jacopone/antigravity-nix";
     agenix.url = "github:ryantm/agenix";
+    zed.url = "github:zed-industries/zed";
   };
 
   outputs =
@@ -40,6 +41,7 @@
       beads,
       antigravity,
       agenix,
+      zed,
       ...
     }@inputs:
     let
