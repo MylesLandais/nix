@@ -219,7 +219,7 @@
       vulkan-tools
       wl-clipboard
       zed-editor
-       inputs.cursor-flake.packages.${pkgs.stdenv.hostPlatform.system}.default
+      inputs.cursor-flake.packages.${pkgs.stdenv.hostPlatform.system}.default
       # Chromium-based browsers
       google-chrome
       vivaldi
