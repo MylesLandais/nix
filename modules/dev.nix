@@ -66,24 +66,6 @@
             autoStart = true;
           };
 
-          qdrant = {
-            image = "qdrant/qdrant:latest";
-            autoStart = true;
-            ports = [
-              "6333:6333" # HTTP API / Monitoring
-              "6334:6334" # gRPC API
-            ];
-            volumes = [
-              "/var/lib/qdrant/storage:/qdrant/storage"
-              # Optional: If you want custom config, uncomment and create the file
-              # "/var/lib/qdrant/config.yaml:/qdrant/config/production.yaml"
-            ];
-            environment = {
-              # Default logging level
-              QDRANT__LOG_LEVEL = "INFO";
-            };
-          };
-
           # ComfyUI with GPU support
           # comfy = {
           #   image = "ghcr.io/clsferguson/comfyui-docker:latest"; # Using a community-maintained, up-to-date image
