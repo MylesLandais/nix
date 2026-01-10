@@ -137,6 +137,7 @@
       bitwarden-desktop
       btop
       coreutils
+      devenv
       fastfetch
       fd
       ffmpeg
