@@ -370,6 +370,17 @@
     enable = true;
     platformTheme.name = "qt5ct";
   };
+
+  # GTK dark mode preferences (theme managed by Stylix)
+  gtk = {
+    enable = true;
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+  };
   stylix = {
     autoEnable = false;
     enable = true;
@@ -384,6 +395,10 @@
   };
 
   dconf.settings = {
+    # Dark mode signal for portals (Firefox, Chrome, GTK4 apps)
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
     "org/nemo/preferences" = {
       show-image-thumbnails = "always";
       thumbnail-limit = lib.hm.gvariant.mkUint64 2147483648; # 2 GB
