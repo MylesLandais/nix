@@ -59,6 +59,10 @@ in
     enable = true;
     # portalPackage is managed via `xdg.portal` above so we don't set it here
     settings = {
+      ecosystem = {
+        no_update_news = true;
+        no_donation_nag = true;
+      };
       general = {
         gaps_in = 5;
         gaps_out = 10;
