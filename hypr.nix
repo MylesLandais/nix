@@ -87,28 +87,31 @@ in
           "workspaces, 1, 6, default"
         ];
       };
+      # Window rules using v3 syntax (Hyprland 0.53+)
       windowrule = [
-        "float,title:(Picture-in-Picture)"
-        "pin,title:(Picture-in-Picture)"
-        "noshadow,title:(Picture-in-Picture)"
-        "size 25% 25%,title:(Picture-in-Picture)"
-        "move 100%-w-20,title:(Picture-in-Picture)"
-        "noinitialfocus,title:(Picture-in-Picture)"
-        "float,class:(mpv)"
-        "pin,class:(mpv)"
-        "noshadow,class:(mpv)"
-        "size 50% 50%,class:(mpv)"
-        "move 100%-w-20,class:(mpv)"
-        "noinitialfocus,class:(mpv)"
-        "float, class:(GLava)"
-        "size 100% 25%,class:(GLava)"
-        "move 100%-w-20,class:(GLava)"
-        "noshadow,class:(GLava)"
-        "noinitialfocus,title:(GLava)"
-      ];
-      windowrulev2 = [
-        "opacity 1.0 override 1.0 override,class:^(chromium|Chromium|vivaldi|Vivaldi)$"
-        "noblur,class:^(chromium|Chromium|vivaldi|Vivaldi)$"
+        # Picture-in-Picture rules
+        "match:title Picture-in-Picture, float on"
+        "match:title Picture-in-Picture, pin on"
+        "match:title Picture-in-Picture, no_shadow on"
+        "match:title Picture-in-Picture, size 25% 25%"
+        "match:title Picture-in-Picture, move 100%-w-20"
+        "match:title Picture-in-Picture, no_initial_focus on"
+        # MPV rules
+        "match:class mpv, float on"
+        "match:class mpv, pin on"
+        "match:class mpv, no_shadow on"
+        "match:class mpv, size 50% 50%"
+        "match:class mpv, move 100%-w-20"
+        "match:class mpv, no_initial_focus on"
+        # GLava rules
+        "match:class GLava, float on"
+        "match:class GLava, size 100% 25%"
+        "match:class GLava, move 100%-w-20"
+        "match:class GLava, no_shadow on"
+        "match:title GLava, no_initial_focus on"
+        # Browser opacity rules
+        "match:class ^(chromium|Chromium|vivaldi|Vivaldi)$, opacity 1.0 override 1.0 override"
+        "match:class ^(chromium|Chromium|vivaldi|Vivaldi)$, no_blur on"
       ];
       monitor = [
         # Bottom row - Three Dell monitors at y=2160
