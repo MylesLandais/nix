@@ -128,6 +128,7 @@
     shellAliases = {
       nixos-rebuild-awake = "gnome-session-inhibit --inhibit idle sudo nixos-rebuild";
       nix-build-awake = "gnome-session-inhibit --inhibit idle nix build";
+      npm = "bun";
     };
 
 
@@ -179,9 +180,9 @@
       maple-mono.NF-unhinted
       # mpv # External media player - managed via programs.mpv
       nix-search-tv
-      nixos-generators
-      nodejs_20 # Required for discord-ai-bot-lmstudio project (Node.js >=20.11.0)
-      nwg-look
+       nixos-generators
+       bun
+       nwg-look
       obsidian
       opencloud-desktop
       opencode
