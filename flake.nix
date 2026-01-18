@@ -1,6 +1,21 @@
 {
   description = "Cerberus NixOS Flake";
 
+  nixConfig = {
+    extra-substituters = [
+      "https://nix-community.cachix.org/"
+      "https://chaotic-nyx.cachix.org/"
+      "https://attic.xuyh0120.win/lantian"
+      "https://cache.nixos.org/"
+    ];
+    extra-trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8"
+      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
@@ -22,10 +37,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code.url = "github:sadjow/claude-code-nix";
-    beads.url = "github:steveyegge/beads";
     antigravity.url = "github:jacopone/antigravity-nix";
     agenix.url = "github:ryantm/agenix";
     zed.url = "github:zed-industries/zed";
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
   };
 
   outputs =
@@ -38,7 +53,6 @@
       thorium,
       zen-browser,
       cursor-flake,
-      beads,
       antigravity,
       agenix,
       zed,
@@ -67,6 +81,7 @@
           ({ config, pkgs, ... }: {
             nixpkgs.overlays = [
               nur.overlays.default
+              inputs.nix-cachyos-kernel.overlays.pinned
             ];
           })
           ./hosts/cerberus/configuration.nix

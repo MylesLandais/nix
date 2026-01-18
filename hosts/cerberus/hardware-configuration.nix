@@ -12,6 +12,7 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
+  boot.blacklistedKernelModules = [ "nova_core" ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/9467bee9-bd90-4e9e-a7fd-80d701fca550";
