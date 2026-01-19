@@ -201,6 +201,7 @@
       pulseaudio
       pulseaudio-ctl
       pulsemixer
+      python3
       qt6Packages.qt6ct
       revive
       ripgrep
