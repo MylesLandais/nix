@@ -41,6 +41,10 @@
     agenix.url = "github:ryantm/agenix";
     zed.url = "github:zed-industries/zed";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    opencode = {
+      url = "github:anomalyco/opencode";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -56,6 +60,7 @@
       antigravity,
       agenix,
       zed,
+      opencode,
       ...
     }@inputs:
     let

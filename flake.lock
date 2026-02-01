@@ -967,6 +967,26 @@
         "type": "github"
       }
     },
+    "opencode": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1769984033,
+        "narHash": "sha256-6wo5w/94+44AtVd6bRKlF261CHChAN9xejk5SjXe8ZM=",
+        "owner": "anomalyco",
+        "repo": "opencode",
+        "rev": "f23d8d343be94c1af2f67ddeaaddc556c9617420",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anomalyco",
+        "repo": "opencode",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -980,6 +1000,7 @@
         "nixified-ai": "nixified-ai",
         "nixpkgs": "nixpkgs_8",
         "nur": "nur",
+        "opencode": "opencode",
         "stylix": "stylix",
         "thorium": "thorium",
         "tokyonight": "tokyonight",
