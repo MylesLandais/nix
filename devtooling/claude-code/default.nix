@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  inputs,
   ...
 }:
 {
@@ -10,7 +11,7 @@
   };
 
   config = lib.mkIf config.claude-code.enable {
-    home.packages = with pkgs; [ pkgs.claude-code ];
+    home.packages = [ inputs.claude-code.packages.${pkgs.system}.claude-code ];
 
     home.file.".claude/CLAUDE.md".text = ''
       # Claude Code Global Style
