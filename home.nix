@@ -54,31 +54,6 @@
       "${config.xdg.configHome}/vivaldi-flags.conf".text = waylandBrowserFlags;
       "${config.xdg.configHome}/thorium-flags.conf".text = waylandBrowserFlags;
 
-      "${config.xdg.configHome}/electron-flags.conf".text = ''
-        --ozone-platform=wayland
-        --enable-features=WaylandWindowDecorations
-      '';
-
-      "${config.xdg.configHome}/chrome-flags.conf".text = ''
-        --ozone-platform-hint=wayland
-        --enable-wayland-ime
-      '';
-
-      "${config.xdg.configHome}/chromium-flags.conf".text = ''
-        --ozone-platform-hint=wayland
-        --enable-wayland-ime
-      '';
-
-      "${config.xdg.configHome}/vivaldi-flags.conf".text = ''
-        --ozone-platform-hint=wayland
-        --enable-wayland-ime
-      '';
-
-      "${config.xdg.configHome}/thorium-flags.conf".text = ''
-        --ozone-platform-hint=wayland
-        --enable-wayland-ime
-      '';
-
       "${config.home.homeDirectory}/.local/share/nemo/actions/open-ghostty.nemo_action".text = ''
         [Nemo Action]
         Active=true
