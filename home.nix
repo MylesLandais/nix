@@ -162,11 +162,11 @@
       nemo
       nemo-fileroller # Nemo extension for context menu integration
       nerd-fonts._0xproto
-      pkgs.ristretto # Image viewer
+      ristretto # Image viewer
       shared-mime-info # MIME utilities
       webp-pixbuf-loader # WebP thumbnail support
-      libheif
-      heif-pixbuf-loader
+      # libheif # TODO: Package may have been removed/renamed
+      # heif-pixbuf-loader # TODO: Package may have been removed/renamed
       xdg-utils # XDG utilities
       nerd-fonts.droid-sans-mono
       maple-mono.truetype
