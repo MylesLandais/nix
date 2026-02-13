@@ -143,6 +143,7 @@
       fd
       ffmpeg
       file-roller # GNOME archive manager
+      yt-dlp
       fishPlugins.forgit
       font-awesome
       gamemode
