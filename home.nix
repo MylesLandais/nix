@@ -30,14 +30,29 @@
 
 
 
-    file = {
+    file = let
+      waylandBrowserFlags = ''
+        --ozone-platform-hint=wayland
+        --enable-wayland-ime
+      '';
+    in {
       "${config.xdg.configHome}/ghostty/config".text = ''
         theme = "Kanagawa Dragon"
         background-opacity = 0.9
         window-decoration = false
         font-family = "'Maple Mono NF', JetBrainsMono Nerd Font"
-        keybind = shift+enter=send_text:\\n
+        keybind = shift+enter=send_text:\n
       '';
+
+      "${config.xdg.configHome}/electron-flags.conf".text = ''
+        --ozone-platform=wayland
+        --enable-features=WaylandWindowDecorations
+      '';
+
+      "${config.xdg.configHome}/chrome-flags.conf".text = waylandBrowserFlags;
+      "${config.xdg.configHome}/chromium-flags.conf".text = waylandBrowserFlags;
+      "${config.xdg.configHome}/vivaldi-flags.conf".text = waylandBrowserFlags;
+      "${config.xdg.configHome}/thorium-flags.conf".text = waylandBrowserFlags;
 
       "${config.xdg.configHome}/electron-flags.conf".text = ''
         --ozone-platform=wayland
