@@ -175,6 +175,8 @@
       pkgs.ristretto # Image viewer
       shared-mime-info # MIME utilities
       webp-pixbuf-loader # WebP thumbnail support
+      libheif
+      heif-pixbuf-loader
       xdg-utils # XDG utilities
       nerd-fonts.droid-sans-mono
       maple-mono.truetype
