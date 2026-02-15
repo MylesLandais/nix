@@ -421,6 +421,10 @@
           command = "${pkgs.git}/bin/git";
           options = [ "NOPASSWD" ];
         }
+        {
+          command = "/run/current-system/sw/bin/systemctl";
+          options = [ "NOPASSWD" ];
+        }
       ];
     }
   ];
