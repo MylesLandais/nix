@@ -387,6 +387,8 @@
     };
   };
 
+  services.network-manager-applet.enable = true;
+
   dconf.settings = {
     # Dark mode signal for portals (Firefox, Chrome, GTK4 apps)
     "org/gnome/desktop/interface" = {
