@@ -530,6 +530,7 @@
   environment.systemPackages = with pkgs; [
     # Graphics diagnostics
     libva-utils
+    nvtopPackages.nvidia
     vulkan-tools
     vulkan-validation-layers
     egl-wayland
