@@ -552,6 +552,7 @@
     # Applications
     bitwarden-desktop
     syncthing  # File synchronization
+    teamspeak6-client
   ];
 
   # ---------------------------------------------------------------------------
