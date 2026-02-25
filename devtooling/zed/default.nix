@@ -73,6 +73,14 @@
             ];
             env = {};
           };
+          "Kimi Code CLI" = {
+            type = "custom";
+            command = "kimi";
+            args = [
+              "acp"
+            ];
+            env = {};
+          };
         };
       };
     };

@@ -16,7 +16,8 @@
     ./remmina
     ./rust
     ./tmux
-    ./vscode-ai
+    ./code
+    ./kimi-cli
     ./zed
   ];
 
@@ -33,7 +34,8 @@
     remmina.enable = lib.mkDefault false;
     rust.enable = lib.mkDefault false;
     tmux.enable = lib.mkDefault false;
-    vscode-ai.enable = lib.mkDefault true;
+    code.enable = lib.mkDefault true;
+    kimi-cli.enable = lib.mkDefault true;
     zed.enable = lib.mkDefault false;
   };
 }

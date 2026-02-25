@@ -29,6 +29,7 @@
       url = "github:anomalyco/opencode";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    kimi-cli.url = "github:MoonshotAI/kimi-cli";
   };
 
   outputs =
