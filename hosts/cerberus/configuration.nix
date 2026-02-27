@@ -551,6 +551,7 @@
 
     # Applications
     bitwarden-desktop
+    gemini-cli
     syncthing  # File synchronization
     teamspeak6-client
   ];
