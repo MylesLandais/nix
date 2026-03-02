@@ -543,10 +543,7 @@
 
     # Desktop theming
     papirus-icon-theme
-    kdePackages.breeze-icons
-    kdePackages.qtmultimedia
     adwaita-icon-theme
-    sddm-astronaut
 
     # Applications
     bitwarden-desktop
