@@ -154,12 +154,6 @@
     font.size = 16;
   };
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs.kdePackages; [ xdg-desktop-portal-kde ];
-    config.kde.default = [ "kde" ];
-  };
-
   # Exports Wayland env vars to user systemd units
   systemd.user.services.hyprland-session = {
     description = "Hyprland Wayland Session";
