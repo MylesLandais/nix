@@ -148,6 +148,8 @@
 
   programs.hyprland.enable = true;
 
+  services.displayManager.sessionPackages = [ pkgs.hyprland ];
+
   programs.regreet = {
     enable = true;
     font.name = "Hack Nerd Font";
