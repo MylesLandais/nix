@@ -41,6 +41,9 @@
     virtualisation = {
       docker = {
         enable = true;
+        # Socket-activate Docker instead of starting at boot (saves ~1min)
+        # oci-containers will still auto-start via their dependency on docker.service
+        enableOnBoot = false;
       };
 
       oci-containers = {

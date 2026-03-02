@@ -161,10 +161,8 @@ in
       "$mod" = "SUPER";
       "exec-once" = [
         "dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && systemctl --user stop hyprland-session.target && systemctl --user start hyprland-session.target"
-        "hyprpanel &"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
-        "hyprpaper &"
         "add_record_player"
       ];
       bindm = [

@@ -392,6 +392,16 @@
   systemd.services.nvidia-container-toolkit-cdi-generator.serviceConfig.ExecStartPre = lib.mkForce null;
 
   # ---------------------------------------------------------------------------
+  # Coredump Limits
+  # ---------------------------------------------------------------------------
+
+  # Prevent crash loops from filling disk with coredumps
+  systemd.coredump.extraConfig = ''
+    MaxUse=512M
+    KeepFree=1G
+  '';
+
+  # ---------------------------------------------------------------------------
   # Security and Permissions
   # ---------------------------------------------------------------------------
 

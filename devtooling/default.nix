@@ -17,7 +17,6 @@
     ./rust
     ./tmux
     ./code
-    ./kimi-cli
     ./zed
   ];
 
@@ -35,7 +34,6 @@
     rust.enable = lib.mkDefault false;
     tmux.enable = lib.mkDefault false;
     code.enable = lib.mkDefault true;
-    kimi-cli.enable = lib.mkDefault true;
     zed.enable = lib.mkDefault false;
   };
 }

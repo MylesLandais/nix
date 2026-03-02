@@ -26,11 +26,10 @@
     zed.url = "github:zed-industries/zed";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     opencode = {
-      url = "github:anomalyco/opencode";
+      url = "github:anomalyco/opencode/8c739b4a7db455a33fd77b4c997f2a9eaf27648a";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    kimi-cli.url = "github:MoonshotAI/kimi-cli";
-  };
+};
 
   outputs =
     {
