@@ -148,15 +148,10 @@
 
   programs.hyprland.enable = true;
 
-  services.displayManager = {
-    sessionPackages = [ pkgs.hyprland ];
-    sddm = {
-      enable = true;
-      wayland.enable = true;
-      theme = lib.mkForce "sddm-astronaut-theme";
-      extraPackages = with pkgs; [ sddm-astronaut ];
-      settings.Theme.Current = "sddm-astronaut-theme";
-    };
+  programs.regreet = {
+    enable = true;
+    font.name = "Hack Nerd Font";
+    font.size = 16;
   };
 
   xdg.portal = {
