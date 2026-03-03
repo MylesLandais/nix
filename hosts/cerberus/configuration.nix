@@ -170,6 +170,10 @@
 
     env = GTK_USE_PORTAL,0
     env = GDK_DEBUG,no-portals
+    env = GBM_BACKEND,nvidia-drm
+    env = __GLX_VENDOR_LIBRARY_NAME,nvidia
+    env = LIBVA_DRIVER_NAME,nvidia
+    env = NVD_BACKEND,direct
   '';
 
   # Exports Wayland env vars to user systemd units
