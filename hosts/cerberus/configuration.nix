@@ -156,6 +156,22 @@
     font.size = 16;
   };
 
+  # Use Hyprland as greeter compositor instead of cage (cage breaks on NVIDIA)
+  services.greetd.settings.default_session.command = "Hyprland --config /etc/greetd/hyprland.conf";
+
+  environment.etc."greetd/hyprland.conf".text = ''
+    exec-once = regreet; hyprctl dispatch exit
+
+    misc {
+      disable_hyprland_logo = true
+      disable_splash_rendering = true
+      disable_hyprland_qtutils_check = true
+    }
+
+    env = GTK_USE_PORTAL,0
+    env = GDK_DEBUG,no-portals
+  '';
+
   # Exports Wayland env vars to user systemd units
   systemd.user.services.hyprland-session = {
     description = "Hyprland Wayland Session";
