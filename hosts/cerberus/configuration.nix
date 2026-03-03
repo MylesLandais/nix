@@ -148,33 +148,22 @@
 
   programs.hyprland.enable = true;
 
-  services.displayManager.sessionPackages = [ pkgs.hyprland ];
-
-  programs.regreet = {
-    enable = true;
-    font.name = "Hack Nerd Font";
-    font.size = 16;
+  services.displayManager = {
+    sessionPackages = [ pkgs.hyprland ];
+    sddm = {
+      enable = true;
+      wayland.enable = true;
+      theme = lib.mkForce "sddm-astronaut-theme";
+      extraPackages = with pkgs; [ sddm-astronaut ];
+      settings.Theme.Current = "sddm-astronaut-theme";
+    };
   };
 
-  # Use Hyprland as greeter compositor instead of cage (cage breaks on NVIDIA)
-  services.greetd.settings.default_session.command = "Hyprland --config /etc/greetd/hyprland.conf";
-
-  environment.etc."greetd/hyprland.conf".text = ''
-    exec-once = regreet; hyprctl dispatch exit
-
-    misc {
-      disable_hyprland_logo = true
-      disable_splash_rendering = true
-      disable_hyprland_qtutils_check = true
-    }
-
-    env = GTK_USE_PORTAL,0
-    env = GDK_DEBUG,no-portals
-    env = GBM_BACKEND,nvidia-drm
-    env = __GLX_VENDOR_LIBRARY_NAME,nvidia
-    env = LIBVA_DRIVER_NAME,nvidia
-    env = NVD_BACKEND,direct
-  '';
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs.kdePackages; [ xdg-desktop-portal-kde ];
+    config.kde.default = [ "kde" ];
+  };
 
   # Exports Wayland env vars to user systemd units
   systemd.user.services.hyprland-session = {
@@ -565,7 +554,10 @@
 
     # Desktop theming
     papirus-icon-theme
+    kdePackages.breeze-icons
+    kdePackages.qtmultimedia
     adwaita-icon-theme
+    sddm-astronaut
 
     # Applications
     bitwarden-desktop
