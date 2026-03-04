@@ -160,17 +160,20 @@
     sessionPackages = [ pkgs.hyprland ];
     sddm = {
       enable = true;
-      wayland.enable = true;
+      wayland.enable = false;
       package = pkgs.kdePackages.sddm;
       theme = "sddm-astronaut-theme";
-      extraPackages = with pkgs; [ sddm-astronaut ];
+      extraPackages = with pkgs; [ sddm-astronaut kdePackages.qtmultimedia ];
     };
   };
 
   xdg.portal = {
     enable = true;
-    extraPortals = with pkgs.kdePackages; [ xdg-desktop-portal-kde ];
-    config.kde.default = [ "kde" ];
+    extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+    config = {
+      common.default = [ "hyprland" "gtk" ];
+      hyprland."org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+    };
   };
 
   # Exports Wayland env vars to user systemd units
