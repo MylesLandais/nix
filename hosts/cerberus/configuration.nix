@@ -54,12 +54,20 @@
   # ---------------------------------------------------------------------------
 
   boot = {
+    plymouth.enable = true;
+    consoleLogLevel = 3;
+    initrd.verbose = false;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
     kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
-    kernelParams = [ "usbcore.autosuspend=-1" ];
+    kernelParams = [
+      "usbcore.autosuspend=-1"
+      "quiet"
+      "udev.log_level=3"
+      "systemd.show_status=auto"
+    ];
   };
 
   # ---------------------------------------------------------------------------
@@ -153,9 +161,9 @@
     sddm = {
       enable = true;
       wayland.enable = true;
-      theme = lib.mkForce "sddm-astronaut-theme";
+      package = pkgs.kdePackages.sddm;
+      theme = "sddm-astronaut-theme";
       extraPackages = with pkgs; [ sddm-astronaut ];
-      settings.Theme.Current = "sddm-astronaut-theme";
     };
   };
 
