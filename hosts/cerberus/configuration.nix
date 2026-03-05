@@ -57,6 +57,7 @@
     plymouth.enable = true;
     consoleLogLevel = 3;
     initrd.verbose = false;
+    initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
