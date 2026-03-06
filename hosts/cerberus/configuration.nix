@@ -399,6 +399,24 @@
     memoryPercent = 25;
   };
 
+  # VM tuning for interactive desktop responsiveness
+  boot.kernel.sysctl = {
+    # Prefer zram swap over keeping idle anon pages resident
+    "vm.swappiness" = 180;
+    # Flush dirty pages sooner — defaults allow 25 GB to accumulate
+    "vm.dirty_ratio" = 5;
+    "vm.dirty_background_ratio" = 1;
+    # Reclaim dentries/inodes more aggressively to free slab memory
+    "vm.vfs_cache_pressure" = 150;
+    # Watermark boost helps avoid direct reclaim stalls
+    "vm.watermark_boost_factor" = 15000;
+    "vm.watermark_scale_factor" = 125;
+    # Start reclaiming pages sooner
+    "vm.min_free_kbytes" = 524288;
+    # Reduce page lock contention on multi-core
+    "vm.page-cluster" = 0;
+  };
+
   # Prevent USB/input devices from suspending
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="usb", ATTR{power/autosuspend}="0"
