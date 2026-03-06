@@ -157,14 +157,13 @@
 
   programs.hyprland.enable = true;
 
-  services.displayManager = {
-    sessionPackages = [ pkgs.hyprland ];
-    sddm = {
-      enable = true;
-      wayland.enable = false;
-      package = pkgs.kdePackages.sddm;
-      theme = "sddm-astronaut-theme";
-      extraPackages = with pkgs; [ sddm-astronaut kdePackages.qtmultimedia ];
+  services.displayManager.sessionPackages = [ pkgs.hyprland ];
+
+  services.greetd = {
+    enable = true;
+    settings.default_session = {
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
+      user = "greeter";
     };
   };
 
@@ -392,6 +391,14 @@
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
 
+  # Compressed RAM swap - gives the kernel a release valve under memory
+  # pressure without touching disk. 128 GB RAM => ~16 GB effective swap.
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 25;
+  };
+
   # Prevent USB/input devices from suspending
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="usb", ATTR{power/autosuspend}="0"
@@ -567,9 +574,7 @@
     # Desktop theming
     papirus-icon-theme
     kdePackages.breeze-icons
-    kdePackages.qtmultimedia
     adwaita-icon-theme
-    sddm-astronaut
 
     # Applications
     bitwarden-desktop
