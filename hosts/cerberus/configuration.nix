@@ -417,12 +417,18 @@
     "vm.page-cluster" = 0;
   };
 
-  # Prevent USB/input devices from suspending
+  # Prevent USB/input devices from suspending, set NVMe I/O scheduler
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="usb", ATTR{power/autosuspend}="0"
     ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="on"
     SUBSYSTEM=="input", ATTR{power/autosuspend}="0"
     SUBSYSTEM=="input", ATTR{power/control}="on"
+
+    # Use kyber I/O scheduler for NVMe — prioritizes latency-sensitive
+    # reads over bulk writes so interactive I/O isn't starved
+    ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="kyber"
+    # 256 KB read-ahead (default 8 MB is far too aggressive for interactive)
+    ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/read_ahead_kb}="256"
   '';
 
   # nvidia-container-toolkit CDI generator workaround
