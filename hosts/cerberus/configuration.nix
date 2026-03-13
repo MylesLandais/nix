@@ -204,6 +204,8 @@
   # Remote Gaming (Sunshine/Moonlight)
   # ---------------------------------------------------------------------------
 
+  boot.kernelModules = [ "uinput" ];
+
   services.sunshine = {
     enable = true;
     autoStart = true;
@@ -243,6 +245,20 @@
         {
           name = "Full Desktop (iPad Mini)";
           cmd = "${pkgs.gamescope}/bin/gamescope -w 2266 -h 1488 -r 60 -f --rt -- ${pkgs.hyprland}/bin/Hyprland";
+          "auto-detach" = "true";
+          "exclude-global-prep-cmd" = "false";
+        }
+
+        # Fire Emblem: Path of Radiance via Dolphin
+        {
+          name = "Fire Emblem";
+          cmd = "${pkgs.gamescope}/bin/gamescope -w 2266 -h 1488 -r 60 -f --rt -- ${pkgs.gamemode}/bin/gamemoderun ${pkgs.dolphin-emu}/bin/dolphin-emu \"/home/warby/Games/NGC/Fire Emblem - Path of Radiance (USA)/Fire Emblem - Path of Radiance (USA).nkit.iso\"";
+          "prep-cmd" = [
+            {
+              do = "";
+              undo = "setsid sh -c 'pkill -f dolphin-emu || true'";
+            }
+          ];
           "auto-detach" = "true";
           "exclude-global-prep-cmd" = "false";
         }
