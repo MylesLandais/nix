@@ -122,6 +122,7 @@
     powerManagement.enable = false;
     powerManagement.finegrained = false;
     open = true;
+    nvidiaPersistenced = true;
     nvidiaSettings = true;
     package =
       let
