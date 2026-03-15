@@ -8,11 +8,11 @@
 }:
 {
   services.ollama = {
-    enable = true;
+    enable = false;
     port = 11434;
     host = "0.0.0.0";
     openFirewall = true;
-    package = pkgs.ollama-cuda;
+    package = pkgs.ollama-rocm;
 
     loadModels = [
       "qwen2.5-coder:14b"
