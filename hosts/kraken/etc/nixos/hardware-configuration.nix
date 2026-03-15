@@ -14,7 +14,6 @@
   ];
 
   boot = {
-    blacklistedKernelModules = [ "nova_core" ];
     initrd = {
       availableKernelModules = [
         "nvme"
@@ -84,7 +83,6 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware = {
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-    nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
     bluetooth = {
       enable = true;
       powerOnBoot = true;

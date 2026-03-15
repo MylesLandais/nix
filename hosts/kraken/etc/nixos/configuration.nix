@@ -7,6 +7,7 @@
   pkgs,
   inputs,
   extra-types,
+  vars,
   ...
 }:
 let
@@ -72,16 +73,17 @@ in
     kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
     kernelParams = [
       "pci=nomsi"
+      "acpi_enforce_reosurces=lax"
       "clearcpuid=514"
-      "nvidia_drm.fbdev=1"
     ];
   };
 
   # network config
 
+  systemd.packages = with pkgs; [ lact ];
   systemd.services = {
     dhcpd.enable = false;
-    nvidia-container-toolkit-cdi-generator.serviceConfig.ExecStartPre = lib.mkForce null;
+    lactd.wantedBy = [ "multi-user.target" ];
   };
   networking = {
     firewall = {
@@ -97,7 +99,7 @@ in
       "192.168.0.2"
       "192.168.0.1"
     ];
-    interfaces.enp8s0 = {
+    interfaces.enp10s0 = {
       ipv4.addresses = [
         {
           address = "192.168.0.38";
@@ -107,7 +109,7 @@ in
     };
     defaultGateway = {
       address = "192.168.0.1";
-      interface = "enp8s0";
+      interface = "enp10s0";
     };
     networkmanager = {
       enable = false;
@@ -126,6 +128,16 @@ in
   services = {
     journald.extraConfig = "SystemMaxUse=50M";
     pulseaudio.enable = false;
+    hardware.openrgb = {
+      enable = true;
+      motherboard = "amd";
+    };
+
+    greetd = {
+      enable = true;
+      settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --xsessions ${config.services.displayManager.sessionData.desktops}/share/xsessions --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions --remember --remember-user-session --user-menu --user-menu-min-uid 1000 --asterisks --power-shutdown 'shutdown -P now' --power-reboot 'shutdown -r now'";
+    };
+
     openssh = {
       enable = true;
       ports = [ 22 ];
@@ -208,10 +220,6 @@ in
             "logind"
           ];
         };
-        nvidia-gpu = {
-          enable = true;
-          openFirewall = true;
-        };
       };
     };
     promtail = {
@@ -257,7 +265,6 @@ in
       useRoutingFeatures = "client";
     };
     rpcbind.enable = true;
-    xserver.videoDrivers = [ "nvidia" ];
     xserver = {
       enable = true;
       xkb = {
@@ -314,54 +321,35 @@ in
       wireplumber.enable = true;
     };
 
-    displayManager.sddm = {
-      enable = true;
-      wayland.enable = true;
-      theme = lib.mkForce "sddm-astronaut-theme";
-      extraPackages = with pkgs; [
-        sddm-astronaut
-      ];
-      settings = {
-        Theme = {
-          Current = "sddm-astronaut-theme";
+    displayManager = {
+      sddm = {
+        enable = false;
+        wayland.enable = true;
+        theme = lib.mkForce "sddm-astronaut-theme";
+        extraPackages = with pkgs; [
+          sddm-astronaut
+        ];
+        settings = {
+          Theme = {
+            Current = "sddm-astronaut-theme";
+          };
         };
       };
     };
   };
 
   hardware = {
-    nvidia-container-toolkit.enable = true;
     logitech.wireless.enable = true;
     logitech.wireless.enableGraphical = true;
-    graphics = {
-      enable = true;
-      extraPackages = with pkgs; [
-        mesa
-        nvidia-vaapi-driver
-      ];
-      enable32Bit = true;
+    amdgpu = {
+      overdrive.enable = true;
+      opencl.enable = true;
+      initrd.enable = true;
     };
 
-    nvidia = {
-      modesetting.enable = true;
-      open = true;
-      powerManagement.enable = false;
-      powerManagement.finegrained = false;
-      package =
-        let
-          base = config.boot.kernelPackages.nvidiaPackages.latest;
-          cachyos-nvidia-patch = pkgs.fetchpatch {
-            url = "https://raw.githubusercontent.com/CachyOS/CachyOS-PKGBUILDS/master/nvidia/nvidia-utils/kernel-6.19.patch";
-            sha256 = "sha256-YuJjSUXE6jYSuZySYGnWSNG5sfVei7vvxDcHx3K+IN4=";
-          };
-        in
-        base
-        // {
-          open = base.open.overrideAttrs (oldAttrs: {
-            patches = (oldAttrs.patches or [ ]) ++ [ cachyos-nvidia-patch ];
-          });
-        };
-      nvidiaSettings = true;
+    graphics = {
+      enable = true;
+      enable32Bit = true;
     };
 
   };
@@ -382,11 +370,15 @@ in
     hyprland.xwayland.enable = true;
   };
 
-  security.rtkit.enable = true;
+  security = {
+    rtkit.enable = true;
+    pam.services.gdm.enableGnomeKeyring = true;
+  };
   fonts.packages = with pkgs; [
     nerd-fonts.hack
   ];
   environment.systemPackages = with pkgs; [
+    lact
     sddm-astronaut
   ];
   users = {
@@ -436,7 +428,6 @@ in
         qemu
         qemu_kvm
         nfs-utils
-        nvtopPackages.nvidia
         wireguard-tools
         kdePackages.qtmultimedia
       ];
