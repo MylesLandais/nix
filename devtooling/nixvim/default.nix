@@ -2,6 +2,7 @@
   lib,
   config,
   inputs,
+  pkgs,
   ...
 }:
 {
@@ -13,6 +14,7 @@
     programs.nixvim = {
       _module.args.inputs = inputs;
       enable = true;
+      nixpkgs.config.allowUnfree = true;
       imports = [
         inputs.frostvim.nixvimModules.default
       ];
@@ -30,6 +32,8 @@
             };
           };
         };
+
+        claude-code.enable = true;
 
         minuet = {
           enable = false;
