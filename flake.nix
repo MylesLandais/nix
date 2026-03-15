@@ -20,7 +20,7 @@
     frostvim.url = "github:FKouhai/frostvim/main";
     helium.url = "github:FKouhai/helium2nix";
     agenix.url = "github:ryantm/agenix";
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel";
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -49,10 +49,6 @@
     wallpapers = {
       url = "github:FKouhai/Kanagawa-wallpapers";
     };
-    zmk-cli = {
-      url = "github:FKouhai/zmk-cli-flake/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -71,7 +67,6 @@
       wallpapers,
       opencode,
       tokyonight,
-      zmk-cli,
       ...
     }@inputs:
     let
@@ -87,7 +82,6 @@
         ];
       };
 
-      # Create environment packages for different shells
       mkEnvPkgs = shell: {
         environment.systemPackages = [
           pkgs.ghostty
@@ -95,7 +89,6 @@
           agenix.packages.x86_64-linux.default
           opencode.packages.x86_64-linux.default
           wallpapers.packages.x86_64-linux.default
-          zmk-cli.packages.x86_64-linux.default
           inputs.helium.defaultPackage.x86_64-linux
         ]
         ++ (
@@ -119,6 +112,46 @@
           ];
         };
       };
+
+      franktoryVars = {
+        hostName = "franktory";
+        isDesktop = false;
+        class = "laptop";
+        shell = "noctalia";
+        wallpaper = "${wallpapers}/kanagawa-dragon/3895e.jpg";
+        mainMonitor = {
+          name = "eDP-1";
+          width = "1920";
+          height = "1080";
+          refresh = "60";
+        };
+        secondaryMonitor = {
+          name = "HDMI-A-2";
+          width = "1920";
+          height = "1080";
+          refresh = "60";
+        };
+      };
+
+      krakenVars = {
+        hostName = "kraken";
+        isDesktop = true;
+        class = "desktop";
+        shell = "noctalia";
+        wallpaper = "${wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/3895e.jpg";
+        mainMonitor = {
+          name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. GS27QA 24286B001135";
+          width = "2560";
+          height = "1440";
+          refresh = "180";
+        };
+        secondaryMonitor = {
+          name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. GS27QA 24286B001081";
+          width = "2560";
+          height = "1440";
+          refresh = "144";
+        };
+      };
     in
     {
       nixosConfigurations."franktory" = nixpkgs.lib.nixosSystem {
@@ -126,6 +159,7 @@
         inherit pkgs;
         specialArgs = {
           inherit inputs;
+          vars = franktoryVars;
         };
         modules = with pkgs; [
           ./hosts/franktory/etc/nixos/configuration.nix
@@ -140,25 +174,7 @@
                 agenix.homeManagerModules.age
               ];
               extraSpecialArgs = {
-                vars = {
-                  hostName = "franktory";
-                  isDesktop = false;
-                  class = "laptop";
-                  shell = "noctalia";
-                  wallpaper = "${wallpapers}/kanagawa-dragon/3895e.jpg";
-                  mainMonitor = {
-                    name = "eDP-1";
-                    width = "1920";
-                    height = "1080";
-                    refresh = "60";
-                  };
-                  secondaryMonitor = {
-                    name = "HDMI-A-2";
-                    width = "1920";
-                    height = "1080";
-                    refresh = "60";
-                  };
-                };
+                vars = franktoryVars;
                 inherit inputs system;
               };
             };
@@ -170,6 +186,7 @@
         inherit pkgs;
         specialArgs = {
           inherit inputs;
+          vars = krakenVars;
         };
 
         modules = with pkgs; [
@@ -185,25 +202,7 @@
                 agenix.homeManagerModules.age
               ];
               extraSpecialArgs = {
-                vars = {
-                  hostName = "kraken";
-                  isDesktop = true;
-                  class = "desktop";
-                  shell = "noctalia";
-                  wallpaper = "${wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/3895e.jpg";
-                  mainMonitor = {
-                    name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. GS27QA 24286B001135";
-                    width = "2560";
-                    height = "1440";
-                    refresh = "180";
-                  };
-                  secondaryMonitor = {
-                    name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. GS27QA 24286B001081";
-                    width = "2560";
-                    height = "1440";
-                    refresh = "144";
-                  };
-                };
+                vars = krakenVars;
                 inherit inputs system;
               };
             };
