@@ -17,6 +17,7 @@ with pkgs;
   coreutils
   cosmic-files
   cozy
+  claude-code
   devenv
   dysk
   element-desktop
@@ -31,6 +32,7 @@ with pkgs;
   gnome-keyring
   gnome-secrets
   gnome-themes-extra
+  grim
   gowall
   gpgme
   gtk-engine-murrine
@@ -49,13 +51,13 @@ with pkgs;
   kubernetes-helm
   lazygit
   libnotify
-  libnvidia-container
+  liquidctl
   lmstudio
   mpv
   nitch
   nix-search-tv
   nixos-generators
-  nvidia-docker
+  nvtopPackages.amd
   nwg-look
   obs-studio
   obsidian
@@ -70,8 +72,10 @@ with pkgs;
   revive
   ripgrep
   sesh
+  slack
   statix
   statping-ng
+  teamspeak6-client
   telegram-desktop
   terraform-ls
   tflint
