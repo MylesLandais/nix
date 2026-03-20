@@ -124,19 +124,7 @@
     open = true;
     nvidiaPersistenced = true;
     nvidiaSettings = true;
-    package =
-      let
-        base = config.boot.kernelPackages.nvidiaPackages.latest;
-        cachyos-nvidia-patch = pkgs.fetchpatch {
-          url = "https://raw.githubusercontent.com/CachyOS/CachyOS-PKGBUILDS/master/nvidia/nvidia-utils/kernel-6.19.patch";
-          sha256 = "sha256-YuJjSUXE6jYSuZySYGnWSNG5sfVei7vvxDcHx3K+IN4=";
-        };
-      in
-      base // {
-        open = base.open.overrideAttrs (oldAttrs: {
-          patches = (oldAttrs.patches or [ ]) ++ [ cachyos-nvidia-patch ];
-        });
-      };
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
 
   environment.sessionVariables = {
@@ -199,6 +187,22 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+
+    # Virtual audio sink for isolated Sunshine streaming
+    extraConfig.pipewire."99-sunshine-sink" = {
+      "context.objects" = [
+        {
+          factory = "adapter";
+          args = {
+            "factory.name" = "support.null-audio-sink";
+            "node.name" = "sunshine_sink";
+            "node.description" = "Sunshine Streaming Sink";
+            "media.class" = "Audio/Sink";
+            "audio.position" = "FL,FR";
+          };
+        }
+      ];
+    };
   };
 
   # ---------------------------------------------------------------------------
@@ -212,11 +216,13 @@
     autoStart = true;
     openFirewall = true;
     capSysAdmin = true;
+    package = pkgs.sunshine.override { cudaSupport = true; };
 
     # Global Sunshine settings (rendered to sunshine.conf)
     settings = {
       sunshine_name = "Cerberus Stream Host";
       min_log_level = "info";
+      output_name = "";  # set to HEADLESS-1 after Phase 5 testing
     };
 
     # Declarative applications configuration (rendered to apps.json)
@@ -253,7 +259,7 @@
         # Fire Emblem: Path of Radiance via Dolphin
         {
           name = "Fire Emblem";
-          cmd = "${pkgs.gamescope}/bin/gamescope -w 2266 -h 1488 -r 60 -f --rt -- ${pkgs.gamemode}/bin/gamemoderun ${pkgs.dolphin-emu}/bin/dolphin-emu \"/home/warby/Games/NGC/Fire Emblem - Path of Radiance (USA)/Fire Emblem - Path of Radiance (USA).nkit.iso\"";
+          cmd = "sunshine-stream ${pkgs.dolphin-emu}/bin/dolphin-emu \"/home/warby/Games/NGC/Fire Emblem - Path of Radiance (USA)/Fire Emblem - Path of Radiance (USA).nkit.iso\"";
           "prep-cmd" = [
             {
               do = "";
@@ -408,6 +414,10 @@
   hardware.cpu.amd.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
 
+  # Bluetooth support + GUI manager (tray applet)
+  hardware.bluetooth.enable = true;
+  services.blueman.enable = true;
+
   # Compressed RAM swap - gives the kernel a release valve under memory
   # pressure without touching disk. 128 GB RAM => ~16 GB effective swap.
   zramSwap = {
@@ -440,6 +450,9 @@
     ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="on"
     SUBSYSTEM=="input", ATTR{power/autosuspend}="0"
     SUBSYSTEM=="input", ATTR{power/control}="on"
+
+    # 8BitDo Pro 2 controller — grant input group access to hidraw devices
+    KERNEL=="hidraw*", ATTRS{idVendor}=="2dc8", MODE="0660", GROUP="input"
 
     # Use kyber I/O scheduler for NVMe — prioritizes latency-sensitive
     # reads over bulk writes so interactive I/O isn't starved
@@ -616,6 +629,16 @@
     papirus-icon-theme
     kdePackages.breeze-icons
     adwaita-icon-theme
+
+    # Sunshine streaming wrapper
+    (writeShellScriptBin "sunshine-stream" ''
+      # Route audio to the Sunshine virtual sink
+      export PULSE_SINK=sunshine_sink
+      # Launch app inside gamescope with gamemode
+      exec ${gamescope}/bin/gamescope \
+        -w 2160 -h 1440 -r 60 -f --rt \
+        -- ${gamemode}/bin/gamemoderun "$@"
+    '')
 
     # Applications
     bitwarden-desktop

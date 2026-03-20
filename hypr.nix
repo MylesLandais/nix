@@ -124,6 +124,8 @@ in
         "${vars.secondaryMonitor.name},${toString vars.secondaryMonitor.width}x${toString vars.secondaryMonitor.height}@${toString vars.secondaryMonitor.refresh},10380x2160,1"  # Right Dell
         # Top row - Samsung monitor centered above middle
         "${vars.fourthMonitor.name},${toString vars.fourthMonitor.width}x${toString vars.fourthMonitor.height}@${toString vars.fourthMonitor.refresh},8140x1080,1"  # Samsung (Top)
+        # Headless monitor for Sunshine streaming (not visible on physical displays)
+        "HEADLESS-1,2160x1440@60,auto,1"
       ];
       workspace = [
         "1,monitor:${vars.tertiaryMonitor.name},default:true"
@@ -136,6 +138,7 @@ in
         "8,monitor:${vars.mainMonitor.name}"
         "9,monitor:${vars.secondaryMonitor.name}"
         "10,monitor:${vars.fourthMonitor.name},default:true"
+        "99,monitor:HEADLESS-1,default:true"
       ];
       env = [
         "LIBVA_DRIVER_NAME,nvidia"
@@ -163,7 +166,9 @@ in
         "dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && systemctl --user stop hyprland-session.target && systemctl --user start hyprland-session.target"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
+        "hyprctl output create headless HEADLESS-1"
         "add_record_player"
+        "blueman-applet"
       ];
       bindm = [
         "$mod, mouse:272, movewindow"
