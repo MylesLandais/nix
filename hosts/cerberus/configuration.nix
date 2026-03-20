@@ -415,7 +415,18 @@
   hardware.enableRedistributableFirmware = true;
 
   # Bluetooth support + GUI manager (tray applet)
-  hardware.bluetooth.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        Privacy = "device";
+        JustWorksRepairing = "always";
+        Class = "0x000100";
+        FastConnectable = "true";
+      };
+    };
+  };
   services.blueman.enable = true;
 
   # Compressed RAM swap - gives the kernel a release valve under memory
@@ -451,8 +462,10 @@
     SUBSYSTEM=="input", ATTR{power/autosuspend}="0"
     SUBSYSTEM=="input", ATTR{power/control}="on"
 
-    # 8BitDo Pro 2 controller — grant input group access to hidraw devices
-    KERNEL=="hidraw*", ATTRS{idVendor}=="2dc8", MODE="0660", GROUP="input"
+    # 8BitDo Pro 2 controller — TAG+="uaccess" lets Steam access hidraw
+    # without root. Covers both wired/2.4GHz (idVendor) and Bluetooth (KERNELS)
+    KERNEL=="hidraw*", ATTRS{idVendor}=="2dc8", MODE="0660", TAG+="uaccess"
+    KERNEL=="hidraw*", KERNELS=="*2DC8:*", MODE="0660", TAG+="uaccess"
 
     # Use kyber I/O scheduler for NVMe — prioritizes latency-sensitive
     # reads over bulk writes so interactive I/O isn't starved

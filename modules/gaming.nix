@@ -41,6 +41,7 @@ in
     remotePlay.openFirewall = true; # Allow remote play connections
     dedicatedServer.openFirewall = true; # Allow dedicated server hosting
   };
+  hardware.steam-hardware.enable = true; # udev rules for controllers/HID devices
   # Gamescope for composited gaming experience
   programs.gamescope.enable = true;
   # Gamemode for performance optimization
