@@ -190,7 +190,6 @@
       programs = {
         gpu-screen-recorder.enable = true;
         zsh.enable = true;
-        fish.enable = true;
         nh.enable = true;
         firefox.enable = true;
         steam.enable = true;

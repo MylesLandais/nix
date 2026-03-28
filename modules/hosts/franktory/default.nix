@@ -9,6 +9,7 @@
       "${inputs.self}/modules/features/host-options.nix"
       "${inputs.self}/modules/features/env-packages.nix"
       "${inputs.self}/modules/features/nix-config.nix"
+      "${inputs.self}/modules/features/fish-config.nix"
       inputs.home-manager.nixosModules.home-manager
       {
         home-manager = {

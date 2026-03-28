@@ -105,7 +105,6 @@
 
       programs = {
         gpu-screen-recorder.enable = true;
-        fish.enable = true;
         zsh.enable = true;
         hyprland = {
           enable = true;
