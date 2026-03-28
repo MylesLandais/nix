@@ -16,7 +16,7 @@
           useUserPackages = true;
           useGlobalPkgs = true;
           sharedModules = [ inputs.agenix.homeManagerModules.age ];
-          users.franky = import "${inputs.self}/home.nix";
+          users.franky = import "${inputs.self}/modules/home.nix";
           extraSpecialArgs = {
             inherit inputs;
             system = "x86_64-linux";

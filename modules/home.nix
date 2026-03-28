@@ -10,15 +10,15 @@
   # manage.
 
   imports = [
-    ./modules/features/desktops/hyprland
-    ./modules/features/bars
-    ./modules/features/prompt
-    ./modules/features/shelltools
-    ./modules/features/devtooling
-    ./modules/features/gtk
-    ./modules/features/terminals
-    ./modules/features/stylix
-    ./modules/features/flameshot.nix
+    ./features/desktops/hyprland
+    ./features/bars
+    ./features/prompt
+    ./features/shelltools
+    ./features/devtooling
+    ./features/gtk
+    ./features/terminals
+    ./features/stylix
+    ./features/flameshot.nix
     inputs.stylix.homeModules.stylix
     inputs.nixvim.homeModules.nixvim
     inputs.caelestia-shell.homeManagerModules.default
@@ -31,11 +31,11 @@
     identityPaths = [ "/home/franky/.ssh/age" ];
     secrets = {
       ollama = {
-        file = ./secrets/ollama.age;
+        file = ../secrets/ollama.age;
         mode = "400";
       };
       gemini = {
-        file = ./secrets/gemini.age;
+        file = ../secrets/gemini.age;
         mode = "400";
       };
     };
