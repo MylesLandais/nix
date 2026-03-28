@@ -139,7 +139,7 @@
       gamemode
       gcc
       gemini-cli
-      goose-cli
+
       gh
       ghostty
       git-lfs
@@ -221,8 +221,7 @@
       inputs.thorium.packages.${pkgs.stdenv.hostPlatform.system}.thorium-avx2
       # Firefox-based browser (stable Wayland/NVIDIA, uses DMABUF instead of Mailbox)
       inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-      # Agentic IDE with Chrome integration
-      inputs.antigravity.packages.${pkgs.stdenv.hostPlatform.system}.default
+
     ];
     pointerCursor = {
       gtk.enable = true;

@@ -21,7 +21,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code.url = "github:sadjow/claude-code-nix";
-    antigravity.url = "github:jacopone/antigravity-nix";
+
     agenix.url = "github:ryantm/agenix";
     zed.url = "github:zed-industries/zed";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
@@ -41,7 +41,7 @@
       thorium,
       zen-browser,
       cursor-flake,
-      antigravity,
+
       agenix,
       zed,
       opencode,
@@ -57,7 +57,7 @@
         overlays = [
           inputs.nix-vscode-extensions.overlays.default
           inputs.claude-code.overlays.default
-          inputs.antigravity.overlays.default
+
         ];
       };
       vars = import ./vars.nix { inherit pkgs; };
