@@ -1,8 +1,6 @@
 {
-  self,
   pkgs,
   lib,
-  vars,
   config,
   inputs,
   ...
@@ -12,14 +10,15 @@
   # manage.
 
   imports = [
-    ./hyprland
-    ./prompt
-    ./shelltools
-    ./devtooling
-    ./gtk
-    ./terminals
-    ./stylix
-    ./flameshot.nix
+    ./modules/features/desktops/hyprland
+    ./modules/features/bars
+    ./modules/features/prompt
+    ./modules/features/shelltools
+    ./modules/features/devtooling
+    ./modules/features/gtk
+    ./modules/features/terminals
+    ./modules/features/stylix
+    ./modules/features/flameshot.nix
     inputs.stylix.homeModules.stylix
     inputs.nixvim.homeModules.nixvim
     inputs.caelestia-shell.homeManagerModules.default

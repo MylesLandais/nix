@@ -1,0 +1,147 @@
+{ ... }:
+{
+  flake.nixosModules.franktory =
+    {
+      config,
+      lib,
+      pkgs,
+      inputs,
+      ...
+    }:
+    let
+      sddm-astronaut = pkgs.sddm-astronaut.overrideAttrs (_: {
+        embeddedTheme = "japanese_aesthetic";
+      });
+    in
+    {
+      nixpkgs.config.allowUnfree = true;
+
+      host = {
+        hostName = "franktory";
+        isDesktop = false;
+        class = "laptop";
+        bar = "noctalia";
+        wallpaper = "${inputs.wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/3895e.jpg";
+        mainMonitor = {
+          name = "eDP-1";
+          width = "1920";
+          height = "1080";
+          refresh = "60";
+        };
+        secondaryMonitor = {
+          name = "HDMI-A-2";
+          width = "1920";
+          height = "1080";
+          refresh = "60";
+        };
+      };
+
+      boot = {
+        kernelPackages = pkgs.linuxPackages_latest;
+        loader = {
+          systemd-boot.enable = true;
+          efi.canTouchEfiVariables = true;
+        };
+      };
+
+      networking = {
+        hostName = "franktory";
+        search = [ "universe.home" ];
+        nameservers = [
+          "192.168.0.2"
+          "1.1.1.1"
+        ];
+        wireless.enable = lib.mkDefault false;
+        networkmanager.enable = true;
+      };
+
+      time.timeZone = "Europe/Madrid";
+      i18n.defaultLocale = "en_US.UTF-8";
+      i18n.extraLocaleSettings = {
+        LC_ADDRESS = "es_ES.UTF-8";
+        LC_IDENTIFICATION = "es_ES.UTF-8";
+        LC_MEASUREMENT = "es_ES.UTF-8";
+        LC_MONETARY = "es_ES.UTF-8";
+        LC_NAME = "es_ES.UTF-8";
+        LC_NUMERIC = "es_ES.UTF-8";
+        LC_PAPER = "es_ES.UTF-8";
+        LC_TELEPHONE = "es_ES.UTF-8";
+        LC_TIME = "es_ES.UTF-8";
+      };
+
+      services = {
+        blueman.enable = true;
+        upower.enable = true;
+        power-profiles-daemon.enable = true;
+        displayManager.sddm = {
+          enable = true;
+          wayland.enable = true;
+          theme = lib.mkForce "sddm-astronaut-theme";
+          extraPackages = [ sddm-astronaut ];
+          settings.Theme.Current = "sddm-astronaut-theme";
+        };
+        tailscale.enable = true;
+        openssh = {
+          enable = true;
+          settings = {
+            UseDns = false;
+            PasswordAuthentication = true;
+          };
+        };
+        pipewire = {
+          enable = true;
+          alsa.enable = true;
+          alsa.support32Bit = true;
+          pulse.enable = true;
+        };
+        xserver = {
+          enable = true;
+          xkb = {
+            layout = "us";
+            variant = "";
+          };
+        };
+      };
+
+      programs = {
+        gpu-screen-recorder.enable = true;
+        fish.enable = true;
+        zsh.enable = true;
+        hyprland = {
+          enable = true;
+          xwayland.enable = true;
+        };
+      };
+
+      security.rtkit.enable = true;
+
+      fonts.packages = [
+        pkgs.nerd-fonts.hack
+        pkgs.maple-mono.NF-unhinted
+        pkgs.maple-mono.truetype
+      ];
+
+      users = {
+        defaultUserShell = pkgs.fish;
+        users.franky = {
+          isNormalUser = true;
+          description = "franky";
+          extraGroups = [
+            "networkmanager"
+            "wheel"
+          ];
+          packages = with pkgs; [
+            nixfmt
+            nixd
+          ];
+        };
+      };
+
+      environment.systemPackages = [
+        pkgs.tailscale
+        sddm-astronaut
+      ];
+
+      system.stateVersion = "24.11";
+    };
+}

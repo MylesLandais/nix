@@ -15,9 +15,11 @@ with pkgs;
   cava
   cliphist
   coreutils
+  copilot-language-server
   cosmic-files
   cozy
   claude-code
+  claude-monitor
   devenv
   dysk
   element-desktop
@@ -26,6 +28,7 @@ with pkgs;
   fd
   ffmpeg
   gamemode
+  gemini-cli
   gcc
   gh
   git-lfs
@@ -68,6 +71,7 @@ with pkgs;
   pulseaudio
   pulseaudio-ctl
   pulsemixer
+  protonup-rs
   python3
   revive
   ripgrep
