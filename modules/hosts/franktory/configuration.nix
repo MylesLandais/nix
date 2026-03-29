@@ -8,11 +8,6 @@
       inputs,
       ...
     }:
-    let
-      sddm-astronaut = pkgs.sddm-astronaut.overrideAttrs (_: {
-        embeddedTheme = "japanese_aesthetic";
-      });
-    in
     {
       nixpkgs.config.allowUnfree = true;
 
@@ -21,6 +16,7 @@
         isDesktop = false;
         class = "laptop";
         bar = "noctalia";
+        greeter = "sddm";
         wallpaper = "${inputs.wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/3895e.jpg";
         mainMonitor = {
           name = "eDP-1";
@@ -73,13 +69,6 @@
         blueman.enable = true;
         upower.enable = true;
         power-profiles-daemon.enable = true;
-        displayManager.sddm = {
-          enable = true;
-          wayland.enable = true;
-          theme = lib.mkForce "sddm-astronaut-theme";
-          extraPackages = [ sddm-astronaut ];
-          settings.Theme.Current = "sddm-astronaut-theme";
-        };
         tailscale.enable = true;
         openssh = {
           enable = true;
@@ -138,7 +127,6 @@
 
       environment.systemPackages = [
         pkgs.tailscale
-        sddm-astronaut
       ];
 
       system.stateVersion = "24.11";

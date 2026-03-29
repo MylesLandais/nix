@@ -6,6 +6,7 @@
     modules = [
       inputs.self.nixosModules.franktory
       inputs.self.nixosModules.franktoryHardware
+      inputs.self.nixosModules.greeter
       "${inputs.self}/modules/features/host-options.nix"
       "${inputs.self}/modules/features/env-packages.nix"
       "${inputs.self}/modules/features/nix-config.nix"

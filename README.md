@@ -40,20 +40,22 @@ nh clean all -v
 
 The config uses the **dendritic pattern** with [flake-parts](https://github.com/hercules-ci/flake-parts) and [import-tree](https://github.com/vic/import-tree).
 
-- `flake.nix` is a minimal wrapper; `import-tree` auto-discovers host modules from `modules/hosts/`
-- Every `.nix` file under `modules/hosts/` is a valid flake-parts module — including hardware configs and sub-modules — each exporting `flake.nixosModules.<name>` or `flake.nixosConfigurations.<host>`
+- `flake.nix` is a minimal wrapper; `import-tree` auto-discovers modules from three directories:
+  - `modules/hosts/` — per-host NixOS configs → `flake.nixosModules.*` / `flake.nixosConfigurations.*`
+  - `modules/services/` — reusable NixOS service modules → `flake.nixosModules.*`
+  - `modules/flake-parts/` — flake-level exports → `flake.homeManagerModules.*`
 - Host-specific data is exposed via typed NixOS options at `options.host.*`; HM modules access them via `osConfig.host.*`
-- Shared NixOS feature modules live in `modules/features/` and are imported explicitly
+- Shared HM feature modules live in `modules/features/` and are imported explicitly by `modules/home.nix`
 
 ## Structure
 
 ```
 .
-├── flake.nix                          # flake-parts wrapper; auto-discovers modules/hosts/
-├── home.nix                           # root Home Manager config
-├── packages.nix                       # user packages (home.packages)
+├── flake.nix                          # flake-parts wrapper; import-tree scans hosts/, services/, flake-parts/
 ├── modules/
-│   ├── hosts/                         # auto-scanned by import-tree (all files are flake-parts modules)
+│   ├── home.nix                       # root Home Manager config (imports all features)
+│   ├── packages.nix                   # user packages (home.packages)
+│   ├── hosts/                         # auto-scanned by import-tree
 │   │   ├── franktory/
 │   │   │   ├── default.nix            # flake.nixosConfigurations.franktory
 │   │   │   ├── configuration.nix      # flake.nixosModules.franktory
@@ -62,17 +64,22 @@ The config uses the **dendritic pattern** with [flake-parts](https://github.com/
 │   │       ├── default.nix            # flake.nixosConfigurations.kraken
 │   │       ├── configuration.nix      # flake.nixosModules.kraken
 │   │       ├── hardware-configuration.nix  # flake.nixosModules.krakenHardware
-│   │       ├── ollama.nix             # flake.nixosModules.krakenOllama
-│   │       ├── glance.nix             # flake.nixosModules.krakenGlance
 │   │       ├── udev.nix               # flake.nixosModules.krakenUdev
-│   │       ├── logiops.nix            # flake.nixosModules.krakenLogiops
-│   │       ├── otel.nix               # flake.nixosModules.krakenOtel
-│   │       └── prometheus.nix         # flake.nixosModules.krakenPrometheus
-│   └── features/                      # NixOS/HM modules (not scanned by import-tree)
-│       ├── host-options.nix           # defines options.host.{hostName,isDesktop,class,bar,wallpaper,mainMonitor,secondaryMonitor}
+│   │       └── logiops.nix            # flake.nixosModules.krakenLogiops
+│   ├── services/                      # reusable NixOS modules, auto-scanned by import-tree
+│   │   ├── gpu.nix                    # flake.nixosModules.gpu    — AMD/NVIDIA hardware, nvtop, lact
+│   │   ├── greeter.nix                # flake.nixosModules.greeter — greetd/tuigreet or SDDM
+│   │   ├── ollama.nix                 # flake.nixosModules.ollama  — GPU-aware package selection
+│   │   ├── glance.nix                 # flake.nixosModules.glance  — dashboard (port 8080)
+│   │   ├── otel.nix                   # flake.nixosModules.otel    — OpenTelemetry collector
+│   │   └── prometheus.nix             # flake.nixosModules.prometheus — node exporter + Promtail
+│   ├── flake-parts/                   # flake-level exports, auto-scanned by import-tree
+│   │   └── homeManagerModules.nix     # flake.homeManagerModules.*
+│   └── features/                      # HM modules, imported by home.nix (not scanned by import-tree)
+│       ├── host-options.nix           # options.host.{hostName,isDesktop,class,bar,greeter,gpuType,...}
 │       ├── env-packages.nix           # flake-input packages injected into environment.systemPackages
 │       ├── nix-config.nix             # shared nix daemon config (substituters, gc, optimise)
-│       ├── bars/                      # desktop-agnostic bar modules (reusable across WMs)
+│       ├── bars/                      # bar modules selected by host.bar
 │       │   ├── default.nix
 │       │   ├── noctalia.nix
 │       │   ├── caelestia.nix
@@ -87,7 +94,7 @@ The config uses the **dendritic pattern** with [flake-parts](https://github.com/
 │       │       └── config/            # animations, bindings, decoration, exec, gestures, windowrules
 │       ├── devtooling/                # git, rust, go, lua, gleam, kubernetes, tmux, nixvim
 │       ├── shelltools/                # fish, zsh, fzf, eza, bat, direnv, atuin, yazi, zoxide
-│       ├── prompt/                    # starship (kanagawa / oxocarbon / tokyonight themes)
+│       ├── prompt/                    # starship
 │       ├── terminals/                 # kitty, ghostty
 │       ├── stylix/                    # system-wide Kanagawa Dragon theming
 │       ├── gtk/                       # GTK theme config
@@ -103,7 +110,7 @@ The config uses the **dendritic pattern** with [flake-parts](https://github.com/
 
 ### Host options (`options.host.*`)
 
-Each host sets these in its `configuration.nix` (as `flake.nixosModules.<host>`):
+Each host sets these in its `configuration.nix`. HM modules access them via `osConfig.host.*`.
 
 | Option | Type | Description |
 |--------|------|-------------|
@@ -111,11 +118,47 @@ Each host sets these in its `configuration.nix` (as `flake.nixosModules.<host>`)
 | `host.isDesktop` | `bool` | Whether the machine is a desktop |
 | `host.class` | `enum [laptop desktop]` | Form factor |
 | `host.bar` | `enum [noctalia caelestia hyprpanel]` | Desktop panel |
+| `host.greeter` | `enum [greetd sddm]` | Display manager / greeter (default: `greetd`) |
+| `host.gpuType` | `enum [amd nvidia none]` | GPU vendor for driver + tool selection (default: `none`) |
 | `host.wallpaper` | `path` | Wallpaper path |
 | `host.mainMonitor` | `{ name, width, height, refresh }` | Primary monitor |
 | `host.secondaryMonitor` | `{ name, width, height, refresh }` | Secondary monitor |
 
-HM modules access these via `osConfig.host.*`.
+### Reusable NixOS modules (`flake.nixosModules.*`)
+
+Generic service modules in `modules/services/` can be included in any host's `default.nix`:
+
+| Module | What it provides |
+|--------|-----------------|
+| `nixosModules.gpu` | `hardware.amdgpu` + `lact` + `nvtopPackages.amd` when `gpuType = "amd"`; `hardware.nvidia` + `nvtopPackages.nvidia` when `gpuType = "nvidia"`; `hardware.graphics` always |
+| `nixosModules.greeter` | greetd/tuigreet when `greeter = "greetd"`; SDDM astronaut theme when `greeter = "sddm"` |
+| `nixosModules.ollama` | Ollama service; selects `ollama-rocm` / `ollama-cuda` / `ollama` based on `gpuType` |
+| `nixosModules.glance` | Glance dashboard on port 8080 |
+| `nixosModules.otel` | OpenTelemetry collector (exports to `otelcollector.universe.home`) |
+| `nixosModules.prometheus` | Prometheus node exporter + Promtail (uses `host.hostName` as log label) |
+
+### Home Manager modules (`flake.homeManagerModules.*`)
+
+All HM feature modules are exported for reuse by other flakes. Add them to `home-manager.sharedModules` or `home-manager.users.<name>`:
+
+| Module | What it provides |
+|--------|-----------------|
+| `homeManagerModules.bars` | All bars bundle (selects active bar via `osConfig.host.bar`) |
+| `homeManagerModules.barNoctalia` | Noctalia shell bar |
+| `homeManagerModules.barCaelestia` | Caelestia shell bar |
+| `homeManagerModules.barHyprpanel` | Hyprpanel bar |
+| `homeManagerModules.desktops` | Hyprland + hyprlock + hyprpaper + wlogout |
+| `homeManagerModules.devtooling` | git, rust, go, lua, gleam, kubernetes, tmux, nixvim |
+| `homeManagerModules.shelltools` | fish, zsh, fzf, eza, bat, direnv, atuin, yazi, zoxide |
+| `homeManagerModules.prompt` | Starship prompt |
+| `homeManagerModules.terminals` | kitty + ghostty |
+| `homeManagerModules.stylix` | Kanagawa Dragon base16 theming |
+| `homeManagerModules.gtk` | GTK theme config |
+| `homeManagerModules.flameshot` | Screenshot tool |
+
+> **Note:** Bar modules require `host-options.nix` as a NixOS module and home-manager used as a NixOS module (not standalone), since they reference `osConfig.host.*`.
+
+> **Note:** `nix flake show` displays `homeManagerModules: unknown` — this is expected; `homeManagerModules` is not a standard flake output type that nix knows how to introspect. The modules are accessible and functional. Verify with: `nix eval .#homeManagerModules --apply builtins.attrNames`
 
 ### Module pattern
 

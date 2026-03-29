@@ -2,17 +2,10 @@
 {
   flake.nixosModules.kraken =
     {
-      config,
-      lib,
       pkgs,
       inputs,
       ...
     }:
-    let
-      sddm-astronaut = pkgs.sddm-astronaut.override (_: {
-        embeddedTheme = "japanese_aesthetic";
-      });
-    in
     {
       nixpkgs.config.allowUnfree = true;
       nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
@@ -22,6 +15,8 @@
         isDesktop = true;
         class = "desktop";
         bar = "noctalia";
+        greeter = "greetd";
+        gpuType = "amd";
         wallpaper = "${inputs.wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/call_of_the_night_2.jpg";
         mainMonitor = {
           name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. GS27QA 24286B001135";
@@ -51,10 +46,8 @@
         ];
       };
 
-      systemd.packages = with pkgs; [ lact ];
       systemd.services = {
         dhcpd.enable = false;
-        lactd.wantedBy = [ "multi-user.target" ];
       };
 
       networking = {
@@ -94,10 +87,6 @@
         hardware.openrgb = {
           enable = true;
           motherboard = "amd";
-        };
-        greetd = {
-          enable = true;
-          settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --xsessions ${config.services.displayManager.sessionData.desktops}/share/xsessions --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions --remember --remember-user-session --user-menu --user-menu-min-uid 1000 --asterisks --power-shutdown 'shutdown -P now' --power-reboot 'shutdown -r now'";
         };
         openssh = {
           enable = true;
@@ -159,27 +148,11 @@
           pulse.enable = true;
           wireplumber.enable = true;
         };
-        displayManager.sddm = {
-          enable = false;
-          wayland.enable = true;
-          theme = lib.mkForce "sddm-astronaut-theme";
-          extraPackages = [ sddm-astronaut ];
-          settings.Theme.Current = "sddm-astronaut-theme";
-        };
       };
 
       hardware = {
         logitech.wireless.enable = true;
         logitech.wireless.enableGraphical = true;
-        amdgpu = {
-          overdrive.enable = true;
-          opencl.enable = true;
-          initrd.enable = true;
-        };
-        graphics = {
-          enable = true;
-          enable32Bit = true;
-        };
       };
 
       virtualisation = {
@@ -203,11 +176,6 @@
       };
 
       fonts.packages = with pkgs; [ nerd-fonts.hack ];
-
-      environment.systemPackages = with pkgs; [
-        lact
-        sddm-astronaut
-      ];
 
       users = {
         defaultUserShell = pkgs.fish;
