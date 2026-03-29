@@ -60,7 +60,6 @@ with pkgs;
   nitch
   nix-search-tv
   nixos-generators
-  nvtopPackages.amd
   nwg-look
   obs-studio
   obsidian
