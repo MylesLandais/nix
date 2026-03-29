@@ -53,7 +53,11 @@
   outputs =
     inputs@{ flake-parts, import-tree, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [ (import-tree ./modules/hosts) ];
+      imports = [
+        (import-tree ./modules/hosts)
+        (import-tree ./modules/services)
+        (import-tree ./modules/flake-parts)
+      ];
       systems = [ "x86_64-linux" ];
     };
 }
