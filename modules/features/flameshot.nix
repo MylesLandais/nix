@@ -33,6 +33,10 @@
     };
   };
 
+  systemd.user.services.flameshot = {
+    Service.Environment = [ "PATH=${pkgs.grim}/bin:$PATH" ];
+  };
+
   wayland.windowManager.hyprland.settings = {
     windowrule = [
       "no_anim on, float on, move (0) (0), pin on, no_initial_focus on, match:title ^(flameshot)$"
