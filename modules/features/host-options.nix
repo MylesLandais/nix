@@ -25,6 +25,23 @@
       ];
       description = "The desktop bar/panel to use.";
     };
+    greeter = lib.mkOption {
+      type = lib.types.enum [
+        "sddm"
+        "greetd"
+      ];
+      default = "greetd";
+      description = "The display manager / greeter to use.";
+    };
+    gpuType = lib.mkOption {
+      type = lib.types.enum [
+        "amd"
+        "nvidia"
+        "none"
+      ];
+      default = "none";
+      description = "GPU type for acceleration packages (amd=ROCm, nvidia=CUDA, none=CPU-only).";
+    };
     wallpaper = lib.mkOption {
       type = lib.types.path;
       description = "Path to the wallpaper image.";

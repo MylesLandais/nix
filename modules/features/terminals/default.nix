@@ -6,6 +6,7 @@
 {
   imports = [
     ./kitty.nix
+    ./ghostty.nix
   ];
 
   options = {
@@ -13,5 +14,6 @@
   };
   config = lib.mkIf config.terminals.enable {
     kitty.enable = lib.mkDefault true;
+    ghostty.enable = lib.mkDefault true;
   };
 }
