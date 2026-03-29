@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  osConfig,
   ...
 }:
 {
@@ -41,7 +42,7 @@
         {
           plugin = ukiyo;
           extraConfig = ''
-            set -g @ukiyo-theme "kanagawa/wave"
+            set -g @ukiyo-theme "${osConfig.host.themeData.tmuxTheme}"
             set -g @ukiyo-playerctl-format "►  {{ artist }} - {{ title }}"
             set -g @ukiyo-ignore-window-colors true
             set -g @ukiyo-refresh-rate 10

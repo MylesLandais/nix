@@ -120,6 +120,8 @@ Each host sets these in its `configuration.nix`. HM modules access them via `osC
 | `host.bar` | `enum [noctalia caelestia hyprpanel]` | Desktop panel |
 | `host.greeter` | `enum [greetd sddm]` | Display manager / greeter (default: `greetd`) |
 | `host.gpuType` | `enum [amd nvidia none]` | GPU vendor for driver + tool selection (default: `none`) |
+| `host.theme` | `enum [kanagawa-dragon kanagawa-wave kanagawa-aqua]` | System color theme (default: `kanagawa-dragon`) |
+| `host.themeData` | `attrs` (read-only) | Computed color data derived from `host.theme`; set by `nixosModules.themeData` |
 | `host.wallpaper` | `path` | Wallpaper path |
 | `host.mainMonitor` | `{ name, width, height, refresh }` | Primary monitor |
 | `host.secondaryMonitor` | `{ name, width, height, refresh }` | Secondary monitor |
@@ -130,12 +132,25 @@ Generic service modules in `modules/services/` can be included in any host's `de
 
 | Module | What it provides |
 |--------|-----------------|
+| `nixosModules.themeData` | Computes `host.themeData` from `host.theme`; required for all themed HM modules |
 | `nixosModules.gpu` | `hardware.amdgpu` + `lact` + `nvtopPackages.amd` when `gpuType = "amd"`; `hardware.nvidia` + `nvtopPackages.nvidia` when `gpuType = "nvidia"`; `hardware.graphics` always |
 | `nixosModules.greeter` | greetd/tuigreet when `greeter = "greetd"`; SDDM astronaut theme when `greeter = "sddm"` |
 | `nixosModules.ollama` | Ollama service; selects `ollama-rocm` / `ollama-cuda` / `ollama` based on `gpuType` |
 | `nixosModules.glance` | Glance dashboard on port 8080 |
 | `nixosModules.otel` | OpenTelemetry collector (exports to `otelcollector.universe.home`) |
 | `nixosModules.prometheus` | Prometheus node exporter + Promtail (uses `host.hostName` as log label) |
+
+### Themes
+
+Set `host.theme` in a host's `configuration.nix` to switch the full color scheme. The `nixosModules.themeData` module must be included in the host's modules list.
+
+| Theme | Background | Style | Drives |
+|-------|-----------|-------|--------|
+| `kanagawa-dragon` | `#181616` | Dark warm grey | stylix base16, kitty (`kanagawa_dragon`), ghostty, GTK (`Kanagawa-B`), tmux (`kanagawa/dragon`) |
+| `kanagawa-wave` | `#1F1F28` | Dark blue-black | stylix base16, kitty (`kanagawa`), ghostty, GTK (`Kanagawa`), tmux (`kanagawa/wave`) |
+| `kanagawa-aqua` | `#12141c` | Dark teal-tinted (custom) | stylix base16 (inline), kitty (`kanagawa_dragon`), ghostty (custom aqua palette), GTK (`Kanagawa-B`), tmux (`kanagawa/dragon`) |
+
+All color data is stored as inline base16 attrsets in `modules/services/theme-data.nix` — no external YAML files needed. Bars (noctalia, hyprpanel) derive colors from the wallpaper via matugen and auto-adjust independently.
 
 ### Home Manager modules (`flake.homeManagerModules.*`)
 

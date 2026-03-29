@@ -2,6 +2,7 @@
   lib,
   config,
   pkgs,
+  osConfig,
   vars,
   ...
 }:
@@ -13,7 +14,7 @@
     stylix = {
       autoEnable = false;
       enable = true;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/kanagawa-dragon.yaml";
+      base16Scheme = osConfig.host.themeData.base16Scheme;
       targets = {
         bat.enable = true;
         btop.enable = true;

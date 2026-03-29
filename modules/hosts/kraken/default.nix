@@ -9,6 +9,7 @@
       inputs.self.nixosModules.krakenUdev
       inputs.self.nixosModules.krakenLogiops
       inputs.self.nixosModules.greeter
+      inputs.self.nixosModules.themeData
       inputs.self.nixosModules.gpu
       inputs.self.nixosModules.ollama
       inputs.self.nixosModules.glance

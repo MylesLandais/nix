@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  osConfig,
   ...
 }:
 {
@@ -14,10 +15,10 @@
       enable = true;
       iconTheme = {
         package = pkgs.kanagawa-icon-theme;
-        name = "Kanagawa";
+        name = osConfig.host.themeData.gtk.iconName;
       };
       theme = {
-        name = "Kanagawa-B";
+        name = osConfig.host.themeData.gtk.name;
         package = pkgs.kanagawa-gtk-theme;
       };
       gtk4.theme = config.gtk.theme;

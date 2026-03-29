@@ -17,6 +17,7 @@
         bar = "noctalia";
         greeter = "greetd";
         gpuType = "amd";
+        theme = "kanagawa-aqua";
         wallpaper = "${inputs.wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/call_of_the_night_2.jpg";
         mainMonitor = {
           name = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. GS27QA 24286B001135";

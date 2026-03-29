@@ -42,6 +42,20 @@
       default = "none";
       description = "GPU type for acceleration packages (amd=ROCm, nvidia=CUDA, none=CPU-only).";
     };
+    theme = lib.mkOption {
+      type = lib.types.enum [
+        "kanagawa-dragon"
+        "kanagawa-wave"
+        "kanagawa-aqua"
+      ];
+      default = "kanagawa-dragon";
+      description = "System color theme variant.";
+    };
+    themeData = lib.mkOption {
+      type = lib.types.attrs;
+      readOnly = true;
+      description = "Computed theme values derived from host.theme. Set by nixosModules.themeData.";
+    };
     wallpaper = lib.mkOption {
       type = lib.types.path;
       description = "Path to the wallpaper image.";

@@ -17,6 +17,7 @@
         class = "laptop";
         bar = "noctalia";
         greeter = "sddm";
+        theme = "kanagawa-dragon";
         wallpaper = "${inputs.wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/3895e.jpg";
         mainMonitor = {
           name = "eDP-1";

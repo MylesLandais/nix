@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  osConfig,
   ...
 }:
 {
@@ -23,7 +24,7 @@
       shellIntegration = {
         enableZshIntegration = true;
       };
-      themeFile = "kanagawa";
+      themeFile = osConfig.host.themeData.kittyTheme;
     };
   };
 }
