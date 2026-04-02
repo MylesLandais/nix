@@ -181,7 +181,7 @@
         };
         brightness = {
           brightnessStep = 5;
-          enableDdcSupport = false;
+          enableDdcSupport = true;
           enforceMinimum = true;
         };
         calendar = {
@@ -289,6 +289,8 @@
           avatarImage = "/home/franky/.face";
           boxRadiusRatio = 1;
           compactLockScreen = false;
+          lockScreenAnimations = true;
+          enableLockScreenMediaControls = true;
           dimmerOpacity = 0.2;
           enableShadows = true;
           forceBlackScreenCorners = false;
