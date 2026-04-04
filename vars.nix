@@ -34,7 +34,7 @@ in
     name = "desc:Dell Inc. Dell S2716DG ##ASPYT+r5vCzd";
     width = 2560;
     height = 1440;
-    refresh = 59.95;
+    refresh = 144.0;
   };
 
   secondaryMonitor = {

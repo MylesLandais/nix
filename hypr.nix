@@ -63,6 +63,12 @@ in
         no_update_news = true;
         no_donation_nag = true;
       };
+      misc = {
+        vrr = 2; # VRR only when fullscreen (prevents flicker on 60Hz side monitors)
+      };
+      cursor = {
+        no_hardware_cursors = true;
+      };
       general = {
         gaps_in = 5;
         gaps_out = 10;
@@ -116,6 +122,20 @@ in
         # Browser opacity rules
         "match:class ^(chromium|Chromium|vivaldi|Vivaldi)$, opacity 1.0 override 1.0 override"
         "match:class ^(chromium|Chromium|vivaldi|Vivaldi)$, no_blur on"
+        # Gaming window rules - Steam client
+        "match:class ^steam$, float on"
+        "match:class ^steam$ title:^Steam$, workspace 1"
+        # Gaming window rules - games launched via Steam/Proton
+        "match:class ^steam_app_, workspace 5"
+        "match:class ^steam_app_, fullscreen 1"
+        "match:class ^steam_app_, no_blur on"
+        "match:class ^steam_app_, no_shadow on"
+        "match:class ^steam_app_, immediate on"
+        # Gamescope window rules
+        "match:class ^gamescope$, fullscreen 1"
+        "match:class ^gamescope$, no_blur on"
+        "match:class ^gamescope$, no_shadow on"
+        "match:class ^gamescope$, immediate on"
       ];
       monitor = [
         # Bottom row - Three Dell monitors at y=2160
@@ -146,8 +166,8 @@ in
         "NVD_BACKEND,direct"
         "XDG_SESSION_TYPE,wayland"
         "GBM_BACKEND,nvidia-drm"
-        "__GL_GSYNC_ALLOWED,0"
-        "__GL_VRR_ALLOWED,0"
+        "__GL_GSYNC_ALLOWED,1"
+        "__GL_VRR_ALLOWED,1"
         "WLR_NO_HARDWARE_CURSORS,1"
         "NIXOS_OZONE_WL,1"
         "ELECTRON_OZONE_PLATFORM_HINT,auto"

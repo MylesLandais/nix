@@ -13,6 +13,8 @@
     ./go
     ./kubernetes
     ./lua
+    ./nushell
+    ./pi
     ./remmina
     ./rust
     ./tmux
@@ -30,10 +32,12 @@
     go.enable = lib.mkDefault false;
     kubernetes.enable = lib.mkDefault false;
     lua.enable = lib.mkDefault false;
-    remmina.enable = lib.mkDefault false;
+    nushell.enable = lib.mkDefault true;
+    pi.enable = lib.mkDefault true;
+    remmina.enable = lib.mkDefault true;
     rust.enable = lib.mkDefault false;
     tmux.enable = lib.mkDefault false;
     code.enable = lib.mkDefault true;
-    zed.enable = lib.mkDefault false;
+    zed.enable = lib.mkDefault true;
   };
 }

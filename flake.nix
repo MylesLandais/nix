@@ -29,6 +29,7 @@
       url = "github:anomalyco/opencode/8c739b4a7db455a33fd77b4c997f2a9eaf27648a";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.4.3";
 };
 
   outputs =
@@ -45,6 +46,7 @@
       agenix,
       zed,
       opencode,
+      hermes-agent,
       ...
     }@inputs:
     let
@@ -76,6 +78,7 @@
           ./hosts/cerberus/configuration.nix
           chaotic.nixosModules.default
           inputs.agenix.nixosModules.default
+          inputs.hermes-agent.nixosModules.default
           ./modules/gnome-keyring.nix
           home-manager.nixosModules.home-manager
           {

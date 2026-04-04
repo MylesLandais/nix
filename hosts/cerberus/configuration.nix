@@ -13,9 +13,11 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../../modules/nvidia.nix
     ../../modules/gaming.nix
     ../../modules/dev.nix
     ../../modules/agenix.nix
+    ../../modules/hermes.nix
   ];
 
   # ---------------------------------------------------------------------------
@@ -57,7 +59,6 @@
     plymouth.enable = true;
     consoleLogLevel = 3;
     initrd.verbose = false;
-    initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -104,34 +105,6 @@
     enable = true;
     settings.PasswordAuthentication = false;
     settings.KbdInteractiveAuthentication = false;
-  };
-
-  # ---------------------------------------------------------------------------
-  # Graphics (NVIDIA Proprietary)
-  # ---------------------------------------------------------------------------
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
-
-  services.xserver.videoDrivers = [ "nvidia" ];
-
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    open = true;
-    nvidiaPersistenced = true;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
-  };
-
-  environment.sessionVariables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
-    LIBVA_DRIVER_NAME = "nvidia";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    GBM_BACKEND = "nvidia-drm";
   };
 
   # ---------------------------------------------------------------------------
@@ -209,7 +182,7 @@
   # Remote Gaming (Sunshine/Moonlight)
   # ---------------------------------------------------------------------------
 
-  boot.kernelModules = [ "uinput" ];
+  boot.kernelModules = [ "uinput" "wireguard" ];
 
   services.sunshine = {
     enable = true;
@@ -399,6 +372,9 @@
     allowedUDPPorts = [
       22000  # Syncthing discovery
       21027  # Syncthing local discovery
+    ];
+    allowedUDPPortRanges = [
+      { from = 60000; to = 61000; }  # Mosh
     ];
   };
 
@@ -624,17 +600,11 @@
   # ---------------------------------------------------------------------------
 
   environment.systemPackages = with pkgs; [
-    # Graphics diagnostics
-    libva-utils
-    nvtopPackages.nvidia
-    vulkan-tools
-    vulkan-validation-layers
-    egl-wayland
-    nvidia-vaapi-driver
-
     # System utilities
     git
     cifs-utils
+    wireguard-tools
+    nmap
     ntfs3g
     polkit_gnome  # GTK polkit auth agent for keyring unlock prompts
 
@@ -659,6 +629,8 @@
     gemini-cli
     syncthing  # File synchronization
     teamspeak6-client
+    termius
+    mosh
   ];
 
   # ---------------------------------------------------------------------------

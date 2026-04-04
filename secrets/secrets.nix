@@ -10,4 +10,5 @@ in
   "zai-api-key.age".publicKeys = users ++ systems;
   "tailscale-auth-key.age".publicKeys = users ++ systems;
   "code-server-password.age".publicKeys = users ++ systems;
+  "hermes-env.age".publicKeys = users ++ systems;
 }

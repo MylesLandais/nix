@@ -9,9 +9,31 @@
     zed.enable = lib.mkEnableOption "Enable zed module";
   };
   config = lib.mkIf config.zed.enable {
+    home.packages = with pkgs; [
+      nil
+    ];
+
     programs.zed-editor = {
       enable = true;
       userSettings = {
+        theme = "Kanagawa Wave";
+        buffer_font_family = "Maple Mono NF";
+        ui_font_size = 16;
+        buffer_font_size = 14;
+        autosave = "on_focus_change";
+        vim_mode = true;
+        languages = {
+          "Nix" = {
+            language_servers = [ "nil" ];
+          };
+        };
+        lsp = {
+          nix = {
+            binary = {
+              path = "${pkgs.nil}/bin/nil";
+            };
+          };
+        };
         language_models = {
           openai_compatible = {
             "ZAI" = {
@@ -29,7 +51,6 @@
             };
           };
         };
-        vim_mode = true;
         terminal = {
           alternate_scroll = "off";
           blinking = "off";
@@ -56,9 +77,6 @@
           option_as_meta = false;
           button = false;
           shell = "system";
-          #{
-          #                    program = "zsh";
-          #};
           toolbar = {
             title = true;
           };
@@ -73,7 +91,7 @@
             ];
             env = {};
           };
-};
+        };
       };
     };
   };

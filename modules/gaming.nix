@@ -23,18 +23,6 @@ let
   '';
 in
 {
-  # Graphics support for 3D gaming
-  # hardware.graphics = {
-  #   enable = true;
-  #  extraPackages = with pkgs; [
-  #    intel-media-driver # Hardware-accelerated video decoding
-  #    vaapiIntel # VAAPI support for Intel GPUs
-  #  ];
-  #};
-
-  # Video driver configuration (updated for NVIDIA compatibility)
-  services.xserver.videoDrivers = [ "nvidia" ]; # Use NVIDIA drivers as per previous configuration
-
   # Steam gaming platform
   programs.steam = {
     enable = true;
@@ -58,7 +46,6 @@ in
     heroic # Epic/GOG game launcher
     wineWowPackages.stable # Windows compatibility
     protontricks # Winetricks for Proton
-    mangohud # Performance overlay
     gamemode # CPU/GPU optimization
     runelite
     # RetroArch with minimal cores (bsnes and mgba)
@@ -78,6 +65,7 @@ in
     rpcs3 # PlayStation 3
           # Temporarily disabled due to build failure:
           # Error: builder failed with exit code 2 (C++ compilation errors)
+    azahar # 3DS emulator (successor to Citra, best Fire Emblem Awakening compatibility)
     ryubing
   ];
 }
