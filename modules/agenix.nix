@@ -33,11 +33,11 @@
         file = ../secrets/zai-api-key.age;
         owner = "warby";
       };
-      # hermes-env = {
-      #   file = ../secrets/hermes-env.age;
-      #   owner = "hermes";
-      #   group = "hermes";
-      # };
+      hermes-env = {
+        file = ../secrets/hermes-env.age;
+        owner = "hermes";
+        group = "hermes";
+      };
     };
   };
 

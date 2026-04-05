@@ -19,6 +19,13 @@
         function last_history_item; echo $history[1]; end
         abbr -a !! --position anywhere --function last_history_item
       '';
+      interactiveShellInit = ''
+        if test -f ~/Workspace/.env
+          for line in (grep -v '^#' ~/Workspace/.env | grep -v '^$')
+            set -gx (string split -m1 = $line)[1] (string split -m1 = $line)[2]
+          end
+        end
+      '';
 
       shellAliases = {
         ll = "eza --icons --git --git-ignore --git -F -l";
