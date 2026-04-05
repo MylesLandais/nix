@@ -63,6 +63,7 @@
                   capabilities = {
                     tools = true;
                     images = true;
+                    parallel_tool_calls = true;
                   };
                 }
               ];
