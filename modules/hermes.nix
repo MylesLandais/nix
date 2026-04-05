@@ -13,7 +13,7 @@
     ];
 
     settings = {
-      model = "anthropic/claude-sonnet-4";
+      model = "qwen/qwen3-6-plus:free";
       terminal.backend = "local";
       toolsets = [ "all" ];
     };
