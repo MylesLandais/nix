@@ -36,6 +36,23 @@
         };
         language_models = {
           openai_compatible = {
+            "glm" = {
+              api_url = "https://api.z.ai/api/coding/paas/v4";
+              available_models = [
+                {
+                  name = "glm-4.7";
+                  max_tokens = 200000;
+                  max_output_tokens = 32000;
+                  max_completion_tokens = 200000;
+                  capabilities = {
+                    tools = true;
+                    images = true;
+                    parallel_tool_calls = true;
+                    prompt_cache_key = true;
+                  };
+                }
+              ];
+            };
             "ZAI" = {
               api_url = "https://api.z.ai/api/paas/v4";
               available_models = [
@@ -45,6 +62,7 @@
                   max_tokens = 200000;
                   capabilities = {
                     tools = true;
+                    images = true;
                   };
                 }
               ];
@@ -86,9 +104,13 @@
           "Opencode" = {
             type = "custom";
             command = "opencode";
-            args = [
-              "acp"
-            ];
+            args = [ "acp" ];
+            env = {};
+          };
+          "pi" = {
+            type = "custom";
+            command = "npx";
+            args = [ "-y" "pi-acp" ];
             env = {};
           };
         };
