@@ -102,6 +102,18 @@
           working_directory = "current_project_directory";
         };
         agent_servers = {
+          "hermes" = {
+            type = "custom";
+            command = "hermes";
+            args = [ "acp" ];
+            env = {};
+          };
+          "gemini" = {
+            type = "custom";
+            command = "npx";
+            args = [ "@google/gemini-cli" "--acp" ];
+            env = {};
+          };
           "Opencode" = {
             type = "custom";
             command = "opencode";
