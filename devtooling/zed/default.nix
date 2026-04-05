@@ -64,6 +64,7 @@
                     tools = true;
                     images = true;
                     parallel_tool_calls = true;
+                    prompt_cache_key = true;
                   };
                 }
               ];
