@@ -21,7 +21,7 @@
         ui_font_size = 16;
         buffer_font_size = 14;
         autosave = "on_focus_change";
-        vim_mode = true;
+        vim_mode = false;
         languages = {
           "Nix" = {
             language_servers = [ "nil" ];
