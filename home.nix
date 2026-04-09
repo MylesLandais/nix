@@ -41,7 +41,7 @@
         background-opacity = 0.9
         window-decoration = false
         font-family = "'Maple Mono NF', JetBrainsMono Nerd Font"
-        keybind = shift+enter=text:\\n
+        # keybind = shift+enter=text:\\n  # Removed to allow normal enter behavior
       '';
 
       "${config.xdg.configHome}/electron-flags.conf".text = ''
