@@ -25,7 +25,7 @@
         };
         kernelModules = [
           "kvm-amd"
-          "kvm-intel"
+          "ntsync"
           "kvm"
         ];
         extraModulePackages = [ ];

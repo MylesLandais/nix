@@ -30,7 +30,7 @@
             health_check = { };
           };
           exporters.otlphttp = {
-            endpoint = "https://otelcollector.universe.home:443";
+            endpoint = "https://otelcollector.fkouhailabs.net";
             tls = {
               insecure = false;
               insecure_skip_verify = true;

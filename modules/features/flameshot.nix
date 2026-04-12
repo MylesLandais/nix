@@ -34,7 +34,11 @@
   };
 
   systemd.user.services.flameshot = {
-    Service.Environment = [ "PATH=${pkgs.grim}/bin:$PATH" ];
+    Service.Environment = [
+      "PATH=${pkgs.grim}/bin:${lib.makeBinPath [ pkgs.flameshot ]}"
+      "QT_QPA_PLATFORM=wayland"
+      "XDG_SESSION_TYPE=wayland"
+    ];
   };
 
   wayland.windowManager.hyprland.settings = {

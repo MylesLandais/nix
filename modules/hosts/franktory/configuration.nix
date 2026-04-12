@@ -104,11 +104,19 @@
 
       security.rtkit.enable = true;
 
-      fonts.packages = [
-        pkgs.nerd-fonts.hack
-        pkgs.maple-mono.NF-unhinted
-        pkgs.maple-mono.truetype
-      ];
+      fonts = {
+        packages = [
+          pkgs.nerd-fonts.hack
+          pkgs.maple-mono.NF-unhinted
+          pkgs.maple-mono.truetype
+          pkgs.noto-fonts-cjk-sans
+        ];
+        fontconfig.defaultFonts = {
+          sansSerif = [ "DejaVu Sans" "Noto Sans CJK JP" ];
+          serif = [ "DejaVu Serif" "Noto Serif CJK JP" ];
+          monospace = [ "DejaVu Sans Mono" "Noto Sans Mono CJK JP" ];
+        };
+      };
 
       users = {
         defaultUserShell = pkgs.fish;
