@@ -101,7 +101,7 @@ let
       }
 
       wait_for_stable_topology() {
-        local deadline remaining key last_key=""
+        local deadline key last_key=""
         local stable_count=0
         deadline=$((SECONDS + STABILIZE_TIMEOUT))
 
