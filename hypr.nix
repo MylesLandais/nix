@@ -50,7 +50,7 @@ let
       readonly STABLE_POLLS="''${STABLE_POLLS:-3}"
       readonly STABILIZE_INTERVAL="''${STABILIZE_INTERVAL:-1}"
       readonly STABILIZE_TIMEOUT="''${STABILIZE_TIMEOUT:-20}"
-      readonly SOCKET_PATH="/tmp/hypr/''${HYPRLAND_INSTANCE_SIGNATURE:-}/.socket2.sock"
+      readonly SOCKET_PATH="''${XDG_RUNTIME_DIR:-/tmp}/hypr/''${HYPRLAND_INSTANCE_SIGNATURE:-}/.socket2.sock"
 
       readonly -a MANAGED_WORKSPACES=(1 2 3 4 5 6 7 8 9 10)
       readonly HEADLESS_WORKSPACE="99"
