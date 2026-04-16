@@ -56,6 +56,8 @@ with pkgs;
   libnotify
   liquidctl
   lmstudio
+  mcp-k8s-go
+  mcp-grafana
   mpv
   nitch
   nix-search-tv
@@ -64,6 +66,7 @@ with pkgs;
   obs-studio
   obsidian
   oci-cli
+  opentofu
   opencloud-desktop
   pavucontrol
   playerctl
