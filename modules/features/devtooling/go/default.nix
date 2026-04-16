@@ -12,7 +12,6 @@
   config = lib.mkIf config.go.enable {
     home.packages = with pkgs; [
       go
-      gopls
       gotestsum
       mockgen
       gofumpt
