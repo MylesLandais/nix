@@ -38,6 +38,10 @@
         file = ../secrets/gemini.age;
         mode = "400";
       };
+      grafana = {
+        file = ../secrets/grafana.age;
+        mode = "400";
+      };
     };
   };
 

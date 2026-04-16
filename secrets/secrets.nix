@@ -14,4 +14,9 @@ in
     franktory
     kraken
   ];
+  "grafana.age".publicKeys = [
+    franky
+    franktory
+    kraken
+  ];
 }
