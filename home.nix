@@ -263,7 +263,44 @@
     };
   };
 
-   programs = {
+  programs = {
+    ssh = {
+      enable = true;
+      matchBlocks = {
+        "hydra" = {
+          hostname = "192.168.0.222";
+          user = "root";
+          identityFile = "~/.ssh/id_ed25519";
+          extraOptions = {
+            ControlMaster = "auto";
+            ControlPath = "~/.ssh/control-%h-%p-%r";
+            ControlPersist = "10m";
+            ServerAliveInterval = "15";
+            ServerAliveCountMax = "3";
+          };
+        };
+        "potato" = {
+          hostname = "192.168.0.49";
+          user = "warby";
+          identityFile = "~/.ssh/id_ed25519";
+          extraOptions = {
+            ControlMaster = "auto";
+            ControlPath = "~/.ssh/control-%h-%p-%r";
+            ControlPersist = "10m";
+          };
+        };
+        "nixos" = {
+          hostname = "192.168.0.49";
+          user = "root";
+          identityFile = "~/.ssh/id_ed25519";
+          extraOptions = {
+            ControlMaster = "auto";
+            ControlPath = "~/.ssh/control-%h-%p-%r";
+            ControlPersist = "10m";
+          };
+        };
+      };
+    };
     chromium = {
       enable = true;
       extensions = [

@@ -21,7 +21,7 @@
         source "$(fzf-share)/key-bindings.zsh"
         source "$(fzf-share)/completion.zsh"
         source <(fzf --zsh)
-        export SSH_AUTH_SOCK=/home/franky/.bitwarden-ssh-agent.sock
+        export SSH_AUTH_SOCK=/home/warby/.bitwarden-ssh-agent.sock
 
         # grep alias: use ripgrep if available, fall back to grep
         grep() {
