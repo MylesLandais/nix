@@ -21,6 +21,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     claude-code.url = "github:sadjow/claude-code-nix";
+    codex-nix.url = "github:SecBear/codex-nix";
 
     agenix.url = "github:ryantm/agenix";
     zed.url = "github:zed-industries/zed";
