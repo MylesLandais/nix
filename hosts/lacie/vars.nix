@@ -23,7 +23,7 @@ let
   };
 in
 {
-  hostName = "usb-workstation";
+  hostName = "lacie";
   username = "warby";
   userEmail = "myles.landais@protonmail.com";
 
@@ -31,7 +31,7 @@ in
   wallpaper = "${wp}/share/wallpapers/nix-wallpaper-nineish-catppuccin-mocha.png";
 
   # Portable: empty name = Hyprland wildcard (matches any unrecognized monitor).
-  # Positions and workspace bindings are overridden in hosts/usb-workstation/home.nix.
+  # Positions and workspace bindings are overridden in hosts/lacie/home.nix.
   mainMonitor = { name = ""; width = 1920; height = 1080; refresh = 60.0; };
   secondaryMonitor = { name = ""; width = 1920; height = 1080; refresh = 60.0; };
   tertiaryMonitor = { name = ""; width = 1920; height = 1080; refresh = 60.0; };

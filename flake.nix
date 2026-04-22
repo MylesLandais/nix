@@ -64,12 +64,12 @@
         ];
       };
       vars = import ./vars.nix { inherit pkgs; };
-      usbVars = import ./hosts/usb-workstation/vars.nix { inherit pkgs; };
+      lacieVars = import ./hosts/lacie/vars.nix { inherit pkgs; };
     in
     {
-      nixosConfigurations.usb-workstation = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.lacie = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs; vars = usbVars; };
+        specialArgs = { inherit inputs; vars = lacieVars; };
         modules = [
           ({ config, pkgs, ... }: {
             nixpkgs.overlays = [
@@ -77,16 +77,17 @@
               inputs.claude-code.overlays.default
             ];
           })
-          ./hosts/usb-workstation/configuration.nix
+          ./hosts/lacie/configuration.nix
+          inputs.hermes-agent.nixosModules.default
           home-manager.nixosModules.home-manager
           {
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = false;
-              extraSpecialArgs = { inherit inputs; vars = usbVars; };
-              users.warby = import ./hosts/usb-workstation/home.nix;
+              extraSpecialArgs = { inherit inputs; vars = lacieVars; };
+              users.warby = import ./hosts/lacie/home.nix;
             };
-            networking.hostName = usbVars.hostName;
+            networking.hostName = lacieVars.hostName;
           }
         ];
       };

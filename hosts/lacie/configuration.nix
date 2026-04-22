@@ -1,4 +1,4 @@
-# USB Workstation NixOS Configuration
+# LaCie NixOS Configuration
 # Portable Hyprland workstation. Boots from LaCie live_nix partition.
 # systemd-boot with canTouchEfiVariables=false to avoid polluting host NVRAM.
 
@@ -13,6 +13,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./hermes.nix
     ../../modules/gnome-keyring.nix
   ];
 
