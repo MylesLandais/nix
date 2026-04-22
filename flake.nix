@@ -64,8 +64,33 @@
         ];
       };
       vars = import ./vars.nix { inherit pkgs; };
+      usbVars = import ./hosts/usb-workstation/vars.nix { inherit pkgs; };
     in
     {
+      nixosConfigurations.usb-workstation = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit inputs; vars = usbVars; };
+        modules = [
+          ({ config, pkgs, ... }: {
+            nixpkgs.overlays = [
+              nur.overlays.default
+              inputs.claude-code.overlays.default
+            ];
+          })
+          ./hosts/usb-workstation/configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = false;
+              extraSpecialArgs = { inherit inputs; vars = usbVars; };
+              users.warby = import ./hosts/usb-workstation/home.nix;
+            };
+            networking.hostName = usbVars.hostName;
+          }
+        ];
+      };
+
       nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs vars; };
