@@ -169,11 +169,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1776289225,
-        "narHash": "sha256-2pjmO1if0T+YxTVklQORbz/DXC0SwG1lUZ4DKhyIjCo=",
+        "lastModified": 1776970327,
+        "narHash": "sha256-OMAxXcH7XmQPT/s3UKAOzA9QSHz9fbNUgSbQb3RwbPU=",
         "owner": "SecBear",
         "repo": "codex-nix",
-        "rev": "7d495ed484d13eecb51b80ec369f55bec609fec7",
+        "rev": "0bf60683cc38b576648d042e140779682e8d3b20",
         "type": "github"
       },
       "original": {

@@ -326,7 +326,7 @@ let
 
           snapshot_state || true
 
-          socat - "UNIX-CONNECT:$socket" 2>/dev/null | while read -r line; do
+          socat -u "UNIX-CONNECT:$socket" - 2>/dev/null | while read -r line; do
             case "$line" in
               monitoradded*|monitorremoved*|monitorrenamed*|configreloaded*)
                 log "Event received: $line"

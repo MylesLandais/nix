@@ -53,8 +53,12 @@
     consoleLogLevel = 3;
     initrd.verbose = false;
     loader = {
-      systemd-boot.enable = true;
-      # Never write machine-specific EFI NVRAM entries on host hardware.
+      systemd-boot = {
+        enable = true;
+        # Install as /EFI/BOOT/BOOTX64.EFI so firmware fallback picks us up.
+        # Required for portability — we never write host NVRAM entries.
+        efiInstallAsRemovable = true;
+      };
       efi.canTouchEfiVariables = false;
       efi.efiSysMountPoint = "/boot";
     };

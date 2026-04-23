@@ -107,6 +107,8 @@
     };
 
     sessionVariables = {
+      # Hermes should use the user-owned home, not the system service state dir.
+      HERMES_HOME = "/home/${vars.username}/.hermes";
       TERMINAL = "ghostty";
       EDITOR = "nvim";
       GDK_BACKEND = "wayland,x11";
@@ -123,6 +125,10 @@
 
 
     packages = with pkgs; [
+      (writeShellScriptBin "hermes" ''
+        export HERMES_HOME="$HOME/.hermes"
+        exec /run/current-system/sw/bin/hermes "$@"
+      '')
       # Additions for declarative archive handling in Nemo and CLI
       bind
       bitwarden-desktop
