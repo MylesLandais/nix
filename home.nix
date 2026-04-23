@@ -89,20 +89,6 @@
       #   in
       #     customizedScript;
 
-      ".config/code-server/config.yaml".text = ''
-        bind-addr: 0.0.0.0:8080
-        auth: password
-        password: admin  # Matches container env; secure with agenix
-        cert: false
-      '';
-
-      ".config/code-server/settings.json".text = ''
-        {
-          "workbench.colorTheme": "Kanagawa",
-          "editor.fontFamily": "JetBrains Mono Nerd Font",
-          "terminal.integrated.fontFamily": "JetBrains Mono Nerd Font"
-        }
-      '';
 
     };
 
