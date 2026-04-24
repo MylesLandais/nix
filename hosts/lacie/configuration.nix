@@ -207,6 +207,7 @@
     usbutils
     pciutils
     networkmanagerapplet
+    mixxx
   ];
 
   system.stateVersion = "25.05";
