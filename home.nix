@@ -41,7 +41,8 @@
         background-opacity = 0.9
         window-decoration = false
         font-family = "'Maple Mono NF', JetBrainsMono Nerd Font"
-        # keybind = shift+enter=text:\\n  # Removed to allow normal enter behavior
+        # Hermes treats ESC+Enter like Alt+Enter, inserting a newline without submitting.
+        keybind = shift+enter=text:\x1b\r
       '';
 
       "${config.xdg.configHome}/electron-flags.conf".text = ''
