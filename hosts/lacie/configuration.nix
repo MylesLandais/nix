@@ -53,14 +53,15 @@
     consoleLogLevel = 3;
     initrd.verbose = false;
     loader = {
-      systemd-boot = {
-        enable = true;
-        # Install as /EFI/BOOT/BOOTX64.EFI so firmware fallback picks us up.
-        # Required for portability — we never write host NVRAM entries.
-        efiInstallAsRemovable = true;
-      };
       efi.canTouchEfiVariables = false;
       efi.efiSysMountPoint = "/boot";
+      grub = {
+        enable = true;
+        device = "nodev";
+        efiSupport = true;
+        efiInstallAsRemovable = true;
+        copyKernels = false;
+      };
     };
     kernelParams = [
       # Give USB controller time to enumerate before root mount.
