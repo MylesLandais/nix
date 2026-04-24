@@ -26,6 +26,18 @@ Shell functions and aliases: devtooling/shelltools/ (automatically imported)
 
 ## Common Procedures
 
+### Repetitive System Maintenance
+
+Use this pattern for flake input updates, package bumps, lockfile refreshes, and other small maintenance tasks.
+
+Start with `git status --short` and identify any existing dirty files. Keep the change atomic: do not mix unrelated cleanup, formatting, or opportunistic fixes. If the user gives an exact version or tag, pin that exact version rather than updating to latest.
+
+For flake input updates, inspect the current input in `flake.nix`, update only that input, then refresh the lockfile from the flake directory. Prefer `nix flake update input-name`; older invocations such as `nix flake lock --flake ...` may not be supported by the installed Nix.
+
+Validate narrowly first. For Cerberus-impacting changes, run `nix build .#nixosConfigurations.cerberus.config.system.build.toplevel`. Use `nix flake check` when practical, but if it fails on an unrelated host option, report that blocker and validate the affected host directly.
+
+Clean up generated repo-local artifacts such as the `result` symlink after builds. Finish with `git diff --check` and `git status --short`, and report the exact files changed plus validation results.
+
 ### Add a System Package
 
 Edit hosts/cerberus/configuration.nix. Find environment.systemPackages section. Add package name to list. Run /nix-check. If error "attribute missing", package doesn't exist in nixpkgs; search with nix search nixpkgs package-name. Commit with chore(packages): add package-name. Run /nix-switch.
