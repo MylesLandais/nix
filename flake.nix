@@ -30,7 +30,7 @@
       url = "github:anomalyco/opencode/8c739b4a7db455a33fd77b4c997f2a9eaf27648a";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.4.16";
+    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.4.23";
 };
 
   outputs =
