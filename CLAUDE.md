@@ -64,7 +64,7 @@ Read error message and note file path and line number. Common errors: "attribute
 
 ### Handle Home-Manager Configuration Not Applying
 
-Changes to home.nix or devtooling/ should appear in ~/.config files after rebuild. If not: Verify rebuild ran by checking target file. If file is old, rebuild didn't apply. Cause is usually running home-manager switch instead of nixos-rebuild switch. Run: sudo nixos-rebuild switch --flake /home/warby/Workspace/nix#cerberus. Wait for completion. Check file again. If still missing, check module imports in home.nix and devtooling/default.nix. If still failing, run /nix-check for validation errors.
+Changes to home.nix or devtooling/ should appear in ~/.config files after rebuild. If not: Verify rebuild ran by checking target file. If file is old, rebuild didn't apply. Cause is usually running home-manager switch instead of nixos-rebuild switch. Run: sudo nixos-rebuild switch --flake ~/.config/nixos#cerberus. Wait for completion. Check file again. If still missing, check module imports in home.nix and devtooling/default.nix. If still failing, run /nix-check for validation errors.
 
 ### Shell Not Seeing Changes
 

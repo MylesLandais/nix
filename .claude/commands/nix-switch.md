@@ -15,7 +15,7 @@ Apply validated changes to the live system. Only run after /nix-check passes.
 
 Ask user for explicit confirmation: "Ready to apply live system rebuild with nixos-rebuild switch. Confirm? (yes/no)"
 
-If user confirms, run: sudo nixos-rebuild switch --flake /home/warby/Workspace/nix#cerberus --show-trace -L
+If user confirms, run: sudo nixos-rebuild switch --flake ~/.config/nixos#cerberus --show-trace -L
 
 ## What Happens
 
