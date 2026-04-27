@@ -112,6 +112,7 @@
 
 
     packages = with pkgs; [
+      foliate
       (writeShellScriptBin "hermes" ''
         export HERMES_HOME="$HOME/.hermes"
         exec /run/current-system/sw/bin/hermes "$@"
@@ -260,6 +261,7 @@
         "audio/ogg" = [ "mpv.desktop" ];
         "audio/x-wav" = [ "mpv.desktop" ];
         "audio/x-mp3" = [ "mpv.desktop" ];
+        "application/epub+zip" = [ "com.github.johnfactotum.Foliate.desktop" ];
       };
     };
   };
