@@ -252,6 +252,14 @@
         "video/x-matroska" = [ "mpv.desktop" ];
         "video/quicktime" = [ "mpv.desktop" ];
         "application/ogg" = [ "mpv.desktop" ];
+        "audio/mpeg" = [ "mpv.desktop" ];
+        "audio/mp4" = [ "mpv.desktop" ];
+        "audio/aac" = [ "mpv.desktop" ];
+        "audio/wav" = [ "mpv.desktop" ];
+        "audio/flac" = [ "mpv.desktop" ];
+        "audio/ogg" = [ "mpv.desktop" ];
+        "audio/x-wav" = [ "mpv.desktop" ];
+        "audio/x-mp3" = [ "mpv.desktop" ];
       };
     };
   };
@@ -344,7 +352,6 @@
         screenshot-directory = "~/Pictures/mpv/";
         screenshot-template = "%F - [%P] (%#01n)";
         hr-seek = "yes";
-        seek = "exact";
       };
       extraInput = ''
         , frame-step ; show-text "Frame forward"
