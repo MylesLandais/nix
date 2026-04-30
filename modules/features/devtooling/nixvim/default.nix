@@ -3,6 +3,7 @@
   config,
   inputs,
   pkgs,
+  osConfig,
   ...
 }:
 {
@@ -16,7 +17,32 @@
       enable = true;
       nixpkgs.config.allowUnfree = true;
       imports = [
-        inputs.frostvim.nixvimModules.default
+        inputs.frostvim.nixvimModules.base
+        inputs.frostvim.nixvimModules.blink
+        inputs.frostvim.nixvimModules.clipboard-image
+        inputs.frostvim.nixvimModules.dashboard
+        inputs.frostvim.nixvimModules.dap
+        inputs.frostvim.nixvimModules.git
+        inputs.frostvim.nixvimModules.go
+        inputs.frostvim.nixvimModules.images
+        inputs.frostvim.nixvimModules.lint
+        inputs.frostvim.nixvimModules.lsp
+        inputs.frostvim.nixvimModules.lualine
+        inputs.frostvim.nixvimModules.luasnip
+        inputs.frostvim.nixvimModules.markdown-preview
+        inputs.frostvim.nixvimModules.mini
+        inputs.frostvim.nixvimModules.noice
+        inputs.frostvim.nixvimModules.oil
+        inputs.frostvim.nixvimModules.opencode
+        inputs.frostvim.nixvimModules.presence
+        inputs.frostvim.nixvimModules.quicker
+        inputs.frostvim.nixvimModules.snacks
+        inputs.frostvim.nixvimModules.telekasten
+        inputs.frostvim.nixvimModules.tree-sitter
+        inputs.frostvim.nixvimModules.trouble
+        inputs.frostvim.nixvimModules.web-devicons
+        inputs.frostvim.nixvimModules.which-key
+        inputs.frostvim.nixvimModules.kanagawa
       ];
 
       plugins = {
@@ -59,6 +85,15 @@
         };
 
         claude-code.enable = true;
+
+        lsp.servers.nixd.settings =
+          let
+            flake = ''(builtins.getFlake "${inputs.self}")'';
+          in
+          {
+            nixpkgs.expr = "import ${flake}.inputs.nixpkgs {}";
+            nixos.expr = "${flake}.nixosConfigurations.${osConfig.host.hostName}.options";
+          };
 
         minuet = {
           enable = false;
