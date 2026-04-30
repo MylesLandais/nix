@@ -19,9 +19,10 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
     nixvim.url = "github:nix-community/nixvim";
-    frostvim.url = "github:FKouhai/frostvim/main";
+    frostvim.url = "github:FKouhai/frostvim";
     helium.url = "github:FKouhai/helium2nix";
     agenix.url = "github:ryantm/agenix";
+    trigo.url = "github:FKouhai/trigo";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel";
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
@@ -36,8 +37,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     opencode = {
-      url = "github:anomalyco/opencode/refs/tags/v1.4.3";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:anomalyco/opencode";
     };
     tokyonight.url = "github:mrjones2014/tokyonight.nix";
     stylix = {
