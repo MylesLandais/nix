@@ -35,6 +35,7 @@
         upgrade = "nh os switch ~/.config/home-manager --update";
         cleanup = "nh clean all -v";
         seshc = "sesh connect $(sesh list -i | gum filter --limit 1 --placeholder 'Pick a sesh' --prompt='⚡')";
+        oc = "opencode";
       };
     };
   };
