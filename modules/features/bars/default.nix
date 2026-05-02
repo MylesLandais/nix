@@ -14,8 +14,10 @@
   };
 
   config = {
-    bars.caelestia.enable = lib.mkDefault false;
-    bars.noctalia.enable = lib.mkDefault false;
-    bars.hyprpanel.enable = lib.mkDefault false;
+    bars = {
+      caelestia.enable = lib.mkDefault false;
+      noctalia.enable = lib.mkDefault false;
+      hyprpanel.enable = lib.mkDefault false;
+    };
   };
 }

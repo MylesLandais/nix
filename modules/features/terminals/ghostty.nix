@@ -14,12 +14,12 @@
         font-family = "Maple Mono NF";
         background-opacity = 0.9;
         window-decoration = false;
-        background = osConfig.host.themeData.ghostty.background;
-        foreground = osConfig.host.themeData.ghostty.foreground;
+        inherit (osConfig.host.themeData.ghostty) background;
+        inherit (osConfig.host.themeData.ghostty) foreground;
         cursor-color = osConfig.host.themeData.ghostty.cursorColor;
         selection-background = osConfig.host.themeData.ghostty.selectionBackground;
         selection-foreground = osConfig.host.themeData.ghostty.selectionForeground;
-        palette = osConfig.host.themeData.ghostty.palette;
+        inherit (osConfig.host.themeData.ghostty) palette;
       };
     };
   };

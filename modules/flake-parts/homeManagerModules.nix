@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   flake.homeManagerModules = {
     bars = import ../features/bars;
     barNoctalia = import ../features/bars/noctalia.nix;

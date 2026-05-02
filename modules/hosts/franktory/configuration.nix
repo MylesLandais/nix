@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   flake.nixosModules.franktory =
     {
       config,
@@ -112,9 +111,18 @@
           pkgs.noto-fonts-cjk-sans
         ];
         fontconfig.defaultFonts = {
-          sansSerif = [ "DejaVu Sans" "Noto Sans CJK JP" ];
-          serif = [ "DejaVu Serif" "Noto Serif CJK JP" ];
-          monospace = [ "DejaVu Sans Mono" "Noto Sans Mono CJK JP" ];
+          sansSerif = [
+            "DejaVu Sans"
+            "Noto Sans CJK JP"
+          ];
+          serif = [
+            "DejaVu Serif"
+            "Noto Serif CJK JP"
+          ];
+          monospace = [
+            "DejaVu Sans Mono"
+            "Noto Sans Mono CJK JP"
+          ];
         };
       };
 

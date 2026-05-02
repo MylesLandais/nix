@@ -76,14 +76,14 @@
         // (import ./config/decoration.nix)
         // (import ./config/exec.nix {
           inherit lib;
-          bar = osConfig.host.bar;
-          wallpaper = osConfig.host.wallpaper;
+          inherit (osConfig.host) bar;
+          inherit (osConfig.host) wallpaper;
         })
         // (import ./config/animations.nix)
         // (import ./config/windowrules.nix)
         // (import ./config/bindings.nix {
           inherit lib;
-          bar = osConfig.host.bar;
+          inherit (osConfig.host) bar;
         });
       };
     }

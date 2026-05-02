@@ -14,7 +14,7 @@
     stylix = {
       autoEnable = false;
       enable = true;
-      base16Scheme = osConfig.host.themeData.base16Scheme;
+      inherit (osConfig.host.themeData) base16Scheme;
       targets = {
         bat.enable = true;
         btop.enable = true;
