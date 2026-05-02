@@ -432,11 +432,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1777489266,
-        "narHash": "sha256-AK/PITCxBxLSKeriBzJVkn6AFRxxJBbkZdFS4HCyG48=",
+        "lastModified": 1777725733,
+        "narHash": "sha256-PsoIzsJdwytpU+L2M5Zd3WSDOpthYKZDCCP0LPqDwHA=",
         "owner": "FKouhai",
         "repo": "frostvim",
-        "rev": "b73a5de694ff1f5313cfb75737874fc2092b360e",
+        "rev": "722e03b91eb22c1731be4c31a3ffe73bd3ca75b5",
         "type": "github"
       },
       "original": {
@@ -1309,11 +1309,11 @@
         "nixpkgs": "nixpkgs_10"
       },
       "locked": {
-        "lastModified": 1776976412,
-        "narHash": "sha256-nPz0bOmZ0cwPa6Bt/rYtAtAYEzkdXCv6fYNaIRcDF5U=",
+        "lastModified": 1777728480,
+        "narHash": "sha256-mqePmYSQ2lWrAw2gWfRgsdjjLDt8a2qeptvV9pUsU9U=",
         "owner": "FKouhai",
         "repo": "trigo",
-        "rev": "88e35cee733c1baf63da1f151cfd5cf944c654fc",
+        "rev": "86b04634e2ede4aecaa9d1279cca2e11c14edffa",
         "type": "github"
       },
       "original": {
