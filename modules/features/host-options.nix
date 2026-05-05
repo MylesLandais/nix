@@ -82,5 +82,49 @@
       };
       description = "Secondary monitor configuration.";
     };
+    profile = lib.mkOption {
+      type = lib.types.enum [
+        "default"
+        "pentest"
+        "gaming"
+      ];
+      default = "default";
+      description = "Host workload profile (latitudes imaged off lacie flip this to pentest).";
+    };
+    imaging = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enable the portable-USB imaging feature module (systemd-boot, by-label fs, no NVRAM writes).";
+      };
+      mode = lib.mkOption {
+        type = lib.types.enum [
+          "ventoy"
+          "amnesic"
+        ];
+        default = "ventoy";
+        description = "ventoy: persistent root on live_nix. amnesic: tmpfs root + /persist (deferred).";
+      };
+      homeLabel = lib.mkOption {
+        type = lib.types.str;
+        default = "live_nix";
+        description = "Filesystem label for the NixOS root (ventoy mode) or /persist partition (amnesic mode).";
+      };
+      imagesLabel = lib.mkOption {
+        type = lib.types.str;
+        default = "images";
+        description = "Filesystem label for the exFAT images partition.";
+      };
+      shareLabel = lib.mkOption {
+        type = lib.types.str;
+        default = "persistent_data";
+        description = "Filesystem label for the NTFS bulk-share partition (kept NTFS for Windows interop).";
+      };
+      homeLuks = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Future: wrap home/persist in LUKS. Wired but not active in ventoy mode.";
+      };
+    };
   };
 }
