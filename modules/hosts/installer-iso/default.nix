@@ -4,7 +4,7 @@
     system = "x86_64-linux";
     specialArgs = { inherit inputs; };
     modules = [
-      "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal-new-kernel-no-zfs.nix"
+      "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
       inputs.self.nixosModules.wifiProfiles
       (
         { pkgs, lib, ... }:
