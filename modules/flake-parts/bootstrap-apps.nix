@@ -2,7 +2,7 @@
   perSystem =
     { pkgs, ... }:
     let
-      bootstrap-lacie = pkgs.writeShellApplication {
+      bootstrap-lacie-bin = pkgs.writeShellApplication {
         name = "bootstrap-lacie";
         runtimeInputs = with pkgs; [
           util-linux
@@ -137,6 +137,14 @@
           Recovery: if NixOS entry fails to boot, F12 -> Ventoy -> NixOS ISO,
           then re-run bootstrap-lacie or inspect /mnt/etc/nixos/repo from there.
           EOF
+        '';
+      };
+
+      bootstrap-lacie = pkgs.symlinkJoin {
+        name = "bootstrap-lacie";
+        paths = [ bootstrap-lacie-bin ];
+        postBuild = ''
+          ln -s bootstrap-lacie $out/bin/nix-install
         '';
       };
     in

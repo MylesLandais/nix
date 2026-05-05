@@ -7,6 +7,7 @@
       inputs.self.nixosModules.lacie
       inputs.self.nixosModules.lacieHardware
       inputs.self.nixosModules.imaging
+      inputs.self.nixosModules.wifiProfiles
       inputs.self.nixosModules.greeter
       inputs.self.nixosModules.themeData
       "${inputs.self}/modules/features/host-options.nix"
