@@ -9,10 +9,8 @@
       (
         { pkgs, lib, ... }:
         {
-          isoImage = {
-            isoName = lib.mkForce "home-office-installer.iso";
-            volumeID = lib.mkForce "HOMEOFFICE";
-          };
+          image.fileName = lib.mkForce "home-office-installer.iso";
+          isoImage.volumeID = lib.mkForce "HOMEOFFICE";
 
           # Minimal ISO ships wpa_supplicant by default — disable in favour of NM.
           networking = {
