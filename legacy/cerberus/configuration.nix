@@ -1,0 +1,658 @@
+# Cerberus NixOS Configuration
+# Host: cerberus-nix | User: warby | DE: Hyprland (Wayland)
+
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  extra-types,
+  ...
+}:
+
+{
+  imports = [
+    ./hardware-configuration.nix
+    ../modules/nvidia.nix
+    ../modules/gaming.nix
+    ../modules/dev.nix
+    ../modules/agenix.nix
+    ../modules/hermes.nix
+  ];
+
+  # ---------------------------------------------------------------------------
+  # Nix Package Manager
+  # ---------------------------------------------------------------------------
+
+  nix = {
+    settings = {
+      substituters = [
+        "https://nix-community.cachix.org/"
+        "https://chaotic-nyx.cachix.org/"
+        "https://cache.nixos.org/"
+        "https://attic.xuyh0120.win/lantian"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8"
+        "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+      ];
+      experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = [ "root" "warby" "@wheel" ];
+    };
+    optimise.automatic = true;
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 3d";
+    };
+  };
+
+  nixpkgs.config.allowUnfree = true;
+
+  # ---------------------------------------------------------------------------
+  # Boot
+  # ---------------------------------------------------------------------------
+
+  boot = {
+    plymouth.enable = true;
+    consoleLogLevel = 3;
+    initrd.verbose = false;
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+    kernelParams = [
+      "usbcore.autosuspend=-1"
+      "quiet"
+      "udev.log_level=3"
+      "systemd.show_status=auto"
+    ];
+  };
+
+  # ---------------------------------------------------------------------------
+  # Locale and Time
+  # ---------------------------------------------------------------------------
+
+  time.timeZone = "America/Chicago";
+  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "en_US.UTF-8";
+    LC_IDENTIFICATION = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
+    LC_NAME = "en_US.UTF-8";
+    LC_NUMERIC = "en_US.UTF-8";
+    LC_PAPER = "en_US.UTF-8";
+    LC_TELEPHONE = "en_US.UTF-8";
+    LC_TIME = "en_US.UTF-8";
+  };
+
+  # ---------------------------------------------------------------------------
+  # Networking
+  # ---------------------------------------------------------------------------
+
+  networking.networkmanager = {
+    enable = true;
+    plugins = with pkgs; [ networkmanager-openvpn ];
+  };
+
+  services.tailscale.enable = true;
+
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
+  };
+
+  # ---------------------------------------------------------------------------
+  # Display and Desktop Environment
+  # ---------------------------------------------------------------------------
+
+  services.xserver.enable = true;
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
+
+  programs.hyprland.enable = true;
+
+  services.displayManager.sessionPackages = [ pkgs.hyprland ];
+
+  services.greetd = {
+    enable = true;
+    settings.default_session = {
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
+      user = "greeter";
+    };
+  };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+    config = {
+      common.default = [ "hyprland" "gtk" ];
+      hyprland."org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+    };
+  };
+
+  # Exports Wayland env vars to user systemd units
+  systemd.user.services.hyprland-session = {
+    description = "Hyprland Wayland Session";
+    partOf = [ "graphical-session.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+      ExecStart = "${pkgs.systemd}/bin/systemctl --user import-environment DISPLAY WAYLAND_DISPLAY HYPRLAND_INSTANCE_SIGNATURE XDG_CURRENT_DESKTOP";
+    };
+  };
+
+  # ---------------------------------------------------------------------------
+  # Audio (PipeWire)
+  # ---------------------------------------------------------------------------
+
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+
+    # Virtual audio sink for isolated Sunshine streaming
+    extraConfig.pipewire."99-sunshine-sink" = {
+      "context.objects" = [
+        {
+          factory = "adapter";
+          args = {
+            "factory.name" = "support.null-audio-sink";
+            "node.name" = "sunshine_sink";
+            "node.description" = "Sunshine Streaming Sink";
+            "media.class" = "Audio/Sink";
+            "audio.position" = "FL,FR";
+          };
+        }
+      ];
+    };
+  };
+
+  # ---------------------------------------------------------------------------
+  # Remote Gaming (Sunshine/Moonlight)
+  # ---------------------------------------------------------------------------
+
+  boot.kernelModules = [ "uinput" "wireguard" ];
+
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    openFirewall = true;
+    capSysAdmin = true;
+    package = pkgs.sunshine.override { cudaSupport = true; };
+
+    # Global Sunshine settings (rendered to sunshine.conf)
+    settings = {
+      sunshine_name = "Cerberus Stream Host";
+      min_log_level = "info";
+      output_name = "";  # set to HEADLESS-1 after Phase 5 testing
+    };
+
+    # Declarative applications configuration (rendered to apps.json)
+    # This makes the web UI read-only for app management
+    applications = {
+      # Global environment variables for all apps
+      env = {
+        PATH = "${pkgs.gamescope}/bin:${pkgs.steam}/bin:${pkgs.lib.makeBinPath [ pkgs.coreutils pkgs.bash ]}";
+      };
+
+      apps = [
+        # Steam Big Picture via Gamescope (iPad Mini native resolution)
+        {
+          name = "Steam Big Picture (iPad Mini)";
+          cmd = "${pkgs.gamescope}/bin/gamescope -w 2266 -h 1488 -r 60 -f --rt --steam -- ${pkgs.steam}/bin/steam -bigpicture";
+          "prep-cmd" = [
+            {
+              do = "";
+              undo = "setsid sh -c 'pkill -f steam.*bigpicture || true'";
+            }
+          ];
+          "auto-detach" = "true";
+          "exclude-global-prep-cmd" = "false";
+        }
+
+        # Full desktop session via Gamescope (for non-Steam VNs)
+        {
+          name = "Full Desktop (iPad Mini)";
+          cmd = "${pkgs.gamescope}/bin/gamescope -w 2266 -h 1488 -r 60 -f --rt -- ${pkgs.hyprland}/bin/Hyprland";
+          "auto-detach" = "true";
+          "exclude-global-prep-cmd" = "false";
+        }
+
+        # Fire Emblem: Path of Radiance via Dolphin
+        {
+          name = "Fire Emblem";
+          cmd = "sunshine-stream ${pkgs.dolphin-emu}/bin/dolphin-emu \"/home/warby/Games/NGC/Fire Emblem - Path of Radiance (USA)/Fire Emblem - Path of Radiance (USA).nkit.iso\"";
+          "prep-cmd" = [
+            {
+              do = "";
+              undo = "setsid sh -c 'pkill -f dolphin-emu || true'";
+            }
+          ];
+          "auto-detach" = "true";
+          "exclude-global-prep-cmd" = "false";
+        }
+      ];
+    };
+  };
+
+  # mDNS discovery for Moonlight clients
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    nssmdns6 = true;
+    publish = {
+      enable = true;
+      userServices = true;
+    };
+  };
+
+  # ---------------------------------------------------------------------------
+  # File Sharing and Storage
+  # ---------------------------------------------------------------------------
+
+  services.samba = {
+    enable = true;
+    openFirewall = true;
+  };
+
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
+  services.tumbler.enable = true;
+
+  # ---------------------------------------------------------------------------
+  # Syncthing - File Synchronization
+  # ---------------------------------------------------------------------------
+
+  services.syncthing = {
+    enable = true;
+    user = "warby";
+    dataDir = "/home/warby/.local/share/syncthing";
+    configDir = "/home/warby/.config/syncthing";
+
+    # Manage devices through NixOS config, but allow manual folder management
+    # This allows auto-accepted folders from trusted devices (Hydra) while
+    # still being able to declaratively define folders when needed
+    overrideDevices = true;
+    overrideFolders = false;  # Set to false to allow auto-accepted folders
+
+    settings = {
+      # GUI configuration - accessible on local network
+      gui = {
+        enabled = true;
+        address = "0.0.0.0:8384";  # Listen on all interfaces for network access
+        user = "warby";
+      };
+
+      # Device configuration
+      devices = {
+        # Hydra (Unraid server) - source of the "Obsidian vault" share
+        "hydra" = {
+          id = "L2FZYMW-J65PV4B-U23SBTT-F6N6S6Z-2J3KHGW-XJPDWQG-LB4TGBU-Z72XYAF";
+          addresses = [ "dynamic" ];  # Use automatic discovery
+          autoAcceptFolders = true;  # Automatically accept folder shares from Hydra
+        };
+
+        # iPad
+        "ipad" = {
+          id = "IZ4KJMN-ZCOMH75-ZTRUVI2-PWT7HYH-D7NUDSB-SUESE2K-DBUMZ5C-HOQB4AC";
+          addresses = [ "dynamic" ];  # Use automatic discovery
+          autoAcceptFolders = false;  # Only auto-accept from trusted source (Hydra)
+        };
+      };
+
+      # Folder configuration - Automatically join existing "Obsidian vault" share
+      folders = {
+        # Existing "Obsidian vault" share - using the exact folder ID from Hydra
+        # This will automatically join the existing share without manual steps
+        "obsidian-vault" = {
+          path = "/home/warby/Notes";
+          id = "nzep2-ux6xz";  # Existing folder ID - must match exactly
+          label = "Obsidian vault";  # Display label matching the existing share
+          devices = [
+            "hydra"
+            "ipad"
+          ];
+
+          # Folder options matching the existing share configuration
+          ignorePerms = false;  # Preserve permissions
+          rescanIntervalS = 3600;  # Scan every hour
+          fsWatcherEnabled = true;  # Enable filesystem watching
+          fsWatcherDelayS = 10;  # Delay before processing changes
+
+          # File versioning - keep old versions for 30 days (matching existing share)
+          versioning = {
+            type = "staggered";
+            params = {
+              cleanInterval = "3600";
+              maxAge = "2592000";  # 30 days in seconds
+            };
+          };
+        };
+      };
+
+      # Global options
+      options = {
+        # Use local announcements and global discovery
+        localAnnounceEnabled = true;
+        globalAnnounceEnabled = true;
+
+        # Enable NAT traversal
+        natEnabled = true;
+
+        # Relay configuration
+        relaysEnabled = true;
+
+        # Connection limits (0 = no limit)
+        maxSendKbps = 0;
+        maxRecvKbps = 0;
+
+        # Auto upgrade
+        autoUpgradeIntervalH = 12;
+      };
+    };
+  };
+
+  # Firewall configuration for Syncthing
+  networking.firewall = {
+    allowedTCPPorts = [
+      22000  # Syncthing file transfer
+      8384   # Syncthing Web GUI
+    ];
+    allowedUDPPorts = [
+      22000  # Syncthing discovery
+      21027  # Syncthing local discovery
+    ];
+    allowedUDPPortRanges = [
+      { from = 60000; to = 61000; }  # Mosh
+    ];
+  };
+
+  # Create Notes directory
+  systemd.tmpfiles.rules = [
+    "d /home/warby/Notes 0755 warby users -"
+  ];
+
+  # ---------------------------------------------------------------------------
+  # Hardware Tweaks
+  # ---------------------------------------------------------------------------
+
+  hardware.cpu.amd.updateMicrocode = true;
+  hardware.enableRedistributableFirmware = true;
+
+  # Bluetooth support + GUI manager (tray applet)
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        Privacy = "device";
+        JustWorksRepairing = "always";
+        Class = "0x000100";
+        FastConnectable = "true";
+      };
+    };
+  };
+  services.blueman.enable = true;
+
+  # Compressed RAM swap - gives the kernel a release valve under memory
+  # pressure without touching disk. 128 GB RAM => ~16 GB effective swap.
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 25;
+  };
+
+  # VM tuning for interactive desktop responsiveness
+  boot.kernel.sysctl = {
+    # Prefer zram swap over keeping idle anon pages resident
+    "vm.swappiness" = 180;
+    # Flush dirty pages sooner — defaults allow 25 GB to accumulate
+    "vm.dirty_ratio" = 5;
+    "vm.dirty_background_ratio" = 1;
+    # Reclaim dentries/inodes more aggressively to free slab memory
+    "vm.vfs_cache_pressure" = 150;
+    # Watermark boost helps avoid direct reclaim stalls
+    "vm.watermark_boost_factor" = 15000;
+    "vm.watermark_scale_factor" = 125;
+    # Start reclaiming pages sooner
+    "vm.min_free_kbytes" = 524288;
+    # Reduce page lock contention on multi-core
+    "vm.page-cluster" = 0;
+  };
+
+  # Prevent USB/input devices from suspending, set NVMe I/O scheduler
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{power/autosuspend}="0"
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="on"
+    SUBSYSTEM=="input", ATTR{power/autosuspend}="0"
+    SUBSYSTEM=="input", ATTR{power/control}="on"
+
+    # 8BitDo Pro 2 controller — TAG+="uaccess" lets Steam access hidraw
+    # without root. Covers both wired/2.4GHz (idVendor) and Bluetooth (KERNELS)
+    KERNEL=="hidraw*", ATTRS{idVendor}=="2dc8", MODE="0660", TAG+="uaccess"
+    KERNEL=="hidraw*", KERNELS=="*2DC8:*", MODE="0660", TAG+="uaccess"
+
+    # Use kyber I/O scheduler for NVMe — prioritizes latency-sensitive
+    # reads over bulk writes so interactive I/O isn't starved
+    ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/scheduler}="kyber"
+    # 256 KB read-ahead (default 8 MB is far too aggressive for interactive)
+    ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/read_ahead_kb}="256"
+  '';
+
+  # nvidia-container-toolkit CDI generator workaround
+  systemd.services.nvidia-container-toolkit-cdi-generator.serviceConfig.ExecStartPre = lib.mkForce null;
+
+  # ---------------------------------------------------------------------------
+  # Coredump Limits
+  # ---------------------------------------------------------------------------
+
+  # Prevent crash loops from filling disk with coredumps
+  systemd.coredump.extraConfig = ''
+    MaxUse=512M
+    KeepFree=1G
+  '';
+
+  # ---------------------------------------------------------------------------
+  # Security and Permissions
+  # ---------------------------------------------------------------------------
+
+  security.polkit.enable = true;
+
+  # Allow wheel group to mount filesystems without password
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if ((action.id == "org.freedesktop.udisks2.filesystem-mount-system" ||
+           action.id == "org.freedesktop.udisks2.filesystem-mount") &&
+          subject.isInGroup("wheel")) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
+
+  # Passwordless commands for development operations
+  security.sudo.extraRules = [
+    {
+      users = [ "warby" ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/nixos-rebuild";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "${pkgs.git}/bin/git";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/systemctl";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
+
+  # ---------------------------------------------------------------------------
+  # User Account
+  # ---------------------------------------------------------------------------
+
+  users.defaultUserShell = pkgs.fish;
+
+  users.users.warby = {
+    isNormalUser = true;
+    description = "warby";
+    extraGroups = [
+      "audio"
+      "docker"
+      "input"
+      "kvm"
+      "libvirtd"
+      "networkmanager"
+      "render"
+      "video"
+      "wheel"
+    ];
+    packages = with pkgs; [
+      neovim
+      vesktop
+      mpv
+    ];
+  };
+
+  # ---------------------------------------------------------------------------
+  # Shell
+  # ---------------------------------------------------------------------------
+
+  programs.fish.enable = true;
+
+  # ---------------------------------------------------------------------------
+  # Firefox Policy Configuration
+  # ---------------------------------------------------------------------------
+
+  environment.etc."firefox/policies/policies.json".text = builtins.toJSON {
+    policies = {
+      EnableMediaDRM = true;
+
+      # Disable local storage (use Bitwarden instead)
+      DisablePasswordManager = true;
+      DisableDownloadSave = true;
+      DisableSavePage = true;
+      DisableFormHistory = true;
+      DisableBuiltinPDFViewer = false;
+
+      # Force-install extensions
+      ExtensionSettings = {
+        "ublock-origin@raymondhill.net" = {
+          installation_mode = "force_installed";
+          default_area = "navbar";
+        };
+        "bitwarden@browser" = {
+          installation_mode = "force_installed";
+          default_area = "navbar";
+        };
+      };
+
+      # Privacy hardening
+      DisableFirefoxAccounts = false;
+      DisableFirefoxStudies = true;
+      DisablePocket = true;
+      DisableTelemetry = true;
+      DisableFeedbackCommands = true;
+      DisableDefaultBrowserCheck = true;
+
+      DNSOverHTTPS = {
+        Enabled = true;
+        ProviderURL = "https://dns.quad9.net/dns-query";
+      };
+
+      Homepage = {
+        URL = "about:home";
+        Locked = true;
+      };
+      NewTabPage = "about:home";
+      Bookmarks.Enabled = false;
+
+      AppAutoUpdate = false;
+      BackgroundAppUpdate = false;
+    };
+  };
+
+  # Bitwarden native messaging for Firefox
+  environment.etc."firefox/native-messaging-hosts/bitwarden.json".text = ''
+    {
+      "name": "com.8bit.bitwarden",
+      "description": "Bitwarden desktop integration",
+      "path": "${pkgs.bitwarden-desktop}/bin/bitwarden-desktop",
+      "type": "stdio",
+      "allowed_extensions": ["{446900e4-71c2-419f-a6a7-df9c091e268b}"]
+    }
+  '';
+
+  # ---------------------------------------------------------------------------
+  # System Packages
+  # ---------------------------------------------------------------------------
+
+  # Virtualisation (QEMU/KVM for Windows VM builds)
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      swtpm.enable = true;
+    };
+  };
+
+  environment.systemPackages = with pkgs; [
+    # System utilities
+    git
+    cifs-utils
+    wireguard-tools
+    nmap
+    ntfs3g
+    polkit_gnome  # GTK polkit auth agent for keyring unlock prompts
+
+    # VM tooling
+    qemu_kvm
+    OVMFFull
+    swtpm
+    virt-manager
+    packer
+
+    # Desktop theming
+    papirus-icon-theme
+    kdePackages.breeze-icons
+    adwaita-icon-theme
+
+    # Sunshine streaming wrapper
+    (writeShellScriptBin "sunshine-stream" ''
+      # Route audio to the Sunshine virtual sink
+      export PULSE_SINK=sunshine_sink
+      # Launch app inside gamescope with gamemode
+      exec ${gamescope}/bin/gamescope \
+        -w 2160 -h 1440 -r 60 -f --rt \
+        -- ${gamemode}/bin/gamemoderun "$@"
+    '')
+
+    # Applications
+    bitwarden-desktop
+    dolphin-emu
+    gemini-cli
+    syncthing  # File synchronization
+    teamspeak6-client
+    termius
+    mosh
+    nicotine-plus
+  ];
+
+  # ---------------------------------------------------------------------------
+
+  system.stateVersion = "25.05";
+}

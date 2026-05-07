@@ -23,7 +23,20 @@
     helium.url = "github:FKouhai/helium2nix";
     agenix.url = "github:ryantm/agenix";
     trigo.url = "github:FKouhai/trigo";
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel";
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.4.23";
+    nur.url = "github:nix-community/NUR";
+    claude-code.url = "github:sadjow/claude-code-nix";
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+    };
+    codex-nix.url = "github:SecBear/codex-nix";
+    cursor-flake = {
+      url = "github:omarcresp/cursor-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    thorium.url = "github:Rishabh5321/thorium_flake";
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";

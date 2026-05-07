@@ -1,0 +1,43 @@
+{
+  lib,
+  config,
+  ...
+}:
+{
+  imports = [
+    ./browser-mcp
+    ./claude-code
+    ./elixir
+    ./git
+    ./gleam
+    ./go
+    ./kubernetes
+    ./lua
+    ./nushell
+    ./pi
+    ./remmina
+    ./rust
+    ./tmux
+    ./code
+    ./zed
+  ];
+
+  options = {
+    devtooling.enable = lib.mkEnableOption "Enable devtooling module";
+  };
+  config = lib.mkIf config.devtooling.enable {
+    browser-mcp.enable = lib.mkDefault true;
+    claude-code.enable = lib.mkDefault true;
+    git.enable = lib.mkDefault true;
+    go.enable = lib.mkDefault false;
+    kubernetes.enable = lib.mkDefault false;
+    lua.enable = lib.mkDefault false;
+    nushell.enable = lib.mkDefault true;
+    pi.enable = lib.mkDefault true;
+    remmina.enable = lib.mkDefault true;
+    rust.enable = lib.mkDefault false;
+    tmux.enable = lib.mkDefault false;
+    code.enable = lib.mkDefault true;
+    zed.enable = lib.mkDefault true;
+  };
+}

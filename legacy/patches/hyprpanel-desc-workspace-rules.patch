@@ -1,0 +1,54 @@
+diff --git a/src/components/bar/modules/workspaces/helpers/utils.ts b/src/components/bar/modules/workspaces/helpers/utils.ts
+index 4b12548..42b0137 100644
+--- a/src/components/bar/modules/workspaces/helpers/utils.ts
++++ b/src/components/bar/modules/workspaces/helpers/utils.ts
+@@ -72,2 +72,11 @@ export function initWorkspaceEvents(): void {
+         workspaceService.refreshWorkspaceRules();
+     });
++    hyprlandService.connect('monitor-added', () => {
++        workspaceService.refreshWorkspaceRules();
++        workspaceService.forceAnUpdate();
++    });
++
++    hyprlandService.connect('monitor-removed', () => {
++        workspaceService.refreshWorkspaceRules();
++        workspaceService.forceAnUpdate();
++    });
+diff --git a/src/services/workspace/index.ts b/src/services/workspace/index.ts
+index 3816f19..ab7d7e3 100644
+--- a/src/services/workspace/index.ts
++++ b/src/services/workspace/index.ts
+@@ -258,2 +258,16 @@ export class WorkspaceService {
+             const rulesResponse = hyprlandService.message('j/workspacerules');
+             const workspaceMonitorRules: WorkspaceMonitorMap = {};
++            const monitorNameByRuleName: Record<string, string> = {};
++
++            try {
++                const monitorsResponse = hyprlandService.message('j/monitors');
++                const parsedMonitors = JSON.parse(monitorsResponse) as AstalHyprland.Monitor[];
++                parsedMonitors.forEach((monitor) => {
++                    monitorNameByRuleName[monitor.name] = monitor.name;
++                    if (monitor.description !== undefined && monitor.description !== '') {
++                        monitorNameByRuleName[`desc:${monitor.description}`] = monitor.name;
++                    }
++                });
++            } catch (error) {
++                console.error(error);
++            }
+@@ -267,2 +281,3 @@ export class WorkspaceService {
+                     return;
+                 }
++                const monitorName = monitorNameByRuleName[rule.monitor] ?? rule.monitor;
+@@ -270,3 +285,3 @@ export class WorkspaceService {
+                 const doesMonitorExistInRules = Object.hasOwnProperty.call(
+                     workspaceMonitorRules,
+-                    rule.monitor,
++                    monitorName,
+@@ -277,3 +292,3 @@ export class WorkspaceService {
+                 if (doesMonitorExistInRules) {
+-                    workspaceMonitorRules[rule.monitor].push(workspaceNumber);
++                    workspaceMonitorRules[monitorName].push(workspaceNumber);
+                 } else {
+@@ -280,2 +295,2 @@ export class WorkspaceService {
+-                    workspaceMonitorRules[rule.monitor] = [workspaceNumber];
++                    workspaceMonitorRules[monitorName] = [workspaceNumber];
