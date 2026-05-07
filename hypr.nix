@@ -372,26 +372,6 @@ in
     pkgs.poppler            # PDF thumbnails
   ];
 
-  # ---------------------------------------------------------
-  # XDG portal configuration - ensure a file picker backend is available
-  # and prefer the GTK portal for file chooser requests (used by Electron/GTK apps)
-  # ---------------------------------------------------------
-  xdg.portal = {
-    enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-hyprland
-      pkgs.xdg-desktop-portal-gtk
-    ];
-    config = {
-      common = {
-        default = [ "gtk" ];
-      };
-      hyprland = {
-        default = [ "gtk" "hyprland" ];
-      };
-    };
-  };
-
   # Hyprland Window Manager Configuration
   wayland.windowManager.hyprland = {
     enable = true;
