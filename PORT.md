@@ -1,10 +1,20 @@
 # Port checklist: warby/nix → FKouhai/nix-dots dendritic layout
 
-Working dir: `~/Workspace/nix-dots-fork` on branch `dendritic`.
+Working dir: `~/Workspace/nix-dots-fork` on branch `port/cerberus` (off `dendritic`).
 Remote `origin` = `git@github.com:MylesLandais/nix.git` (existing repo).
 Remote `upstream` = `https://github.com/FKouhai/nix-dots.git` (Frankie).
 
 Source repo for this port: `~/.config/nixos` (dirty working tree — port from HEAD, not from uncommitted changes unless flagged).
+
+## Lift-and-shift checkpoint (2026-05-07, commit `f406bf8`)
+
+The pre-port cerberus tree now lives at `legacy/` (see commit message).
+`modules/hosts/cerberus/{configuration,default}.nix` wraps it as
+`flake.nixosModules.cerberus` + `flake.nixosConfigurations.cerberus`.
+Cerberus evaluates from the fork; build hits unrelated upstream test
+flakes at locked nixpkgs (mpv concurrency, openldap syncrepl) which
+also affect the old repo. Incremental migration out of `legacy/` into
+the dendritic feature-module layout proceeds per the table below.
 
 ## Status legend
 
