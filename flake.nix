@@ -1,123 +1,80 @@
 {
-  description = "Cerberus NixOS Flake";
+  nixConfig = {
+
+    extra-substituters = [
+      "https://nix-community.cachix.org/"
+      "https://attic.xuyh0120.win/lantian"
+      "https://cache.nixos.org/"
+    ];
+
+    extra-trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+    ];
+  };
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
+    nixvim.url = "github:nix-community/nixvim";
+    frostvim.url = "github:FKouhai/frostvim";
+    helium.url = "github:FKouhai/helium2nix";
+    agenix.url = "github:ryantm/agenix";
+    trigo.url = "github:FKouhai/trigo";
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    stylix.url = "github:danth/stylix";
-    tokyonight.url = "github:mrjones2014/tokyonight.nix";
+    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.4.23";
+    nur.url = "github:nix-community/NUR";
+    claude-code.url = "github:sadjow/claude-code-nix";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
     };
-    nur.url = "github:nix-community/NUR";
-    thorium.url = "github:Rishabh5321/thorium_flake";
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    codex-nix.url = "github:SecBear/codex-nix";
     cursor-flake = {
       url = "github:omarcresp/cursor-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    claude-code.url = "github:sadjow/claude-code-nix";
-    codex-nix.url = "github:SecBear/codex-nix";
-
-    agenix.url = "github:ryantm/agenix";
-    zed.url = "github:zed-industries/zed";
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
-    opencode = {
-      url = "github:anomalyco/opencode/8c739b4a7db455a33fd77b4c997f2a9eaf27648a";
+    thorium.url = "github:Rishabh5321/thorium_flake";
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.4.23";
-};
+    caelestia-shell = {
+      url = "github:anarion80/caelestia-shell/topbar";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    opencode = {
+      url = "github:anomalyco/opencode";
+    };
+    tokyonight.url = "github:mrjones2014/tokyonight.nix";
+    stylix = {
+      url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    wallpapers = {
+      url = "github:FKouhai/Kanagawa-wallpapers";
+    };
+  };
 
   outputs =
-    {
-      self,
-      chaotic,
-      nixpkgs,
-      home-manager,
-      nur,
-      thorium,
-      zen-browser,
-      cursor-flake,
-
-      agenix,
-      zed,
-      opencode,
-      hermes-agent,
-      ...
-    }@inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config = {
-          allowUnfree = true;
-        };
-        overlays = [
-          inputs.nix-vscode-extensions.overlays.default
-          inputs.claude-code.overlays.default
-
-        ];
-      };
-      vars = import ./vars.nix { inherit pkgs; };
-      lacieVars = import ./hosts/lacie/vars.nix { inherit pkgs; };
-    in
-    {
-      nixosConfigurations.lacie = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit inputs; vars = lacieVars; };
-        modules = [
-          ({ config, pkgs, ... }: {
-            nixpkgs.overlays = [
-              nur.overlays.default
-              inputs.claude-code.overlays.default
-            ];
-          })
-          ./hosts/lacie/configuration.nix
-          inputs.hermes-agent.nixosModules.default
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = false;
-              extraSpecialArgs = { inherit inputs; vars = lacieVars; };
-              users.warby = import ./hosts/lacie/home.nix;
-            };
-            networking.hostName = lacieVars.hostName;
-          }
-        ];
-      };
-
-      nixosConfigurations.cerberus = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit inputs vars; };
-        modules = [
-          ({ config, pkgs, ... }: {
-            nixpkgs.overlays = [
-              nur.overlays.default
-              inputs.nix-cachyos-kernel.overlays.pinned
-            ];
-          })
-          ./hosts/cerberus/configuration.nix
-          chaotic.nixosModules.default
-          inputs.agenix.nixosModules.default
-          inputs.hermes-agent.nixosModules.default
-          ./modules/gnome-keyring.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = false;
-              extraSpecialArgs = { inherit inputs vars; };
-              users.warby = import ./home.nix;
-            };
-            networking.hostName = vars.hostName;
-          }
-        ];
-      };
+    inputs@{ flake-parts, import-tree, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        (import-tree ./modules/hosts)
+        (import-tree ./modules/services)
+        (import-tree ./modules/flake-parts)
+      ];
+      systems = [ "x86_64-linux" ];
     };
 }
