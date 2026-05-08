@@ -12,6 +12,7 @@
   imports = [
     ./features/desktops/hyprland
     ./features/desktops/niri
+    ./features/desktops/xfce
     ./features/bars
     ./features/prompt
     ./features/shelltools
