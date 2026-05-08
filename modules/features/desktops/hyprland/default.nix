@@ -1,0 +1,30 @@
+{
+  lib,
+  config,
+  osConfig,
+  ...
+}:
+{
+  imports = [
+    ./hypr.nix
+    ./hyprlock.nix
+    ./hyprpaper.nix
+    ./wlogout.nix
+  ];
+
+  options = {
+    hyprland.enable = lib.mkEnableOption "Enable hyprland module";
+  };
+  config = lib.mkIf (config.hyprland.enable && osConfig.host.desktop == "hyprland") {
+    hypr.enable = lib.mkDefault true;
+    # Bar selection based on host.bar option
+    bars = {
+      noctalia.enable = lib.mkIf (osConfig.host.bar == "noctalia") true;
+      caelestia.enable = lib.mkIf (osConfig.host.bar == "caelestia") true;
+      hyprpanel.enable = lib.mkIf (osConfig.host.bar == "hyprpanel") true;
+    };
+    hyprlock.enable = lib.mkDefault true;
+    hyprpaper.enable = lib.mkDefault true;
+    wlogout.enable = lib.mkDefault true;
+  };
+}
