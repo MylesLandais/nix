@@ -18,23 +18,11 @@
     home.packages = with pkgs; [
       arc-theme
       papirus-icon-theme
-      xfce.xfce4-whiskermenu-plugin
-      xfce.xfce4-pulseaudio-plugin
-      xfce.xfce4-systemload-plugin
-      xfce.xfce4-cpugraph-plugin
+      xfce4-whiskermenu-plugin
+      xfce4-pulseaudio-plugin
+      xfce4-systemload-plugin
+      xfce4-cpugraph-plugin
     ];
-
-    gtk = {
-      enable = true;
-      theme = {
-        name = "Arc-Dark";
-        package = pkgs.arc-theme;
-      };
-      iconTheme = {
-        name = "Papirus-Dark";
-        package = pkgs.papirus-icon-theme;
-      };
-    };
 
     xfconf.settings = {
       xsettings = {

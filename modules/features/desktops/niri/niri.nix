@@ -6,11 +6,12 @@
   ...
 }:
 {
-  options = {
-    niriConfig.enable = lib.mkEnableOption "Enable niri compositor configuration";
-  };
+  config = {
+    bars = {
+      noctalia.enable = lib.mkIf (osConfig.host.bar == "noctalia") true;
+      caelestia.enable = lib.mkIf (osConfig.host.bar == "caelestia") true;
+    };
 
-  config = lib.mkIf config.niriConfig.enable {
     programs.niri = {
       settings = {
         outputs =

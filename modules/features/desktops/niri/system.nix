@@ -1,17 +1,27 @@
 {
   lib,
   config,
-  inputs,
+  pkgs,
   ...
 }:
 {
-  imports = [ inputs.niri.nixosModules.niri ];
-
   config = lib.mkIf (config.host.desktop == "niri") {
-    programs.niri.enable = true;
+    environment.systemPackages = with pkgs; [
+      niri
+      xwayland-satellite
+      swaybg
+      fuzzel
+    ];
 
-    environment.sessionVariables = {
-      NIXOS_OZONE_WL = "1";
+    services.displayManager.sessionPackages = [ pkgs.niri ];
+
+    environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
+    security.polkit.enable = true;
+    services.dbus.enable = true;
+    xdg.portal = {
+      enable = true;
+      extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
     };
   };
 }
