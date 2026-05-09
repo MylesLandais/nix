@@ -1,0 +1,18 @@
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+{
+  config = lib.mkIf config.host.kali.enable {
+    assertions = [
+      {
+        assertion = config.host.desktop == "xfce";
+        message = "host.kali.enable requires host.desktop = \"xfce\"; Kali ships an XFCE session.";
+      }
+    ];
+
+    environment.systemPackages = import ./packages.nix { inherit pkgs; };
+  };
+}
