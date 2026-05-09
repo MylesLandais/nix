@@ -16,17 +16,48 @@ let
   '';
 
   xfconfXmlDir = "${assets}/xdg/xfce4/xfconf/xfce-perchannel-xml";
+
+  wallpaper = "${kali-artifacts}/share/backgrounds/kali/kali-cubes-16x9.jpg";
+
+  desktopXml = pkgs.writeText "xfce4-desktop.xml" ''
+    <?xml version="1.0" encoding="UTF-8"?>
+    <channel name="xfce4-desktop" version="1.0">
+      <property name="backdrop" type="empty">
+        <property name="screen0" type="empty">
+          <property name="monitorVirtual-1" type="empty">
+            <property name="workspace0" type="empty">
+              <property name="last-image" type="string" value="${wallpaper}"/>
+              <property name="image-style" type="int" value="5"/>
+            </property>
+          </property>
+          <property name="monitor0" type="empty">
+            <property name="workspace0" type="empty">
+              <property name="last-image" type="string" value="${wallpaper}"/>
+              <property name="image-style" type="int" value="5"/>
+            </property>
+          </property>
+        </property>
+      </property>
+    </channel>
+  '';
 in
 {
   config = lib.mkIf config.host.kali.enable {
-  environment.systemPackages = [
+  environment.systemPackages = with pkgs; [
     kali-artifacts
-    pkgs.flat-remix-icon-theme
+    flat-remix-icon-theme
+    xfce.xfce4-genmon-plugin
+    xfce.xfce4-notifyd
+    xfce.xfce4-power-manager
+    xfce.xfce4-pulseaudio-plugin
+    xfce.xfce4-cpugraph-plugin
+    xfce.xfce4-whiskermenu-plugin
   ];
 
   environment.etc = lib.mkMerge [
     {
       "xdg/xfce4/panel/default.xml".source = "${assets}/xdg/xfce4/panel/default.xml";
+      "xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml".source = desktopXml;
       "xdg/xfce4/terminal/terminalrc".source = "${assets}/xdg/xfce4/terminal/terminalrc";
       "xdg/xfce4/helpers.rc".source = "${assets}/xdg/xfce4/helpers.rc";
     }
@@ -39,7 +70,6 @@ in
         [
           "xsettings.xml"
           "xfwm4.xml"
-          "xfce4-desktop.xml"
           "xfce4-session.xml"
           "xfce4-power-manager.xml"
           "xfce4-screensaver.xml"
