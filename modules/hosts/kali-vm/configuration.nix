@@ -46,7 +46,7 @@ _: {
 
       users.users.kali = {
         isNormalUser = true;
-        description = "Kali guest user";
+        description = "Kali";
         extraGroups = [
           "wheel"
           "networkmanager"

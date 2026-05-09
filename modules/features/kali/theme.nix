@@ -14,6 +14,8 @@ let
     cp -r ${assets}/backgrounds/kali $out/share/backgrounds/
     cp -r ${assets}/desktop-base/kali-theme $out/share/desktop-base/
     cp ${assets}/applications/*.desktop $out/share/applications/
+    mkdir -p $out/share/desktop-directories
+    cp ${assets}/desktop-directories/*.directory $out/share/desktop-directories/
   '';
 
   xfconfXmlDir = "${assets}/xdg/xfce4/xfconf/xfce-perchannel-xml";
@@ -60,6 +62,7 @@ in
   environment.etc = lib.mkMerge [
     {
       "xdg/xfce4/panel/default.xml".source = "${assets}/xdg/xfce4/panel/default.xml";
+      "xdg/menus/applications-merged/kali-applications.menu".source = "${assets}/menus/kali-applications.menu";
       "xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml".source = desktopXml;
       "xdg/xfce4/terminal/terminalrc".source = "${assets}/xdg/xfce4/terminal/terminalrc";
       "xdg/xfce4/helpers.rc".text = ''

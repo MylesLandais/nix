@@ -1,0 +1,716 @@
+<?xml version="1.0"?>
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN" "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+<Menu>
+  <Name>Applications</Name>
+  <Layout>
+    <Menuname>Usual Applications</Menuname>
+    <Menuname>Reconnaissance</Menuname>
+    <Menuname>Resource Development</Menuname>
+    <Menuname>Initial Access</Menuname>
+    <Menuname>Execution</Menuname>
+    <Menuname>Persistence</Menuname>
+    <Menuname>Privilege Escalation</Menuname>
+    <Menuname>Defense Evasion</Menuname>
+    <Menuname>Credential Access</Menuname>
+    <Menuname>Discovery</Menuname>
+    <Menuname>Lateral Movement</Menuname>
+    <Menuname>Collection</Menuname>
+    <Menuname>Command and Control</Menuname>
+    <Menuname>Exfiltration</Menuname>
+    <Menuname>Impact</Menuname>
+    <Menuname>Forensics</Menuname>
+    <Menuname>Services and Other Tools</Menuname>
+    <Merge type="all"/>
+  </Layout>
+
+  <Menu>
+    <Name>Usual Applications</Name>
+    <Directory>kali-usual-applications.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-usual-applications</Category>
+      </And>
+    </Include>
+
+  </Menu>
+  <Menu>
+    <Name>Reconnaissance</Name>
+    <Directory>kali-reconnaissance.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-reconnaissance</Category>
+      </And>
+    </Include>
+    <Menu>
+      <Name>Host Information</Name>
+      <Directory>kali-host-information.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-host-information</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Identity Information</Name>
+      <Directory>kali-identity-information.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-identity-information</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Network Information</Name>
+      <Directory>kali-network-information.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-network-information</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Network Information: DNS</Name>
+      <Directory>kali-network-information-dns.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-network-information-dns</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Web Scanning</Name>
+      <Directory>kali-web-scanning.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-web-scanning</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Vulnerability Scanning</Name>
+      <Directory>kali-vulnerability-scanning.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-vulnerability-scanning</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Web Vulnerability Scanning</Name>
+      <Directory>kali-web-vulnerability-scanning.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-web-vulnerability-scanning</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Bluetooth</Name>
+      <Directory>kali-bluetooth.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-bluetooth</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>WiFi</Name>
+      <Directory>kali-wifi.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-wifi</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Radio Frequency</Name>
+      <Directory>kali-radio-frequency.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-radio-frequency</Category>
+        </And>
+      </Include>
+    </Menu>
+  </Menu>
+  <Menu>
+    <Name>Resource Development</Name>
+    <Directory>kali-resource-development.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-resource-development</Category>
+      </And>
+    </Include>
+
+  </Menu>
+  <Menu>
+    <Name>Initial Access</Name>
+    <Directory>kali-initial-access.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-initial-access</Category>
+      </And>
+    </Include>
+
+  </Menu>
+  <Menu>
+    <Name>Execution</Name>
+    <Directory>kali-execution.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-execution</Category>
+      </And>
+    </Include>
+
+  </Menu>
+  <Menu>
+    <Name>Persistence</Name>
+    <Directory>kali-persistence.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-persistence</Category>
+      </And>
+    </Include>
+
+  </Menu>
+  <Menu>
+    <Name>Privilege Escalation</Name>
+    <Directory>kali-privilege-escalation.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-privilege-escalation</Category>
+      </And>
+    </Include>
+
+  </Menu>
+  <Menu>
+    <Name>Defense Evasion</Name>
+    <Directory>kali-defense-evasion.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-defense-evasion</Category>
+      </And>
+    </Include>
+    <Menu>
+      <Name>Pass-the-Hash</Name>
+      <Directory>kali-pass-the-hash.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-pass-the-hash</Category>
+        </And>
+      </Include>
+    </Menu>
+  </Menu>
+  <Menu>
+    <Name>Credential Access</Name>
+    <Directory>kali-credential-access.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-credential-access</Category>
+      </And>
+    </Include>
+    <Menu>
+      <Name>OS Credential Dumping</Name>
+      <Directory>kali-os-credential-dumping.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-os-credential-dumping</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Hash Identification</Name>
+      <Directory>kali-hash-identification.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-hash-identification</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Password Profiling &amp; Wordlists</Name>
+      <Directory>kali-password-profiling-wordlists.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-password-profiling-wordlists</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Brute Force</Name>
+      <Directory>kali-brute-force.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-brute-force</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Password Cracking</Name>
+      <Directory>kali-password-cracking.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-password-cracking</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Unsecured Credentials</Name>
+      <Directory>kali-unsecured-credentials.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-unsecured-credentials</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>WiFi Credential Access</Name>
+      <Directory>kali-wifi-credential-access.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-wifi-credential-access</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Keylogger</Name>
+      <Directory>kali-keylogger.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-keylogger</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>VoIP Credential Access</Name>
+      <Directory>kali-voip-credential-access.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-voip-credential-access</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>NFC</Name>
+      <Directory>kali-nfc.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-nfc</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Kerberoasting</Name>
+      <Directory>kali-kerberoasting.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-kerberoasting</Category>
+        </And>
+      </Include>
+    </Menu>
+  </Menu>
+  <Menu>
+    <Name>Discovery</Name>
+    <Directory>kali-discovery.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-discovery</Category>
+      </And>
+    </Include>
+    <Menu>
+      <Name>Network Service Discovery</Name>
+      <Directory>kali-network-service-discovery.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-network-service-discovery</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>SSL / TLS</Name>
+      <Directory>kali-ssl-tls.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-ssl-tls</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>SNMP</Name>
+      <Directory>kali-snmp.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-snmp</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Network Sniffing</Name>
+      <Directory>kali-network-sniffing.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-network-sniffing</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Remote System Discovery</Name>
+      <Directory>kali-remote-system-discovery.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-remote-system-discovery</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Account Discovery</Name>
+      <Directory>kali-account-discovery.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-account-discovery</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Network Share Discovery</Name>
+      <Directory>kali-network-share-discovery.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-network-share-discovery</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Process Discovery</Name>
+      <Directory>kali-process-discovery.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-process-discovery</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>System Network Configuration Discovery</Name>
+      <Directory>kali-system-network-configuration-discovery.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-system-network-configuration-discovery</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Network Security Appliances</Name>
+      <Directory>kali-network-security-appliances.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-network-security-appliances</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Databases</Name>
+      <Directory>kali-databases.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-databases</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>SMTP</Name>
+      <Directory>kali-smtp.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-smtp</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Cisco Tools</Name>
+      <Directory>kali-cisco-tools.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-cisco-tools</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Active Directory</Name>
+      <Directory>kali-active-directory.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-active-directory</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>VoIP</Name>
+      <Directory>kali-voip.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-voip</Category>
+        </And>
+      </Include>
+    </Menu>
+  </Menu>
+  <Menu>
+    <Name>Lateral Movement</Name>
+    <Directory>kali-lateral-movement.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-lateral-movement</Category>
+      </And>
+    </Include>
+    <Menu>
+      <Name>Pass-the-Hash</Name>
+      <Directory>kali-pass-the-hash.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-pass-the-hash</Category>
+        </And>
+      </Include>
+    </Menu>
+  </Menu>
+  <Menu>
+    <Name>Collection</Name>
+    <Directory>kali-collection.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-collection</Category>
+      </And>
+    </Include>
+
+  </Menu>
+  <Menu>
+    <Name>Command and Control</Name>
+    <Directory>kali-command-and-control.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-command-and-control</Category>
+      </And>
+    </Include>
+    <Menu>
+      <Name>Application Layer Protocol</Name>
+      <Directory>kali-application-layer-protocol.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-application-layer-protocol</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Non-Application Layer Protocol</Name>
+      <Directory>kali-non-application-layer-protocol.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-non-application-layer-protocol</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Protocol Tunneling</Name>
+      <Directory>kali-protocol-tunneling.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-protocol-tunneling</Category>
+        </And>
+      </Include>
+    </Menu>
+  </Menu>
+  <Menu>
+    <Name>Exfiltration</Name>
+    <Directory>kali-exfiltration.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-exfiltration</Category>
+      </And>
+    </Include>
+
+  </Menu>
+  <Menu>
+    <Name>Impact</Name>
+    <Directory>kali-impact.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-impact</Category>
+      </And>
+    </Include>
+
+  </Menu>
+  <Menu>
+    <Name>Forensics</Name>
+    <Directory>kali-forensics.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-forensics</Category>
+      </And>
+    </Include>
+    <Menu>
+      <Name>Digital Forensics</Name>
+      <Directory>kali-digital-forensics.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-digital-forensics</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Forensic Carving Tools</Name>
+      <Directory>kali-forensic-carving-tools.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-forensic-carving-tools</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Forensic Imaging Tools</Name>
+      <Directory>kali-forensic-imaging-tools.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-forensic-imaging-tools</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>PDF Forensics Tools</Name>
+      <Directory>kali-pdf-forensics-tools.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-pdf-forensics-tools</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Sleuth Kit Suite</Name>
+      <Directory>kali-sleuth-kit-suite.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-sleuth-kit-suite</Category>
+        </And>
+      </Include>
+    </Menu>
+  </Menu>
+  <Menu>
+    <Name>Services and Other Tools</Name>
+    <Directory>kali-services-and-other-tools.directory</Directory>
+    <Include>
+      <And>
+        <Category>kali-services-and-other-tools</Category>
+      </And>
+    </Include>
+    <Menu>
+      <Name>Reporting Tools</Name>
+      <Directory>kali-reporting-tools.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-reporting-tools</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Laboratories</Name>
+      <Directory>kali-laboratories.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-laboratories</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>System Services</Name>
+      <Directory>kali-system-services.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-system-services</Category>
+        </And>
+      </Include>
+    </Menu>
+    <Menu>
+      <Name>Kali &amp; OffSec Links</Name>
+      <Directory>kali-kali-offsec-links.directory</Directory>
+      <Include>
+        <And>
+          <Category>kali-kali-offsec-links</Category>
+        </And>
+      </Include>
+    </Menu>
+  </Menu>
+
+  <!-- Move default top-level menus one level deeper -->
+  <Move>
+    <Old>Accessories</Old>
+    <New>Usual Applications/Accessories</New>
+  </Move>
+  <Move>
+    <Old>Universal Access</Old>
+    <New>Usual Applications/Universal Access</New>
+  </Move>
+  <Move>
+    <Old>Electronics</Old>
+    <New>Usual Applications/Electronics</New>
+  </Move>
+  <Move>
+    <Old>Development</Old>
+    <New>Usual Applications/Development</New>
+  </Move>
+  <Move>
+    <Old>Education</Old>
+    <New>Usual Applications/Education</New>
+  </Move>
+  <Move>
+    <Old>Science</Old>
+    <New>Usual Applications/Science</New>
+  </Move>
+  <Move>
+    <Old>Games</Old>
+    <New>Usual Applications/Games</New>
+  </Move>
+  <Move>
+    <Old>Graphics</Old>
+    <New>Usual Applications/Graphics</New>
+  </Move>
+  <Move>
+    <Old>Internet</Old>
+    <New>Usual Applications/Internet</New>
+  </Move>
+  <Move>
+    <Old>Web Applications</Old>
+    <New>Usual Applications/Web Applications</New>
+  </Move>
+  <Move>
+    <Old>Multimedia</Old>
+    <New>Usual Applications/Multimedia</New>
+  </Move>
+  <Move>
+    <Old>Office</Old>
+    <New>Usual Applications/Office</New>
+  </Move>
+  <Move>
+    <Old>Settings</Old>
+    <New>Usual Applications/Settings</New>
+  </Move>
+  <Move>
+    <Old>Sundry</Old>
+    <New>Usual Applications/Sundry</New>
+  </Move>
+  <Move>
+    <Old>System</Old>
+    <New>Usual Applications/System</New>
+  </Move>
+  <Move>
+    <Old>System Settings</Old>
+    <New>Usual Applications/System Settings</New>
+  </Move>
+  <Move>
+    <Old>Utilities</Old>
+    <New>Usual Applications/Utilities</New>
+  </Move>
+  <Move>
+    <Old>Other</Old>
+    <New>Usual Applications/Other</New>
+  </Move>
+  <Move>
+    <Old>Hamradio</Old>
+    <New>Usual Applications/Hamradio</New>
+  </Move>
+</Menu>
