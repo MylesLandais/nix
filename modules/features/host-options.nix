@@ -102,6 +102,15 @@
     };
     kali = {
       enable = lib.mkEnableOption "Kali visual identity (themes, icons, panel, menu) and restricted-minimal toolset. Requires host.desktop = \"xfce\".";
+      profile = lib.mkOption {
+        type = lib.types.enum [
+          "default"
+          "large"
+          "everything"
+        ];
+        default = "default";
+        description = "Kali toolset profile, mirroring kali-linux-{default,large,everything} metapackage tiers.";
+      };
     };
     imaging = {
       enable = lib.mkOption {

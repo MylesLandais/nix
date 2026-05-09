@@ -18,6 +18,9 @@
       }
     ];
 
-    environment.systemPackages = import ./packages.nix { inherit pkgs; };
+    environment.systemPackages = import ./packages.nix {
+      inherit pkgs;
+      inherit (config.host.kali) profile;
+    };
   };
 }
