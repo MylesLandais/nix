@@ -100,6 +100,9 @@
       default = "default";
       description = "Host workload profile (latitudes imaged off lacie flip this to pentest).";
     };
+    kali = {
+      enable = lib.mkEnableOption "Kali visual identity (themes, icons, panel, menu) and restricted-minimal toolset. Requires host.desktop = \"xfce\".";
+    };
     imaging = {
       enable = lib.mkOption {
         type = lib.types.bool;
