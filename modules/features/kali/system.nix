@@ -5,6 +5,8 @@
   ...
 }:
 {
+  imports = [ ./theme.nix ];
+
   config = lib.mkIf config.host.kali.enable {
     assertions = [
       {

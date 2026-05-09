@@ -35,7 +35,7 @@ with pkgs;
   exploitdb
 
   # Post-exploitation
-  impacket
+  python3Packages.impacket
   evil-winrm
   # missing: bloodhound (python collector packaged as bloodhound-py separately)
 

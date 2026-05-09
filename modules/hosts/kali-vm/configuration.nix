@@ -16,6 +16,7 @@ _: {
         class = "desktop";
         bar = "noctalia";
         desktop = "xfce";
+      kali.enable = true;
         greeter = "greetd";
         gpuType = "none";
         theme = "kanagawa-dragon";
