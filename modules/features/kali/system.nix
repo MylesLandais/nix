@@ -8,6 +8,7 @@
   imports = [
     ./theme.nix
     ./greeter.nix
+    ./skel.nix
   ];
 
   config = lib.mkIf config.host.kali.enable {
