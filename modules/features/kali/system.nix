@@ -5,7 +5,10 @@
   ...
 }:
 {
-  imports = [ ./theme.nix ];
+  imports = [
+    ./theme.nix
+    ./greeter.nix
+  ];
 
   config = lib.mkIf config.host.kali.enable {
     assertions = [

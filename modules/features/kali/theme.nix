@@ -10,6 +10,7 @@ let
   kali-artifacts = pkgs.runCommandLocal "kali-artifacts" { } ''
     mkdir -p $out/share/themes $out/share/backgrounds $out/share/applications $out/share/desktop-base
     cp -r ${assets}/themes/Kali-Dark $out/share/themes/
+    cp -r ${assets}/themes/Kali-Light $out/share/themes/
     cp -r ${assets}/backgrounds/kali $out/share/backgrounds/
     cp -r ${assets}/desktop-base/kali-theme $out/share/desktop-base/
     cp ${assets}/applications/*.desktop $out/share/applications/
