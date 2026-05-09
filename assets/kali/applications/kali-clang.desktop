@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=clang
+Comment=The Clang C, C++, and Objective-C compiler
+Exec=/usr/share/kali-menu/exec-in-shell "clang --help"
+Icon=kali-clang
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-resource-development
+X-Kali-Package=clang

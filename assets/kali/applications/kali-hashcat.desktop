@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=hashcat
+Comment=Advanced CPU-based password recovery utility
+Exec=/usr/share/kali-menu/exec-in-shell "hashcat -h"
+Icon=kali-hashcat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-password-cracking;kali-credential-access
+X-Kali-Package=hashcat

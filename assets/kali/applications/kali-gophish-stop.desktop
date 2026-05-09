@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=gophish-stop
+Comment=Open-Source Phishing Toolkit
+Exec=/usr/share/kali-menu/exec-in-shell "gophish-stop"
+Icon=kali-gophish-stop
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-system-services
+X-Kali-Package=gophish

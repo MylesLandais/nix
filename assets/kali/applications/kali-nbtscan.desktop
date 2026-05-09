@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=nbtscan
+Comment=Scan networks for NetBIOS name information
+Exec=/usr/share/kali-menu/exec-in-shell "nbtscan"
+Icon=kali-nbtscan
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-share-discovery
+X-Kali-Package=nbtscan

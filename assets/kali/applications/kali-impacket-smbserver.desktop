@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=impacket-smbserver
+Comment=Python3 module to easily build and dissect network protocols
+Exec=/usr/share/kali-menu/exec-in-shell "impacket-smbserver -h"
+Icon=kali-impacket-smbserver
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-exfiltration
+X-Kali-Package=python3-impacket

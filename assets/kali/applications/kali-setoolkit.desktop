@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=setoolkit
+Comment=Social-Engineer Toolkit
+Exec=/usr/share/kali-menu/exec-in-shell "sudo setoolkit"
+Icon=kali-setoolkit
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-initial-access
+X-Kali-Package=set

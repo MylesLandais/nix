@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=cryptsetup
+Comment=Utility for configuring and managing encrypted storage devices
+Exec=/usr/share/kali-menu/exec-in-shell "cryptsetup --help"
+Icon=kali-cryptsetup
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-protect
+X-Kali-Package=cryptsetup-bin

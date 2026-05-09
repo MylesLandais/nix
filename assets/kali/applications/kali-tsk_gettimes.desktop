@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=tsk_gettimes
+Comment=Collect MAC times from a disk image into a body file.
+Exec=/usr/share/kali-menu/exec-in-shell "tsk_gettimes"
+Icon=kali-tsk_gettimes
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

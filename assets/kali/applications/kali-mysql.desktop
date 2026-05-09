@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=mysql
+Comment=The MariaDB command-line tool (mysql is now a symlink to mariadb)
+Exec=/usr/share/kali-menu/exec-in-shell "mysql -h"
+Icon=kali-mysql
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-databases
+X-Kali-Package=mariadb-client-core

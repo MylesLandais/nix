@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=msfvenom
+Comment=Payload Generator and Encoder
+Exec=/usr/share/kali-menu/exec-in-shell "msfvenom -h"
+Icon=kali-msfvenom
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-resource-development;kali-defense-evasion
+X-Kali-Package=metasploit-framework

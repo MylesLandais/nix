@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=patator
+Comment=Multi-purpose brute-forcer
+Exec=/usr/share/kali-menu/exec-in-shell "patator"
+Icon=kali-patator
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-brute-force
+X-Kali-Package=patator

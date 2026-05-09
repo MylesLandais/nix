@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=faraday
+Comment=Kali script to start and stop faraday-server and faraday-client
+Exec=/usr/share/kali-menu/exec-in-shell "sudo faraday"
+Icon=kali-faraday
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-reporting-tools;kali-system-services
+X-Kali-Package=faraday

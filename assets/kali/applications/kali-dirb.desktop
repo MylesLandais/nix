@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=dirb
+Comment=Web Content Scanner
+Exec=/usr/share/kali-menu/exec-in-shell "dirb"
+Icon=kali-dirb
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-web-scanning;kali-reconnaissance
+X-Kali-Package=dirb

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=starkiller
+Comment=PowerShell and Python post-exploitation agent
+Exec=/usr/share/kali-menu/exec-in-shell "starkiller"
+Icon=kali-starkiller
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-command-and-control
+X-Kali-Package=powershell-empire

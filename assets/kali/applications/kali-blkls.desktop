@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=blkls
+Comment=List or output file system data units.
+Exec=/usr/share/kali-menu/exec-in-shell "blkls"
+Icon=kali-blkls
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

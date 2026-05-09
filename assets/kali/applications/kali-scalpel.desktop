@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=scalpel
+Comment=Recover files using a header/footer database
+Exec=/usr/share/kali-menu/exec-in-shell "scalpel -h"
+Icon=kali-scalpel
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-forensic-carving-tools
+X-Kali-Package=scalpel

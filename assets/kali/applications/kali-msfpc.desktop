@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=msfpc
+Comment=MSFvenom Payload Creator (MSFPC)
+Exec=/usr/share/kali-menu/exec-in-shell "msfpc"
+Icon=kali-msfpc
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-resource-development
+X-Kali-Package=msfpc

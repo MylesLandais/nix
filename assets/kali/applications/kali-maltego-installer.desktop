@@ -1,0 +1,10 @@
+[Desktop Entry]
+Comment=Open source intelligence and forensics application
+Exec=/usr/share/kali-menu/exec-in-shell "/usr/share/kali-menu/install-packages maltego"
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-reconnaissance;kali-reporting-tools;kali-identify
+X-Kali-Package=maltego
+Name=maltego (installer)
+Icon=kali-maltego

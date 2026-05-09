@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ncrack
+Comment=Network authentication cracking tool
+Exec=/usr/share/kali-menu/exec-in-shell "ncrack -h"
+Icon=kali-ncrack
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-brute-force;kali-credential-access
+X-Kali-Package=ncrack

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=chntpw
+Comment=Utility to overwrite passwords of Windows systems
+Exec=/usr/share/kali-menu/exec-in-shell "chntpw -h"
+Icon=kali-chntpw
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-os-credential-dumping
+X-Kali-Package=chntpw

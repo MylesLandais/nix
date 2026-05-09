@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=blkstat
+Comment=Display details of a file system data unit (i.e. block or sector)
+Exec=/usr/share/kali-menu/exec-in-shell "blkstat"
+Icon=kali-blkstat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

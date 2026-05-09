@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=metasploit-framework
+Comment=Framework for exploit development and vulnerability research
+Exec=/usr/share/kali-menu/exec-in-shell "/usr/share/kali-menu/helper-scripts/metasploit-framework.sh"
+Icon=kali-metasploit-framework
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-initial-access;kali-execution;kali-privilege-escalation;kali-command-and-control
+X-Kali-Package=metasploit-framework

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=unix-privesc-check
+Comment=Script to check for simple privilege escalation vectors
+Exec=/usr/share/kali-menu/exec-in-shell "unix-privesc-check"
+Icon=kali-unix-privesc-check
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-privilege-escalation
+X-Kali-Package=unix-privesc-check

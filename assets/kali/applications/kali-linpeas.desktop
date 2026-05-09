@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=linpeas
+Comment=Privilege Escalation Awesome Scripts SUITE
+Exec=/usr/share/kali-menu/exec-in-shell "linpeas"
+Icon=kali-linpeas
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-privilege-escalation
+X-Kali-Package=peass

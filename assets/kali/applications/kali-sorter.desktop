@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=sorter
+Comment=Sort files in an image into categories based on file type
+Exec=/usr/share/kali-menu/exec-in-shell "sorter"
+Icon=kali-sorter
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

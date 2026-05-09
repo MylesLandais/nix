@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=laudanum
+Comment=Collection of injectable web files
+Exec=/usr/share/kali-menu/exec-in-shell "laudanum"
+Icon=kali-laudanum
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-persistence
+X-Kali-Package=laudanum

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ffuf
+Comment=Fast web fuzzer written in Go
+Exec=/usr/share/kali-menu/exec-in-shell "ffuf -h"
+Icon=kali-ffuf
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-web-scanning;kali-reconnaissance
+X-Kali-Package=ffuf

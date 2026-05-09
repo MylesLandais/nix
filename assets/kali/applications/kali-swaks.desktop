@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=swaks
+Comment=Swiss Army Knife SMTP, the all-purpose SMTP transaction tester
+Exec=/usr/share/kali-menu/exec-in-shell "swaks --help"
+Icon=kali-swaks
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-smtp
+X-Kali-Package=swaks

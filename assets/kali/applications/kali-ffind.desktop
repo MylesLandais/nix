@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ffind
+Comment=Finds the name of the file or directory using a given inode
+Exec=/usr/share/kali-menu/exec-in-shell "ffind"
+Icon=kali-ffind
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

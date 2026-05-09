@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=img_cat
+Comment=Output contents of an image file.
+Exec=/usr/share/kali-menu/exec-in-shell "img_cat"
+Icon=kali-img_cat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

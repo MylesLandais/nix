@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=sslh
+Comment=Protocol demultiplexer
+Exec=/usr/share/kali-menu/exec-in-shell "sslh -h"
+Icon=kali-sslh
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-protocol-tunneling
+X-Kali-Package=sslh

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=sqlmap
+Comment=Automatic SQL injection tool
+Exec=/usr/share/kali-menu/exec-in-shell "sqlmap --wizard"
+Icon=kali-sqlmap
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-initial-access
+X-Kali-Package=sqlmap

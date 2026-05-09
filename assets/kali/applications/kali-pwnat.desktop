@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=pwnat
+Comment=Proxy server that works behind both client and server NATs
+Exec=/usr/share/kali-menu/exec-in-shell "pwnat -h"
+Icon=kali-pwnat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-protocol-tunneling
+X-Kali-Package=pwnat

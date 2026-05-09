@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=smbmap
+Comment=SMB enumeration tool
+Exec=/usr/share/kali-menu/exec-in-shell "smbmap -h"
+Icon=kali-smbmap
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-pass-the-hash;kali-network-share-discovery;kali-pass-the-hash
+X-Kali-Package=smbmap

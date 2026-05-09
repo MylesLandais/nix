@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=iodine-client-start
+Comment=Start an iodine IPv4-over-DNS tunnel
+Exec=/usr/share/kali-menu/exec-in-shell "iodine-client-start"
+Icon=kali-iodine-client-start
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-protocol-tunneling
+X-Kali-Package=iodine

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=samdump2
+Comment=Retrieves syskey and extract hashes from Windows 2k/NT/XP/Vista SAM.
+Exec=/usr/share/kali-menu/exec-in-shell "samdump2 -h"
+Icon=kali-samdump2
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-os-credential-dumping
+X-Kali-Package=samdump2

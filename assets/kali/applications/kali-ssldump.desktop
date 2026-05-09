@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ssldump
+Comment=Dump SSL traffic on a network
+Exec=/usr/share/kali-menu/exec-in-shell "ssldump -h"
+Icon=kali-ssldump
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-collection
+X-Kali-Package=ssldump

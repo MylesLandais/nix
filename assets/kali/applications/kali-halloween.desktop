@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Kali Halloween Mode
+Comment=Toggle Kali Halloween Mode
+Exec=kali-undercover --halloween
+Terminal=false
+Type=Application
+Icon=kali-halloween
+OnlyShowIn=XFCE;
+Keywords=halloween;theme;desktop;
+Hidden=true

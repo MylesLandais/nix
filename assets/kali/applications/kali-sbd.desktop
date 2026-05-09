@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=sbd
+Comment=Secure backdoor for Linux and Windows
+Exec=/usr/share/kali-menu/exec-in-shell "sbd -h"
+Icon=kali-sbd
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-non-application-layer-protocol
+X-Kali-Package=sbd

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=dns-rebind
+Comment=DNS rebinding tool
+Exec=/usr/share/kali-menu/exec-in-shell "dns-rebind"
+Icon=kali-dns-rebind
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-initial-access
+X-Kali-Package=rebind

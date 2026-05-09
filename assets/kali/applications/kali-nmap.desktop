@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=nmap
+Comment=Network exploration tool and security / port scanner
+Exec=/usr/share/kali-menu/exec-in-shell "nmap -h"
+Icon=kali-nmap
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-information;kali-vulnerability-scanning;kali-reconnaissance;kali-network-service-discovery;kali-discovery
+X-Kali-Package=nmap

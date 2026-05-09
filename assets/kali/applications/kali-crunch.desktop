@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=crunch
+Comment=Generate wordlists from a character set
+Exec=/usr/share/kali-menu/exec-in-shell "crunch"
+Icon=kali-crunch
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-password-profiling-wordlists;kali-credential-access
+X-Kali-Package=crunch

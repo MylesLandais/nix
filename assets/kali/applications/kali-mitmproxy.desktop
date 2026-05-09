@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=mitmproxy
+Comment=SSL-capable man-in-the-middle HTTP proxy
+Exec=/usr/share/kali-menu/exec-in-shell "mitmproxy -h"
+Icon=kali-mitmproxy
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-collection
+X-Kali-Package=mitmproxy

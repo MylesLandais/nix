@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=macchanger
+Comment=MAC Changer
+Exec=/usr/share/kali-menu/exec-in-shell "macchanger -h"
+Icon=kali-macchanger
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-defense-evasion
+X-Kali-Package=macchanger

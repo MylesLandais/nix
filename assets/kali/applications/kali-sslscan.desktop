@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=sslscan
+Comment=Fast SSL/TLS scanner
+Exec=/usr/share/kali-menu/exec-in-shell "sslscan --help"
+Icon=kali-sslscan
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-ssl-tls
+X-Kali-Package=sslscan

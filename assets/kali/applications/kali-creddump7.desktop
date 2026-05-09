@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=creddump7
+Comment=Python tool to extract credentials and secrets from Windows registry hives
+Exec=/usr/share/kali-menu/exec-in-shell "creddump7"
+Icon=kali-creddump7
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-os-credential-dumping
+X-Kali-Package=creddump7

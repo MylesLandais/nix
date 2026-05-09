@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=hash-identifier
+Comment=Tool to identify hash types
+Exec=/usr/share/kali-menu/exec-in-shell "hash-identifier"
+Icon=kali-hash-identifier
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-hash-identification
+X-Kali-Package=hash-identifier

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=pdf-parser
+Comment=Parses PDF files to identify fundamental elements
+Exec=/usr/share/kali-menu/exec-in-shell "pdf-parser -h"
+Icon=kali-pdf-parser
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-pdf-forensics-tools
+X-Kali-Package=pdf-parser

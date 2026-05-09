@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=binwalk
+Comment=Tool for searching binary images for embedded files and executable code
+Exec=/usr/share/kali-menu/exec-in-shell "binwalk -h"
+Icon=kali-binwalk
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-forensics
+X-Kali-Package=binwalk

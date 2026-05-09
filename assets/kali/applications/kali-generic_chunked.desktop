@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=generic_chunked
+Comment=Network protocol fuzzer
+Exec=/usr/share/kali-menu/exec-in-shell "generic_chunked"
+Icon=kali-generic_chunked
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-resource-development
+X-Kali-Package=spike

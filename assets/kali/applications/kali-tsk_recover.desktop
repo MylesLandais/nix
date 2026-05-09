@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=tsk_recover
+Comment=Export files from an image into a local directory
+Exec=/usr/share/kali-menu/exec-in-shell "tsk_recover"
+Icon=kali-tsk_recover
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

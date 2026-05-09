@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=radare2
+Comment=Advanced command-line hexadecimal editor, disassembler and debugger
+Exec=/usr/share/kali-menu/exec-in-shell "radare2 -h"
+Icon=kali-radare2
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-resource-development
+X-Kali-Package=radare2

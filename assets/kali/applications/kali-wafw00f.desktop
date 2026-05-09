@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=wafw00f
+Comment=Identify and fingerprint Web Application Firewall products
+Exec=/usr/share/kali-menu/exec-in-shell "wafw00f -h"
+Icon=kali-wafw00f
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-security-appliances
+X-Kali-Package=wafw00f

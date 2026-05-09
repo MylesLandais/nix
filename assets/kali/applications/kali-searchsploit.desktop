@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=searchsploit
+Comment=Exploit Database Archive Search
+Exec=/usr/share/kali-menu/exec-in-shell "searchsploit -h"
+Icon=kali-searchsploit
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-resource-development;kali-identify
+X-Kali-Package=exploitdb

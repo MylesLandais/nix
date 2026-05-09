@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=hashdeep
+Comment=Compute, compare, or audit multiple message digests
+Exec=/usr/share/kali-menu/exec-in-shell "hashdeep -h"
+Icon=kali-hashdeep
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-forensics
+X-Kali-Package=hashdeep

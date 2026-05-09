@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=dnschef
+Comment=DNS proxy for penetration testers
+Exec=/usr/share/kali-menu/exec-in-shell "dnschef -h"
+Icon=kali-dnschef
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-sniffing
+X-Kali-Package=dnschef

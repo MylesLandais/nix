@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ifind
+Comment=Find the meta-data structure that has allocated a given disk unit or file name.
+Exec=/usr/share/kali-menu/exec-in-shell "ifind"
+Icon=kali-ifind
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

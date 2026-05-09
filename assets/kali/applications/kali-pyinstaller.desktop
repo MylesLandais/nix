@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=pyinstaller
+Comment=Bundle a Python application and all its dependencies into a single package
+Exec=/usr/share/kali-menu/exec-in-shell "pyinstaller -h"
+Icon=kali-pyinstaller
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-resource-development
+X-Kali-Package=pyinstaller

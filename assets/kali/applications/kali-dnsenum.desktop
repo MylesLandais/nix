@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=dnsenum
+Comment=- multithread script to enumerate information on a domain and to discover non-contiguous IP blocks
+Exec=/usr/share/kali-menu/exec-in-shell "dnsenum -h"
+Icon=kali-dnsenum
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-information-dns
+X-Kali-Package=dnsenum

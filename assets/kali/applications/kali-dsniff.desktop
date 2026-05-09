@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=dsniff
+Comment=Password sniffer
+Exec=/usr/share/kali-menu/exec-in-shell "dsniff -h"
+Icon=kali-dsniff
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-sniffing
+X-Kali-Package=dsniff

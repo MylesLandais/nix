@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=masscan
+Comment=Fast scan of the Internet
+Exec=/usr/share/kali-menu/exec-in-shell "masscan --help"
+Icon=kali-masscan
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-service-discovery;kali-discovery
+X-Kali-Package=masscan

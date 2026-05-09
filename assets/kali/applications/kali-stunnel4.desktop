@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=stunnel4
+Comment=TLS offloading and load-balancing proxy
+Exec=/usr/share/kali-menu/exec-in-shell "stunnel4 -help"
+Icon=kali-stunnel4
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-protocol-tunneling
+X-Kali-Package=stunnel4

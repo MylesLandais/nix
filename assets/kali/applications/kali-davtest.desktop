@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=davtest
+Comment=Testing tool for WebDAV servers
+Exec=/usr/share/kali-menu/exec-in-shell "davtest"
+Icon=kali-davtest
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-web-vulnerability-scanning
+X-Kali-Package=davtest

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=tsk_comparedir
+Comment=Compare the contents of a directory with the contents of an image or local device.
+Exec=/usr/share/kali-menu/exec-in-shell "tsk_comparedir"
+Icon=kali-tsk_comparedir
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

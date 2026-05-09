@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=impacket-mssqlclient
+Comment=Python3 module to easily build and dissect network protocols
+Exec=/usr/share/kali-menu/exec-in-shell "impacket-mssqlclient -h"
+Icon=kali-impacket-mssqlclient
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-databases
+X-Kali-Package=python3-impacket

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=mmcat
+Comment=Output the contents of a partition to stdout
+Exec=/usr/share/kali-menu/exec-in-shell "mmcat"
+Icon=kali-mmcat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

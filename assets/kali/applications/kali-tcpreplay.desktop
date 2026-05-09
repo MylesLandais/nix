@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=tcpreplay
+Comment=Replay network traffic stored in pcap files
+Exec=/usr/share/kali-menu/exec-in-shell "tcpreplay -h"
+Icon=kali-tcpreplay
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-security-appliances
+X-Kali-Package=tcpreplay

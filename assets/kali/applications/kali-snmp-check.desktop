@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=snmp-check
+Comment=SNMP device enumerator
+Exec=/usr/share/kali-menu/exec-in-shell "snmp-check -h"
+Icon=kali-snmp-check
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-snmp
+X-Kali-Package=snmpcheck

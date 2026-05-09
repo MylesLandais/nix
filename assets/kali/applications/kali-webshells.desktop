@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=webshells
+Comment=Collection of webshells
+Exec=/usr/share/kali-menu/exec-in-shell "webshells"
+Icon=kali-webshells
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-persistence
+X-Kali-Package=webshells

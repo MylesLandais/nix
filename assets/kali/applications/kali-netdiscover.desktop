@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=netdiscover
+Comment=Active/passive ARP reconnaissance tool
+Exec=/usr/share/kali-menu/exec-in-shell "netdiscover -h"
+Icon=kali-netdiscover
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-system-network-configuration-discovery;kali-discovery
+X-Kali-Package=netdiscover

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ptunnel
+Comment=Tunnel TCP connections over ICMP echo request/reply packets.
+Exec=/usr/share/kali-menu/exec-in-shell "ptunnel -h"
+Icon=kali-ptunnel
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-protocol-tunneling
+X-Kali-Package=ptunnel

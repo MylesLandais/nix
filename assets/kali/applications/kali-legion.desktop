@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=legion
+Comment=semi-automated network penetration testing tool
+Exec=pkexec legion
+Icon=kali-legion
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=kali-network-information;kali-reconnaissance
+X-Kali-Package=legion
+StartupWMClass=legion.py

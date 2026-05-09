@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=smbclient
+Comment=Ftp-like client to access SMB/CIFS resources on servers
+Exec=/usr/share/kali-menu/exec-in-shell "smbclient"
+Icon=kali-smbclient
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-share-discovery;kali-application-layer-protocol
+X-Kali-Package=smbclient

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=gobuster
+Comment=Directory/file, DNS and virtual host brute-forcing tool written in Go
+Exec=/usr/share/kali-menu/exec-in-shell "gobuster help"
+Icon=kali-gobuster
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-web-scanning;kali-reconnaissance
+X-Kali-Package=gobuster

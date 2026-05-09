@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=rsmangler
+Comment=Wordlist mangling tool
+Exec=/usr/share/kali-menu/exec-in-shell "rsmangler -h"
+Icon=kali-rsmangler
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-password-profiling-wordlists
+X-Kali-Package=rsmangler

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=impacket-scripts
+Comment=Links to useful impacket scripts examples
+Exec=/usr/share/kali-menu/exec-in-shell "/usr/share/kali-menu/helper-scripts/impacket-scripts.sh"
+Icon=kali-impacket-scripts
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-pass-the-hash;kali-pass-the-hash;kali-application-layer-protocol;kali-respond
+X-Kali-Package=impacket-scripts

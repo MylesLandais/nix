@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=dnsrecon
+Comment=DNS Enumeration and Scanning Tool
+Exec=/usr/share/kali-menu/exec-in-shell "dnsrecon -h"
+Icon=kali-dnsrecon
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-information-dns
+X-Kali-Package=dnsrecon

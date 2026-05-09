@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=srch_strings
+Comment=Display printable strings in files
+Exec=/usr/share/kali-menu/exec-in-shell "srch_strings -h"
+Icon=kali-srch_strings
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

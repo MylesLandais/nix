@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=dbd
+Comment=Netcat clone with encryption
+Exec=/usr/share/kali-menu/exec-in-shell "dbd -h"
+Icon=kali-dbd
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-non-application-layer-protocol
+X-Kali-Package=dbd

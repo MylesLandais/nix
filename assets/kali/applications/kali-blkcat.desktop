@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=blkcat
+Comment=Display the contents of file system data unit in a disk image.
+Exec=/usr/share/kali-menu/exec-in-shell "blkcat"
+Icon=kali-blkcat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

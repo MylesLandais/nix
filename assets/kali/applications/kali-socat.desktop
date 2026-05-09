@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=socat
+Comment=Multipurpose relay (SOcket CAT)
+Exec=/usr/share/kali-menu/exec-in-shell "socat -h"
+Icon=kali-socat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-non-application-layer-protocol
+X-Kali-Package=socat

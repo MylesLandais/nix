@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=scrounge-ntfs
+Comment=Helps retrieve data from corrupted NTFS partitions
+Exec=/usr/share/kali-menu/exec-in-shell "scrounge-ntfs -h"
+Icon=kali-scrounge-ntfs
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-forensic-carving-tools;kali-recover
+X-Kali-Package=scrounge-ntfs

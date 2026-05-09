@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=skipfish
+Comment=Web application security scanner
+Exec=/usr/share/kali-menu/exec-in-shell "skipfish -h"
+Icon=kali-skipfish
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-web-vulnerability-scanning
+X-Kali-Package=skipfish

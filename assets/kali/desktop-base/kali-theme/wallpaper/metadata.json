@@ -1,0 +1,13 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "devel@kali.org",
+                "Name": "Kali Devel Team"
+            }
+        ],
+        "Id": "Kali",
+        "Name": "Kali",
+        "License": "GPL-3.0+"
+    }
+}

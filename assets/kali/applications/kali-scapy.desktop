@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=scapy
+Comment=Interactive packet manipulation tool
+Exec=/usr/share/kali-menu/exec-in-shell "scapy"
+Icon=kali-scapy
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-sniffing;kali-impact
+X-Kali-Package=python3-scapy

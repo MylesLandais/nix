@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=hashid
+Comment=Identify the different types of hashes used to encrypt data
+Exec=/usr/share/kali-menu/exec-in-shell "hashid -h"
+Icon=kali-hashid
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-hash-identification
+X-Kali-Package=hashid

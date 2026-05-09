@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=binwalk3
+Comment=tool library for analyzing binary blobs and executable code
+Exec=/usr/share/kali-menu/exec-in-shell "binwalk3 -h"
+Icon=kali-binwalk3
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-forensics
+X-Kali-Package=binwalk3

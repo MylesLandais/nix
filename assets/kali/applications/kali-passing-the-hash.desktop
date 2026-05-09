@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=passing-the-hash
+Comment=Patched tools to use password hashes as authentication input
+Exec=/usr/share/kali-menu/exec-in-shell "/usr/share/kali-menu/helper-scripts/passing-the-hash.sh"
+Icon=kali-passing-the-hash
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-pass-the-hash;kali-pass-the-hash
+X-Kali-Package=passing-the-hash

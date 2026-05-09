@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=spooftooph
+Comment=Automates spoofing or cloning Bluetooth devices
+Exec=/usr/share/kali-menu/exec-in-shell "spooftooph -h"
+Icon=kali-spooftooph
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-bluetooth
+X-Kali-Package=spooftooph

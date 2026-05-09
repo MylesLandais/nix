@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=dmitry
+Comment=Deepmagic Information Gathering Tool
+Exec=/usr/share/kali-menu/exec-in-shell "dmitry"
+Icon=kali-dmitry
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-information
+X-Kali-Package=dmitry

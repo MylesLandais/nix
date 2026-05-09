@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=generic_listen_tcp
+Comment=Network protocol fuzzer
+Exec=/usr/share/kali-menu/exec-in-shell "generic_listen_tcp"
+Icon=kali-generic_listen_tcp
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-resource-development
+X-Kali-Package=spike

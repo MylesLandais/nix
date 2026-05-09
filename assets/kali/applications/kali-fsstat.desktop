@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=fsstat
+Comment=Display general details of a file system
+Exec=/usr/share/kali-menu/exec-in-shell "fsstat"
+Icon=kali-fsstat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=jcat
+Comment=Show the contents of a block in the file system journal.
+Exec=/usr/share/kali-menu/exec-in-shell "jcat"
+Icon=kali-jcat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=theHarvester
+Comment=tool for gathering e-mail accounts and subdomain names from public sources
+Exec=/usr/share/kali-menu/exec-in-shell "theHarvester -h"
+Icon=kali-theHarvester
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-information
+X-Kali-Package=theharvester

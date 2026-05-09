@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=BackTrack Mode
+Comment=Toggle BackTrack Mode
+Exec=kali-undercover --backtrack
+Terminal=false
+Type=Application
+Icon=kali-backtrack
+OnlyShowIn=XFCE;
+Keywords=backtrack;theme;desktop;

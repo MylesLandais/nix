@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=netmask
+Comment=A netmask generation and conversion program
+Exec=/usr/share/kali-menu/exec-in-shell "netmask -h"
+Icon=kali-netmask
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-system-network-configuration-discovery
+X-Kali-Package=netmask

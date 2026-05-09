@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=autopsy
+Comment=Autopsy Forensic Browser
+Exec=/usr/share/kali-menu/exec-in-shell "sudo autopsy"
+Icon=kali-autopsy
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite;kali-forensics
+X-Kali-Package=autopsy

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=medusa
+Comment=Parallel Network Login Auditor
+Exec=/usr/share/kali-menu/exec-in-shell "medusa"
+Icon=kali-medusa
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-brute-force;kali-credential-access
+X-Kali-Package=medusa

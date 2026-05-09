@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=bulk_extractor
+Comment=Scans a disk image for regular expressions and other content.
+Exec=/usr/share/kali-menu/exec-in-shell "bulk_extractor -h"
+Icon=kali-bulk_extractor
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-forensics
+X-Kali-Package=bulk-extractor

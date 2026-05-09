@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=jls
+Comment=List the contents of a file system journal
+Exec=/usr/share/kali-menu/exec-in-shell "jls"
+Icon=kali-jls
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

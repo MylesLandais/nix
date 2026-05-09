@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=whatweb
+Comment=Next generation Web scanner. Identify technologies used by websites.
+Exec=/usr/share/kali-menu/exec-in-shell "whatweb -h"
+Icon=kali-whatweb
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-web-vulnerability-scanning
+X-Kali-Package=whatweb

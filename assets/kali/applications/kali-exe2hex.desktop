@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=exe2hex
+Comment=Convert EXE to bat
+Exec=/usr/share/kali-menu/exec-in-shell "exe2hex -h"
+Icon=kali-exe2hex
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-defense-evasion
+X-Kali-Package=exe2hexbat

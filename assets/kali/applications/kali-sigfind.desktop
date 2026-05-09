@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=sigfind
+Comment=Find a binary signature in a file
+Exec=/usr/share/kali-menu/exec-in-shell "sigfind"
+Icon=kali-sigfind
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

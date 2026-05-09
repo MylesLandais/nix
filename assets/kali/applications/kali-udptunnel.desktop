@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=udptunnel
+Comment=Tunnel UDP packets over a TCP connection
+Exec=/usr/share/kali-menu/exec-in-shell "udptunnel -h"
+Icon=kali-udptunnel
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-protocol-tunneling
+X-Kali-Package=udptunnel

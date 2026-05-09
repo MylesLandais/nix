@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=kismet
+Comment=Wireless sniffer and monitor
+Exec=/usr/share/kali-menu/exec-in-shell "kismet -h"
+Icon=kali-kismet
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-wifi
+X-Kali-Package=kismet-core

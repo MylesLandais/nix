@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=reaver
+Comment=WPS Cracker
+Exec=/usr/share/kali-menu/exec-in-shell "reaver -h"
+Icon=kali-reaver
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-wifi-credential-access
+X-Kali-Package=reaver

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=lbd
+Comment=Load balancer detector
+Exec=/usr/share/kali-menu/exec-in-shell "lbd"
+Icon=kali-lbd
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-web-scanning
+X-Kali-Package=lbd

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=msf-nasm_shell
+Comment=Framework for exploit development and vulnerability research
+Exec=/usr/share/kali-menu/exec-in-shell "msf-nasm_shell"
+Icon=kali-msf-nasm_shell
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-resource-development
+X-Kali-Package=metasploit-framework

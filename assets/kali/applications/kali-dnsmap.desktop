@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=dnsmap
+Comment=Scan for subdomains using bruteforcing techniques
+Exec=/usr/share/kali-menu/exec-in-shell "dnsmap"
+Icon=kali-dnsmap
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-information-dns
+X-Kali-Package=dnsmap

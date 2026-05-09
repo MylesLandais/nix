@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=cutycapt
+Comment=Utility to capture WebKit's rendering of a web page
+Exec=/usr/share/kali-menu/exec-in-shell "cutycapt --help"
+Icon=kali-cutycapt
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-reporting-tools
+X-Kali-Package=cutycapt

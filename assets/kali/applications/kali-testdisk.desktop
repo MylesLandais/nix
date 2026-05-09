@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=testdisk
+Comment=Scan and repair disk partitions
+Exec=/usr/share/kali-menu/exec-in-shell "testdisk -h"
+Icon=kali-testdisk
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-forensic-carving-tools
+X-Kali-Package=testdisk

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=powersploit
+Comment=PowerShell Post-Exploitation Framework
+Exec=/usr/share/kali-menu/exec-in-shell "powersploit"
+Icon=kali-powersploit
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-execution
+X-Kali-Package=powersploit

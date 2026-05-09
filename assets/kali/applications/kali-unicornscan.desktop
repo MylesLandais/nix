@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=unicornscan
+Comment=Userland distributed TCP/IP stack
+Exec=/usr/share/kali-menu/exec-in-shell "unicornscan -h"
+Icon=kali-unicornscan
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-information;kali-network-service-discovery
+X-Kali-Package=unicornscan

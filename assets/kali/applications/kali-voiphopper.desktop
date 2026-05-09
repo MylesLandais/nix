@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=voiphopper
+Comment=Runs a VLAN hop security test
+Exec=/usr/share/kali-menu/exec-in-shell "voiphopper -h"
+Icon=kali-voiphopper
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-voip
+X-Kali-Package=voiphopper

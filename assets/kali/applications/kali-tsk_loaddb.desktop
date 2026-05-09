@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=tsk_loaddb
+Comment=Populate a SQLite database with metadata from a disk image
+Exec=/usr/share/kali-menu/exec-in-shell "tsk_loaddb"
+Icon=kali-tsk_loaddb
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

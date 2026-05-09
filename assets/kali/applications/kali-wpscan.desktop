@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=wpscan
+Comment=WordPress Security Scanner
+Exec=/usr/share/kali-menu/exec-in-shell "wpscan -h"
+Icon=kali-wpscan
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-web-vulnerability-scanning
+X-Kali-Package=wpscan

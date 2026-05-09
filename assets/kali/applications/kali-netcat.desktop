@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=netcat
+Comment=TCP/IP swiss army knife
+Exec=/usr/share/kali-menu/exec-in-shell "netcat -h"
+Icon=kali-netcat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-non-application-layer-protocol;kali-exfiltration
+X-Kali-Package=netcat-traditional

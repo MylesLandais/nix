@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=wash
+Comment=brute force attack tool against Wi-Fi Protected Setup PIN number
+Exec=/usr/share/kali-menu/exec-in-shell "wash -h"
+Icon=kali-wash
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-wifi
+X-Kali-Package=reaver

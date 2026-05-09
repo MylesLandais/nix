@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=smtp-user-enum
+Comment=Username guessing tool for the SMTP service
+Exec=/usr/share/kali-menu/exec-in-shell "smtp-user-enum -h"
+Icon=kali-smtp-user-enum
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-account-discovery;kali-smtp
+X-Kali-Package=smtp-user-enum

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=responder
+Comment=LLMNR/NBT-NS/mDNS Poisoner
+Exec=/usr/share/kali-menu/exec-in-shell "responder -h"
+Icon=kali-responder
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-credential-access
+X-Kali-Package=responder

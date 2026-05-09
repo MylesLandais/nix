@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=x-terminal-emulator -e kali-tweaks -title "Kali Tweaks"
+StartupNotify=false
+Terminal=false
+Type=Application
+X-Kali-Package=kali-tweaks
+Name=Kali Tweaks
+Comment=Tool to adjust advanced configuration settings for Kali Linux
+Icon=kali-tweaks
+Categories=Settings;X-XFCE-SettingsDialog;kali-services-and-other-tools

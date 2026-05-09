@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=wordlists
+Comment=Contains the rockyou wordlist
+Exec=/usr/share/kali-menu/exec-in-shell "wordlists"
+Icon=kali-wordlists
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-password-profiling-wordlists;kali-credential-access
+X-Kali-Package=wordlists

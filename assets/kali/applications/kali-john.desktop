@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=john
+Comment=A tool to find weak passwords of your users
+Exec=/usr/share/kali-menu/exec-in-shell "/usr/share/kali-menu/helper-scripts/john.sh"
+Icon=kali-john
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-password-cracking;kali-credential-access
+X-Kali-Package=john

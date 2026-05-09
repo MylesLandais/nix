@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=weevely
+Comment=Weaponized web shell
+Exec=/usr/share/kali-menu/exec-in-shell "weevely terminal -h"
+Icon=kali-weevely
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-persistence
+X-Kali-Package=weevely

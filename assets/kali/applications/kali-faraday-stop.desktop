@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=faraday-stop
+Comment=Collaborative Penetration Test IDE
+Exec=/usr/share/kali-menu/exec-in-shell "/usr/share/kali-menu/helper-scripts/faraday-stop.sh"
+Icon=kali-faraday-stop
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-system-services
+X-Kali-Package=faraday

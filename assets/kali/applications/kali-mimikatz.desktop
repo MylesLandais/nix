@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=mimikatz
+Comment=Uses admin rights on Windows to display passwords in plaintext
+Exec=/usr/share/kali-menu/exec-in-shell "mimikatz"
+Icon=kali-mimikatz
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-pass-the-hash;kali-os-credential-dumping;kali-pass-the-hash
+X-Kali-Package=mimikatz

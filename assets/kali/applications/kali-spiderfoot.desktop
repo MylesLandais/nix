@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=spiderfoot
+Comment=OSINT collection and reconnaissance tool
+Exec=/usr/share/kali-menu/exec-in-shell "spiderfoot -h"
+Icon=kali-spiderfoot
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-host-information;kali-identify
+X-Kali-Package=spiderfoot

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ils
+Comment=List inode information
+Exec=/usr/share/kali-menu/exec-in-shell "ils"
+Icon=kali-ils
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite;kali-respond
+X-Kali-Package=sleuthkit

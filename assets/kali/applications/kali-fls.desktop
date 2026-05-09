@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=fls
+Comment=List file and directory names in a disk image.
+Exec=/usr/share/kali-menu/exec-in-shell "fls"
+Icon=kali-fls
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

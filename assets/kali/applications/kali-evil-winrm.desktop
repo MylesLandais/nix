@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=evil-winrm
+Comment=ultimate WinRM shell for hacking/pentesting
+Exec=/usr/share/kali-menu/exec-in-shell "evil-winrm -h"
+Icon=kali-evil-winrm
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-pass-the-hash;kali-pass-the-hash;kali-lateral-movement;kali-application-layer-protocol
+X-Kali-Package=evil-winrm

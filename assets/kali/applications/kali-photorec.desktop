@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=photorec
+Comment=Recover lost files from harddisk, digital camera and cdrom
+Exec=/usr/share/kali-menu/exec-in-shell "photorec -h"
+Icon=kali-photorec
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-forensic-carving-tools
+X-Kali-Package=testdisk

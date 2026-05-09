@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=cadaver
+Comment=A command-line WebDAV client for Unix.
+Exec=/usr/share/kali-menu/exec-in-shell "cadaver"
+Icon=kali-cadaver
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-application-layer-protocol
+X-Kali-Package=cadaver

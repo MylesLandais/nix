@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=wifite
+Comment=Python script to automate wireless auditing using aircrack-ng tools
+Exec=/usr/share/kali-menu/exec-in-shell "wifite -h"
+Icon=kali-wifite
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-wifi-credential-access
+X-Kali-Package=wifite

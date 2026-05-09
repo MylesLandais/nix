@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=pipal
+Comment=Statistical analysis on password dumps
+Exec=/usr/share/kali-menu/exec-in-shell "pipal -h"
+Icon=kali-pipal
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-reporting-tools
+X-Kali-Package=pipal

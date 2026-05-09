@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=istat
+Comment=Display details of a meta-data structure (i.e. inode)
+Exec=/usr/share/kali-menu/exec-in-shell "istat"
+Icon=kali-istat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

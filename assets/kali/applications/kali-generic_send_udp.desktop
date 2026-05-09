@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=generic_send_udp
+Comment=Network protocol fuzzer
+Exec=/usr/share/kali-menu/exec-in-shell "generic_send_udp"
+Icon=kali-generic_send_udp
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-resource-development
+X-Kali-Package=spike

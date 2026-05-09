@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=mmstat
+Comment=Display details about the volume system (partition tables)
+Exec=/usr/share/kali-menu/exec-in-shell "mmstat"
+Icon=kali-mmstat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=bloodhound-python
+Comment=ingestor for BloodHound, based on Impacket (Python 3)
+Exec=/usr/share/kali-menu/exec-in-shell "bloodhound-python -h"
+Icon=kali-bloodhound-python
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-active-directory
+X-Kali-Package=bloodhound.py

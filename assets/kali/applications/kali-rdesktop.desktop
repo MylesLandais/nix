@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=rdesktop
+Comment=Remote Desktop Protocol client
+Exec=/usr/share/kali-menu/exec-in-shell "rdesktop"
+Icon=kali-menu
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-lateral-movement
+X-Kali-Package=rdesktop

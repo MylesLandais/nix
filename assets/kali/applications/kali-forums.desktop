@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=x-www-browser https://forums.kali.org/
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=kali-kali-offsec-links
+X-Kali-Package=kali-menu
+Name=Kali Forums
+Comment=Get community support on forums
+Icon=kali-forums

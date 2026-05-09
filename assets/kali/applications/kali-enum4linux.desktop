@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=enum4linux
+Comment=Enumerates info from Windows and Samba systems
+Exec=/usr/share/kali-menu/exec-in-shell "enum4linux -h"
+Icon=kali-enum4linux
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-share-discovery;kali-discovery
+X-Kali-Package=enum4linux

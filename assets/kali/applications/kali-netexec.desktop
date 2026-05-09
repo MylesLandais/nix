@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=netexec
+Comment=Network Execution Tool
+Exec=/usr/share/kali-menu/exec-in-shell "netexec -h"
+Icon=kali-netexec
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-pass-the-hash;kali-brute-force;kali-credential-access;kali-network-share-discovery;kali-pass-the-hash;kali-lateral-movement;kali-application-layer-protocol
+X-Kali-Package=netexec

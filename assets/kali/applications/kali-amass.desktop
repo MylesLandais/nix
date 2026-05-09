@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=amass
+Comment=In-depth DNS Enumeration and Network Mapping
+Exec=/usr/share/kali-menu/exec-in-shell "amass -h"
+Icon=kali-amass
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-network-information;kali-network-service-discovery;kali-discovery;kali-identify
+X-Kali-Package=amass

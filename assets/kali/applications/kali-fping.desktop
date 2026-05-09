@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=fping
+Comment=Send ICMP ECHO_REQUEST packets to network hosts
+Exec=/usr/share/kali-menu/exec-in-shell "fping -h"
+Icon=kali-fping
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-remote-system-discovery
+X-Kali-Package=fping

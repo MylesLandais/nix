@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=fern-wifi-cracker
+Comment=Automated Wi-Fi cracker
+Exec=pkexec fern-wifi-cracker
+Icon=kali-fern-wifi-cracker
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=kali-wifi-credential-access
+X-Kali-Package=fern-wifi-cracker

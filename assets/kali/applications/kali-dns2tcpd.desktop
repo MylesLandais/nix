@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=dns2tcpd
+Comment=A tunneling tool that encapsulate TCP traffic over DNS.
+Exec=/usr/share/kali-menu/exec-in-shell "dns2tcpd"
+Icon=kali-dns2tcpd
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-protocol-tunneling
+X-Kali-Package=dns2tcp

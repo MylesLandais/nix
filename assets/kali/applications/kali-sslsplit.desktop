@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=sslsplit
+Comment=- transparent SSL/TLS interception
+Exec=/usr/share/kali-menu/exec-in-shell "sslsplit -h"
+Icon=kali-sslsplit
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-collection
+X-Kali-Package=sslsplit

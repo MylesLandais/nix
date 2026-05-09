@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=impacket-psexec
+Comment=Python3 module to easily build and dissect network protocols
+Exec=/usr/share/kali-menu/exec-in-shell "impacket-psexec -h"
+Icon=kali-impacket-psexec
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-lateral-movement
+X-Kali-Package=python3-impacket

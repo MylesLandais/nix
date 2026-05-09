@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=pdfid
+Comment=Scans PDF files for certain PDF keywords
+Exec=/usr/share/kali-menu/exec-in-shell "pdfid -h"
+Icon=kali-pdfid
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-pdf-forensics-tools
+X-Kali-Package=pdfid

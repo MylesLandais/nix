@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=sslyze
+Comment=Fast and full-featured SSL scanner
+Exec=/usr/share/kali-menu/exec-in-shell "sslyze -h"
+Icon=kali-sslyze
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-ssl-tls
+X-Kali-Package=sslyze

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=thc-pptp-bruter
+Comment=THC PPTP Brute Force
+Exec=/usr/share/kali-menu/exec-in-shell "thc-pptp-bruter"
+Icon=kali-thc-pptp-bruter
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-brute-force
+X-Kali-Package=thc-pptp-bruter

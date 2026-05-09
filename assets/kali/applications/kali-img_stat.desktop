@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=img_stat
+Comment=Display details of an image file
+Exec=/usr/share/kali-menu/exec-in-shell "img_stat"
+Icon=kali-img_stat
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-sleuth-kit-suite
+X-Kali-Package=sleuthkit

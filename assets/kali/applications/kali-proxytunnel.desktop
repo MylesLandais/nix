@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=proxytunnel
+Comment=Program to tunnel a connection through a standard HTTPS proxy
+Exec=/usr/share/kali-menu/exec-in-shell "proxytunnel -h"
+Icon=kali-proxytunnel
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-protocol-tunneling
+X-Kali-Package=proxytunnel

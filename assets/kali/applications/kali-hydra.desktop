@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=hydra
+Comment=A very fast network logon cracker which supports many different services
+Exec=/usr/share/kali-menu/exec-in-shell "/usr/share/kali-menu/helper-scripts/hydra.sh"
+Icon=kali-hydra
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-brute-force;kali-credential-access
+X-Kali-Package=hydra

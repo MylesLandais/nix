@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=dirbuster
+Comment=Web server directory brute-forcer
+Exec=dirbuster
+Icon=kali-dirbuster
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=kali-web-scanning;kali-reconnaissance
+X-Kali-Package=dirbuster
+StartupWMClass=com-sittinglittleduck-DirBuster-Start

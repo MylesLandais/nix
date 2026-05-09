@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=miredo
+Comment=Teredo IPv6 tunneling for Unix
+Exec=/usr/share/kali-menu/exec-in-shell "miredo -h"
+Icon=kali-miredo
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=kali-protocol-tunneling
+X-Kali-Package=miredo
