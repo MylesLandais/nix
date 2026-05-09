@@ -52,6 +52,8 @@ in
     xfce.xfce4-pulseaudio-plugin
     xfce.xfce4-cpugraph-plugin
     xfce.xfce4-whiskermenu-plugin
+    ghostty
+    xfce.xfce4-terminal
   ];
 
   environment.etc = lib.mkMerge [
@@ -59,7 +61,21 @@ in
       "xdg/xfce4/panel/default.xml".source = "${assets}/xdg/xfce4/panel/default.xml";
       "xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml".source = desktopXml;
       "xdg/xfce4/terminal/terminalrc".source = "${assets}/xdg/xfce4/terminal/terminalrc";
-      "xdg/xfce4/helpers.rc".source = "${assets}/xdg/xfce4/helpers.rc";
+      "xdg/xfce4/helpers.rc".text = ''
+        WebBrowser=firefox
+        FileManager=thunar
+        TerminalEmulator=ghostty
+      '';
+      "xdg/xfce4/helpers/ghostty.desktop".text = ''
+        [Desktop Entry]
+        Version=1.0
+        Type=X-XFCE-Helper
+        X-XFCE-Category=TerminalEmulator
+        X-XFCE-CommandsWithParameter=ghostty -e "%s"
+        X-XFCE-Commands=ghostty
+        Name=Ghostty
+        Icon=utilities-terminal
+      '';
     }
     (lib.listToAttrs (
       map
