@@ -28,6 +28,7 @@
       imports = [
         inputs.self.nixosModules.qmom2
         inputs.self.nixosModules.qmom2Hardware
+        inputs.self.nixosModules.qmom2Postgres
         "${inputs.self}/modules/features/nix-config.nix"
         "${inputs.self}/modules/features/fish-config.nix"
         inputs.home-manager.nixosModules.home-manager
