@@ -1,5 +1,5 @@
 # Dell OptiPlex 7050 (Service Tag 95QMOM2)
-# Intel i5-6500, 12 GB RAM, 238 GB SSD (root) + 9.1 TB HDD (data)
+# Intel i5-6500, 12 GB RAM, 238 GB SSD (sda, root) + 9.1 TB HDD (sdb, data)
 _: {
   flake.nixosModules.qmom2Hardware =
     { config, lib, modulesPath, ... }:
@@ -16,7 +16,7 @@ _: {
       boot.kernelModules = [ "kvm-intel" ];
       boot.extraModulePackages = [ ];
 
-      # 238 GB SSD — sdb
+      # 238 GB SSD — sda3, ext4 root
       fileSystems."/" = {
         device = "/dev/disk/by-uuid/89395068-a5be-4b51-af6d-856a77ba5fa2";
         fsType = "ext4";
@@ -28,9 +28,9 @@ _: {
         options = [ "fmask=0077" "dmask=0077" ];
       };
 
-      # 9.1 TB HDD — sda1, XFS, data volume
+      # 9.1 TB HDD — sdb1, XFS, data volume (reformatted 2026-05-16)
       fileSystems."/srv/data" = {
-        device = "/dev/disk/by-uuid/d7d0f16a-f2fd-4cae-baa7-0a2e0387c4c3";
+        device = "/dev/disk/by-uuid/2f206721-500c-409c-b147-a2fdb44544b0";
         fsType = "xfs";
         options = [ "noatime" "nofail" "x-systemd.automount" ];
       };
