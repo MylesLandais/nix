@@ -45,13 +45,4 @@
     ];
   };
 
-  flake.deploy.nodes."95qmom2" = {
-    hostname = "192.168.0.49";
-    profiles.system = {
-      user = "root";
-      sshUser = "warby";
-      path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos inputs.self.nixosConfigurations."95qmom2";
-    };
-    sshOpts = [ "-i" "/home/warby/.ssh/id_ed25519" ];
-  };
 }
