@@ -14,8 +14,8 @@ _: {
         hostName = "lacie";
         isDesktop = false;
         class = "laptop";
-        bar = "noctalia";
-        desktop = "xfce";
+        bar = "hyprpanel";
+        desktop = "hyprland";
         greeter = "greetd";
         gpuType = "none";
         theme = "kanagawa-dragon";
@@ -127,6 +127,7 @@ _: {
       };
 
       environment.systemPackages = with pkgs; [
+        # System utilities
         git
         vim
         tmux
@@ -138,6 +139,28 @@ _: {
         pciutils
         usbutils
         tailscale
+        cifs-utils
+        wireguard-tools
+        nmap
+        ntfs3g
+        polkit_gnome
+
+        # VM tooling — portable forensics
+        qemu_kvm
+        OVMFFull
+        swtpm
+        virt-manager
+
+        # Desktop theming (parity with cerberus)
+        papirus-icon-theme
+        kdePackages.breeze-icons
+        adwaita-icon-theme
+
+        # Applications
+        bitwarden-desktop
+        syncthing
+        termius
+        mosh
       ];
 
       system.stateVersion = "25.11";
