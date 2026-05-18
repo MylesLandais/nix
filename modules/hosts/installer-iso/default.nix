@@ -17,6 +17,7 @@
       "${inputs.self}/modules/features/env-packages.nix"
       "${inputs.self}/modules/features/nix-config.nix"
       "${inputs.self}/modules/features/fish-config.nix"
+      "${inputs.self}/modules/features/ssh-keys.nix"
 
       inputs.home-manager.nixosModules.home-manager
       {
@@ -68,10 +69,6 @@
 
           users.users.warby = {
             hashedPassword = lib.mkForce "$y$j9T$gJkLnhuqbgOfuN6aCqCkV/$mP5AkJqviJilNvMVUTSvn5h5.IrP15ZaUelK5NARJj6";
-            openssh.authorizedKeys.keys = [
-              "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQPlTg3O6tXvjOO8+hVGWfu7tr2lzgAdu+EFVNV2BYY landais.myles@gmail.com"
-              "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIONcu7pQIpReczEW77P9eW7vtte0PTVs9gGck/wyNVYZ warby@warbpad"
-            ];
           };
 
           users.users.kali = {

@@ -2,6 +2,8 @@ _: {
   flake.nixosModules.argus =
     { config, lib, pkgs, inputs, ... }:
     {
+      imports = [ "${inputs.self}/modules/features/ssh-keys.nix" ];
+
       nixpkgs.config.allowUnfree = true;
 
       # ---------------------------------------------------------------------------
@@ -109,9 +111,6 @@ _: {
           ];
           # Set a hashedPassword or use agenix for secrets. Empty = locked.
           hashedPassword = "";
-          openssh.authorizedKeys.keys = [
-            # TODO: paste your pubkey here
-          ];
         };
       };
 
@@ -133,10 +132,9 @@ _: {
         pciutils
         usbutils
         smartmontools
-        nvtop              # GPU monitoring
+        nvtopPackages.full   # GPU monitoring
         docker-compose
         tailscale
-        agenix
       ];
 
       programs.fish.enable = true;

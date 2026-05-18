@@ -2,6 +2,8 @@ _: {
   flake.nixosModules.qmom2 =
     { config, lib, pkgs, inputs, ... }:
     {
+      imports = [ "${inputs.self}/modules/features/ssh-keys.nix" ];
+
       nixpkgs.config.allowUnfree = true;
 
       networking.hostName = "95qmom2";
@@ -65,12 +67,6 @@ _: {
             "disk"
           ];
           hashedPassword = "";
-          openssh.authorizedKeys.keys = [
-            # cerberus
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQPlTg3O6tXvjOO8+hVGWfu7tr2lzgAdu+EFVNV2BYY landais.myles@gmail.com"
-            # warbpad
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIONcu7pQIpReczEW77P9eW7vtte0PTVs9gGck/wyNVYZ warby@warbpad"
-          ];
         };
       };
 
@@ -91,6 +87,13 @@ _: {
         smartmontools
         docker-compose
         tailscale
+        # forensics scan window (95qmom2 14 TB games-drive catalog)
+        cifs-utils
+        ntfs3g
+        fclones
+        sqlite
+        jq
+        file
       ];
 
       programs.fish.enable = true;
