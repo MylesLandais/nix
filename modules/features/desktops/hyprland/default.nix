@@ -15,7 +15,7 @@
   options = {
     hyprland.enable = lib.mkEnableOption "Enable hyprland module";
   };
-  config = lib.mkIf (config.hyprland.enable && osConfig.host.desktop == "hyprland") {
+  config = lib.mkIf config.hyprland.enable {
     hypr.enable = lib.mkDefault true;
     # Bar selection based on host.bar option
     bars = {

@@ -36,14 +36,6 @@
         file = ../secrets/ollama.age;
         mode = "400";
       };
-      gemini = {
-        file = ../secrets/gemini.age;
-        mode = "400";
-      };
-      grafana = {
-        file = ../secrets/grafana.age;
-        mode = "400";
-      };
     };
   };
 
