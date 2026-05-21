@@ -48,6 +48,10 @@
     wallpapers = {
       url = "github:FKouhai/Kanagawa-wallpapers";
     };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
