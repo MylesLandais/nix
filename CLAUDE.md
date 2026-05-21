@@ -4,9 +4,9 @@ This document extends the global Claude Code rules with Nix-specific guidance.
 
 ## Nix Development Workflow
 
-All changes follow this sequence: Edit, Validate with /nix-check, Commit, Apply with /nix-switch
+All changes follow this sequence: Edit, Validate with /nix-check, Commit, Apply with /nix-switch for local Cerberus changes, or Deploy with /nix-deploy for remote hosts.
 
-Do not skip /nix-check. Do not commit unvalidated changes. Do not apply changes to live system without validation.
+Do not skip /nix-check. Do not commit unvalidated changes. Do not apply changes to live system without validation. Do not deploy to remote hosts without first building the target configuration locally.
 
 ## Where to Make Changes
 
@@ -71,6 +71,64 @@ Changes to home.nix or devtooling/ should appear in ~/.config files after rebuil
 Changes to environment, PATH, or other shell variables need shell restart. Verify changes applied by checking config file or running git config --global credential.helper. Restart current shell with exec fish (or bash). Test command again. If still old values, reboot: sudo reboot.
 
 Opening a new terminal window does NOT reload environment. Must restart the current shell with exec.
+
+## Remote Deployment
+
+Use deploy-rs to push NixOS configurations to remote machines (argus, lacie, secretcon, franktory, kraken, etc.). Local Cerberus changes use /nix-switch instead.
+
+### Add a deploy-rs node
+
+Edit `flake.nix`. Add `deploy-rs` to `inputs` (if not present). In `outputs`, define `flake.deploy.nodes.<hostname>` with `hostname`, `profiles.system.path`, and `sshOpts`.
+
+Example for a headless server:
+
+```nix
+inputs.deploy-rs = {
+  url = "github:serokell/deploy-rs";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
+
+outputs = inputs@{ flake-parts, deploy-rs, ... }:
+  flake-parts.lib.mkFlake { inherit inputs; } {
+    # ... existing imports ...
+    flake.deploy.nodes.argus = {
+      hostname = "argus.lan";
+      profiles.system = {
+        user = "root";
+        path = deploy-rs.lib.x86_64-linux.activate.nixos inputs.self.nixosConfigurations.argus;
+      };
+      sshOpts = [ "-i" "/home/warby/.ssh/id_ed25519" ];
+    };
+  };
+```
+
+### Deploy to a remote host
+
+Validate the target configuration locally first:
+
+```bash
+nix build .#nixosConfigurations.<host>.config.system.build.toplevel
+```
+
+Then run /nix-deploy or manually:
+
+```bash
+deploy .#<hostname>
+```
+
+### Requirements on target
+
+- NixOS installed with flakes enabled
+- SSH key access for deploying user
+- Passwordless sudo for the profile user (or use `user = "root"`)
+- Matching system architecture (x86_64-linux for all current hosts)
+
+### Deploy troubleshooting
+
+- SSH errors: verify `hostname` and key in `authorized_keys`
+- Sudo prompts: add NOPASSWD rule or use root profile user
+- Build failures: validate locally with `nix build .#nixosConfigurations.<host>.config.system.build.toplevel`
+- Rollback on target: `sudo nixos-rebuild switch --rollback`
 
 ## Task Completion Pattern
 
