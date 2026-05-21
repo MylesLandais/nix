@@ -8,6 +8,8 @@ _: {
       ...
     }:
     {
+      imports = [ "${inputs.self}/modules/features/ssh-keys.nix" ];
+
       nixpkgs.config.allowUnfree = true;
 
       host = {
@@ -54,7 +56,6 @@ _: {
           settings = {
             UseDns = false;
             PasswordAuthentication = false;
-            PermitRootLogin = "no";
           };
         };
         pipewire = {

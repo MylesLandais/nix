@@ -8,6 +8,8 @@ _: {
       ...
     }:
     {
+      imports = [ "${inputs.self}/modules/features/ssh-keys.nix" ];
+
       nixpkgs.config.allowUnfree = true;
 
       host = {
