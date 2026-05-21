@@ -46,5 +46,13 @@ node_modules/
 
 # Claude Code local settings
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
+
+# VM images and bootable media
+*.qcow2
+*.vhdx
 ventoy-*.tar.gz
 ventoy-*/
+
+# Diagnostics
+.nix-usb-logs/
