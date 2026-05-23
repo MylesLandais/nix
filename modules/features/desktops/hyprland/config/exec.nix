@@ -1,18 +1,12 @@
 {
   bar,
-  wallpaper,
   lib,
+  wallpaper,
 }:
 {
   exec-once = [
     "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
     "add_record_player"
-  ]
-  ++ lib.optionals (bar == "caelestia") [
-    "caelestia wallpaper --file ${wallpaper}"
-    "caelestia scheme set -n dynamic --variant fidelity"
-  ]
-  ++ [
     "wl-paste --watch cliphist store &"
   ];
 }

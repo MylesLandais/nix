@@ -1,5 +1,5 @@
 {
-  decoration = {
+  config.decoration = {
     rounding = 10;
     blur = {
       enabled = true;

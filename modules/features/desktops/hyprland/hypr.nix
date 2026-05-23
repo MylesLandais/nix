@@ -63,7 +63,6 @@
 
           env = [
             "BROWSER=zen"
-            "XDG_CONFIG_HOME=/home/franky/.config"
             "XDG_SESSION_TYPE=wayland"
             "XCURSOR_SIZE=22"
             "EDITOR=nvim"
@@ -72,7 +71,7 @@
 
         }
         // (import ./config/general.nix)
-        // (import ./config/gestures.nix)
+        // (import ./config/gestures.nix { inherit lib; })
         // (import ./config/decoration.nix)
         // (import ./config/exec.nix {
           inherit lib;
