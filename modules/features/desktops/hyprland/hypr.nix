@@ -44,46 +44,69 @@
 
       wayland.windowManager.hyprland = {
         enable = true;
+        configType = "lua";
         portalPackage = pkgs.xdg-desktop-portal-hyprland;
 
-        settings = {
-          input = {
-            touchpad = {
-              clickfinger_behavior = true;
-              natural_scroll = true;
+        extraConfig =
+          let
+            execOnce =
+              [
+                "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+                "add_record_player"
+                "wl-paste --watch cliphist store &"
+              ]
+              ++ lib.optionals (osConfig.host.bar == "noctalia") [ "noctalia-shell" ];
+          in
+          ''
+            hl.on("hyprland.start", function()
+            ${lib.concatMapStrings (cmd: "  hl.exec_cmd(\"${cmd}\")\n") execOnce}end)
+          '';
+
+        settings = lib.foldl' lib.recursiveUpdate {
+          config = {
+            input = {
+              kb_layout = "us";
+              kb_variant = "altgr-intl";
+              touchpad = {
+                clickfinger_behavior = true;
+                natural_scroll = true;
+              };
             };
-            kb_layout = "us";
-            kb_variant = "altgr-intl";
           };
 
           monitor = [
-            "${osConfig.host.mainMonitor.name},${osConfig.host.mainMonitor.width}x${osConfig.host.mainMonitor.height}@${osConfig.host.mainMonitor.refresh},0x0,1"
-            "${osConfig.host.secondaryMonitor.name},${osConfig.host.secondaryMonitor.width}x${osConfig.host.secondaryMonitor.height}@${osConfig.host.secondaryMonitor.refresh},2560x0,1"
+            {
+              output = osConfig.host.mainMonitor.name;
+              mode = "${osConfig.host.mainMonitor.width}x${osConfig.host.mainMonitor.height}@${osConfig.host.mainMonitor.refresh}";
+              position = "0x0";
+              scale = 1;
+            }
+            {
+              output = osConfig.host.secondaryMonitor.name;
+              mode = "${osConfig.host.secondaryMonitor.width}x${osConfig.host.secondaryMonitor.height}@${osConfig.host.secondaryMonitor.refresh}";
+              position = "2560x0";
+              scale = 1;
+            }
           ];
 
           env = [
-            "BROWSER=zen"
-            "XDG_SESSION_TYPE=wayland"
-            "XCURSOR_SIZE=22"
-            "EDITOR=nvim"
-            "QT_STYLE_OVERRIDE=''"
+            { _args = [ "BROWSER" "zen" ]; }
+            { _args = [ "XDG_SESSION_TYPE" "wayland" ]; }
+            { _args = [ "XCURSOR_SIZE" "22" ]; }
+            { _args = [ "EDITOR" "nvim" ]; }
+            { _args = [ "QT_STYLE_OVERRIDE" "" ]; }
           ];
-
-        }
-        // (import ./config/general.nix)
-        // (import ./config/gestures.nix { inherit lib; })
-        // (import ./config/decoration.nix)
-        // (import ./config/exec.nix {
-          inherit lib;
-          inherit (osConfig.host) bar;
-          inherit (osConfig.host) wallpaper;
-        })
-        // (import ./config/animations.nix)
-        // (import ./config/windowrules.nix)
-        // (import ./config/bindings.nix {
-          inherit lib;
-          inherit (osConfig.host) bar;
-        });
+        } [
+          (import ./config/general.nix)
+          (import ./config/gestures.nix { inherit lib; })
+          (import ./config/decoration.nix)
+          (import ./config/animations.nix)
+          (import ./config/windowrules.nix)
+          (import ./config/bindings.nix {
+            inherit lib;
+            inherit (osConfig.host) bar;
+          })
+        ];
       };
     }
   );
