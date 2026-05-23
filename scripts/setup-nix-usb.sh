@@ -112,7 +112,7 @@ Missing required tools on this system.
 
 Recommended fallback:
   nix-shell -p parted gptfdisk exfatprogs dosfstools grub2 ntfs3g wget curl git rsync --run \\
-    "sudo ./scripts/$SCRIPT_NAME --device /dev/sdX"
+    "sudo -E ./scripts/$SCRIPT_NAME --device /dev/sdX"
 EOF
 }
 
