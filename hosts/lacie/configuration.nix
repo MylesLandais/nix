@@ -75,22 +75,19 @@ in
           menuentry "Home Office Installer (NixOS)" --class nixos {
             search --no-floppy --label --set=isopart lacie_isos
             loopback loop ($isopart)/home-office-installer.iso
-            set root=(loop)
-            configfile /boot/grub/grub.cfg
+            configfile (loop)/boot/grub/loopback.cfg
           }
 
           menuentry "NixOS Graphical Live" --class nixos {
             search --no-floppy --label --set=isopart lacie_isos
             loopback loop ($isopart)/nixos-latest-graphical.iso
-            set root=(loop)
-            configfile /boot/grub/grub.cfg
+            configfile (loop)/boot/grub/loopback.cfg
           }
 
           menuentry "Kali Linux Live" --class linux {
             search --no-floppy --label --set=isopart lacie_isos
             loopback loop ($isopart)/kali-live-latest.iso
-            set root=(loop)
-            configfile /boot/grub/grub.cfg
+            configfile (loop)/boot/grub/loopback.cfg
           }
 
           menuentry "Reboot" --class restart {

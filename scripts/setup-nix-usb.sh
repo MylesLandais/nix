@@ -262,22 +262,19 @@ insmod ext2
 
 search --no-floppy --label --set=isopart lacie_isos
 
-menuentry "Home Office Installer (NixOS)" {
+menuentry "Home Office Installer (NixOS)" --class nixos {
   loopback loop ($isopart)/home-office-installer.iso
-  set root=(loop)
-  configfile /boot/grub/grub.cfg
+  configfile (loop)/boot/grub/loopback.cfg
 }
 
-menuentry "NixOS Graphical Live" {
+menuentry "NixOS Graphical Live" --class nixos {
   loopback loop ($isopart)/nixos-latest-graphical.iso
-  set root=(loop)
-  configfile /boot/grub/grub.cfg
+  configfile (loop)/boot/grub/loopback.cfg
 }
 
-menuentry "Kali Linux Live" {
+menuentry "Kali Linux Live" --class linux {
   loopback loop ($isopart)/kali-live-latest.iso
-  set root=(loop)
-  configfile /boot/grub/grub.cfg
+  configfile (loop)/boot/grub/loopback.cfg
 }
 
 menuentry "Reboot"   { reboot }
