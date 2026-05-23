@@ -395,7 +395,6 @@ layout_ready() {
 
 prepare_tools() {
   check_required_cmds
-  get_drive_facts
   discover_latest_iso
   log "Target drive: $TARGET_DRIVE"
   log "ISO URL: $ISO_URL"
@@ -672,6 +671,7 @@ done
 [[ -b "$TARGET_DRIVE" ]] || die "Target is not a block device: $TARGET_DRIVE"
 
 init_log_dir
+get_drive_facts  # interactive prompt — must run outside run_phase
 run_phase prepare_tools prepare_tools
 
 if [[ $SKIP_DISK -eq 0 ]]; then
