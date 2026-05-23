@@ -369,8 +369,15 @@ install_grub() {
   rmdir "$isos_mount" 2>/dev/null || true
 
   mkdir -p "$efi_mount/boot/grub"
-  {
-    cat <<'HEADER'
+
+  # Write ISO entries to a separate file so nixos-install doesn't clobber them.
+  # After nixos-install, NixOS's grub.cfg sources this file via extraEntries.
+  printf '%s\n' "$iso_entries" > "$efi_mount/boot/grub/iso-entries.cfg"
+
+  # Bootstrap grub.cfg — used before nixos-install runs.
+  # After nixos-install this file is replaced by NixOS's generated config,
+  # which also sources iso-entries.cfg via extraEntries.
+  cat > "$efi_mount/boot/grub/grub.cfg" <<'GRUBCFG'
 set timeout=30
 set default=0
 
@@ -381,20 +388,11 @@ insmod loopback
 insmod iso9660
 insmod ext2
 
-HEADER
-    printf '%s' "$iso_entries"
-    cat <<'FOOTER'
-
-menuentry "Boot installed NixOS (live_nix)" --class nixos {
-  search --no-floppy --label --set=root live_nix
-  linux /boot/bzImage root=LABEL=live_nix rootwait quiet
-  initrd /boot/initrd
-}
+source /boot/grub/iso-entries.cfg
 
 menuentry "Reboot"   { reboot }
 menuentry "Shutdown" { halt }
-FOOTER
-  } > "$efi_mount/boot/grub/grub.cfg"
+GRUBCFG
 
   sync
   umount "$efi_mount"

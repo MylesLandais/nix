@@ -50,6 +50,33 @@
           image.fileName = lib.mkForce "home-office-installer.iso";
           isoImage.volumeID = lib.mkForce "HOMEOFFICE";
 
+          # Support GRUB loopback boot via findiso= kernel parameter.
+          # When the ISO is booted from a GRUB loopback menu (e.g. from lacie_isos),
+          # the kernel never sees the ISO as a block device. This hook mounts the
+          # isos partition, loop-mounts the ISO file, and exposes it as /dev/loop0
+          # so the initrd's root-finding code can locate the squashfs by label.
+          boot.initrd.availableKernelModules = [ "loop" "exfat" "iso9660" ];
+          boot.initrd.extraUtilsCommands = ''
+            copy_bin_and_libs ${pkgs.util-linux}/bin/losetup
+          '';
+          boot.initrd.postDeviceCommands = lib.mkBefore ''
+            if [ -n "''${findiso}" ]; then
+              mkdir -p /run/isopart
+              for dev in /dev/disk/by-label/lacie_isos /dev/sd*2 /dev/nvme*p2; do
+                [ -b "$dev" ] || continue
+                if mount -o ro "$dev" /run/isopart 2>/dev/null; then
+                  if [ -f "/run/isopart''${findiso}" ]; then
+                    losetup /dev/loop0 "/run/isopart''${findiso}"
+                    umount /run/isopart
+                    echo "findiso: mounted ''${findiso} as /dev/loop0"
+                    break
+                  fi
+                  umount /run/isopart
+                fi
+              done
+            fi
+          '';
+
           networking.hostName = lib.mkForce "home-office-installer";
           networking.wireless.enable = lib.mkForce false;
           networking.networkmanager.enable = lib.mkForce true;

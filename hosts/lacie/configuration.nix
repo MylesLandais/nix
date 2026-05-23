@@ -68,27 +68,12 @@ in
         theme = grubTheme;
         font = "${grubTheme}/JetBrainsMono.pf2";
         splashImage = null;
-        # ISO loopback entries — place ISOs on the lacie_isos partition using
-        # these exact filenames. Each entry chainloads the ISO's own grub.cfg
-        # to avoid hardcoding kernel/initrd store paths.
+        # ISO entries are maintained dynamically by setup-nix-usb.sh --grub-only,
+        # which scans lacie_isos and generates explicit linux/initrd entries with
+        # exact store paths extracted from each ISO's internal grub.cfg.
+        # Re-run --grub-only whenever ISOs are added or updated.
         extraEntries = ''
-          menuentry "Home Office Installer (NixOS)" --class nixos {
-            search --no-floppy --label --set=isopart lacie_isos
-            loopback loop ($isopart)/home-office-installer.iso
-            configfile (loop)/boot/grub/loopback.cfg
-          }
-
-          menuentry "NixOS Graphical Live" --class nixos {
-            search --no-floppy --label --set=isopart lacie_isos
-            loopback loop ($isopart)/nixos-latest-graphical.iso
-            configfile (loop)/boot/grub/loopback.cfg
-          }
-
-          menuentry "Kali Linux Live" --class linux {
-            search --no-floppy --label --set=isopart lacie_isos
-            loopback loop ($isopart)/kali-live-latest.iso
-            configfile (loop)/boot/grub/loopback.cfg
-          }
+          source /boot/grub/iso-entries.cfg
 
           menuentry "Reboot" --class restart {
             reboot
