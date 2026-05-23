@@ -1,58 +1,57 @@
 { lib, bar, ... }:
-let
-  mk       = keys: dsp:       { _args = [ keys (lib.generators.mkLuaInline dsp) ]; };
-  mkO      = keys: dsp: opts: { _args = [ keys (lib.generators.mkLuaInline dsp) opts ]; };
-  exec     = cmd: ''hl.dsp.exec_cmd("${cmd}")'';
-  focus    = dir: ''hl.dsp.focus({ direction = "${dir}" })'';
-  wMove    = dir: ''hl.dsp.window.move({ direction = "${dir}" })'';
-  wsSwitch = ws:  ''hl.dsp.focus({ workspace = ${ws} })'';
-  wsMoveTo = ws:  ''hl.dsp.window.move({ workspace = ${ws} })'';
-in
 {
-  bind = [
-    (mk "SUPER + RETURN"       (exec "ghostty"))
-    (mk "SUPER + W"            (exec "helium"))
-    (mk "SUPER + D"            (exec "vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto"))
-    (mk "SUPER + Q"            "hl.dsp.window.close()")
-    (mk "SUPER + M"            "hl.dsp.exit()")
-    (mk "SUPER + E"            (exec "nemo"))
-    (mk "SUPER + V"            "hl.dsp.window.float()")
-    (mk "SUPER + P"            (exec "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"))
-    (mk "SUPER + H"            (focus "l"))
-    (mk "SUPER + L"            (focus "r"))
-    (mk "SUPER + K"            (focus "u"))
-    (mk "SUPER + J"            (focus "d"))
-    (mk "SUPER + SHIFT + H"    (wMove "l"))
-    (mk "SUPER + SHIFT + L"    (wMove "r"))
-    (mk "SUPER + SHIFT + K"    (wMove "u"))
-    (mk "SUPER + SHIFT + J"    (wMove "d"))
-    (mk "SUPER + mouse_down"   (wsSwitch "e+1"))
-    (mk "SUPER + mouse_up"     (wsSwitch "e-1"))
-    (mk "XF86AudioRaiseVolume" (exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"))
-    (mk "XF86AudioLowerVolume" (exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"))
-    (mkO "SUPER + mouse:272"   "hl.dsp.window.drag()"   { drag = true; })
-    (mkO "SUPER + mouse:273"   "hl.dsp.window.resize()" { drag = true; })
-  ]
-  ++ lib.optionals (bar == "noctalia") [
-    (mk "SUPER + B"         (exec "noctalia-shell ipc call lockScreen lock"))
-    (mk "SUPER + F"         (exec "noctalia-shell ipc call launcher toggle"))
-    (mk "SUPER + S"         (exec "hyprshot -m region --clipboard-only"))
-    (mk "SUPER + SHIFT + R" (exec "noctalia-shell ipc call sessionMenu toggle"))
-    (mk "SUPER + X"         (exec "noctalia-shell ipc call settings toggle"))
-    (mk "SUPER + SHIFT + S" (exec "obs"))
-    (mk "SUPER + SHIFT + N" (exec "noctalia-shell ipc call nightLight toggle"))
-    (mk "SUPER + N"         (exec "noctalia-shell ipc call notifications toggleHistory"))
-    (mk "SUPER + SHIFT + W" (exec "noctalia-shell ipc call wallpaper toggle"))
-    (mk "SUPER + SHIFT + C" (exec "noctalia-shell ipc call controlCenter toggle"))
-  ]
-  ++ (builtins.concatLists (
-    builtins.genList (
-      i:
-      let ws = toString (i + 1);
-      in [
-        (mk "SUPER + code:1${toString i}" (wsSwitch ws))
-        (mk "SUPER + SHIFT + code:1${toString i}" (wsMoveTo ws))
-      ]
-    ) 9
-  ));
+  "$mod" = "SUPER";
+
+  bind =
+    [
+      "$mod, RETURN, exec, ghostty"
+      "$mod, W, exec, helium"
+      "$mod, D, exec, vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto"
+      "$mod, Q, killactive,"
+      "$mod, M, exit,"
+      "$mod, E, exec, nemo"
+      "$mod, V, togglefloating,"
+      "$mod, P, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
+      "$mod, H, movefocus, l"
+      "$mod, L, movefocus, r"
+      "$mod, K, movefocus, u"
+      "$mod, J, movefocus, d"
+      "$mod SHIFT, H, movewindow, l"
+      "$mod SHIFT, L, movewindow, r"
+      "$mod SHIFT, K, movewindow, u"
+      "$mod SHIFT, J, movewindow, d"
+      "$mod, mouse_down, workspace, e+1"
+      "$mod, mouse_up, workspace, e-1"
+      ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+      ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+    ]
+    ++ lib.optionals (bar == "noctalia") [
+      "$mod, B, exec, noctalia-shell ipc call lockScreen lock"
+      "$mod, F, exec, noctalia-shell ipc call launcher toggle"
+      "$mod, S, exec, hyprshot -m region --clipboard-only"
+      "$mod SHIFT, R, exec, noctalia-shell ipc call sessionMenu toggle"
+      "$mod, X, exec, noctalia-shell ipc call settings toggle"
+      "$mod SHIFT, S, exec, obs"
+      "$mod SHIFT, N, exec, noctalia-shell ipc call nightLight toggle"
+      "$mod, N, exec, noctalia-shell ipc call notifications toggleHistory"
+      "$mod SHIFT, W, exec, noctalia-shell ipc call wallpaper toggle"
+      "$mod SHIFT, C, exec, noctalia-shell ipc call controlCenter toggle"
+    ]
+    ++ (builtins.concatLists (
+      builtins.genList (
+        i:
+        let
+          ws = toString (i + 1);
+        in
+        [
+          "$mod, code:1${toString i}, workspace, ${ws}"
+          "$mod SHIFT, code:1${toString i}, movetoworkspace, ${ws}"
+        ]
+      ) 9
+    ));
+
+  bindm = [
+    "$mod, mouse:272, movewindow"
+    "$mod, mouse:273, resizewindow"
+  ];
 }

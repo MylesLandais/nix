@@ -42,7 +42,6 @@ in
     # Core gaming tools
     steam-sunshine # Gamescope wrapper for Sunshine streaming
     gamescope # Compositor for gaming
-    lutris # Game library manager
     heroic # Epic/GOG game launcher
     wineWowPackages.stable # Windows compatibility
     protontricks # Winetricks for Proton

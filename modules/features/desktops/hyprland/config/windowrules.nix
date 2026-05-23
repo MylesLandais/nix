@@ -1,22 +1,21 @@
 {
-  window_rule = [
-    {
-      float = true; pin = true; no_shadow = true;
-      size = "(monitor_w*0.25) (monitor_h*0.25)";
-      move = "(monitor_w - window_w - 20) 20";
-      no_initial_focus = true;
-      match.title = "Picture-in-Picture";
-    }
-    { float = true; match.class = "^(pavucontrol)$"; }
-    { float = true; match.title = "^(Volume Control)$"; }
-    {
-      float = true; pin = true; no_shadow = true;
-      size = "(monitor_w*0.5) (monitor_h*0.5)";
-      move = "(monitor_w - window_w - 20) 20";
-      no_initial_focus = true;
-      match.class = "mpv";
-    }
-    { opacity = 0.90; match.class = "^(vesktop)$"; }
-    { opacity = 1.0; no_blur = true; match.class = "^(zen-beta)$"; }
+  windowrule = [
+    "match:title Picture-in-Picture, float on"
+    "match:title Picture-in-Picture, pin on"
+    "match:title Picture-in-Picture, no_shadow on"
+    "match:title Picture-in-Picture, size 25% 25%"
+    "match:title Picture-in-Picture, move 100%-w-20"
+    "match:title Picture-in-Picture, no_initial_focus on"
+    "match:class ^(pavucontrol)$, float on"
+    "match:title ^(Volume Control)$, float on"
+    "match:class mpv, float on"
+    "match:class mpv, pin on"
+    "match:class mpv, no_shadow on"
+    "match:class mpv, size 50% 50%"
+    "match:class mpv, move 100%-w-20"
+    "match:class mpv, no_initial_focus on"
+    "match:class ^(vesktop)$, opacity 0.90"
+    "match:class ^(zen-beta)$, opacity 1.0 override 1.0 override"
+    "match:class ^(zen-beta)$, no_blur on"
   ];
 }

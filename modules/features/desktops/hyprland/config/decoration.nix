@@ -1,5 +1,5 @@
 {
-  config.decoration = {
+  decoration = {
     rounding = 10;
     blur = {
       enabled = true;
@@ -11,6 +11,5 @@
       xray = false;
       ignore_opacity = true;
     };
-
   };
 }
