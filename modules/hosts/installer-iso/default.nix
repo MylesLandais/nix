@@ -52,30 +52,45 @@
 
           # Support GRUB loopback boot via findiso= kernel parameter.
           # When the ISO is booted from a GRUB loopback menu (e.g. from lacie_isos),
-          # the kernel never sees the ISO as a block device. This hook mounts the
-          # isos partition, loop-mounts the ISO file, and exposes it as /dev/loop0
-          # so the initrd's root-finding code can locate the squashfs by label.
+          # the kernel never sees the ISO as a block device. This systemd initrd
+          # service mounts the isos partition, loop-mounts the ISO file, and exposes
+          # it as /dev/loop0 before initrd-root-device.target runs, allowing the
+          # initrd's root-finding code to locate the squashfs by label.
           boot.initrd.availableKernelModules = [ "loop" "exfat" "iso9660" ];
-          boot.initrd.extraUtilsCommands = ''
-            copy_bin_and_libs ${pkgs.util-linux}/bin/losetup
-          '';
-          boot.initrd.postDeviceCommands = lib.mkBefore ''
-            if [ -n "''${findiso}" ]; then
+          boot.initrd.systemd.storePaths = [ pkgs.util-linux ];
+          boot.initrd.systemd.services.findiso = {
+            description = "Set up ISO loop device for GRUB loopback boot";
+            wantedBy = [ "initrd-root-device.target" ];
+            before = [ "initrd-root-device.target" ];
+            after = [ "systemd-udev-settle.service" ];
+            unitConfig.DefaultDependencies = false;
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+            };
+            script = ''
+              findiso=""
+              for param in $(cat /proc/cmdline); do
+                case "$param" in findiso=*) findiso="''${param#findiso=}" ;; esac
+              done
+              [ -n "$findiso" ] || exit 0
+
               mkdir -p /run/isopart
-              for dev in /dev/disk/by-label/lacie_isos /dev/sd*2 /dev/nvme*p2; do
+              for dev in /dev/disk/by-label/lacie_isos /dev/sda2 /dev/sdb2 /dev/sdc2; do
                 [ -b "$dev" ] || continue
                 if mount -o ro "$dev" /run/isopart 2>/dev/null; then
-                  if [ -f "/run/isopart''${findiso}" ]; then
-                    losetup /dev/loop0 "/run/isopart''${findiso}"
+                  if [ -f "/run/isopart$findiso" ]; then
+                    ${pkgs.util-linux}/bin/losetup /dev/loop0 "/run/isopart$findiso"
                     umount /run/isopart
-                    echo "findiso: mounted ''${findiso} as /dev/loop0"
-                    break
+                    echo "findiso: /dev/loop0 -> $findiso"
+                    exit 0
                   fi
                   umount /run/isopart
                 fi
               done
-            fi
-          '';
+              echo "findiso: WARNING: could not find $findiso"
+            '';
+          };
 
           networking.hostName = lib.mkForce "home-office-installer";
           networking.wireless.enable = lib.mkForce false;
