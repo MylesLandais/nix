@@ -2,7 +2,7 @@
 
 pkgs.stdenv.mkDerivation {
   name = "kanagawa-grub-theme";
-  nativeBuildInputs = [ pkgs.grub2 ];
+  nativeBuildInputs = [ pkgs.grub2_efi ];
 
   unpackPhase = "true";
   installPhase = "true";
