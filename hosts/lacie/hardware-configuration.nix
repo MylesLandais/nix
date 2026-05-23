@@ -14,12 +14,19 @@
   fileSystems."/" = {
     device = "/dev/disk/by-label/live_nix";
     fsType = "ext4";
+    options = [ "noatime" ];
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-label/VTOYEFI";
+    device = "/dev/disk/by-label/LACIE_EFI";
     fsType = "vfat";
-    options = [ "fmask=0077" "dmask=0077" ];
+    options = [ "umask=0077" ];
+  };
+
+  fileSystems."/mnt/isos" = {
+    device = "/dev/disk/by-label/lacie_isos";
+    fsType = "exfat";
+    options = [ "rw" "uid=1000" "gid=100" "umask=0022" "nofail" "x-systemd.automount" ];
   };
 
   fileSystems."/mnt/data" = {

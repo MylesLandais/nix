@@ -24,7 +24,7 @@ _: {
         profile = "default";
         imaging = {
           enable = true;
-          mode = "ventoy";
+          mode = "grub";
         };
         emulators.enable = true;
         pentest.enable = true;

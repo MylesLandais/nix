@@ -10,6 +10,9 @@
   ...
 }:
 
+let
+  grubTheme = pkgs.callPackage ../../modules/features/grub-theme {};
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -61,6 +64,43 @@
         efiSupport = true;
         efiInstallAsRemovable = true;
         copyKernels = false;
+        useOSProber = false;
+        theme = grubTheme;
+        font = "${grubTheme}/JetBrainsMono.pf2";
+        splashImage = null;
+        # ISO loopback entries — place ISOs on the lacie_isos partition using
+        # these exact filenames. Each entry chainloads the ISO's own grub.cfg
+        # to avoid hardcoding kernel/initrd store paths.
+        extraEntries = ''
+          menuentry "Home Office Installer (NixOS)" --class nixos {
+            search --no-floppy --label --set=isopart lacie_isos
+            loopback loop ($isopart)/home-office-installer.iso
+            set root=(loop)
+            configfile /boot/grub/grub.cfg
+          }
+
+          menuentry "NixOS Graphical Live" --class nixos {
+            search --no-floppy --label --set=isopart lacie_isos
+            loopback loop ($isopart)/nixos-latest-graphical.iso
+            set root=(loop)
+            configfile /boot/grub/grub.cfg
+          }
+
+          menuentry "Kali Linux Live" --class linux {
+            search --no-floppy --label --set=isopart lacie_isos
+            loopback loop ($isopart)/kali-live-latest.iso
+            set root=(loop)
+            configfile /boot/grub/grub.cfg
+          }
+
+          menuentry "Reboot" --class restart {
+            reboot
+          }
+
+          menuentry "Shutdown" --class shutdown {
+            halt
+          }
+        '';
       };
     };
     kernelParams = [

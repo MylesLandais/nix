@@ -121,20 +121,31 @@
       mode = lib.mkOption {
         type = lib.types.enum [
           "ventoy"
+          "grub"
           "amnesic"
         ];
-        default = "ventoy";
-        description = "ventoy: persistent root on live_nix. amnesic: tmpfs root + /persist (deferred).";
+        default = "grub";
+        description = "grub: native GRUB ESP (LACIE_EFI) with loopback ISO menu. ventoy: legacy Ventoy layout (VTOYEFI). amnesic: tmpfs root + /persist (deferred).";
+      };
+      espLabel = lib.mkOption {
+        type = lib.types.str;
+        default = "LACIE_EFI";
+        description = "Filesystem label for the FAT32 EFI System Partition (grub mode). Legacy Ventoy builds used VTOYEFI.";
       };
       homeLabel = lib.mkOption {
         type = lib.types.str;
         default = "live_nix";
-        description = "Filesystem label for the NixOS root (ventoy mode) or /persist partition (amnesic mode).";
+        description = "Filesystem label for the NixOS root (grub/ventoy mode) or /persist partition (amnesic mode).";
+      };
+      isosLabel = lib.mkOption {
+        type = lib.types.str;
+        default = "lacie_isos";
+        description = "Filesystem label for the exFAT ISO partition (grub mode). Mounted at /mnt/isos.";
       };
       imagesLabel = lib.mkOption {
         type = lib.types.str;
         default = "images";
-        description = "Filesystem label for the exFAT images partition.";
+        description = "Filesystem label for the exFAT images partition (legacy ventoy mode).";
       };
       shareLabel = lib.mkOption {
         type = lib.types.str;
@@ -144,7 +155,7 @@
       homeLuks = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Future: wrap home/persist in LUKS. Wired but not active in ventoy mode.";
+        description = "Future: wrap home/persist in LUKS. Wired but not active.";
       };
     };
   };

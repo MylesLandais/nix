@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # bootstrap-lacie.sh
 # Installs NixOS onto the LaCie live_nix partition from a live ISO session.
-# Run this after booting the NixOS graphical ISO via Ventoy on the LaCie.
+# Run this after booting the NixOS installer ISO on the LaCie (via GRUB or Ventoy).
 #
 # Usage:
 #   sudo ./bootstrap-lacie.sh
@@ -66,15 +66,16 @@ fi
 [[ -b "$DEVICE" ]] || die "Not a block device: $DEVICE"
 
 log "Checking required partitions..."
-VTOYEFI_DEV="$(blkid -L VTOYEFI 2>/dev/null || true)"
+# Support both the new GRUB layout (LACIE_EFI) and legacy Ventoy layout (VTOYEFI).
+EFI_DEV="$(blkid -L LACIE_EFI 2>/dev/null || blkid -L VTOYEFI 2>/dev/null || true)"
 LIVE_DEV="$(blkid -L live_nix 2>/dev/null || true)"
 DATA_DEV="$(blkid -L persistent_data 2>/dev/null || true)"
 
-[[ -n "$VTOYEFI_DEV" ]] || die "VTOYEFI partition not found. Run setup-nix-usb.sh first."
-[[ -n "$LIVE_DEV" ]]    || die "live_nix partition not found. Run setup-nix-usb.sh first."
-[[ -n "$DATA_DEV" ]]    || die "persistent_data partition not found. Run setup-nix-usb.sh first."
+[[ -n "$EFI_DEV" ]]  || die "EFI partition not found (expected LACIE_EFI or VTOYEFI). Run setup-nix-usb.sh first."
+[[ -n "$LIVE_DEV" ]] || die "live_nix partition not found. Run setup-nix-usb.sh first."
+[[ -n "$DATA_DEV" ]] || die "persistent_data partition not found. Run setup-nix-usb.sh first."
 
-log "Partitions: VTOYEFI=$VTOYEFI_DEV  live_nix=$LIVE_DEV  persistent_data=$DATA_DEV"
+log "Partitions: EFI=$EFI_DEV  live_nix=$LIVE_DEV  persistent_data=$DATA_DEV"
 
 log "Checking network..."
 if curl -sf --max-time 5 https://cache.nixos.org > /dev/null; then
@@ -98,8 +99,8 @@ run mkdir -p "$MNT"
 run mkdir -p "$MNT/boot"
 run mkdir -p "$MNT/data"
 
-mountpoint -q "$MNT"      || run mount "$LIVE_DEV"    "$MNT"
-mountpoint -q "$MNT/boot" || run mount "$VTOYEFI_DEV" "$MNT/boot"
+mountpoint -q "$MNT"      || run mount "$LIVE_DEV" "$MNT"
+mountpoint -q "$MNT/boot" || run mount "$EFI_DEV"  "$MNT/boot"
 mountpoint -q "$MNT/data" || run mount "$DATA_DEV"    "$MNT/data" 2>/dev/null || log "Warning: persistent_data mount failed (NTFS driver may be missing in live ISO — continuing)"
 
 log "Mounts:"
@@ -195,7 +196,7 @@ Install complete. Before rebooting:
        umount -R $MNT
 
   3. Reboot and press F12 at POST to open the firmware boot menu.
-     Select the NixOS / systemd-boot entry (not Ventoy).
+     Select the UEFI USB entry. The Kanagawa GRUB menu will appear.
      Secure Boot must be OFF. UEFI mode required.
 
   4. After first boot, rebuild to apply any pending changes:

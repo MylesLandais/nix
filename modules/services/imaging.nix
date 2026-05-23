@@ -9,20 +9,17 @@ _: {
     let
       cfg = config.host.imaging;
       isAmnesic = cfg.mode == "amnesic";
+      isGrub = cfg.mode == "grub";
+      isVentoy = cfg.mode == "ventoy";
     in
     {
       config = lib.mkIf cfg.enable (lib.mkMerge [
         {
-          boot.loader.systemd-boot = {
-            enable = lib.mkDefault true;
-            editor = false;
-          };
           boot.loader.efi = {
             canTouchEfiVariables = false;
             efiSysMountPoint = "/boot";
           };
-          # systemd-boot with canTouchEfiVariables=false relies on the EFI
-          # removable-media fallback path (\EFI\BOOT\BOOTX64.EFI) — no NVRAM writes.
+          # No NVRAM writes — relies on EFI removable-media fallback (\EFI\BOOT\BOOTX64.EFI).
           boot.kernelParams = [
             "rootwait"
             "quiet"
@@ -39,7 +36,75 @@ _: {
             gptfdisk
           ];
 
+          fileSystems."/mnt/data" = {
+            device = "/dev/disk/by-label/${cfg.shareLabel}";
+            fsType = "ntfs3";
+            options = [
+              "rw"
+              "uid=1000"
+              "gid=100"
+              "umask=0022"
+              "nofail"
+              "x-systemd.automount"
+            ];
+          };
+        }
+
+        # grub mode: native GRUB ESP (LACIE_EFI) + exFAT ISO partition
+        (lib.mkIf isGrub {
+          boot.loader.grub = {
+            enable = lib.mkDefault true;
+            device = lib.mkDefault "nodev";
+            efiSupport = lib.mkDefault true;
+            efiInstallAsRemovable = lib.mkDefault true;
+            copyKernels = lib.mkDefault false;
+          };
+          boot.loader.systemd-boot.enable = false;
+
           fileSystems = {
+            "/" = {
+              device = "/dev/disk/by-label/${cfg.homeLabel}";
+              fsType = "ext4";
+              options = [ "noatime" ];
+            };
+            "/boot" = {
+              device = "/dev/disk/by-label/${cfg.espLabel}";
+              fsType = "vfat";
+              options = [ "umask=0077" ];
+            };
+            "/mnt/isos" = {
+              device = "/dev/disk/by-label/${cfg.isosLabel}";
+              fsType = "exfat";
+              options = [
+                "rw"
+                "uid=1000"
+                "gid=100"
+                "umask=0022"
+                "nofail"
+                "x-systemd.automount"
+              ];
+            };
+          };
+        })
+
+        # ventoy mode: legacy Ventoy VTOYEFI layout + exFAT images partition
+        (lib.mkIf (isVentoy && !isAmnesic) {
+          boot.loader.systemd-boot = {
+            enable = lib.mkDefault true;
+            editor = false;
+          };
+
+          fileSystems = {
+            "/" = {
+              device = "/dev/disk/by-label/${cfg.homeLabel}";
+              fsType = "ext4";
+              options = [ "noatime" ];
+            };
+            "/boot" = {
+              device = "/dev/disk/by-label/${cfg.espLabel}";
+              fsType = "vfat";
+              options = [ "umask=0077" ];
+            };
             "/mnt/images" = {
               device = "/dev/disk/by-label/${cfg.imagesLabel}";
               fsType = "exfat";
@@ -52,37 +117,15 @@ _: {
                 "x-systemd.automount"
               ];
             };
-            "/mnt/data" = {
-              device = "/dev/disk/by-label/${cfg.shareLabel}";
-              fsType = "ntfs3";
-              options = [
-                "rw"
-                "uid=1000"
-                "gid=100"
-                "umask=0022"
-                "nofail"
-                "x-systemd.automount"
-              ];
-            };
-          };
-        }
-
-        (lib.mkIf (!isAmnesic) {
-          fileSystems = {
-            "/" = {
-              device = "/dev/disk/by-label/${cfg.homeLabel}";
-              fsType = "ext4";
-              options = [ "noatime" ];
-            };
-            "/boot" = {
-              device = "/dev/disk/by-label/VTOYEFI";
-              fsType = "vfat";
-              options = [ "umask=0077" ];
-            };
           };
         })
 
         (lib.mkIf isAmnesic {
+          boot.loader.systemd-boot = {
+            enable = lib.mkDefault true;
+            editor = false;
+          };
+
           fileSystems = {
             "/" = {
               device = "none";
@@ -94,7 +137,7 @@ _: {
               ];
             };
             "/boot" = {
-              device = "/dev/disk/by-label/VTOYEFI";
+              device = "/dev/disk/by-label/${cfg.espLabel}";
               fsType = "vfat";
               options = [ "umask=0077" ];
             };

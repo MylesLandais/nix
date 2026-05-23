@@ -6,16 +6,13 @@ SCRIPT_NAME="$(basename "$0")"
 LOG_PREFIX="[nix-usb-setup]"
 
 TARGET_DRIVE=""
-VENTOY_SCRIPT=""
-VENTOY_VERSION="1.0.99"
 
-# Partition sizes — empty means auto-compute from drive size
-VENTOY_SIZE_GIB=""
-LIVE_NIX_SIZE_GIB=""
+# Partition sizes
+EFI_SIZE_GIB=1        # FAT32 ESP — fixed
+ISOS_SIZE_GIB=63      # exFAT ISO partition — overridable via --isos-size
+LIVE_NIX_SIZE_GIB=""  # auto-computed or overridden via --live-size (only used on fresh installs)
 HAS_DATA_PART=1       # set to 0 when drive is too small for persistent_data
 MIN_DRIVE_GIB=16
-
-RESERVE_MIB=0
 
 FORCE_REBUILD=0
 SKIP_DISK=0
@@ -36,16 +33,15 @@ REPO_URL="git@github.com:MylesLandais/nix.git"
 REPO_BRANCH="main"
 
 WORK_ROOT="/mnt/nix-usb"
-VENTOY_MOUNT="${WORK_ROOT}/ventoy"
+EFI_MOUNT="${WORK_ROOT}/efi"
+ISOS_MOUNT="${WORK_ROOT}/isos"
 LIVE_MOUNT="${WORK_ROOT}/live"
 DATA_MOUNT="${WORK_ROOT}/data"
 INSTALL_ROOT="${WORK_ROOT}/install"
 LOG_DIR=""
 
-VENTOY_DATA_PARTNUM=""
-VENTOY_EFI_PARTNUM=""
-VENTOY_DATA_PART=""
-VENTOY_EFI_PART=""
+EFI_PART=""
+ISOS_PART=""
 LIVE_PART=""
 DATA_PART=""
 
@@ -54,38 +50,37 @@ usage() {
 Usage:
   sudo $SCRIPT_NAME --device /dev/sdX [options]
 
-Build a Ventoy-first NixOS USB and optionally install NixOS onto it.
+Build a GRUB-first NixOS USB and optionally install NixOS onto it.
 
-Disk phases:
-  Ventoy boot menu, ext4 live_nix for the NixOS system, optional NTFS
-  persistent_data for bulk storage. Sizes are auto-computed from drive
-  capacity but can be overridden.
+Disk layout (p1 and p2 only — p3/p4 are preserved if they exist):
+  p1  LACIE_EFI   FAT32  ${EFI_SIZE_GIB} GiB   — GRUB EFI + theme
+  p2  lacie_isos  exFAT  ${ISOS_SIZE_GIB} GiB   — ISO files for loopback boot
+  p3  live_nix    ext4   500 GiB  — NixOS system root (preserved)
+  p4  persistent_data NTFS  rest   — bulk storage (preserved)
 
 Options:
   --device /dev/sdX         Target USB disk (required)
-  --ventoy /path/script     Use a local Ventoy2Disk.sh
-  --ventoy-version VERSION  Ventoy version to download if needed (default: $VENTOY_VERSION)
-  --ventoy-size GIB         Ventoy partition size (default: auto)
-  --live-size GIB           live_nix partition size (default: auto)
+  --isos-size GIB           ISO partition size in GiB (default: $ISOS_SIZE_GIB)
+  --live-size GIB           live_nix size GiB — only used if creating p3 fresh (default: auto)
   --min-drive-gib N         Minimum acceptable drive size in GiB (default: $MIN_DRIVE_GIB)
-  --force-rebuild           Reinstall Ventoy and recreate all partitions
-  --skip-disk               Skip disk/format phases and reuse existing layout
+  --force-rebuild           Recreate p1+p2 even if layout looks correct
+  --skip-disk               Skip all disk/format phases and reuse existing layout
   --skip-iso                Skip latest NixOS ISO download/staging
   --skip-repo-sync          Skip git clone/pull on live_nix
   --nixos-install           Run nixos-install after disk setup
   --verbose                 Show full command output (default: summary only, full log in .nix-usb-logs/)
   --flake-path PATH         Flake directory for nixos-install (default: $FLAKE_PATH)
   --flake-target NAME       nixosConfigurations key (default: $FLAKE_TARGET)
-  --win11-iso PATH          Stage a local Windows 11 ISO onto the Ventoy partition
-  --iso-url URL             Override latest ISO discovery
+  --win11-iso PATH          Stage a Windows ISO onto the lacie_isos partition
+  --iso-url URL             Override latest NixOS ISO URL
   --repo-url URL            Override repo URL (default: $REPO_URL)
   --repo-branch BRANCH      Override repo branch (default: $REPO_BRANCH)
   -h, --help                Show this help
 
 Common invocations:
 
-  # Full build from scratch with Windows 11 dual-boot:
-  sudo $SCRIPT_NAME --device /dev/sdX --nixos-install --win11-iso /path/to/win11.iso
+  # Migrate existing Ventoy LaCie to GRUB layout (preserves p3/p4 data):
+  sudo $SCRIPT_NAME --device /dev/sdX
 
   # Full build from scratch (NixOS only):
   sudo $SCRIPT_NAME --device /dev/sdX --nixos-install
@@ -93,11 +88,8 @@ Common invocations:
   # Install NixOS onto an already-formatted drive:
   sudo $SCRIPT_NAME --device /dev/sdX --skip-disk --skip-iso --skip-repo-sync --nixos-install
 
-  # Small drive (200GB) — auto-sizes partitions:
-  sudo $SCRIPT_NAME --device /dev/sdX --nixos-install
-
   # Disk layout only, no NixOS install:
-  sudo $SCRIPT_NAME --device /dev/sdX --skip-nixos-install
+  sudo $SCRIPT_NAME --device /dev/sdX
 EOF
 }
 
@@ -129,15 +121,14 @@ check_required_cmds() {
   local cmd
 
   for cmd in \
-    lsblk blkid partprobe parted mkfs.ext4 mkfs.vfat \
-    curl wget tar git rsync grep sed awk udevadm mount umount sync; do
+    lsblk blkid partprobe sgdisk mkfs.fat mkfs.exfat mkfs.ext4 \
+    grub-install curl wget git rsync grep sed awk udevadm mount umount sync; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
       echo "Missing command: $cmd" >&2
       missing=1
     fi
   done
 
-  # ntfs and exfat only needed when creating those filesystems
   if [[ $HAS_DATA_PART -eq 1 ]] && ! command -v mkfs.ntfs >/dev/null 2>&1; then
     echo "Missing command: mkfs.ntfs (needed for persistent_data)" >&2
     missing=1
@@ -182,82 +173,115 @@ run_phase() {
   fi
 }
 
-patch_ventoy_bundle() {
-  local ventoy_dir
-  local arch_dir
+partition_disk() {
+  local p3_exists=0
+  local p4_exists=0
 
-  ventoy_dir="$(cd "$(dirname "$VENTOY_SCRIPT")" && pwd)"
-  arch_dir="$ventoy_dir/tool/x86_64"
+  # Check whether p3/p4 already exist (they carry live_nix and persistent_data data)
+  lsblk "$(part_path 3)" &>/dev/null && p3_exists=1 || true
+  lsblk "$(part_path 4)" &>/dev/null && p4_exists=1 || true
 
-  [[ -d "$arch_dir" ]] || return 0
+  # Ensure GPT exists (safe no-op if already present)
+  if ! sgdisk -p "$TARGET_DRIVE" &>/dev/null; then
+    sgdisk -o "$TARGET_DRIVE"
+  fi
 
-  rm -f "$arch_dir/mkexfatfs" "$arch_dir/mkexfatfs.xz"
+  # Remove Ventoy partitions (p1, p2) — leaves p3/p4 untouched
+  sgdisk -d 1 "$TARGET_DRIVE" 2>/dev/null || true
+  sgdisk -d 2 "$TARGET_DRIVE" 2>/dev/null || true
+  udevadm settle || true; sleep 1
 
-  cat > "$arch_dir/mkexfatfs" <<'EOF'
-#!/usr/bin/env bash
-set -euo pipefail
+  # Create p1: FAT32 ESP (1 GiB)
+  sgdisk -n 1:2048:+${EFI_SIZE_GIB}G -t 1:ef00 -c 1:LACIE_EFI "$TARGET_DRIVE"
+  # Create p2: exFAT ISO partition (fills space previously used by Ventoy data)
+  sgdisk -n 2:0:+${ISOS_SIZE_GIB}G -t 2:0700 -c 2:lacie_isos "$TARGET_DRIVE"
 
-label=""
-device=""
+  # Create p3/p4 only on a fresh drive where they do not yet exist
+  if [[ $p3_exists -eq 0 ]]; then
+    [[ -n "$LIVE_NIX_SIZE_GIB" ]] || die "live_nix size unknown — pass --live-size GIB for a fresh install."
+    sgdisk -n 3:0:+${LIVE_NIX_SIZE_GIB}G -t 3:8300 -c 3:live_nix "$TARGET_DRIVE"
+    log "Created p3 (live_nix, ${LIVE_NIX_SIZE_GIB} GiB)"
+  else
+    log "p3 (live_nix) already present — not touched"
+  fi
 
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    -V|--version)
-      mkfs.exfat -V >/dev/null 2>&1 || true
-      echo "mkexfatfs shim using mkfs.exfat"
-      exit 0
-      ;;
-    -n)
-      label="${2:-}"
-      shift 2
-      ;;
-    -s)
-      shift 2
-      ;;
-    -*)
-      shift
-      ;;
-    *)
-      device="$1"
-      shift
-      ;;
-  esac
-done
+  if [[ $HAS_DATA_PART -eq 1 && $p4_exists -eq 0 ]]; then
+    sgdisk -n 4:0:0 -t 4:0700 -c 4:persistent_data "$TARGET_DRIVE"
+    log "Created p4 (persistent_data)"
+  elif [[ $p4_exists -eq 1 ]]; then
+    log "p4 (persistent_data) already present — not touched"
+  fi
 
-[[ -n "$device" ]] || exit 1
-
-if [[ -n "$label" ]]; then
-  exec mkfs.exfat -L "$label" "$device"
-else
-  exec mkfs.exfat "$device"
-fi
-EOF
-  chmod +x "$arch_dir/mkexfatfs"
+  udevadm settle || true
+  partprobe "$TARGET_DRIVE" || true
+  sleep 3
+  discover_layout
+  dump_partition_debug
 }
 
-resolve_ventoy_script() {
-  if [[ -n "$VENTOY_SCRIPT" ]]; then
-    [[ -x "$VENTOY_SCRIPT" ]] || die "Ventoy script is not executable: $VENTOY_SCRIPT"
-    return 0
-  fi
+format_efi_isos() {
+  mkfs.fat -F 32 -n LACIE_EFI "$EFI_PART"
+  mkfs.exfat -n lacie_isos "$ISOS_PART"
+  # p3 (live_nix) and p4 (persistent_data) are intentionally NOT reformatted
+  udevadm settle || true
+  partprobe "$TARGET_DRIVE" || true
+  dump_partition_debug
+}
 
-  if [[ -x "./ventoy-${VENTOY_VERSION}/Ventoy2Disk.sh" ]]; then
-    VENTOY_SCRIPT="./ventoy-${VENTOY_VERSION}/Ventoy2Disk.sh"
-    return 0
-  fi
+install_grub() {
+  local efi_mount="${WORK_ROOT}/grub-install-tmp"
+  mkdir -p "$efi_mount"
+  mount "$EFI_PART" "$efi_mount"
 
-  require_cmd wget
-  require_cmd tar
+  grub-install \
+    --target=x86_64-efi \
+    --efi-directory="$efi_mount" \
+    --boot-directory="$efi_mount/boot" \
+    --removable \
+    --no-nvram
 
-  local archive="ventoy-${VENTOY_VERSION}-linux.tar.gz"
-  local url="https://github.com/ventoy/Ventoy/releases/download/v${VENTOY_VERSION}/${archive}"
+  # Bootstrap grub.cfg for pre-NixOS ISO booting.
+  # After nixos-install runs, NixOS replaces this with the declarative config
+  # (including the Kanagawa theme and proper extraEntries).
+  mkdir -p "$efi_mount/boot/grub"
+  cat > "$efi_mount/boot/grub/grub.cfg" <<'GRUBCFG'
+set timeout=30
+set default=0
 
-  log "Downloading Ventoy ${VENTOY_VERSION}"
-  wget -q "$url" -O "$archive"
-  tar -xf "$archive"
+insmod part_gpt
+insmod fat
+insmod exfat
+insmod loopback
+insmod iso9660
+insmod ext2
 
-  VENTOY_SCRIPT="./ventoy-${VENTOY_VERSION}/Ventoy2Disk.sh"
-  [[ -x "$VENTOY_SCRIPT" ]] || die "Failed to prepare Ventoy script at $VENTOY_SCRIPT"
+search --no-floppy --label --set=isopart lacie_isos
+
+menuentry "Home Office Installer (NixOS)" {
+  loopback loop ($isopart)/home-office-installer.iso
+  set root=(loop)
+  configfile /boot/grub/grub.cfg
+}
+
+menuentry "NixOS Graphical Live" {
+  loopback loop ($isopart)/nixos-latest-graphical.iso
+  set root=(loop)
+  configfile /boot/grub/grub.cfg
+}
+
+menuentry "Kali Linux Live" {
+  loopback loop ($isopart)/kali-live-latest.iso
+  set root=(loop)
+  configfile /boot/grub/grub.cfg
+}
+
+menuentry "Reboot"   { reboot }
+menuentry "Shutdown" { halt }
+GRUBCFG
+
+  sync
+  umount "$efi_mount"
+  rmdir "$efi_mount"
 }
 
 discover_latest_iso() {
@@ -282,17 +306,17 @@ get_drive_facts() {
   drive_gib=$(( bytes / 1024 / 1024 / 1024 ))
   (( drive_gib >= MIN_DRIVE_GIB )) || die "$TARGET_DRIVE is ${drive_gib} GiB — minimum is ${MIN_DRIVE_GIB} GiB."
 
-  # Auto-compute sizes if not set by flags
-  if [[ -z "$VENTOY_SIZE_GIB" || -z "$LIVE_NIX_SIZE_GIB" ]]; then
+  if [[ -z "$LIVE_NIX_SIZE_GIB" ]]; then
     compute_sizes "$drive_gib"
   fi
 
+  local boot_total=$(( EFI_SIZE_GIB + ISOS_SIZE_GIB ))
   log "Drive: ${drive_gib} GiB"
-  log "Layout: ventoy=${VENTOY_SIZE_GIB} GiB, live_nix=${LIVE_NIX_SIZE_GIB} GiB, persistent_data=$(
+  log "Layout: EFI=${EFI_SIZE_GIB} GiB, ISOs=${ISOS_SIZE_GIB} GiB, live_nix=${LIVE_NIX_SIZE_GIB:-preserved} GiB, persistent_data=$(
     if [[ $HAS_DATA_PART -eq 1 ]]; then
-      echo "remaining (~$(( drive_gib - VENTOY_SIZE_GIB - LIVE_NIX_SIZE_GIB )) GiB)"
+      echo "remaining (~$(( drive_gib - boot_total - ${LIVE_NIX_SIZE_GIB:-0} )) GiB)"
     else
-      echo "none (drive too small)"
+      echo "none"
     fi
   )"
   echo
@@ -302,35 +326,16 @@ get_drive_facts() {
 
 compute_sizes() {
   local drive_gib="$1"
+  local boot_total=$(( EFI_SIZE_GIB + ISOS_SIZE_GIB ))
 
-  if [[ -n "$VENTOY_SIZE_GIB" && -n "$LIVE_NIX_SIZE_GIB" ]]; then
-    # Both explicitly set — validate there's room
-    local total=$(( VENTOY_SIZE_GIB + LIVE_NIX_SIZE_GIB ))
-    local remaining=$(( drive_gib - total ))
-    if (( remaining < 1 )); then
-      die "Not enough space: ventoy=${VENTOY_SIZE_GIB} GiB + live_nix=${LIVE_NIX_SIZE_GIB} GiB exceeds drive (${drive_gib} GiB)."
-    fi
-    HAS_DATA_PART=$(( remaining >= 2 ? 1 : 0 ))
-    return
-  fi
-
-  # Auto-size tiers
   if (( drive_gib < 32 )); then
-    VENTOY_SIZE_GIB=4
-    LIVE_NIX_SIZE_GIB=$(( drive_gib - VENTOY_SIZE_GIB - 1 ))
+    LIVE_NIX_SIZE_GIB=$(( drive_gib - boot_total - 1 ))
     HAS_DATA_PART=0
-  elif (( drive_gib < 128 )); then
-    VENTOY_SIZE_GIB=8
-    local remaining=$(( drive_gib - VENTOY_SIZE_GIB ))
-    LIVE_NIX_SIZE_GIB=$(( remaining * 60 / 100 ))
-    HAS_DATA_PART=1
   elif (( drive_gib < 512 )); then
-    VENTOY_SIZE_GIB=20
-    local remaining=$(( drive_gib - VENTOY_SIZE_GIB ))
+    local remaining=$(( drive_gib - boot_total ))
     LIVE_NIX_SIZE_GIB=$(( remaining * 60 / 100 ))
     HAS_DATA_PART=1
   else
-    VENTOY_SIZE_GIB=64
     LIVE_NIX_SIZE_GIB=500
     HAS_DATA_PART=1
   fi
@@ -366,26 +371,8 @@ dump_partition_debug() {
 }
 
 discover_layout() {
-  local p1 p2
-
-  p1="$(part_path 1)"
-  p2="$(part_path 2)"
-
-  VENTOY_DATA_PARTNUM=""
-  VENTOY_EFI_PARTNUM=""
-
-  [[ "$(lsblk -n -o FSTYPE "$p1" 2>/dev/null || true)" == "exfat" ]] && VENTOY_DATA_PARTNUM="1"
-  [[ "$(lsblk -n -o FSTYPE "$p2" 2>/dev/null || true)" == "exfat" ]] && VENTOY_DATA_PARTNUM="2"
-  [[ "$(lsblk -n -o LABEL "$p1" 2>/dev/null || true)" == "VTOYEFI" || \
-     "$(lsblk -n -o FSTYPE "$p1" 2>/dev/null || true)" == "vfat" ]] && VENTOY_EFI_PARTNUM="1"
-  [[ "$(lsblk -n -o LABEL "$p2" 2>/dev/null || true)" == "VTOYEFI" || \
-     "$(lsblk -n -o FSTYPE "$p2" 2>/dev/null || true)" == "vfat" ]] && VENTOY_EFI_PARTNUM="2"
-
-  [[ -n "$VENTOY_DATA_PARTNUM" ]] || die "Could not detect Ventoy data partition."
-  [[ -n "$VENTOY_EFI_PARTNUM" ]] || die "Could not detect Ventoy EFI partition."
-
-  VENTOY_DATA_PART="$(part_path "$VENTOY_DATA_PARTNUM")"
-  VENTOY_EFI_PART="$(part_path "$VENTOY_EFI_PARTNUM")"
+  EFI_PART="$(part_path 1)"
+  ISOS_PART="$(part_path 2)"
   LIVE_PART="$(part_path 3)"
 
   if [[ $HAS_DATA_PART -eq 1 ]]; then
@@ -397,24 +384,20 @@ discover_layout() {
 
 layout_ready() {
   discover_layout
-  local live_label
+  local efi_label live_label isos_label
+  efi_label="$(lsblk -n -o LABEL "$EFI_PART" 2>/dev/null || true)"
+  isos_label="$(lsblk -n -o LABEL "$ISOS_PART" 2>/dev/null || true)"
   live_label="$(lsblk -n -o LABEL "$LIVE_PART" 2>/dev/null || true)"
-  if [[ "$live_label" != "live_nix" ]]; then
-    return 1
-  fi
-  if [[ $HAS_DATA_PART -eq 1 && -n "$DATA_PART" ]]; then
-    [[ "$(lsblk -n -o LABEL "$DATA_PART" 2>/dev/null || true)" == "persistent_data" ]]
-  fi
+  [[ "$efi_label"  == "LACIE_EFI"   ]] || return 1
+  [[ "$isos_label" == "lacie_isos"  ]] || return 1
+  [[ "$live_label" == "live_nix"    ]] || return 1
 }
 
 prepare_tools() {
   check_required_cmds
   get_drive_facts
-  resolve_ventoy_script
-  patch_ventoy_bundle
   discover_latest_iso
   log "Target drive: $TARGET_DRIVE"
-  log "Ventoy script: $VENTOY_SCRIPT"
   log "ISO URL: $ISO_URL"
   log "Repo: $REPO_URL ($REPO_BRANCH)"
   if [[ $DO_NIXOS_INSTALL -eq 1 ]]; then
@@ -422,81 +405,19 @@ prepare_tools() {
   fi
 }
 
-compute_reserve_mib() {
-  local drive_bytes
-  drive_bytes="$(lsblk -b -d -n -o SIZE "$TARGET_DRIVE")"
-  local drive_mib=$(( drive_bytes / 1024 / 1024 ))
-  local ventoy_mib=$(( VENTOY_SIZE_GIB * 1024 ))
-  # Reserve everything after the Ventoy data partition; Ventoy writes its EFI
-  # partition into this reserved space, then we add our own partitions after.
-  RESERVE_MIB=$(( drive_mib - ventoy_mib - 64 ))
-  log "Drive: ${drive_mib} MiB, Ventoy data: ${ventoy_mib} MiB, reserve: ${RESERVE_MIB} MiB"
-}
-
-install_ventoy() {
-  compute_reserve_mib
-  "$VENTOY_SCRIPT" -I -g -r "$RESERVE_MIB" "$TARGET_DRIVE"
-  udevadm settle || true
-  partprobe "$TARGET_DRIVE" || true
-  sleep 3
-  discover_layout
-  dump_partition_debug
-}
-
-create_extra_partitions() {
-  local vtoyefi_end_mib live_start_mib live_end_mib
-
-  vtoyefi_end_mib="$(
-    parted -sm "$TARGET_DRIVE" unit MiB print 2>/dev/null |
-      awk -F: 'NR>2 {gsub("MiB","",$3); end=$3} END {print int(end)}'
-  )"
-  [[ -n "$vtoyefi_end_mib" ]] || die "Could not determine end of Ventoy partitions."
-
-  live_start_mib=$(( vtoyefi_end_mib + 1 ))
-  live_end_mib=$(( live_start_mib + LIVE_NIX_SIZE_GIB * 1024 ))
-
-  log "Partition boundaries:"
-  echo "  live_nix:        ${live_start_mib}MiB -> ${live_end_mib}MiB"
-
-  if [[ $HAS_DATA_PART -eq 1 ]]; then
-    echo "  persistent_data: ${live_end_mib}MiB -> end"
-    printf 'Fix\nFix\n' | parted ---pretend-input-tty --align optimal "$TARGET_DRIVE" -- unit MiB \
-      mkpart primary ext4 "${live_start_mib}MiB" "${live_end_mib}MiB" \
-      mkpart primary "${live_end_mib}MiB" -1
-  else
-    echo "  persistent_data: skipped (drive too small)"
-    printf 'Fix\nFix\n' | parted ---pretend-input-tty --align optimal "$TARGET_DRIVE" -- unit MiB \
-      mkpart primary ext4 "${live_start_mib}MiB" -1
-  fi
-
-  udevadm settle || true
-  partprobe "$TARGET_DRIVE" || true
-  sleep 3
-  discover_layout
-  dump_partition_debug
-}
-
-format_partitions() {
-  mkfs.ext4 -F -L live_nix "$LIVE_PART"
-  if [[ $HAS_DATA_PART -eq 1 && -n "$DATA_PART" ]]; then
-    mkfs.ntfs -f -L persistent_data "$DATA_PART"
-  fi
-  udevadm settle || true
-  partprobe "$TARGET_DRIVE" || true
-  dump_partition_debug
-}
-
 ensure_mountpoint() {
   mkdir -p "$1"
 }
 
 mount_partitions() {
-  ensure_mountpoint "$VENTOY_MOUNT"
+  ensure_mountpoint "$EFI_MOUNT"
+  ensure_mountpoint "$ISOS_MOUNT"
   ensure_mountpoint "$LIVE_MOUNT"
 
-  umount "$DATA_MOUNT" "$LIVE_MOUNT" "$VENTOY_MOUNT" 2>/dev/null || true
+  umount "$DATA_MOUNT" "$LIVE_MOUNT" "$ISOS_MOUNT" "$EFI_MOUNT" 2>/dev/null || true
 
-  mount "$VENTOY_DATA_PART" "$VENTOY_MOUNT"
+  mount "$EFI_PART"  "$EFI_MOUNT"
+  mount "$ISOS_PART" "$ISOS_MOUNT"
   mount "$LIVE_PART" "$LIVE_MOUNT"
 
   if [[ $HAS_DATA_PART -eq 1 && -n "$DATA_PART" ]]; then
@@ -505,11 +426,11 @@ mount_partitions() {
   fi
 
   log "Mounts:"
-  mount | grep -E "${VENTOY_MOUNT}|${LIVE_MOUNT}|${DATA_MOUNT}" || true
+  mount | grep -E "${EFI_MOUNT}|${ISOS_MOUNT}|${LIVE_MOUNT}|${DATA_MOUNT}" || true
 }
 
 stage_iso() {
-  local iso_path="${VENTOY_MOUNT}/${ISO_NAME}"
+  local iso_path="${ISOS_MOUNT}/${ISO_NAME}"
   local sha_path="${iso_path}.sha256"
 
   if [[ -f "$iso_path" ]]; then
@@ -558,7 +479,6 @@ nixos_install() {
 
   mkdir -p "$INSTALL_ROOT" "$INSTALL_ROOT/boot"
 
-  # Trap to always unmount on exit
   cleanup_install() {
     log "Unmounting install root..."
     umount -R "$INSTALL_ROOT" 2>/dev/null || true
@@ -568,8 +488,8 @@ nixos_install() {
   log "Mounting live_nix at $INSTALL_ROOT"
   mountpoint -q "$INSTALL_ROOT" || mount "$LIVE_PART" "$INSTALL_ROOT"
 
-  log "Mounting VTOYEFI at $INSTALL_ROOT/boot"
-  mountpoint -q "$INSTALL_ROOT/boot" || mount "$VENTOY_EFI_PART" "$INSTALL_ROOT/boot"
+  log "Mounting LACIE_EFI at $INSTALL_ROOT/boot"
+  mountpoint -q "$INSTALL_ROOT/boot" || mount "$EFI_PART" "$INSTALL_ROOT/boot"
 
   log "Running nixos-install --flake ${FLAKE_PATH}#${FLAKE_TARGET} --root $INSTALL_ROOT"
   log "(this takes 10-20 min — output always shown)"
@@ -578,9 +498,6 @@ nixos_install() {
     --root "$INSTALL_ROOT" \
     --no-root-passwd \
     2>&1 | tee "${LOG_DIR}/nixos-install.log"
-
-  # Add Ventoy chainload entry while /boot is still mounted
-  add_ventoy_boot_entry
 
   trap - EXIT
   cleanup_install
@@ -598,14 +515,13 @@ NixOS installed. Before booting:
        sudo umount -R /mnt/nix-usb
 
   3. Boot the target machine — press F12 at POST, select the UEFI USB entry.
-     Secure Boot must be OFF. UEFI mode required (not Legacy/CSM).
-     You should land directly in Hyprland.
+     The Kanagawa GRUB menu will appear. Secure Boot must be OFF. UEFI mode required.
 
   4. After first boot, rebuild to apply any pending changes:
        sudo nixos-rebuild switch --flake /nix-configs#$FLAKE_TARGET
 
   5. Regenerate hardware config on the target machine and commit:
-       nixos-generate-config --show-hardware-config > /nix-configs/hosts/$FLAKE_TARGET/hardware-configuration.nix
+       nixos-generate-config --no-filesystems --show-hardware-config > /nix-configs/hosts/$FLAKE_TARGET/hardware-configuration.nix
        git -C /nix-configs commit -am "feat(lacie): update hardware-configuration.nix"
 
 EOF
@@ -619,63 +535,26 @@ stage_win11_iso() {
 
   [[ -f "$WIN11_ISO" ]] || die "Win11 ISO not found: $WIN11_ISO"
 
-  local dest="${VENTOY_MOUNT}/$(basename "$WIN11_ISO")"
+  local dest="${ISOS_MOUNT}/$(basename "$WIN11_ISO")"
 
   if [[ -f "$dest" ]]; then
     log "[win11] already staged: $dest"
     return 0
   fi
 
-  log "[win11] staging $(basename "$WIN11_ISO") to Ventoy partition..."
+  # Note: GRUB loopback booting of Windows ISOs is not supported — the ISO is
+  # staged here for manual dd/Rufus use on another machine.
+  log "[win11] staging $(basename "$WIN11_ISO") to lacie_isos partition..."
   rsync --progress "$WIN11_ISO" "$dest"
   sync
-  log "[win11] done"
-}
-
-add_ventoy_boot_entry() {
-  local entry_dir="${INSTALL_ROOT}/boot/loader/entries"
-  local entry_file="${entry_dir}/ventoy.conf"
-
-  [[ -d "$INSTALL_ROOT/boot" ]] || {
-    log "[ventoy-entry] INSTALL_ROOT/boot not mounted; skipping"
-    return 0
-  }
-
-  # Find Ventoy's grub binary — it survives nixos-install's BOOTX64.EFI overwrite
-  local ventoy_efi=""
-  for candidate in \
-    "/EFI/BOOT/grubx64.efi" \
-    "/EFI/ventoy/ventoy_x64.efi" \
-    "/EFI/BOOT/mmx64.efi"; do
-    if [[ -f "${INSTALL_ROOT}/boot${candidate}" ]]; then
-      ventoy_efi="$candidate"
-      break
-    fi
-  done
-
-  if [[ -z "$ventoy_efi" ]]; then
-    log "[ventoy-entry] WARNING: no Ventoy EFI binary found — boot entry not added"
-    log "[ventoy-entry] Files on VTOYEFI:"
-    find "${INSTALL_ROOT}/boot/EFI" -type f 2>/dev/null | sort || true
-    return 0
-  fi
-
-  log "[ventoy-entry] Ventoy binary: $ventoy_efi"
-  mkdir -p "$entry_dir"
-
-  cat > "$entry_file" <<EOF
-title   Ventoy (Windows 11 / ISO Boot Menu)
-efi     ${ventoy_efi}
-EOF
-
-  log "[ventoy-entry] wrote $entry_file"
+  log "[win11] done (use Rufus or dd on another machine to boot Windows from this ISO)"
 }
 
 validate_workspace() {
   log "Workspace validation:"
   test -d "${LIVE_MOUNT}/nix-configs" || die "Missing nix-configs directory on live_nix."
   test -d "${LIVE_MOUNT}/recovery" || die "Missing recovery directory on live_nix."
-  test -f "${VENTOY_MOUNT}/${ISO_NAME}" || die "Missing staged ISO on Ventoy partition."
+  test -f "${ISOS_MOUNT}/${ISO_NAME}" || die "Missing staged ISO on lacie_isos partition."
   if [[ -d "${LIVE_MOUNT}/nix-configs/.git" ]]; then
     git -C "${LIVE_MOUNT}/nix-configs" rev-parse --abbrev-ref HEAD
     git -C "${LIVE_MOUNT}/nix-configs" status --short
@@ -684,13 +563,19 @@ validate_workspace() {
 
 summarize_next_steps() {
   log "USB disk is ready."
-  echo "  Ventoy mount: $VENTOY_MOUNT"
-  echo "  live_nix:     $LIVE_MOUNT"
+  echo "  EFI:       $EFI_MOUNT"
+  echo "  ISOs:      $ISOS_MOUNT"
+  echo "  live_nix:  $LIVE_MOUNT"
   if [[ $HAS_DATA_PART -eq 1 ]]; then
-    echo "  data:         $DATA_MOUNT"
+    echo "  data:      $DATA_MOUNT"
   fi
-  echo "  repo path:    ${LIVE_MOUNT}/nix-configs"
-  echo "  ISO path:     ${VENTOY_MOUNT}/${ISO_NAME}"
+  echo "  repo path: ${LIVE_MOUNT}/nix-configs"
+  echo "  ISO path:  ${ISOS_MOUNT}/${ISO_NAME}"
+  echo
+  echo "ISO naming convention for GRUB loopback entries:"
+  echo "  home-office-installer.iso   — NixOS custom installer"
+  echo "  nixos-latest-graphical.iso  — Official NixOS live"
+  echo "  kali-live-latest.iso        — Kali Linux live"
   echo
   if [[ $DO_NIXOS_INSTALL -eq 0 ]]; then
     echo "To install NixOS onto this drive, run:"
@@ -708,16 +593,8 @@ while [[ $# -gt 0 ]]; do
       TARGET_DRIVE="${2:-}"
       shift 2
       ;;
-    --ventoy)
-      VENTOY_SCRIPT="${2:-}"
-      shift 2
-      ;;
-    --ventoy-version)
-      VENTOY_VERSION="${2:-}"
-      shift 2
-      ;;
-    --ventoy-size)
-      VENTOY_SIZE_GIB="${2:-}"
+    --isos-size)
+      ISOS_SIZE_GIB="${2:-}"
       shift 2
       ;;
     --live-size)
@@ -799,9 +676,9 @@ run_phase prepare_tools prepare_tools
 
 if [[ $SKIP_DISK -eq 0 ]]; then
   if [[ $FORCE_REBUILD -eq 1 ]] || ! layout_ready; then
-    run_phase install_ventoy install_ventoy
-    run_phase create_extra_partitions create_extra_partitions
-    run_phase format_partitions format_partitions
+    run_phase partition_disk partition_disk
+    run_phase format_efi_isos format_efi_isos
+    run_phase install_grub install_grub
   else
     log "[disk] existing layout detected; skipping disk phases"
     dump_partition_debug > "${LOG_DIR}/disk-skip.log" 2>&1 || true
