@@ -233,9 +233,112 @@ format_efi_isos() {
   dump_partition_debug
 }
 
+generate_nixos_entry() {
+  local iso_file="$1"    # filename only (e.g. latest-nixos-graphical-x86_64-linux.iso)
+  local iso_mount="$2"   # where the ISO is currently loop-mounted
+
+  # Try both EFI and legacy BIOS grub.cfg locations
+  local grub_cfg=""
+  for candidate in \
+    "$iso_mount/EFI/BOOT/grub.cfg" \
+    "$iso_mount/boot/grub/grub.cfg" \
+    "$iso_mount/boot/grub2/grub.cfg"; do
+    [[ -f "$candidate" ]] && { grub_cfg="$candidate"; break; }
+  done
+  [[ -n "$grub_cfg" ]] || return 1
+
+  # Extract the first installer entry from the ISO's own grub.cfg.
+  # Paths contain build-specific store hashes so we parse them dynamically.
+  local kernel initrd init_arg root_arg
+  kernel=$(awk '/^  linux /{print $2; exit}' "$grub_cfg")
+  initrd=$(awk '/^  initrd /{print $2; exit}' "$grub_cfg")
+  init_arg=$(grep -m1 'init=' "$grub_cfg" | grep -o 'init=[^ ]*' | head -1)
+  # Accept any root= form (root=LABEL=..., root=fstab, etc.)
+  root_arg=$(grep -m1 ' root=' "$grub_cfg" | grep -o 'root=[^ ]*' | head -1)
+
+  [[ -n "$kernel" && -n "$initrd" && -n "$root_arg" ]] || return 1
+
+  # Build a readable title from the filename
+  local title
+  title=$(basename "$iso_file" .iso | sed 's/-/ /g; s/\b\(.\)/\u\1/g')
+
+  cat <<ENTRY
+menuentry "${title}" --class nixos {
+  search --no-floppy --label --set=isopart lacie_isos
+  set isofile="/${iso_file}"
+  loopback loop (\$isopart)\$isofile
+  terminal_output console
+  linux (loop)${kernel} boot.shell_on_fail ${root_arg} loglevel=4 lsm=landlock,yama,bpf findiso=\$isofile ${init_arg}
+  initrd (loop)${initrd}
+}
+
+ENTRY
+}
+
+generate_kali_entry() {
+  local iso_file="$1"
+  local iso_mount="$2"
+
+  # Kali/Debian live images use /live/vmlinuz + /live/initrd.img.
+  [[ -f "$iso_mount/live/vmlinuz" ]] || return 1
+
+  local title
+  title=$(basename "$iso_file" .iso | sed 's/-/ /g; s/\b./\u&/g')
+
+  cat <<ENTRY
+menuentry "${title}" --class linux {
+  search --no-floppy --label --set=isopart lacie_isos
+  set isofile="/${iso_file}"
+  loopback loop (\$isopart)\$isofile
+  linux (loop)/live/vmlinuz boot=live findiso=\$isofile noconfig=sudo username=root hostname=kali quiet splash
+  initrd (loop)/live/initrd.img
+}
+
+ENTRY
+}
+
+generate_iso_entries() {
+  local isos_mount="$1"
+  local tmp_iso_mount
+  tmp_iso_mount=$(mktemp -d)
+
+  local entries=""
+  local iso_file
+
+  for iso_path in "$isos_mount"/*.iso; do
+    [[ -f "$iso_path" ]] || continue
+    iso_file=$(basename "$iso_path")
+
+    if mount -o loop,ro "$iso_path" "$tmp_iso_mount" 2>/dev/null; then
+      local entry=""
+      if [[ -f "$tmp_iso_mount/EFI/BOOT/grub.cfg" ]]; then
+        # NixOS-style ISO: parse grub.cfg for exact kernel/initrd paths
+        entry=$(generate_nixos_entry "$iso_file" "$tmp_iso_mount" 2>/dev/null || true)
+      elif [[ -f "$tmp_iso_mount/live/vmlinuz" ]]; then
+        # Debian/Kali-style live ISO
+        entry=$(generate_kali_entry "$iso_file" "$tmp_iso_mount" 2>/dev/null || true)
+      fi
+      umount "$tmp_iso_mount" 2>/dev/null || true
+
+      if [[ -n "$entry" ]]; then
+        entries+="${entry}"$'\n'
+        log "  generated entry for $iso_file" >&2
+      else
+        log "  WARNING: could not generate entry for $iso_file (unknown ISO layout)" >&2
+      fi
+    else
+      log "  WARNING: could not loop-mount $iso_file — skipping" >&2
+    fi
+  done
+
+  rmdir "$tmp_iso_mount" 2>/dev/null || true
+  printf '%s' "$entries"
+}
+
 install_grub() {
   local efi_mount="${WORK_ROOT}/grub-install-tmp"
-  mkdir -p "$efi_mount"
+  local isos_mount="${WORK_ROOT}/grub-isos-tmp"
+  mkdir -p "$efi_mount" "$isos_mount"
   mount "$EFI_PART" "$efi_mount"
 
   grub-install \
@@ -245,11 +348,29 @@ install_grub() {
     --removable \
     --no-nvram
 
-  # Bootstrap grub.cfg for pre-NixOS ISO booting.
-  # After nixos-install runs, NixOS replaces this with the declarative config
-  # (including the Kanagawa theme and proper extraEntries).
+  # Scan ISOs on the isos partition and generate explicit boot entries.
+  # loopback.cfg is NOT used — it resolves paths relative to $root (LACIE_EFI),
+  # not the loop device. Explicit linux/initrd lines with (loop)/... paths are
+  # the only reliable approach for GRUB loopback boot.
+  # Prefer an already-mounted isos partition (udisks automount) over remounting.
+  local iso_entries=""
+  local isos_already_mounted
+  isos_already_mounted=$(findmnt -n -o TARGET "$ISOS_PART" 2>/dev/null || true)
+  if [[ -n "$isos_already_mounted" ]]; then
+    log "scanning $isos_already_mounted for ISOs..."
+    iso_entries=$(generate_iso_entries "$isos_already_mounted")
+  elif mount -t exfat -o ro "$ISOS_PART" "$isos_mount" 2>/dev/null; then
+    log "scanning $isos_mount for ISOs..."
+    iso_entries=$(generate_iso_entries "$isos_mount")
+    umount "$isos_mount" || true
+  else
+    log "WARNING: could not mount isos partition — writing placeholder entries"
+  fi
+  rmdir "$isos_mount" 2>/dev/null || true
+
   mkdir -p "$efi_mount/boot/grub"
-  cat > "$efi_mount/boot/grub/grub.cfg" <<'GRUBCFG'
+  {
+    cat <<'HEADER'
 set timeout=30
 set default=0
 
@@ -260,26 +381,20 @@ insmod loopback
 insmod iso9660
 insmod ext2
 
-search --no-floppy --label --set=isopart lacie_isos
+HEADER
+    printf '%s' "$iso_entries"
+    cat <<'FOOTER'
 
-menuentry "Home Office Installer (NixOS)" --class nixos {
-  loopback loop ($isopart)/home-office-installer.iso
-  configfile (loop)/boot/grub/loopback.cfg
-}
-
-menuentry "NixOS Graphical Live" --class nixos {
-  loopback loop ($isopart)/nixos-latest-graphical.iso
-  configfile (loop)/boot/grub/loopback.cfg
-}
-
-menuentry "Kali Linux Live" --class linux {
-  loopback loop ($isopart)/kali-live-latest.iso
-  configfile (loop)/boot/grub/loopback.cfg
+menuentry "Boot installed NixOS (live_nix)" --class nixos {
+  search --no-floppy --label --set=root live_nix
+  linux /boot/bzImage root=LABEL=live_nix rootwait quiet
+  initrd /boot/initrd
 }
 
 menuentry "Reboot"   { reboot }
 menuentry "Shutdown" { halt }
-GRUBCFG
+FOOTER
+  } > "$efi_mount/boot/grub/grub.cfg"
 
   sync
   umount "$efi_mount"
