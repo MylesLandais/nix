@@ -457,11 +457,10 @@
   # Coredump Limits
   # ---------------------------------------------------------------------------
 
-  # Prevent crash loops from filling disk with coredumps
-  systemd.coredump.extraConfig = ''
-    MaxUse=512M
-    KeepFree=1G
-  '';
+  systemd.coredump.settings.Coredump = {
+    MaxUse = "512M";
+    KeepFree = "1G";
+  };
 
   # ---------------------------------------------------------------------------
   # Security and Permissions
