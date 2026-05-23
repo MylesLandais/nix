@@ -19,6 +19,7 @@ SKIP_DISK=0
 SKIP_ISO=0
 SKIP_REPO_SYNC=0
 DO_NIXOS_INSTALL=0
+GRUB_ONLY=0
 VERBOSE=0
 WIN11_ISO=""
 
@@ -63,6 +64,7 @@ Options:
   --isos-size GIB           ISO partition size in GiB (default: $ISOS_SIZE_GIB)
   --live-size GIB           live_nix size GiB — only used if creating p3 fresh (default: auto)
   --min-drive-gib N         Minimum acceptable drive size in GiB (default: $MIN_DRIVE_GIB)
+  --grub-only               Skip everything except grub-install + grub.cfg (p1 must already exist)
   --force-rebuild           Recreate p1+p2 even if layout looks correct
   --skip-disk               Skip all disk/format phases and reuse existing layout
   --skip-iso                Skip latest NixOS ISO download/staging
@@ -81,6 +83,9 @@ Common invocations:
 
   # Migrate existing Ventoy LaCie to GRUB layout (preserves p3/p4 data):
   sudo $SCRIPT_NAME --device /dev/sdX
+
+  # Re-run GRUB install only (p1 already formatted):
+  sudo $SCRIPT_NAME --device /dev/sdX --grub-only
 
   # Full build from scratch (NixOS only):
   sudo $SCRIPT_NAME --device /dev/sdX --nixos-install
@@ -604,6 +609,10 @@ while [[ $# -gt 0 ]]; do
       MIN_DRIVE_GIB="${2:-}"
       shift 2
       ;;
+    --grub-only)
+      GRUB_ONLY=1
+      shift
+      ;;
     --force-rebuild)
       FORCE_REBUILD=1
       shift
@@ -671,6 +680,14 @@ done
 [[ -b "$TARGET_DRIVE" ]] || die "Target is not a block device: $TARGET_DRIVE"
 
 init_log_dir
+
+if [[ $GRUB_ONLY -eq 1 ]]; then
+  discover_layout
+  run_phase install_grub install_grub
+  log "GRUB install complete. Eject and boot to test."
+  exit 0
+fi
+
 get_drive_facts  # interactive prompt — must run outside run_phase
 run_phase prepare_tools prepare_tools
 
