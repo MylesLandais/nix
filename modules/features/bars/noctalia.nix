@@ -33,6 +33,19 @@
         fi
       '';
 
+    # Restart noctalia-shell after every rebuild so the launcher index reflects
+    # newly installed packages. Quickshell's DesktopEntries inotify watcher
+    # misses NixOS's atomic profile symlink swap and won't fire onValuesChanged
+    # on its own. Only runs inside an active Wayland session.
+    home.activation.reloadNoctalia = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      if [ -n "''${WAYLAND_DISPLAY:-}" ] && ${pkgs.procps}/bin/pgrep -x noctalia-shell > /dev/null 2>&1; then
+        $DRY_RUN_CMD ${pkgs.procps}/bin/pkill -x noctalia-shell || true
+        if [ -z "''${DRY_RUN_CMD:-}" ]; then
+          (sleep 1 && noctalia-shell >/dev/null 2>&1 &)
+        fi
+      fi
+    '';
+
     programs.noctalia-shell = {
       enable = lib.mkIf (osConfig.host.bar == "noctalia") true;
       # Upstream deprecated the systemd unit; the compositor's execOnce

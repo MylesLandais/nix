@@ -417,6 +417,9 @@ in
         hl.exec_cmd("${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1")
         hl.exec_cmd("hyprctl output create headless HEADLESS-1")
         hl.exec_cmd("blueman-applet")
+        -- Bitwarden: start minimised to tray so the SSH agent socket is
+        -- available for git signing as soon as you unlock the vault.
+        hl.exec_cmd("bitwarden-desktop --minimized")
       end)
     ''
   );

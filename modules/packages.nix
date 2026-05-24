@@ -16,7 +16,7 @@ with pkgs;
   cliphist
   coreutils
   copilot-language-server
-  cosmic-files
+  # nemo and file-roller are managed by the gtk-mod feature (see modules/features/gtk/conf)
   cozy
   claude-code
   claude-monitor
