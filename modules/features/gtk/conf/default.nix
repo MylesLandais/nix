@@ -30,6 +30,7 @@
       nemo           # Cinnamon file manager (GTK, works great standalone under Hyprland)
       nemo-fileroller # Nemo → "Open with Archive Manager" context menu bridge
       file-roller     # GNOME Archive Manager (backend for nemo-fileroller)
+      evince          # GNOME document viewer (PDF, ePub, etc.)
 
       # Qt icon theme fallback: Papirus-Dark has complete freedesktop coverage.
       # The GTK icon theme (Kanagawa) inherits Yaru/gnome which are not installed,
@@ -40,6 +41,40 @@
       papirus-icon-theme
       qt6Packages.qt6ct # Qt6 theme configurator; reads ~/.config/qt6ct/qt6ct.conf
     ];
+
+    # XDG MIME associations for GTK-mode desktop.
+    # Explicitly setting inode/directory is required because kitty registers itself
+    # for it via kitty-open.desktop (installed by the terminals module), which would
+    # otherwise win over nemo in the default lookup order.
+    xdg.mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "inode/directory"         = [ "nemo.desktop" ];
+        "application/pdf"         = [ "org.gnome.Evince.desktop" ];
+        "application/epub+zip"    = [ "org.gnome.Evince.desktop" ];
+        "image/png"               = [ "org.gnome.eog.desktop" "ristretto.desktop" ];
+        "image/jpeg"              = [ "org.gnome.eog.desktop" "ristretto.desktop" ];
+        "image/gif"               = [ "org.gnome.eog.desktop" "ristretto.desktop" ];
+        "image/webp"              = [ "org.gnome.eog.desktop" "ristretto.desktop" ];
+        "image/avif"              = [ "org.gnome.eog.desktop" "ristretto.desktop" ];
+        "image/bmp"               = [ "org.gnome.eog.desktop" "ristretto.desktop" ];
+        "image/tiff"              = [ "org.gnome.eog.desktop" "ristretto.desktop" ];
+        "video/mp4"               = [ "mpv.desktop" ];
+        "video/mpeg"              = [ "mpv.desktop" ];
+        "video/webm"              = [ "mpv.desktop" ];
+        "video/x-matroska"        = [ "mpv.desktop" ];
+        "video/quicktime"         = [ "mpv.desktop" ];
+        "audio/mpeg"              = [ "mpv.desktop" ];
+        "audio/mp4"               = [ "mpv.desktop" ];
+        "audio/aac"               = [ "mpv.desktop" ];
+        "audio/wav"               = [ "mpv.desktop" ];
+        "audio/flac"              = [ "mpv.desktop" ];
+        "audio/ogg"               = [ "mpv.desktop" ];
+        "text/html"               = [ "firefox.desktop" ];
+        "x-scheme-handler/http"   = [ "firefox.desktop" ];
+        "x-scheme-handler/https"  = [ "firefox.desktop" ];
+      };
+    };
 
     # Point Qt6 apps (Quickshell/noctalia) at qt6ct so they use Papirus-Dark
     # for icon lookup instead of inheriting the broken Kanagawa→Yaru chain.
