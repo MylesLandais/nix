@@ -29,6 +29,7 @@ in
         home-manager = {
           useUserPackages = true;
           useGlobalPkgs = true;
+          backupFileExtension = "hm-backup";
           sharedModules = [ inputs.agenix.homeManagerModules.age ];
           users.warby =
             { ... }:

@@ -21,6 +21,7 @@
     ./features/terminals
     ./features/stylix
     ./features/flameshot.nix
+    ./firefox.nix
     inputs.stylix.homeModules.stylix
     inputs.nixvim.homeModules.nixvim
     inputs.noctalia.homeModules.default
@@ -70,6 +71,7 @@
   # Minimal programs configuration
   programs = {
     home-manager.enable = true;
+    firefox.enable = true;
     btop = {
       enable = true;
       settings = {
