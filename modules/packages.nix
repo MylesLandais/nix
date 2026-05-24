@@ -28,8 +28,8 @@ with pkgs;
   fd
   ffmpeg
   firefox
+  chromium
   gamemode
-  gemini-cli
   gcc
   gh
   git-lfs
