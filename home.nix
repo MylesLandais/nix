@@ -128,7 +128,6 @@
       font-awesome
       gamemode
       gcc
-      gemini-cli
 
       gh
       ghostty

@@ -634,7 +634,6 @@
     # Applications
     bitwarden-desktop
     dolphin-emu
-    gemini-cli
     syncthing  # File synchronization
     teamspeak6-client
     termius

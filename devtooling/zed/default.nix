@@ -109,12 +109,6 @@
             args = [ "acp" ];
             env = {};
           };
-          "gemini" = {
-            type = "custom";
-            command = "npx";
-            args = [ "@google/gemini-cli" "--acp" ];
-            env = {};
-          };
           "Opencode" = {
             type = "custom";
             command = "opencode";
