@@ -27,6 +27,11 @@
           commit.gpgsign = true;
           gpg.format = "ssh";
           "gpg.ssh".allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
+          # Route HTTPS credential prompts to the GNOME keyring via libsecret,
+          # so first-time auth uses the seahorse GTK askpass and subsequent
+          # ops fetch silently from the keyring instead of falling through to
+          # NixOS's x11_ssh_askpass default.
+          credential.helper = "${pkgs.git.override { withLibsecret = true; }}/bin/git-credential-libsecret";
           alias = {
             lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
           };

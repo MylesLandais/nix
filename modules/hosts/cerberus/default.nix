@@ -41,6 +41,13 @@ in
               home.username = lib.mkForce "warby";
               home.homeDirectory = lib.mkForce "/home/warby";
               age.identityPaths = lib.mkForce [ "/home/warby/.ssh/age" ];
+              # gnome-keyring user session: pkcs11 + secrets only.
+              # `ssh` is intentionally excluded so bitwarden-ssh-agent stays
+              # the sole owner of SSH_AUTH_SOCK (see modules/home.nix:52).
+              services.gnome-keyring = {
+                enable = true;
+                components = [ "pkcs11" "secrets" ];
+              };
             };
           extraSpecialArgs = {
             inherit inputs vars;

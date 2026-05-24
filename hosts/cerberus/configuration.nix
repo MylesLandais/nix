@@ -468,6 +468,16 @@
 
   security.polkit.enable = true;
   services.gnome.gnome-keyring.enable = true;
+  programs.seahorse.enable = true;
+
+  # Replace NixOS's default x11_ssh_askpass with the GTK-themed seahorse one
+  # so any residual askpass prompt (from sub-tools, sudo-over-ssh, etc.)
+  # matches the system aesthetic instead of dropping a 1999 Tk popup.
+  programs.ssh.askPassword = lib.mkForce
+    "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
+
+  # PAM login integration so the keyring auto-unlocks at greetd / tty login.
+  security.pam.services.login.enableGnomeKeyring = true;
 
   # Allow wheel group to mount filesystems without password
   security.polkit.extraConfig = ''
@@ -615,7 +625,9 @@
     wireguard-tools
     nmap
     ntfs3g
-    polkit_gnome  # GTK polkit auth agent for keyring unlock prompts
+    polkit_gnome     # GTK polkit auth agent for keyring unlock prompts
+    libsecret        # secret-tool CLI for keyring debugging
+    libgnome-keyring # legacy compat for older apps (VS Code etc.)
 
     # Desktop theming
     papirus-icon-theme
