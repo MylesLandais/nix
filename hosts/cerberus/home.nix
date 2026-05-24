@@ -358,24 +358,24 @@ in
     in
     ''
       -- == Cerberus monitors ==
-      hl.monitor("${m.tertiaryMonitor.name},${toString m.tertiaryMonitor.width}x${toString m.tertiaryMonitor.height}@${toString m.tertiaryMonitor.refresh},5900x2160,1")
-      hl.monitor("${m.mainMonitor.name},${toString m.mainMonitor.width}x${toString m.mainMonitor.height}@${toString m.mainMonitor.refresh},7820x2160,1")
-      hl.monitor("${m.secondaryMonitor.name},${toString m.secondaryMonitor.width}x${toString m.secondaryMonitor.height}@${toString m.secondaryMonitor.refresh},10380x2160,1")
-      hl.monitor("${m.fourthMonitor.name},${toString m.fourthMonitor.width}x${toString m.fourthMonitor.height}@${toString m.fourthMonitor.refresh},8140x1080,1")
-      hl.monitor("HEADLESS-1,2160x1440@60,auto,1")
+      hl.monitor({ output = "${m.tertiaryMonitor.name}", mode = "${toString m.tertiaryMonitor.width}x${toString m.tertiaryMonitor.height}@${toString m.tertiaryMonitor.refresh}", position = "5900x2160", scale = 1 })
+      hl.monitor({ output = "${m.mainMonitor.name}",     mode = "${toString m.mainMonitor.width}x${toString m.mainMonitor.height}@${toString m.mainMonitor.refresh}",         position = "7820x2160", scale = 1 })
+      hl.monitor({ output = "${m.secondaryMonitor.name}", mode = "${toString m.secondaryMonitor.width}x${toString m.secondaryMonitor.height}@${toString m.secondaryMonitor.refresh}", position = "10380x2160", scale = 1 })
+      hl.monitor({ output = "${m.fourthMonitor.name}",   mode = "${toString m.fourthMonitor.width}x${toString m.fourthMonitor.height}@${toString m.fourthMonitor.refresh}",     position = "8140x1080",  scale = 1 })
+      hl.monitor({ output = "HEADLESS-1", mode = "2160x1440@60", position = "auto", scale = 1 })
 
-      -- == Cerberus workspaces ==
-      hl.workspace("1,monitor:${m.tertiaryMonitor.name},default:true")
-      hl.workspace("2,monitor:${m.mainMonitor.name},default:true")
-      hl.workspace("3,monitor:${m.secondaryMonitor.name},default:true")
-      hl.workspace("4,monitor:${m.tertiaryMonitor.name}")
-      hl.workspace("5,monitor:${m.mainMonitor.name}")
-      hl.workspace("6,monitor:${m.secondaryMonitor.name}")
-      hl.workspace("7,monitor:${m.tertiaryMonitor.name}")
-      hl.workspace("8,monitor:${m.mainMonitor.name}")
-      hl.workspace("9,monitor:${m.secondaryMonitor.name}")
-      hl.workspace("10,monitor:${m.fourthMonitor.name},default:true")
-      hl.workspace("99,monitor:HEADLESS-1,default:true")
+      -- == Cerberus workspace pins ==
+      hl.workspace_rule({ workspace = "1",  monitor = "${m.tertiaryMonitor.name}",  default = true })
+      hl.workspace_rule({ workspace = "2",  monitor = "${m.mainMonitor.name}",      default = true })
+      hl.workspace_rule({ workspace = "3",  monitor = "${m.secondaryMonitor.name}", default = true })
+      hl.workspace_rule({ workspace = "4",  monitor = "${m.tertiaryMonitor.name}" })
+      hl.workspace_rule({ workspace = "5",  monitor = "${m.mainMonitor.name}" })
+      hl.workspace_rule({ workspace = "6",  monitor = "${m.secondaryMonitor.name}" })
+      hl.workspace_rule({ workspace = "7",  monitor = "${m.tertiaryMonitor.name}" })
+      hl.workspace_rule({ workspace = "8",  monitor = "${m.mainMonitor.name}" })
+      hl.workspace_rule({ workspace = "9",  monitor = "${m.secondaryMonitor.name}" })
+      hl.workspace_rule({ workspace = "10", monitor = "${m.fourthMonitor.name}",    default = true })
+      hl.workspace_rule({ workspace = "99", monitor = "HEADLESS-1",                 default = true })
 
       -- == Cerberus env ==
       hl.env("LIBVA_DRIVER_NAME", "nvidia")
