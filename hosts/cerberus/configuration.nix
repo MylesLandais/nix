@@ -594,6 +594,15 @@
     }
   '';
 
+  # Helium (Chromium fork) policy: force-install uBlock Origin Lite + Bitwarden.
+  # Helium honours the Chromium-standard /etc/<binary>/policies/managed path.
+  environment.etc."helium/policies/managed/extensions.json".text = builtins.toJSON {
+    ExtensionInstallForcelist = [
+      "ddkjiahejlhfcafbddmgiahcphecmpfh;https://clients2.google.com/service/update2/crx"
+      "nngceckbapebfimnlniiiahkandclblb;https://clients2.google.com/service/update2/crx"
+    ];
+  };
+
   # ---------------------------------------------------------------------------
   # System Packages
   # ---------------------------------------------------------------------------

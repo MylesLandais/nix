@@ -72,6 +72,16 @@
   programs = {
     home-manager.enable = true;
     firefox.enable = true;
+    chromium = {
+      enable = true;
+      # Force-install extensions via HM-generated Chromium policy
+      # (ublock-origin-lite is the MV3 successor; uBlock Origin proper
+      # was removed from CWS mid-2025).
+      extensions = [
+        { id = "ddkjiahejlhfcafbddmgiahcphecmpfh"; } # uBlock Origin Lite
+        { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
+      ];
+    };
     btop = {
       enable = true;
       settings = {
