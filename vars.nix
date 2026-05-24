@@ -31,7 +31,7 @@ in
   wallpaper = "${wp}/share/wallpapers/nix-wallpaper-nineish-catppuccin-mocha.png";
 
   mainMonitor = {
-    name = "desc:Dell Inc. Dell S2716DG ##ASPYT+r5vCzd";
+    name = "desc:Dell Inc. Dell S2716DG #ASPYT+r5vCzd";
     width = 2560;
     height = 1440;
     refresh = 144.0;

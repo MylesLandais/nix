@@ -30,7 +30,7 @@ _: {
         profile = "default";
         wallpaper = "${inputs.wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/3895e.jpg";
         mainMonitor = {
-          name = "desc:Dell Inc. Dell S2716DG ##ASPYT+r5vCzd";
+          name = "desc:Dell Inc. Dell S2716DG #ASPYT+r5vCzd";
           width = "2560";
           height = "1440";
           refresh = "144";
