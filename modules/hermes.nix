@@ -8,10 +8,17 @@
 # runtime settings and keep this block as documentation only.
 {
   config,
+  lib,
   ...
 }:
 
 {
+  # The hermes-agent flake's nixosModule sets HERMES_HOME=/var/lib/hermes/.hermes
+  # system-wide, which leaks into interactive shells and makes the user-facing
+  # `hermes` CLI try to read /var/lib/hermes/.hermes/.env (no read permission for
+  # the warby user). Override so interactive use points at the user-owned dir.
+  environment.variables.HERMES_HOME = lib.mkForce "/home/warby/.hermes";
+
   services.hermes-agent = {
     enable = true;
     addToSystemPackages = true;

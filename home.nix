@@ -113,10 +113,6 @@
 
     packages = with pkgs; [
       foliate
-      (writeShellScriptBin "hermes" ''
-        export HERMES_HOME="$HOME/.hermes"
-        exec /run/current-system/sw/bin/hermes "$@"
-      '')
       # Additions for declarative archive handling in Nemo and CLI
       bind
       bitwarden-desktop
