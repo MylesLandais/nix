@@ -21,6 +21,7 @@
     ./features/terminals
     ./features/stylix
     ./features/flameshot.nix
+    ./features/ssh-bitwarden.nix
     ./firefox.nix
     inputs.stylix.homeModules.stylix
     inputs.nixvim.homeModules.nixvim
@@ -48,6 +49,7 @@
       OZONE_PLATFORM = "wayland";
       ELECTRON_OZONE_PLATFORM_HINT = "wayland";
       EDITOR = "nvim";
+      SSH_AUTH_SOCK = "${config.home.homeDirectory}/.bitwarden-ssh-agent.sock";
     };
 
     packages = import ./packages.nix { inherit pkgs; };

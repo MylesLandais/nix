@@ -467,6 +467,7 @@
   # ---------------------------------------------------------------------------
 
   security.polkit.enable = true;
+  services.gnome.gnome-keyring.enable = true;
 
   # Allow wheel group to mount filesystems without password
   security.polkit.extraConfig = ''
@@ -633,6 +634,7 @@
 
     # Applications
     bitwarden-desktop
+    bitwarden-cli
     dolphin-emu
     syncthing  # File synchronization
     teamspeak6-client

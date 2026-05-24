@@ -16,20 +16,19 @@
         enable = true;
         package = pkgs.git;
         signing.format = "ssh";
+        signing.key = "~/.ssh/bw.pub";
+        signing.signByDefault = true;
         settings = {
           user = {
             name = "FKouhai";
             email = "frandres00@gmail.com";
             signingkey = "~/.ssh/bw.pub";
           };
-
           commit.gpgsign = true;
           gpg.format = "ssh";
+          "gpg.ssh".allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
           alias = {
             lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-          };
-          signing = {
-            key = "~/.ssh/bw.pub";
           };
         };
       };
@@ -50,5 +49,10 @@
       };
       git-worktree-switcher.enable = true;
     };
+
+    home.file.".ssh/allowed_signers".text = ''
+      # Bitwarden SSH signing key - populate with: cat ~/.ssh/bw.pub
+      # ${config.programs.git.userEmail} <paste-public-key-here>
+    '';
   };
 }
