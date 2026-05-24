@@ -20,8 +20,8 @@
         signing.signByDefault = true;
         settings = {
           user = {
-            name = "FKouhai";
-            email = "frandres00@gmail.com";
+            name = "Myles Landais";
+            email = "landais.myles@gmail.com";
             signingkey = "~/.ssh/bw.pub";
           };
           commit.gpgsign = true;
@@ -51,8 +51,7 @@
     };
 
     home.file.".ssh/allowed_signers".text = ''
-      # Bitwarden SSH signing key - populate with: cat ~/.ssh/bw.pub
-      # ${config.programs.git.userEmail} <paste-public-key-here>
+      landais.myles@gmail.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN26TcFkEK22/wuioiuHxCKZw0C1cdkVzgGMA+m7Jeei
     '';
   };
 }
