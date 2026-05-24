@@ -1,7 +1,11 @@
 { lib, mod, bar }:
 let
   bind = keys: action: "hl.bind(\"${keys}\", ${action})";
-  bindO = keys: action: opts: "hl.bind(\"${keys}\", ${action}, { drag = true })";
+  optsToLua = opts:
+    "{ " + lib.concatStringsSep ", "
+      (lib.mapAttrsToList (k: v: "${k} = ${lib.boolToString v}") opts) + " }";
+  bindO = keys: action: opts:
+    "hl.bind(\"${keys}\", ${action}, ${optsToLua opts})";
   exec = cmd: "hl.dsp.exec_cmd(\"${cmd}\")";
   focus = dir: "hl.dsp.focus({ direction = \"${dir}\" })";
   wMove = dir: "hl.dsp.window.move({ direction = \"${dir}\" })";
@@ -29,12 +33,12 @@ in
   ${bind "${mod} + mouse_up"        (wsSwitch "\"e-1\"")}
   ${bind "XF86AudioRaiseVolume"     (exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")}
   ${bind "XF86AudioLowerVolume"     (exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")}
-  ${bindO "${mod} + mouse:272"      "hl.dsp.window.drag()"   { drag = true; }}
-  ${bindO "${mod} + mouse:273"      "hl.dsp.window.resize()" { drag = true; }}
+  ${bindO "${mod} + mouse:272"      "hl.dsp.window.drag()"   { mouse = true; }}
+  ${bindO "${mod} + mouse:273"      "hl.dsp.window.resize()" { mouse = true; }}
 ''
 + lib.optionalString (bar == "noctalia") ''
   ${bind "${mod} + B"               (exec "noctalia-shell ipc call lockScreen lock")}
-  ${bind "${mod} + F"               (exec "noctalia-shell ipc call launcher toggle")}
+  ${bind "${mod} + R"               (exec "noctalia-shell ipc call launcher toggle")}
   ${bind "${mod} + S"               (exec "hyprshot -m region --clipboard-only")}
   ${bind "${mod} + SHIFT + R"       (exec "noctalia-shell ipc call sessionMenu toggle")}
   ${bind "${mod} + X"               (exec "noctalia-shell ipc call settings toggle")}
