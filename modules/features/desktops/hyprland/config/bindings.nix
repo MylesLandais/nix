@@ -38,6 +38,7 @@ in
 ''
 + lib.optionalString (bar == "noctalia") ''
   ${bind "${mod} + B"               (exec "noctalia-shell ipc call lockScreen lock")}
+  ${bind "${mod} + C"               (exec "noctalia-shell ipc call plugin:clipper toggle")}
   ${bind "${mod} + R"               (exec "noctalia-shell ipc call launcher toggle")}
   ${bind "${mod} + S"               (exec "hyprshot -m region --clipboard-only")}
   ${bind "${mod} + SHIFT + R"       (exec "noctalia-shell ipc call sessionMenu toggle")}

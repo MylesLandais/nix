@@ -11,6 +11,28 @@
     bars.noctalia.enable = lib.mkEnableOption "Enable noctalia bar";
   };
   config = lib.mkIf config.bars.noctalia.enable {
+    # Install noctalia plugins by copying out of a fetched monorepo. Noctalia
+    # writes settings.json / pinned.json / notecards/ inside the plugin dir at
+    # runtime, so we can't use a read-only store symlink. Idempotent: only
+    # copies if the destination is missing. To pull updates, bump the rev
+    # below and delete ~/.config/noctalia/plugins/clipper before rebuilding.
+    home.activation.noctaliaClipper =
+      let
+        plugins = pkgs.fetchFromGitHub {
+          owner = "blackbartblues";
+          repo = "noctalia-plugins";
+          rev = "main";
+          hash = "sha256-YGspOSjP6Y7ilW2w8Rp/QEyCkkW/4Cg7lKbC82BzU50=";
+        };
+      in
+      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        PLUGIN_DIR="$HOME/.config/noctalia/plugins/clipper"
+        if [ ! -e "$PLUGIN_DIR" ]; then
+          run mkdir -p "$HOME/.config/noctalia/plugins"
+          run cp -r --no-preserve=mode,ownership ${plugins}/clipper "$PLUGIN_DIR"
+        fi
+      '';
+
     programs.noctalia-shell = {
       enable = lib.mkIf (osConfig.host.bar == "noctalia") true;
       # Upstream deprecated the systemd unit; the compositor's execOnce
