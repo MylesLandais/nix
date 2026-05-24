@@ -13,7 +13,10 @@
   config = lib.mkIf config.bars.noctalia.enable {
     programs.noctalia-shell = {
       enable = lib.mkIf (osConfig.host.bar == "noctalia") true;
-      systemd.enable = lib.mkIf (osConfig.host.bar == "noctalia") true;
+      # Upstream deprecated the systemd unit; the compositor's execOnce
+      # (see modules/features/desktops/hyprland/hypr.nix) launches the
+      # shell instead. See https://docs.noctalia.dev/getting-started/nixos/
+      systemd.enable = false;
       settings = {
         appLauncher = {
           autoPasteClipboard = false;
