@@ -234,31 +234,28 @@ format_efi_isos() {
 }
 
 generate_nixos_entry() {
-  local iso_file="$1"    # filename only (e.g. latest-nixos-graphical-x86_64-linux.iso)
+  local iso_file="$1"    # filename only (e.g. home-office-installer.iso)
   local iso_mount="$2"   # where the ISO is currently loop-mounted
 
-  # Try both EFI and legacy BIOS grub.cfg locations
-  local grub_cfg=""
+  # NixOS ISOs ship EFI/BOOT/grub.cfg with an iso_path-aware isoboot block
+  # (see nixpkgs nixos/modules/installer/cd-dvd/iso-image.nix:422-426).
+  # We delegate to that config via `configfile` rather than reconstructing the
+  # kernel cmdline by hand — the ISO knows its own kernel build, LSM set, and
+  # root= form, and stays in sync across rebuilds.
+  local iso_grub_cfg=""
   for candidate in \
     "$iso_mount/EFI/BOOT/grub.cfg" \
-    "$iso_mount/boot/grub/grub.cfg" \
-    "$iso_mount/boot/grub2/grub.cfg"; do
-    [[ -f "$candidate" ]] && { grub_cfg="$candidate"; break; }
+    "$iso_mount/boot/grub/grub.cfg"; do
+    [[ -f "$candidate" ]] && { iso_grub_cfg="$candidate"; break; }
   done
-  [[ -n "$grub_cfg" ]] || return 1
+  [[ -n "$iso_grub_cfg" ]] || return 1
 
-  # Extract the first installer entry from the ISO's own grub.cfg.
-  # Paths contain build-specific store hashes so we parse them dynamically.
-  local kernel initrd init_arg root_arg
-  kernel=$(awk '/^  linux /{print $2; exit}' "$grub_cfg")
-  initrd=$(awk '/^  initrd /{print $2; exit}' "$grub_cfg")
-  init_arg=$(grep -m1 'init=' "$grub_cfg" | grep -o 'init=[^ ]*' | head -1)
-  # Accept any root= form (root=LABEL=..., root=fstab, etc.)
-  root_arg=$(grep -m1 ' root=' "$grub_cfg" | grep -o 'root=[^ ]*' | head -1)
+  # Confirm this ISO understands iso_path / findiso. If not, skip — caller
+  # falls back to other generators.
+  grep -q 'iso_path' "$iso_grub_cfg" || return 1
 
-  [[ -n "$kernel" && -n "$initrd" && -n "$root_arg" ]] || return 1
+  local rel_cfg="${iso_grub_cfg#$iso_mount}"  # e.g. /EFI/BOOT/grub.cfg
 
-  # Build a readable title from the filename
   local title
   title=$(basename "$iso_file" .iso | sed 's/-/ /g; s/\b\(.\)/\u\1/g')
 
@@ -267,9 +264,47 @@ menuentry "${title}" --class nixos {
   search --no-floppy --label --set=isopart lacie_isos
   set isofile="/${iso_file}"
   loopback loop (\$isopart)\$isofile
-  terminal_output console
-  linux (loop)${kernel} boot.shell_on_fail ${root_arg} loglevel=4 lsm=landlock,yama,bpf findiso=\$isofile ${init_arg}
-  initrd (loop)${initrd}
+  set iso_path=\$isofile
+  export iso_path
+  configfile (loop)${rel_cfg}
+}
+
+ENTRY
+}
+
+generate_debian_live_entry() {
+  local iso_file="$1"
+  local iso_mount="$2"
+  local iso_grub_cfg="$iso_mount/boot/grub/grub.cfg"
+
+  # Debian/Kali live ISOs ship /boot/grub/grub.cfg with /live/vmlinuz-* paths.
+  # configfile (loop) does NOT work: inner linux/initrd lines lack (loop) and GRUB
+  # resolves them against LACIE_EFI ("file /live/vmlinuz-* not found").
+  [[ -f "$iso_grub_cfg" ]] || return 1
+
+  local linux_line initrd_line
+  linux_line=$(grep -m1 -E '^[[:space:]]*linux[[:space:]]+/live/vmlinuz' "$iso_grub_cfg" || true)
+  initrd_line=$(grep -m1 -E '^[[:space:]]*initrd[[:space:]]+/live/initrd' "$iso_grub_cfg" || true)
+  [[ -n "$linux_line" && -n "$initrd_line" ]] || return 1
+
+  local vmlinuz_rel initrd_rel kargs title
+  vmlinuz_rel=$(awk '{print $2}' <<<"$linux_line")
+  initrd_rel=$(awk '{print $2}' <<<"$initrd_line")
+  kargs=$(awk '{$1=$2=""; sub(/^[ \t]+/, ""); print}' <<<"$linux_line")
+  # Outer GRUB sets isofile; inner ISO grub.cfg expects findiso=${iso_path}.
+  kargs="${kargs//\$\{iso_path\}/\$isofile}"
+
+  [[ -f "$iso_mount$vmlinuz_rel" && -f "$iso_mount$initrd_rel" ]] || return 1
+
+  title=$(basename "$iso_file" .iso | sed 's/-/ /g; s/\b./\u&/g')
+
+  cat <<ENTRY
+menuentry "${title}" --class linux {
+  search --no-floppy --label --set=isopart lacie_isos
+  set isofile="/${iso_file}"
+  loopback loop (\$isopart)\$isofile
+  linux (loop)${vmlinuz_rel} ${kargs}
+  initrd (loop)${initrd_rel}
 }
 
 ENTRY
@@ -278,11 +313,23 @@ ENTRY
 generate_kali_entry() {
   local iso_file="$1"
   local iso_mount="$2"
+  local vmlinuz initrd
 
-  # Kali/Debian live images use /live/vmlinuz + /live/initrd.img.
-  [[ -f "$iso_mount/live/vmlinuz" ]] || return 1
+  # Fallback when /boot/grub/grub.cfg cannot be parsed.
+  vmlinuz=$(compgen -G "$iso_mount/live/vmlinuz-"* 2>/dev/null | head -1)
+  [[ -n "$vmlinuz" ]] || vmlinuz="$iso_mount/live/vmlinuz"
+  [[ -f "$vmlinuz" ]] || return 1
 
-  local title
+  suffix="${vmlinuz##*/vmlinuz}"
+  initrd="$iso_mount/live/initrd.img${suffix}"
+  [[ -f "$initrd" ]] || initrd=$(compgen -G "$iso_mount/live/initrd.img-"* 2>/dev/null | head -1)
+  [[ -f "${initrd:-}" ]] || initrd="$iso_mount/live/initrd.img"
+  [[ -f "$initrd" ]] || return 1
+
+  local vmlinuz_rel initrd_rel title
+  vmlinuz_rel="${vmlinuz#$iso_mount}"
+  initrd_rel="${initrd#$iso_mount}"
+
   title=$(basename "$iso_file" .iso | sed 's/-/ /g; s/\b./\u&/g')
 
   cat <<ENTRY
@@ -290,8 +337,8 @@ menuentry "${title}" --class linux {
   search --no-floppy --label --set=isopart lacie_isos
   set isofile="/${iso_file}"
   loopback loop (\$isopart)\$isofile
-  linux (loop)/live/vmlinuz boot=live findiso=\$isofile noconfig=sudo username=root hostname=kali quiet splash
-  initrd (loop)/live/initrd.img
+  linux (loop)${vmlinuz_rel} boot=live components quiet splash noeject findiso=\$isofile
+  initrd (loop)${initrd_rel}
 }
 
 ENTRY
@@ -312,10 +359,12 @@ generate_iso_entries() {
     if mount -o loop,ro "$iso_path" "$tmp_iso_mount" 2>/dev/null; then
       local entry=""
       if [[ -f "$tmp_iso_mount/EFI/BOOT/grub.cfg" ]]; then
-        # NixOS-style ISO: parse grub.cfg for exact kernel/initrd paths
+        # NixOS-style ISO: delegate to EFI/BOOT/grub.cfg (iso_path / findiso)
         entry=$(generate_nixos_entry "$iso_file" "$tmp_iso_mount" 2>/dev/null || true)
-      elif [[ -f "$tmp_iso_mount/live/vmlinuz" ]]; then
-        # Debian/Kali-style live ISO
+      elif [[ -f "$tmp_iso_mount/boot/grub/grub.cfg" ]]; then
+        # Debian/Kali live ISO: delegate to internal grub.cfg
+        entry=$(generate_debian_live_entry "$iso_file" "$tmp_iso_mount" 2>/dev/null || true)
+      elif compgen -G "$tmp_iso_mount/live/vmlinuz*" >/dev/null; then
         entry=$(generate_kali_entry "$iso_file" "$tmp_iso_mount" 2>/dev/null || true)
       fi
       umount "$tmp_iso_mount" 2>/dev/null || true

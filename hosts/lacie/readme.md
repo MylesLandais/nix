@@ -7,10 +7,10 @@ Plug into any x86_64 UEFI machine, boot, and land in your environment.
 
 | Partition | Label | Size | Filesystem | Purpose |
 |-----------|-------|------|------------|---------|
-| p1 | `Ventoy` | 64 GiB | exFAT | Ventoy ISO boot partition — holds NixOS graphical installer ISO |
-| p2 | `VTOYEFI` | 32 MiB | FAT16 | Ventoy EFI + systemd-boot entries |
-| p3 | `live_nix` | 500 GiB | ext4 | NixOS system root — kernel, store, config, persistent state |
-| p4 | `persistent_data` | ~4 TiB | NTFS | Bulk storage — music, backups, shared files, secrets |
+| p1 | `LACIE_EFI` | 1 GiB | FAT32 | GRUB EFI + Kanagawa theme |
+| p2 | `lacie_isos` | 63 GiB | exFAT | ISO files for GRUB loopback boot |
+| p3 | `live_nix` | 500 GiB | ext4 | NixOS system root — kernel, store, config |
+| p4 | `persistent_data` | ~4 TiB | NTFS | Bulk storage — music, backups, secrets |
 
 The flake config and nix store live on `live_nix`. `persistent_data` mounts at `/mnt/data`.
 
@@ -22,33 +22,58 @@ The flake config and nix store live on `live_nix`. `persistent_data` mounts at `
 
 ## Building the Drive from Scratch
 
-Run `setup-nix-usb.sh` from the host machine (cerberus or any Linux system with the drive attached):
+Run `setup-nix-usb.sh` from cerberus (or any Linux system with the drive attached):
 
 ```bash
-nix-shell -p parted ntfs3g exfatprogs dosfstools wget gnutar curl git rsync --run \
+nix-shell -p parted ntfs3g exfatprogs dosfstools wget gnutar curl git rsync grub2 --run \
   "sudo ./scripts/setup-nix-usb.sh --device /dev/sdX --force-rebuild --skip-repo-sync"
 ```
 
-This installs Ventoy with reserved space, creates the extra partitions, formats them, and stages the latest NixOS ISO.
+Refresh GRUB entries after ISO changes (no repartition):
+
+```bash
+sudo ./scripts/setup-nix-usb.sh --device /dev/sda --grub-only
+```
+
+Scans `lacie_isos` (`/run/media/warby/lacie_isos` when automounted) and writes
+`/boot/grub/iso-entries.cfg` on `LACIE_EFI`. Re-run after adding or renaming any
+`*.iso` (e.g. `kali-linux-2026.1-live-everything-amd64.iso`). Kali/Debian images
+chain-load their own `/boot/grub/grub.cfg` via loopback (`iso_path`).
+
+QA: [`scripts/setup-nix-usb.QA.md`](../../scripts/setup-nix-usb.QA.md).
+
+## Boot testing in QEMU (cerberus)
+
+Test boot paths locally without switching machines. Full checklist: [`scripts/setup-nix-usb.QA.md`](../../scripts/setup-nix-usb.QA.md).
+
+```bash
+# Tier 1 — initrd findiso (fastest; use fresh toplevel boot artifacts)
+./scripts/extract-installer-boot.sh --build
+
+# Tier 2 — GRUB loopback (daily driver)
+sudo ./scripts/test-usb-qemu.sh --partitions --serial --auto-device
+
+# Tier 3 — full USB passthrough
+sudo ./scripts/test-usb-qemu.sh --device /dev/sda --serial
+```
+
+Flake: `nix run .#test-usb-qemu -- --help`
 
 ## Bootstrapping the NixOS Install
 
-Boot the target machine from the NixOS ISO via the Ventoy menu, then run:
+Boot the target machine from an ISO via the GRUB menu on lacie, then run:
 
 ```bash
-# From the live ISO session (network required):
-curl -fsSL https://raw.githubusercontent.com/MylesLandais/nix/main/scripts/bootstrap-lacie.sh \
-  | sudo bash
+sudo nix-install   # alias of bootstrap-lacie (from the live ISO)
 ```
 
-Or clone the repo and run locally:
+Or from a cloned repo:
 
 ```bash
-git clone https://github.com/MylesLandais/nix.git /tmp/nix
-sudo /tmp/nix/scripts/bootstrap-lacie.sh
+sudo ./scripts/bootstrap-lacie.sh
 ```
 
-The script handles: partition detection, mounting, hardware-configuration.nix generation, repo clone, and `nixos-install`. See `scripts/bootstrap-lacie.sh` for flags (`--dry-run`, `--skip-clone`, `--device`).
+The script handles: partition detection, mounting, hardware-configuration.nix generation, repo clone, and `nixos-install`. See `scripts/bootstrap-lacie.sh` for flags.
 
 ## Hermes API Key (AI Assistant)
 
@@ -60,19 +85,11 @@ echo 'ANTHROPIC_API_KEY=sk-ant-...' > /mnt/data/secrets/hermes.env
 chmod 600 /mnt/data/secrets/hermes.env
 ```
 
-Do this before rebooting after install, or on first boot before running `nixos-rebuild`.
-
 ## Day-to-Day Usage
 
 **Rebuild after config changes:**
-```bash
-sudo nixos-rebuild switch --flake /nix-configs#lacie
-```
 
-**Update flake inputs:**
 ```bash
-cd /nix-configs
-nix flake update
 sudo nixos-rebuild switch --flake /nix-configs#lacie
 ```
 
@@ -80,15 +97,9 @@ sudo nixos-rebuild switch --flake /nix-configs#lacie
 
 ## SSH and Git Auth
 
-The default install has no SSH keys. Options:
-
 - Copy `~/.ssh/` from cerberus via Tailscale after first boot
-- Generate a new USB-specific keypair: `ssh-keygen -t ed25519 -C "lacie"`
+- Generate a USB-specific keypair: `ssh-keygen -t ed25519 -C "lacie"`
 - Vault/trust bootstrap with cerberus — planned, not yet implemented
-
-## Vault / Trust Bootstrap (Planned)
-
-Future work: establish a trust relationship between lacie and cerberus so secrets can sync over Tailscale without manual key copying. Likely via agenix with a lacie-specific age key stored on `persistent_data`.
 
 ## Flake Target
 
@@ -97,6 +108,7 @@ nixosConfigurations.lacie
 ```
 
 Build without applying:
+
 ```bash
 nix build /nix-configs#nixosConfigurations.lacie.config.system.build.toplevel
 ```

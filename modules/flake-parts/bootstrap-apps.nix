@@ -147,12 +147,100 @@
           ln -s bootstrap-lacie $out/bin/nix-install
         '';
       };
+
+      test-usb-qemu = pkgs.writeShellApplication {
+        name = "test-usb-qemu";
+        runtimeInputs = with pkgs; [
+          qemu
+          OVMF.fd
+          util-linux
+          coreutils
+          gnugrep
+          gnused
+          openssh
+          nix
+        ];
+        text = ''
+          export OVMF_CODE="${pkgs.OVMF.fd}/FV/OVMF_CODE.fd"
+          export OVMF_VARS_SRC="${pkgs.OVMF.fd}/FV/OVMF_VARS.fd"
+          ${builtins.readFile ../../scripts/test-usb-qemu.sh}
+        '';
+      };
+
+      extract-installer-boot = pkgs.writeShellApplication {
+        name = "extract-installer-boot";
+        runtimeInputs = with pkgs; [
+          nix
+          coreutils
+          findutils
+        ];
+        text = builtins.readFile ../../scripts/extract-installer-boot.sh;
+      };
+
+      recovery-preflight = pkgs.writeShellApplication {
+        name = "recovery-preflight";
+        runtimeInputs = with pkgs; [
+          util-linux
+          coreutils
+          gnugrep
+          udisks2
+        ];
+        text = builtins.readFile ../../scripts/recovery-preflight.sh;
+      };
+
+      recovery-verify = pkgs.writeShellApplication {
+        name = "recovery-verify";
+        runtimeInputs = with pkgs; [
+          openssh
+          coreutils
+          gnugrep
+        ];
+        text = builtins.readFile ../../scripts/recovery-verify.sh;
+      };
+
+      iso-deploy = pkgs.writeShellApplication {
+        name = "iso-deploy";
+        runtimeInputs = with pkgs; [
+          nix
+          coreutils
+          util-linux
+          git
+          gnused
+          openssh
+        ];
+        text = builtins.readFile ../../scripts/iso-deploy.sh;
+      };
     in
     {
       packages.bootstrap-lacie = bootstrap-lacie;
+      packages.test-usb-qemu = test-usb-qemu;
+      packages.extract-installer-boot = extract-installer-boot;
+      packages.recovery-preflight = recovery-preflight;
+      packages.recovery-verify = recovery-verify;
+      packages.iso-deploy = iso-deploy;
       apps.bootstrap-lacie = {
         type = "app";
         program = "${bootstrap-lacie}/bin/bootstrap-lacie";
+      };
+      apps.test-usb-qemu = {
+        type = "app";
+        program = "${test-usb-qemu}/bin/test-usb-qemu";
+      };
+      apps.extract-installer-boot = {
+        type = "app";
+        program = "${extract-installer-boot}/bin/extract-installer-boot";
+      };
+      apps.recovery-preflight = {
+        type = "app";
+        program = "${recovery-preflight}/bin/recovery-preflight";
+      };
+      apps.recovery-verify = {
+        type = "app";
+        program = "${recovery-verify}/bin/recovery-verify";
+      };
+      apps.iso-deploy = {
+        type = "app";
+        program = "${iso-deploy}/bin/iso-deploy";
       };
     };
 }
