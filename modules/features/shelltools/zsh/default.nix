@@ -21,6 +21,7 @@
         source "$(fzf-share)/key-bindings.zsh"
         source "$(fzf-share)/completion.zsh"
         source <(fzf --zsh)
+        export SSH_AUTH_SOCK=$HOME/.bitwarden-ssh-agent.sock
       '';
       plugins = [
         {

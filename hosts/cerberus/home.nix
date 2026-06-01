@@ -343,6 +343,12 @@ let
   };
 in
 {
+  imports = [
+    ../../modules/features/hydra-smb.nix
+  ];
+
+  hydra-smb.enable = true;
+
   home.packages = [ hyprland_workspace_recovery ];
 
   xdg.configFile."hypr/hyprland.conf" = {
@@ -395,8 +401,6 @@ in
       hl.env("GTK_USE_PORTAL", "1")
       hl.env("XCURSOR_SIZE", "22")
       hl.env("EDITOR", "nvim")
-      hl.env("QT_STYLE_OVERRIDE", "")
-
       -- == Cerberus overrides (VRR, cursor, ecosystem) ==
       hl.config({
         misc = {
@@ -413,13 +417,13 @@ in
 
       -- == Cerberus startup ==
       hl.on("hyprland.start", function()
-        hl.exec_cmd("dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && systemctl --user stop hyprland-session.target && systemctl --user start hyprland-session.target")
+        hl.exec_cmd("systemctl --user start gnome-keyring.service")
+        hl.exec_cmd("dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SSH_AUTH_SOCK && systemctl --user stop hyprland-session.target && systemctl --user start hyprland-session.target")
         hl.exec_cmd("${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1")
         hl.exec_cmd("hyprctl output create headless HEADLESS-1")
         hl.exec_cmd("blueman-applet")
-        -- Bitwarden: start minimised to tray so the SSH agent socket is
-        -- available for git signing as soon as you unlock the vault.
-        hl.exec_cmd("bitwarden-desktop --minimized")
+        -- GVfs Hydra mount after keyring (restores pre-2e9e10b hypr.nix session ordering)
+        hl.exec_cmd("systemctl --user start mount-hydra.service")
       end)
     ''
   );
@@ -434,22 +438,24 @@ in
     ];
   };
 
-  home.file."Hydra".source = config.lib.file.mkOutOfStoreSymlink
-    "/run/user/1000/gvfs/smb-share:server=hydra,share=data";
-
-  systemd.user.services.mount-hydra = {
-    Unit = {
-      Description = "Mount Hydra SMB Share";
-      After = [ "graphical-session.target" "network-online.target" ];
-      Wants = [ "network-online.target" ];
-    };
-    Service = {
-      ExecStart = "${pkgs.glib}/bin/gio mount smb://hydra/data";
-      Restart = "on-failure";
-      RestartSec = "30s";
-    };
-    Install.WantedBy = [ "graphical-session.target" ];
-  };
+  # Brave with CDP debug port -- enables Chrome DevTools Protocol access
+  # for Hermes agent to read tabs and capture page content.
+  home.file.".local/share/applications/brave-browser.desktop".text =
+    let brave = "${pkgs.brave}/bin/brave";
+    in ''
+      [Desktop Entry]
+      Version=1.0
+      Name=Brave Web Browser
+      GenericName=Web Browser
+      Comment=Access the internet
+      Exec=${brave} --remote-debugging-port=9222 %U
+      StartupNotify=true
+      Terminal=false
+      Icon=brave-browser
+      Type=Application
+      Categories=Network;WebBrowser;
+      MimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;x-scheme-handler/unknown;application/xhtml+xml;application/xml;
+    '';
 
   systemd.user.services.hyprland-workspace-recovery = {
     Unit = {

@@ -52,6 +52,18 @@
       SSH_AUTH_SOCK = "${config.home.homeDirectory}/.bitwarden-ssh-agent.sock";
     };
 
+    file = let
+      heliumFlags = ''
+        --ozone-platform-hint=wayland
+        --enable-wayland-ime
+        --enable-features=VerticalTabs,SidePanelPinning
+        --enable-features=VaapiVideoDecoder,VaapiVideoEncoder
+        --ignore-gpu-blocklist
+      '';
+    in {
+      "${config.xdg.configHome}/helium-flags.conf".text = heliumFlags;
+    };
+
     packages = import ./packages.nix { inherit pkgs; };
     pointerCursor = {
       gtk.enable = true;
@@ -69,6 +81,27 @@
   gtk-mod.enable = true;
   hyprland.enable = true;
   terminals.enable = true;
+
+  # Gammastep: auto-adjust screen color temperature for eye fatigue reduction.
+  # Uses wayland backend for Hyprland. Coordinates default to Chicago (cerberus).
+  # Override per-host via hosts/<name>/home.nix if needed.
+  services.gammastep = {
+    enable = true;
+    provider = "manual";
+    latitude = 41.9;
+    longitude = -87.6;
+    temperature = {
+      day = 6500;
+      night = 3500;
+    };
+    settings = {
+      general = {
+        adjustment-method = "wayland";
+        brightness-day = 1.0;
+        brightness-night = 0.9;
+      };
+    };
+  };
 
   # Minimal programs configuration
   programs = {
@@ -118,9 +151,4 @@
     };
   };
 
-  qt = {
-    enable = false;
-    platformTheme.name = "gtk";
-    style.name = "kvantum";
-  };
 }

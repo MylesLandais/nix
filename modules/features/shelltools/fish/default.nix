@@ -16,6 +16,12 @@
         set -U fish_term24bit 1
         set -gx SSH_AUTH_SOCK $HOME/.bitwarden-ssh-agent.sock
         fish_vi_key_bindings
+        abbr -a bw --position anywhere -- 'bitwarden'
+        abbr -a bitwarden-desktop --position anywhere -- 'bitwarden'
+        # Force Bitwarden socket even when systemd/direnv still has stale gcr path.
+        if test -S "$HOME/.bitwarden-ssh-agent.sock"
+          set -gx SSH_AUTH_SOCK "$HOME/.bitwarden-ssh-agent.sock"
+        end
         function last_history_item; echo $history[1]; end
         export GEMINI_API_KEY=$(cat {$XDG_RUNTIME_DIR}/agenix/gemini)
         for line in (cat $XDG_RUNTIME_DIR/agenix/grafana)
