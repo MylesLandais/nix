@@ -48,6 +48,14 @@ in
                 enable = true;
                 components = [ "pkcs11" "secrets" ];
               };
+              systemd.user.services.gnome-keyring = {
+                install = lib.mkOverride 0 {
+                  WantedBy = [
+                    "graphical-session-pre.target"
+                    "hyprland-session.target"
+                  ];
+                };
+              };
             };
           extraSpecialArgs = {
             inherit inputs vars;

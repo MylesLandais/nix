@@ -18,7 +18,43 @@
     ../../modules/dev.nix
     ../../modules/agenix.nix
     ../../modules/hermes.nix
+    ../../modules/chromium-policy.nix
   ];
+
+  # ---------------------------------------------------------------------------
+  # Chromium-based browser policies (Helium, Chromium, etc.)
+  # ---------------------------------------------------------------------------
+  chromiumPolicies = {
+    enable = true;
+    browsers = {
+      helium = {
+        enable = true;
+        # Helium AppImage sandbox maps /etc/chromium into the bwrap container
+        # (see bwrap script line: --ro-bind-try /etc/chromium /etc/chromium)
+        # so policies must go through the chromium path for the sandbox.
+        policyPath = "chromium";
+        extensions = [
+          # uBlock Origin Lite (MV3) - content blocking
+          "ddkjiahejlhfcafbddmgiahcphecmpfh"
+          # Bitwarden - password manager
+          "nngceckbapebfimnlniiiahkandclblb"
+          # Dark Reader - dark mode for all sites
+          "eimadpbcbfnmbkopoojfekhnkhdbieeh"
+          # Sidebery - vertical tabs + tab management
+          "ldpochfccmkkmhdbclfhpkoapfpopohp"
+          # Vimium C - keyboard navigation
+          "aomjjhallfgjeglblejbfpaicpbiebcp"
+          # MarkDownload - markdown clipper
+          "hkgfoiooedgoejojocmhlaklpbjgoaco"
+        ];
+        flags = {
+          verticalTabs = true;
+          vaapi = true;
+          wayland = true;
+        };
+      };
+    };
+  };
 
   # ---------------------------------------------------------------------------
   # Nix Package Manager
@@ -100,6 +136,33 @@
   };
 
   services.tailscale.enable = true;
+
+  # AdGuard Home: network-wide ad blocking DNS server
+  services.adguardhome = {
+    enable = true;
+    openFirewall = true;
+    # Docker already uses :3000, so admin UI goes to :8080
+    port = 8080;
+    settings = {
+      dns = {
+        bind_host = "0.0.0.0";
+        port = 53;
+        upstream_dns = [
+          "https://dns.quad9.net/dns-query"
+          "tls://dns.quad9.net"
+        ];
+        bootstrap_dns = [
+          "9.9.9.9"
+          "149.112.112.112"
+        ];
+        ratelimit = 30;
+        cache_size = 8388608;
+      };
+      filtering = {
+        enabled = true;
+      };
+    };
+  };
 
   services.openssh = {
     enable = true;
@@ -246,6 +309,9 @@
     };
   };
 
+  # Hydra (Unraid): short name for smb://hydra/… in Nemo and gio mount
+  networking.hosts."192.168.0.222" = [ "hydra" "hydra.local" ];
+
   # mDNS discovery for Moonlight clients
   services.avahi = {
     enable = true;
@@ -266,7 +332,11 @@
     openFirewall = true;
   };
 
-  services.gvfs.enable = true;
+  # Full GNOME GVfs (includes SMB); required for Nemo "Network" / smb:// on Hyprland.
+  services.gvfs = {
+    enable = true;
+    package = lib.mkForce pkgs.gnome.gvfs;
+  };
   services.udisks2.enable = true;
   services.tumbler.enable = true;
 
@@ -468,6 +538,7 @@
 
   security.polkit.enable = true;
   services.gnome.gnome-keyring.enable = true;
+  services.gnome.gcr-ssh-agent.enable = false;
   programs.seahorse.enable = true;
 
   # Replace NixOS's default x11_ssh_askpass with the GTK-themed seahorse one
@@ -507,6 +578,31 @@
           command = "/run/current-system/sw/bin/systemctl";
           options = [ "NOPASSWD" ];
         }
+        # lacie USB boot loop — QEMU tests, ISO staging, GRUB refresh
+        {
+          command = "/home/warby/.config/nixos/scripts/test-usb-qemu.sh";
+          options = [ "NOPASSWD" "SETENV" ];
+        }
+        {
+          command = "/home/warby/.config/nixos/scripts/setup-nix-usb.sh";
+          options = [ "NOPASSWD" "SETENV" ];
+        }
+        {
+          command = "/home/warby/.config/nixos/scripts/stage-installer-iso.sh";
+          options = [ "NOPASSWD" "SETENV" ];
+        }
+        {
+          command = "/home/warby/.config/nixos/scripts/iso-deploy.sh";
+          options = [ "NOPASSWD" "SETENV" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/mount";
+          options = [ "NOPASSWD" "SETENV" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/umount";
+          options = [ "NOPASSWD" "SETENV" ];
+        }
       ];
     }
   ];
@@ -522,8 +618,10 @@
     description = "warby";
     extraGroups = [
       "audio"
+      "disk"
       "docker"
       "input"
+      "kvm"
       "networkmanager"
       "render"
       "video"
@@ -599,20 +697,11 @@
     {
       "name": "com.8bit.bitwarden",
       "description": "Bitwarden desktop integration",
-      "path": "${pkgs.bitwarden-desktop}/bin/bitwarden-desktop",
+      "path": "${pkgs.bitwarden-desktop}/bin/bitwarden",
       "type": "stdio",
       "allowed_extensions": ["{446900e4-71c2-419f-a6a7-df9c091e268b}"]
     }
   '';
-
-  # Helium (Chromium fork) policy: force-install uBlock Origin Lite + Bitwarden.
-  # Helium honours the Chromium-standard /etc/<binary>/policies/managed path.
-  environment.etc."helium/policies/managed/extensions.json".text = builtins.toJSON {
-    ExtensionInstallForcelist = [
-      "ddkjiahejlhfcafbddmgiahcphecmpfh;https://clients2.google.com/service/update2/crx"
-      "nngceckbapebfimnlniiiahkandclblb;https://clients2.google.com/service/update2/crx"
-    ];
-  };
 
   # ---------------------------------------------------------------------------
   # System Packages
