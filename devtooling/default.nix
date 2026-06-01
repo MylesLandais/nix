@@ -19,6 +19,7 @@
     ./rust
     ./tmux
     ./code
+    ./cursor
     ./zed
   ];
 
@@ -38,6 +39,7 @@
     rust.enable = lib.mkDefault false;
     tmux.enable = lib.mkDefault false;
     code.enable = lib.mkDefault true;
+    cursor.enable = lib.mkDefault true;
     zed.enable = lib.mkDefault true;
   };
 }

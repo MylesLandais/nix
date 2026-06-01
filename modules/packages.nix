@@ -14,6 +14,7 @@ with pkgs;
   bulletty
   cava
   cliphist
+  code-cursor
   coreutils
   copilot-language-server
   # nemo and file-roller are managed by the gtk-mod feature (see modules/features/gtk/conf)
