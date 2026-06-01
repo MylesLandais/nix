@@ -9,6 +9,8 @@ let
   exec = cmd: "hl.dsp.exec_cmd(\"${cmd}\")";
   focus = dir: "hl.dsp.focus({ direction = \"${dir}\" })";
   wMove = dir: "hl.dsp.window.move({ direction = \"${dir}\" })";
+  wResize = dx: dy:
+    "hl.dsp.window.resize({ x = ${toString dx}, y = ${toString dy}, relative = true })";
   wsSwitch = ws: "hl.dsp.focus({ workspace = ${ws} })";
   wsMoveTo = ws: "hl.dsp.window.move({ workspace = ${ws} })";
 in
@@ -29,6 +31,14 @@ in
   ${bind "${mod} + SHIFT + L"       (wMove "r")}
   ${bind "${mod} + SHIFT + K"       (wMove "u")}
   ${bind "${mod} + SHIFT + J"       (wMove "d")}
+  ${bindO "${mod} + ALT + H"        (wResize (-15) 0) { repeating = true; }}
+  ${bindO "${mod} + ALT + L"        (wResize 15 0) { repeating = true; }}
+  ${bindO "${mod} + ALT + K"        (wResize 0 (-15)) { repeating = true; }}
+  ${bindO "${mod} + ALT + J"        (wResize 0 15) { repeating = true; }}
+  ${bindO "${mod} + ALT + left"     (wResize (-15) 0) { repeating = true; }}
+  ${bindO "${mod} + ALT + right"    (wResize 15 0) { repeating = true; }}
+  ${bindO "${mod} + ALT + up"       (wResize 0 (-15)) { repeating = true; }}
+  ${bindO "${mod} + ALT + down"     (wResize 0 15) { repeating = true; }}
   ${bind "${mod} + mouse_down"      (wsSwitch "\"e+1\"")}
   ${bind "${mod} + mouse_up"        (wsSwitch "\"e-1\"")}
   ${bind "XF86AudioRaiseVolume"     (exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")}
@@ -48,6 +58,7 @@ in
   ${bind "${mod} + N"               (exec "noctalia-shell ipc call notifications toggleHistory")}
   ${bind "${mod} + SHIFT + W"       (exec "noctalia-shell ipc call wallpaper toggle")}
   ${bind "${mod} + SHIFT + C"       (exec "noctalia-shell ipc call controlCenter toggle")}
+  ${bind "${mod} + SPACE"           (exec "noctalia-shell ipc call controlCenter toggle")}
 ''
 + (builtins.concatStringsSep "\n" (
     builtins.genList (

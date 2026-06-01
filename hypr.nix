@@ -438,8 +438,8 @@ in
         "match:class GLava, no_shadow on"
         "match:title GLava, no_initial_focus on"
         # Browser opacity rules
-        "match:class ^(chromium|Chromium|vivaldi|Vivaldi)$, opacity 1.0 override 1.0 override"
-        "match:class ^(chromium|Chromium|vivaldi|Vivaldi)$, no_blur on"
+        "match:class ^(chromium|Chromium|vivaldi|Vivaldi|helium|Helium)$, opacity 1.0 override 1.0 override"
+        "match:class ^(chromium|Chromium|vivaldi|Vivaldi|helium|Helium)$, no_blur on"
         # Gaming window rules - Steam client
         "match:class ^steam$, float on"
         "match:class ^steam$ title:^Steam$, workspace 1"

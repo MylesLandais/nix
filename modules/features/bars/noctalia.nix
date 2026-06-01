@@ -84,15 +84,15 @@
         bar = {
           backgroundOpacity = lib.mkForce 0;
           capsuleOpacity = lib.mkForce 1;
-          density = lib.mkForce "comfortable";
+          density = lib.mkForce "compact";
           exclusive = lib.mkForce true;
           floating = lib.mkForce true;
-          marginHorizontal = lib.mkForce 1;
-          marginVertical = lib.mkForce 0.25;
+          marginHorizontal = lib.mkForce 0.5;
+          marginVertical = lib.mkForce 0.15;
           monitors = [
 
           ];
-          outerCorners = true;
+          outerCorners = false;
           position = "top";
           showCapsule = true;
           showOutline = true;
@@ -100,13 +100,13 @@
           widgets = {
             center = [
               {
-                characterCount = 2;
+                characterCount = 1;
                 colorizeIcons = false;
                 enableScrollWheel = true;
                 followFocusedScreen = false;
                 groupedBorderOpacity = 1;
                 hideUnoccupied = false;
-                iconScale = 0.8;
+                iconScale = 0.7;
                 id = "Workspace";
                 labelMode = "index";
                 showApplications = false;
@@ -122,88 +122,26 @@
               }
               {
                 customFont = "";
-                formatHorizontal = "HH:mm ddd, MMM dd";
+                formatHorizontal = "HH:mm";
                 formatVertical = "HH mm - dd MM";
                 id = "Clock";
                 tooltipFormat = "HH:mm ddd, MMM dd";
                 useCustomFont = false;
                 usePrimaryColor = false;
               }
-              {
-                compactMode = true;
-                diskPath = "/";
-                id = "SystemMonitor";
-                showCpuTemp = true;
-                showCpuUsage = true;
-                showDiskUsage = false;
-                showGpuTemp = false;
-                showLoadAverage = false;
-                showMemoryAsPercent = false;
-                showMemoryUsage = true;
-                showNetworkStats = false;
-                useMonospaceFont = true;
-                usePrimaryColor = false;
-              }
-              {
-                colorizeIcons = false;
-                hideMode = "hidden";
-                id = "ActiveWindow";
-                maxWidth = 145;
-                scrollingMode = "hover";
-                showIcon = true;
-                useFixedWidth = false;
-              }
-              {
-                hideMode = "hidden";
-                hideWhenIdle = false;
-                id = "MediaMini";
-                maxWidth = 145;
-                scrollingMode = "hover";
-                showAlbumArt = false;
-                showArtistFirst = true;
-                showProgressRing = true;
-                showVisualizer = false;
-                useFixedWidth = false;
-                visualizerType = "linear";
-              }
             ];
             right = [
-              {
-                id = "ScreenRecorder";
-              }
               {
                 blacklist = [
 
                 ];
                 colorizeIcons = false;
                 drawerEnabled = true;
-                hidePassive = false;
+                hidePassive = true;
                 id = "Tray";
                 pinned = [
 
                 ];
-              }
-              {
-                hideWhenZero = false;
-                id = "NotificationHistory";
-                showUnreadBadge = true;
-              }
-              {
-                deviceNativePath = "";
-                displayMode = "onhover";
-                hideIfNotDetected = true;
-                id = "Battery";
-                showNoctaliaPerformance = false;
-                showPowerProfiles = false;
-                warningThreshold = 30;
-              }
-              {
-                displayMode = "onhover";
-                id = "Volume";
-              }
-              {
-                displayMode = "onhover";
-                id = "Brightness";
               }
               {
                 colorizeDistroLogo = false;
@@ -265,7 +203,7 @@
               id = "audio-card";
             }
             {
-              enabled = false;
+              enabled = true;
               id = "brightness-card";
             }
             {
@@ -325,22 +263,22 @@
           animationDisabled = false;
           animationSpeed = 1;
           avatarImage = "/home/franky/.face";
-          boxRadiusRatio = 1;
+          boxRadiusRatio = 0.4;
           compactLockScreen = false;
           lockScreenAnimations = true;
           enableLockScreenMediaControls = true;
           dimmerOpacity = 0.2;
           enableShadows = true;
           forceBlackScreenCorners = false;
-          iRadiusRatio = 1;
+          iRadiusRatio = 0.3;
           language = "";
           lockOnSuspend = true;
-          radiusRatio = 1;
+          radiusRatio = 0.5;
           scaleRatio = 1;
-          screenRadiusRatio = 1;
+          screenRadiusRatio = 0.5;
           shadowDirection = "bottom_right";
-          shadowOffsetX = 2;
-          shadowOffsetY = 3;
+          shadowOffsetX = 1;
+          shadowOffsetY = 2;
           showChangelogOnStartup = true;
           showHibernateOnLockScreen = false;
           showScreenCorners = false;
@@ -533,7 +471,7 @@
         ui = {
           bluetoothDetailsViewMode = "grid";
           bluetoothHideUnnamedDevices = false;
-          boxBorderEnabled = false;
+          boxBorderEnabled = true;
           fontDefault = lib.mkForce "Maple Mono NF";
           fontDefaultScale = lib.mkForce 1;
           fontFixed = lib.mkForce "monospace";

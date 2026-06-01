@@ -15,10 +15,13 @@
       autoEnable = false;
       enable = true;
       inherit (osConfig.host.themeData) base16Scheme;
+      polarity = "dark";
+      icons.dark = "Papirus-Dark";
       targets = {
         bat.enable = true;
         btop.enable = true;
         gtk.enable = false;
+        qt.enable = true;
         hyprland.enable = true;
         hyprpanel.enable = true;
         k9s.enable = true;

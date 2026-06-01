@@ -31,6 +31,7 @@
       nemo-fileroller # Nemo → "Open with Archive Manager" context menu bridge
       file-roller     # GNOME Archive Manager (backend for nemo-fileroller)
       evince          # GNOME document viewer (PDF, ePub, etc.)
+      gvfs            # SMB/network locations for Nemo (cosmic-files did not use GVfs)
 
       # Qt icon theme fallback: Papirus-Dark has complete freedesktop coverage.
       # The GTK icon theme (Kanagawa) inherits Yaru/gnome which are not installed,
@@ -39,7 +40,6 @@
       # (Inherits=breeze,hicolor — both installed) fills that gap without changing
       # the GTK visual theme.
       papirus-icon-theme
-      qt6Packages.qt6ct # Qt6 theme configurator; reads ~/.config/qt6ct/qt6ct.conf
     ];
 
     # XDG MIME associations for GTK-mode desktop.
@@ -76,15 +76,8 @@
       };
     };
 
-    # Point Qt6 apps (Quickshell/noctalia) at qt6ct so they use Papirus-Dark
-    # for icon lookup instead of inheriting the broken Kanagawa→Yaru chain.
-    home.sessionVariables.QT_QPA_PLATFORMTHEME = lib.mkDefault "qt6ct";
-
-    xdg.configFile."qt6ct/qt6ct.conf".text = ''
-      [Appearance]
-      icon_theme=Papirus-Dark
-      style=Fusion
-    '';
+    # Qt6 apps (Wireshark, etc.): platform theme and palette come from stylix
+    # (targets.qt + Kvantum Base16). Papirus-Dark icons via stylix.icons.dark.
 
     # Open Ghostty terminal from inside Nemo (right-click → "Open in Ghostty")
     home.file.".local/share/nemo/actions/open-ghostty.nemo_action".text = ''
@@ -98,6 +91,29 @@
       Extensions=dir;
       Quote=double
     '';
+
+    # Quickshell/Noctalia use QIcon::fromTheme (not gtk-icon-theme dconf alone).
+    # Match stylix.icons.dark so launcher entries like nemo (Icon=system-file-manager) resolve.
+    home.sessionVariables.QT_ICON_THEME = "Papirus-Dark";
+
+    # Prefer the app-specific icon name; more reliable than system-file-manager in Qt lookup.
+    xdg.desktopEntries.nemo = {
+      name = "Files";
+      comment = "Access and organize files";
+      exec = "nemo %U";
+      icon = "nemo";
+      terminal = false;
+      categories = [
+        "GNOME"
+        "GTK"
+        "Utility"
+        "Core"
+      ];
+      mimeType = [
+        "inode/directory"
+        "application/x-gnome-saved-search"
+      ];
+    };
 
     dconf.settings = {
       # Dark mode signal for portals (Firefox, Chrome, GTK4 apps)

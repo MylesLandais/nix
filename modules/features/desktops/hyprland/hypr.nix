@@ -29,7 +29,8 @@ let
 
   execOnce =
     [
-      "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+      "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_ICON_THEME"
+      "nm-applet --indicator &"
       "add_record_player"
       "wl-paste --watch cliphist store &"
     ]
@@ -42,10 +43,11 @@ in
   config = lib.mkIf config.hypr.enable {
     home.packages = [
       add_record_player
+      pkgs.networkmanagerapplet
     ];
     dbus.packages = [
       pkgs.pass-secret-service
-      pkgs.gcr
+      pkgs.gcr # GVfs / gnome-keyring integration (was in monolithic hypr.nix pre-dendritic)
       pkgs.gnome-settings-daemon
       pkgs.libsecret
     ];
@@ -144,8 +146,6 @@ in
         -- == Base env ==
         hl.env("XCURSOR_SIZE", "22")
         hl.env("EDITOR", "nvim")
-        hl.env("QT_STYLE_OVERRIDE", "")
-
         -- == Exec-once ==
         hl.on("hyprland.start", function()
         ${lib.concatMapStrings (cmd: "  hl.exec_cmd(\"${cmd}\")\n") execOnce}end)
