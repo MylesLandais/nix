@@ -5,6 +5,10 @@
   inputs,
   ...
 }:
+let
+  chromiumBrowsers = import ./chromium-browsers.nix { inherit lib; };
+  inherit (chromiumBrowsers) mkChromiumFlags;
+in
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -52,16 +56,12 @@
       SSH_AUTH_SOCK = "${config.home.homeDirectory}/.bitwarden-ssh-agent.sock";
     };
 
-    file = let
-      heliumFlags = ''
-        --ozone-platform-hint=wayland
-        --enable-wayland-ime
-        --enable-features=VerticalTabs,SidePanelPinning
-        --enable-features=VaapiVideoDecoder,VaapiVideoEncoder
-        --ignore-gpu-blocklist
-      '';
-    in {
-      "${config.xdg.configHome}/helium-flags.conf".text = heliumFlags;
+    file = {
+      "${config.xdg.configHome}/helium-flags.conf".text = mkChromiumFlags {
+        wayland = true;
+        verticalTabs = true;
+        vaapi = true;
+      };
     };
 
     packages = import ./packages.nix { inherit pkgs; };
