@@ -139,6 +139,7 @@ in
         hl.window_rule({ float = true, pin = true, no_shadow = true, size = "(monitor_w*0.5) (monitor_h*0.5)", move = "(monitor_w - window_w - 20) 20", no_initial_focus = true, match = { class = "mpv" } })
         hl.window_rule({ opacity = 0.90, match = { class = "^(vesktop)$" } })
         hl.window_rule({ opacity = 1.0, no_blur = true, match = { class = "^(zen-beta)$" } })
+        ${if lib.attrByPath [ "chromiumPolicies" "enable" ] false osConfig then lib.attrByPath [ "chromiumPolicies" "hyprlandExtraConfig" ] "" osConfig else ""}
 
         -- == Binds ==
         ${import ./config/bindings.nix { inherit lib mod; bar = osConfig.host.bar; }}

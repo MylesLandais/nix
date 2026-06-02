@@ -5,6 +5,15 @@ with lib;
 let
   cfg = config.chromiumPolicies;
 
+  # Hyprland window class patterns per browser key (Helium reports as Helium/Chromium).
+  hyprlandClassFor = browserName:
+    {
+      helium = "^(?i)(helium|chromium)$";
+      chromium = "^(?i)(chromium|helium)$";
+    }
+    .${browserName}
+    or "^(?i)${browserName}$";
+
   # Common Chromium policies we want across all browsers.
   # These are merged with per-browser policies.
   commonPolicies = {
@@ -113,10 +122,26 @@ let
     ++ (lib.optional (browserConfig.flags.extra != [])
       (lib.concatStringsSep "\n" browserConfig.flags.extra)
     );
+
+  mkHyprlandExtraConfig = enabledBrowsers:
+    concatStrings (
+      mapAttrsToList (
+        browserName: browserConfig:
+        optionalString browserConfig.hyprlandRules ''
+          hl.window_rule({ opacity = 1.0, no_blur = true, match = { class = "${hyprlandClassFor browserName}" } })
+        ''
+      ) enabledBrowsers
+    );
 in
 {
   options.chromiumPolicies = {
     enable = mkEnableOption "chromium-policy module";
+
+    hyprlandExtraConfig = mkOption {
+      type = types.str;
+      readOnly = true;
+      description = "Hyprland Lua window_rule snippets for enabled Chromium browsers.";
+    };
 
     browsers = mkOption {
       type = types.attrsOf (types.submodule {
@@ -196,18 +221,11 @@ in
         }
       ) enabledBrowsers;
 
-      # Generate Hyprland window rules for all enabled browsers
-      hyprRules = concatLists (mapAttrsToList (browserName: browserConfig:
-        lib.optional browserConfig.hyprlandRules [
-          "match:class ^${browserName}$, opacity 1.0 override 1.0 override"
-          "match:class ^${browserName}$, no_blur on"
-        ]
-      ) enabledBrowsers);
-
     in
     {
-      # Deploy managed policies for each browser
       environment.etc = policyFiles;
+
+      chromiumPolicies.hyprlandExtraConfig = mkHyprlandExtraConfig enabledBrowsers;
     }
   );
 }
