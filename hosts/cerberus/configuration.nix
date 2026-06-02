@@ -10,6 +10,10 @@
   ...
 }:
 
+let
+  chromiumBrowsers = import ../../modules/chromium-browsers.nix { inherit lib; };
+  inherit (chromiumBrowsers) chromiumStandardExtensions;
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -33,20 +37,7 @@
         # (see bwrap script line: --ro-bind-try /etc/chromium /etc/chromium)
         # so policies must go through the chromium path for the sandbox.
         policyPath = "chromium";
-        extensions = [
-          # uBlock Origin Lite (MV3) - content blocking
-          "ddkjiahejlhfcafbddmgiahcphecmpfh"
-          # Bitwarden - password manager
-          "nngceckbapebfimnlniiiahkandclblb"
-          # Dark Reader - dark mode for all sites
-          "eimadpbcbfnmbkopoojfekhnkhdbieeh"
-          # Sidebery - vertical tabs + tab management
-          "ldpochfccmkkmhdbclfhpkoapfpopohp"
-          # Vimium C - keyboard navigation
-          "aomjjhallfgjeglblejbfpaicpbiebcp"
-          # MarkDownload - markdown clipper
-          "hkgfoiooedgoejojocmhlaklpbjgoaco"
-        ];
+        extensions = chromiumStandardExtensions;
         flags = {
           verticalTabs = true;
           vaapi = true;

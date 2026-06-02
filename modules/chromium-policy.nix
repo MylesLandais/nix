@@ -20,6 +20,9 @@ let
     SpellcheckEnabled = true;
     PrintingEnabled = true;
 
+    # Do not prompt to become the default browser (Firefox uses a different key).
+    DefaultBrowserSettingEnabled = false;
+
     # Disable telemetry & data collection
     MetricsReportingEnabled = false;
     SafeBrowsingProtectionLevel = 1;       # standard, not enhanced (less data sent)
