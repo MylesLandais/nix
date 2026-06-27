@@ -15,6 +15,7 @@ with pkgs;
   cava
   cliphist
   code-cursor
+  cursor-cli # `cursor-agent` CLI
   coreutils
   copilot-language-server
   # nemo and file-roller are managed by the gtk-mod feature (see modules/features/gtk/conf)
