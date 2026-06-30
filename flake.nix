@@ -20,11 +20,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
-    # Held at this rev: newer nixvim dropped `programs.nixvim.cmp`, which the
-    # pinned frostvim modules still set. Bump together with frostvim once they
-    # are compatible again.
-    nixvim.url = "github:nix-community/nixvim/e5c7b40dc569f5c97ba2182d409f0fb54c02d7c1";
-    frostvim.url = "github:FKouhai/frostvim";
     helium.url = "github:FKouhai/helium2nix";
     agenix.url = "github:ryantm/agenix";
     trigo.url = "github:FKouhai/trigo";
@@ -33,6 +28,9 @@
     hermes-agent.url = "github:NousResearch/hermes-agent/v2026.6.19";
     nur.url = "github:nix-community/NUR";
     claude-code.url = "github:sadjow/claude-code-nix";
+    # numtide multi-agent flake: opencode, codex, gemini-cli, etc. Tracks
+    # upstream agent releases — `nix flake update llm` keeps them all current.
+    llm.url = "github:numtide/llm-agents.nix";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
     };
@@ -62,12 +60,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    opencode = {
-      # Held at this rev: opencode 1.17.7 requires bun@^1.3.14 but the pinned
-      # nixpkgs only has bun 1.3.13, so the build fails. Bump once nixpkgs
-      # catches up to bun >= 1.3.14.
-      url = "github:anomalyco/opencode/c48000655458bf1317314413259808b8f8293dd0";
-    };
     tokyonight.url = "github:mrjones2014/tokyonight.nix";
     stylix = {
       url = "github:danth/stylix";
@@ -85,6 +77,11 @@
       imports = [
         (import-tree ./modules/hosts)
         (import-tree ./modules/services)
+        (import-tree ./modules/infra)
+        (import-tree ./modules/database)
+        (import-tree ./modules/security)
+        (import-tree ./modules/networking)
+        (import-tree ./modules/profiles)
         (import-tree ./modules/flake-parts)
       ];
       systems = [ "x86_64-linux" ];
