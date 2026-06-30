@@ -1,75 +1,96 @@
-{ lib, mod, bar }:
+{
+  lib,
+  mod,
+  bar,
+}:
 let
   bind = keys: action: "hl.bind(\"${keys}\", ${action})";
-  optsToLua = opts:
-    "{ " + lib.concatStringsSep ", "
-      (lib.mapAttrsToList (k: v: "${k} = ${lib.boolToString v}") opts) + " }";
-  bindO = keys: action: opts:
+  optsToLua =
+    opts:
+    "{ "
+    + lib.concatStringsSep ", " (lib.mapAttrsToList (k: v: "${k} = ${lib.boolToString v}") opts)
+    + " }";
+  bindO =
+    keys: action: opts:
     "hl.bind(\"${keys}\", ${action}, ${optsToLua opts})";
   exec = cmd: "hl.dsp.exec_cmd(\"${cmd}\")";
   focus = dir: "hl.dsp.focus({ direction = \"${dir}\" })";
   wMove = dir: "hl.dsp.window.move({ direction = \"${dir}\" })";
-  wResize = dx: dy:
-    "hl.dsp.window.resize({ x = ${toString dx}, y = ${toString dy}, relative = true })";
+  wResize =
+    dx: dy: "hl.dsp.window.resize({ x = ${toString dx}, y = ${toString dy}, relative = true })";
   wsSwitch = ws: "hl.dsp.focus({ workspace = ${ws} })";
   wsMoveTo = ws: "hl.dsp.window.move({ workspace = ${ws} })";
 in
 ''
-  ${bind "${mod} + RETURN"          (exec "ghostty")}
-  ${bind "${mod} + W"               (exec "helium")}
-  ${bind "${mod} + D"               (exec "vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto")}
-  ${bind "${mod} + Q"               "hl.dsp.window.close()"}
-  ${bind "${mod} + M"               "hl.dsp.exit()"}
-  ${bind "${mod} + E"               (exec "nemo")}
-  ${bind "${mod} + V"               "hl.dsp.window.float()"}
-  ${bind "${mod} + P"               (exec "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy")}
-  ${bind "${mod} + H"               (focus "l")}
-  ${bind "${mod} + L"               (focus "r")}
-  ${bind "${mod} + K"               (focus "u")}
-  ${bind "${mod} + J"               (focus "d")}
-  ${bind "${mod} + SHIFT + H"       (wMove "l")}
-  ${bind "${mod} + SHIFT + L"       (wMove "r")}
-  ${bind "${mod} + SHIFT + K"       (wMove "u")}
-  ${bind "${mod} + SHIFT + J"       (wMove "d")}
-  ${bindO "${mod} + ALT + H"        (wResize (-15) 0) { repeating = true; }}
-  ${bindO "${mod} + ALT + L"        (wResize 15 0) { repeating = true; }}
-  ${bindO "${mod} + ALT + K"        (wResize 0 (-15)) { repeating = true; }}
-  ${bindO "${mod} + ALT + J"        (wResize 0 15) { repeating = true; }}
-  ${bindO "${mod} + ALT + left"     (wResize (-15) 0) { repeating = true; }}
-  ${bindO "${mod} + ALT + right"    (wResize 15 0) { repeating = true; }}
-  ${bindO "${mod} + ALT + up"       (wResize 0 (-15)) { repeating = true; }}
-  ${bindO "${mod} + ALT + down"     (wResize 0 15) { repeating = true; }}
-  ${bind "${mod} + mouse_down"      (wsSwitch "\"e+1\"")}
-  ${bind "${mod} + mouse_up"        (wsSwitch "\"e-1\"")}
-  ${bind "XF86AudioRaiseVolume"     (exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")}
-  ${bind "XF86AudioLowerVolume"     (exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")}
-  ${bindO "${mod} + mouse:272"      "hl.dsp.window.drag()"   { mouse = true; }}
-  ${bindO "${mod} + mouse:273"      "hl.dsp.window.resize()" { mouse = true; }}
+  ${bind "${mod} + RETURN" (exec "ghostty")}
+  ${bind "${mod} + W" (exec "helium")}
+  ${bind "${mod} + D" (exec "vesktop")}
+  ${bind "${mod} + Q" "hl.dsp.window.close()"}
+  ${bind "${mod} + M" "hl.dsp.exit()"}
+  ${bind "${mod} + E" (exec "nemo")}
+  ${bind "${mod} + V" "hl.dsp.window.float()"}
+  ${bind "${mod} + P" (exec "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy")}
+  ${bind "${mod} + H" (focus "l")}
+  ${bind "${mod} + L" (focus "r")}
+  ${bind "${mod} + K" (focus "u")}
+  ${bind "${mod} + J" (focus "d")}
+  ${bind "${mod} + SHIFT + H" (wMove "l")}
+  ${bind "${mod} + SHIFT + L" (wMove "r")}
+  ${bind "${mod} + SHIFT + K" (wMove "u")}
+  ${bind "${mod} + SHIFT + J" (wMove "d")}
+  ${bindO "${mod} + ALT + H" (wResize (-15) 0) { repeating = true; }}
+  ${bindO "${mod} + ALT + L" (wResize 15 0) { repeating = true; }}
+  ${bindO "${mod} + ALT + K" (wResize 0 (-15)) { repeating = true; }}
+  ${bindO "${mod} + ALT + J" (wResize 0 15) { repeating = true; }}
+  ${bindO "${mod} + ALT + left" (wResize (-15) 0) { repeating = true; }}
+  ${bindO "${mod} + ALT + right" (wResize 15 0) { repeating = true; }}
+  ${bindO "${mod} + ALT + up" (wResize 0 (-15)) { repeating = true; }}
+  ${bindO "${mod} + ALT + down" (wResize 0 15) { repeating = true; }}
+  ${bind "${mod} + mouse_down" (wsSwitch "\"e+1\"")}
+  ${bind "${mod} + mouse_up" (wsSwitch "\"e-1\"")}
+  ${bind "XF86AudioRaiseVolume" (exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+")}
+  ${bind "XF86AudioLowerVolume" (exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")}
+  ${bindO "${mod} + mouse:272" "hl.dsp.window.drag()" { mouse = true; }}
+  ${bindO "${mod} + mouse:273" "hl.dsp.window.resize()" { mouse = true; }}
 ''
 + lib.optionalString (bar == "noctalia") ''
-  ${bind "${mod} + B"               (exec "noctalia-shell ipc call lockScreen lock")}
-  ${bind "${mod} + C"               (exec "noctalia-shell ipc call plugin:clipper toggle")}
-  ${bind "${mod} + R"               (exec "noctalia-shell ipc call launcher toggle")}
-  ${bind "${mod} + S"               (exec "hyprshot -m region --clipboard-only")}
-  ${bind "${mod} + SHIFT + R"       (exec "noctalia-shell ipc call sessionMenu toggle")}
-  ${bind "${mod} + X"               (exec "noctalia-shell ipc call settings toggle")}
-  ${bind "${mod} + SHIFT + S"       (exec "obs")}
-  ${bind "${mod} + SHIFT + N"       (exec "noctalia-shell ipc call nightLight toggle")}
-  ${bind "${mod} + N"               (exec "noctalia-shell ipc call notifications toggleHistory")}
-  ${bind "${mod} + SHIFT + W"       (exec "noctalia-shell ipc call wallpaper toggle")}
-  ${bind "${mod} + SHIFT + C"       (exec "noctalia-shell ipc call controlCenter toggle")}
-  ${bind "${mod} + SPACE"           (exec "noctalia-shell ipc call controlCenter toggle")}
+  ${bind "${mod} + B" (exec "noctalia-shell ipc call lockScreen lock")}
+  ${bind "${mod} + C" (exec "noctalia-shell ipc call plugin:clipper toggle")}
+  ${bind "${mod} + R" (exec "noctalia-shell ipc call launcher toggle")}
+  ${bind "${mod} + S" (exec "hyprshot -m region --clipboard-only")}
+  ${bind "${mod} + SHIFT + R" (exec "noctalia-shell ipc call sessionMenu toggle")}
+  ${bind "${mod} + X" (exec "noctalia-shell ipc call settings toggle")}
+  ${bind "${mod} + SHIFT + S" (exec "obs")}
+  ${bind "${mod} + SHIFT + N" (exec "noctalia-shell ipc call nightLight toggle")}
+  ${bind "${mod} + N" (exec "noctalia-shell ipc call notifications toggleHistory")}
+  ${bind "${mod} + SHIFT + W" (exec "noctalia-shell ipc call wallpaper toggle")}
+  ${bind "${mod} + SHIFT + C" (exec "noctalia-shell ipc call controlCenter toggle")}
+  ${bind "${mod} + SPACE" (exec "noctalia-shell ipc call controlCenter toggle")}
 ''
++ lib.optionalString (bar == "ricelin") (
+  let
+    s = "$HOME/.config/hypr/scripts";
+  in
+  ''
+    ${bind "${mod} + R" (exec "${s}/launcher.sh")}
+    ${bind "${mod} + SPACE" (exec "${s}/launcher.sh")}
+    ${bind "${mod} + C" (exec "${s}/clipboard.sh")}
+    ${bind "${mod} + B" (exec "${s}/lock.sh")}
+    ${bind "${mod} + SHIFT + W" (exec "${s}/wallpaper-picker.sh")}
+    ${bindO "${mod} + SUPER_L" (exec "${s}/link.sh") { release = true; }}
+    ${bind "${mod} + S" (exec "grim -g \\\"$(slurp)\\\" - | wl-copy")}
+  ''
+)
 + (builtins.concatStringsSep "\n" (
-    builtins.genList (
-      i:
-      let
-        ws = toString (i + 1);
-        key = toString (i + 10);
-      in
-      ''
-        ${bind "${mod} + code:${key}"         (wsSwitch ws)}
-        ${bind "${mod} + SHIFT + code:${key}" (wsMoveTo ws)}
-      ''
-    ) 9
-  ))
+  builtins.genList (
+    i:
+    let
+      ws = toString (i + 1);
+      key = toString (i + 10);
+    in
+    ''
+      ${bind "${mod} + code:${key}" (wsSwitch ws)}
+      ${bind "${mod} + SHIFT + code:${key}" (wsMoveTo ws)}
+    ''
+  ) 9
+))

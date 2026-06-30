@@ -6,9 +6,23 @@ _: {
       ...
     }:
     {
-      imports = [
+        imports = [
         "${inputs.self}/hosts/cerberus/configuration.nix"
         "${inputs.self}/modules/features/ssh-keys.nix"
+        inputs.agenix.nixosModules.default
+        inputs.self.nixosModules.infraContract
+        inputs.self.nixosModules.infraSecrets
+        inputs.self.nixosModules.infraIngress
+        inputs.self.nixosModules.profileInfraSpine
+        inputs.self.nixosModules.profileDemoCerberus
+        inputs.self.nixosModules.postgresInfra
+        inputs.self.nixosModules.valkeyInfra
+        inputs.self.nixosModules.openbaoInfra
+        inputs.self.nixosModules.traefikInfra
+        inputs.self.nixosModules.authentikInfra
+        inputs.self.nixosModules.pyloadInfra
+        inputs.self.nixosModules.mayaWorkerInfra
+        inputs.self.nixosModules.agenixInfra
       ];
 
       nixpkgs.overlays = [
@@ -28,6 +42,7 @@ _: {
         gpuType = "nvidia";
         theme = "kanagawa-dragon";
         profile = "default";
+        gamehacking.enable = true;
         wallpaper = "${inputs.wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/3895e.jpg";
         mainMonitor = {
           name = "desc:Dell Inc. Dell S2716DG #ASPYT+r5vCzd";
@@ -42,5 +57,7 @@ _: {
           refresh = "60";
         };
       };
+
+      infra.demo.enable = true;
     };
 }

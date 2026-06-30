@@ -54,5 +54,13 @@ node_modules/
 ventoy-*.tar.gz
 ventoy-*/
 
+# windows-kit payload binaries — staged off-repo, never committed
+win-kit-staging/
+*.iso
+*.CAP
+*.cap
+*.swm
+Microsoft-Activation-Scripts*
+
 # Diagnostics
 .nix-usb-logs/

@@ -14,12 +14,18 @@
   config,
   lib,
   pkgs,
+  osConfig,
   ...
 }:
 let
   cfg = config.hydra-smb;
 
-  runtimeDir = "/run/user/${toString config.home.uid}";
+  uid =
+    if config.home.uid != null then
+      config.home.uid
+    else
+      lib.attrByPath [ "users" "users" config.home.username "uid" ] 1000 osConfig;
+  runtimeDir = "/run/user/${toString uid}";
   gvfsDir = "${runtimeDir}/gvfs/smb-share:server=${cfg.serverName},share=${cfg.share}";
 
   mountUri =
@@ -32,6 +38,14 @@ let
     mountUri
     "smb://guest@${cfg.serverName}/${cfg.share}"
   ];
+
+  gio = "${pkgs.glib}/bin/gio";
+
+  gioMount =
+    if cfg.authMode == "public" then
+      "${gio} mount smb://guest@${cfg.serverName}/${cfg.share}"
+    else
+      "${gio} mount ${mountUri}";
 
   mountScript = pkgs.writeShellScriptBin "mount-hydra-gvfs" ''
     set -euo pipefail
@@ -50,24 +64,10 @@ let
       exit 0
     fi
 
-    ready=0
-    for _ in $(seq 1 60); do
-      if timeout 2 bash -c "echo >/dev/tcp/${cfg.address}/445" 2>/dev/null; then
-        ready=1
-        break
-      fi
-      sleep 2
-    done
-    if [ "$ready" -ne 1 ]; then
-      echo "Hydra SMB (${cfg.address}:445) not reachable" >&2
-      rm -f "$shortcut"
-      exit 1
-    fi
-
     try_mount() {
       local uri="$1"
       echo "Trying: $uri"
-      ${lib.getExe pkgs.glib}/bin/gio mount "$uri"
+      ${gio} mount "$uri"
     }
 
     mounted=0
@@ -77,7 +77,7 @@ let
           mounted=1
           break
         fi
-        ${lib.getExe pkgs.glib}/bin/gio mount -u "$uri" 2>/dev/null || true
+        ${gio} mount -u "$uri" 2>/dev/null || true
       done
     else
       if try_mount "${mountUri}" && [ -d "$gvfs_path" ]; then
@@ -153,17 +153,19 @@ in
     home.packages = with pkgs; [
       samba
       cifs-utils
-      gvfs
       mountScript
       resetCredsScript
     ];
 
-    home.file.".smb/smb.conf".text = ''
-      [global]
-        client min protocol = SMB2
-        client max protocol = SMB3
-        map to guest = Bad User
-    '';
+    home.file = {
+      "Hydra".source = config.lib.file.mkOutOfStoreSymlink gvfsDir;
+      ".smb/smb.conf".text = ''
+        [global]
+          client min protocol = SMB2
+          client max protocol = SMB3
+          map to guest = Bad User
+      '';
+    };
 
     dconf.settings."org/gnome/system/smb" = {
       workgroup = "WORKGROUP";
@@ -172,6 +174,8 @@ in
     systemd.user.services.mount-hydra = {
       Unit = {
         Description = "Mount Hydra SMB share (${cfg.share}) via GVfs for Nemo";
+        # SMB mount is best-effort; do not block home-manager activation on it.
+        X-SwitchMethod = "keep-old";
         After = [
           "gvfs-daemon.service"
           "gnome-keyring.service"
@@ -186,16 +190,19 @@ in
         ];
       };
       Service = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = lib.getExe mountScript;
+        ExecStart = gioMount;
+        Restart = "on-failure";
+        RestartSec = "30s";
       };
-      Install.WantedBy = [ "hyprland-session.target" ];
+      Install.WantedBy = [
+        "graphical-session.target"
+        "hyprland-session.target"
+      ];
     };
 
     systemd.user.timers.mount-hydra-retry = {
       Unit.Description = "Retry Hydra GVfs mount";
-      timerConfig = {
+      Timer = {
         OnBootSec = "2min";
         OnUnitInactiveSec = "5min";
         Unit = "mount-hydra.service";

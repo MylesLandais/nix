@@ -5,11 +5,16 @@ with lib;
 let
   cfg = config.chromiumPolicies;
 
-  # Hyprland window class patterns per browser key (Helium reports as Helium/Chromium).
+  chromiumBrowsers = import ./chromium-browsers.nix { inherit lib; };
+  inherit (chromiumBrowsers) chromiumExtensionMeta;
+
+  extensionMeta = chromiumExtensionMeta;
+
   hyprlandClassFor = browserName:
     {
       helium = "^(?i)(helium|chromium)$";
       chromium = "^(?i)(chromium|helium)$";
+      vivaldi = "^(?i)vivaldi$";
     }
     .${browserName}
     or "^(?i)${browserName}$";
@@ -45,60 +50,55 @@ let
     ExtensionSettings = {
       "*" = {
         installation_mode = "allowed";
-        minimum_version_required = "";
-        update_url = "https://clients2.google.com/service/update2/crx";
+        update_url = cwsUpdateUrl;
       };
     };
   };
 
-  # Extension IDs mapped to human names for readability.
-  # These are Chromium Web Store IDs.
-  extensionMeta = {
-    "ddkjiahejlhfcafbddmgiahcphecmpfh" = "uBlock Origin Lite";   # MV3
-    "cjpalhdlnbpafiamejdnhcphjbkeiagm" = "uBlock Origin";        # MV2 (Chromium)
-    "nngceckbapebfimnlniiiahkandclblb" = "Bitwarden";
-    "eimadpbcbfnmbkopoojfekhnkhdbieeh" = "Dark Reader";
-    "dbnnaeemhnkgddpbkfmbgglgpgmhemdj" = "Tabli";
-    "ldpochfccmkkmhdbclfhpkoapfpopohp" = "Sidebery";            # Vertical tabs + tab manager
-    "hkgfoiooedgoejojocmhlaklpbjgoaco" = "MarkDownload";
-    "aomjjhallfgjeglblejbfpaicpbiebcp" = "Vimium C";
-    "ghbmnnjooekpmoecnnnilnnbdlolhkhi" = "Google Docs Offline";
-    "mnjggcdmjocbbbhaepdchnknhmbkhfif" = "Enhancer for YouTube";
-    "gighmmpiobklfepjocnamgkkbiglidom" = "AdBlock";
-  };
+  cwsUpdateUrl = "https://clients2.google.com/service/update2/crx";
+  # Helium rewrites CWS fetches through its proxy; policy update_url must match.
+  heliumExtensionUpdateUrl = "https://services.helium.imput.net/ext";
 
   # Build ExtensionInstallForcelist from extension IDs.
-  mkForceList = extIds: map (id:
-    let
-      name = extensionMeta.${id} or id;
-    in
-    "${id};https://clients2.google.com/service/update2/crx"
+  mkForceList = updateUrl: extIds: map (id:
+    "${id};${updateUrl}"
   ) extIds;
 
   # Generate the full policies JSON for a given browser config.
   mkPoliciesJson = browserConfig:
     let
-      extSettings = if browserConfig.extensions != null then
-        # Build per-extension settings for force-installed extensions.
-        listToAttrs (map (id: {
+      updateUrl = browserConfig.extensionUpdateUrl;
+      extSettings =
+        (if browserConfig.extensions != null then
+          listToAttrs (map (id: {
+            name = id;
+            value = {
+              installation_mode = "force_installed";
+              update_url = updateUrl;
+              override_update_url = true;
+            };
+          }) browserConfig.extensions)
+        else
+          { })
+        // listToAttrs (map (id: {
           name = id;
           value = {
-            installation_mode = "force_installed";
-            minimum_version_required = "";
-            update_url = "https://clients2.google.com/service/update2/crx";
+            installation_mode = "removed";
           };
-        }) browserConfig.extensions)
-      else
-        commonPolicies.ExtensionSettings;
+        }) (browserConfig.removedExtensions or [ ]));
     in
     builtins.toJSON (
       (removeAttrs commonPolicies [ "ExtensionSettings" ])
       // browserConfig.policies
       // {
-        ExtensionSettings = extSettings;
+        ExtensionSettings = (commonPolicies.ExtensionSettings // {
+          "*" = (commonPolicies.ExtensionSettings."*" // {
+            update_url = updateUrl;
+          });
+        }) // extSettings;
       }
       // (if browserConfig.extensions != null then {
-        ExtensionInstallForcelist = mkForceList browserConfig.extensions;
+        ExtensionInstallForcelist = mkForceList updateUrl browserConfig.extensions;
       } else {})
     );
 
@@ -152,6 +152,24 @@ in
             type = types.nullOr (types.listOf types.str);
             default = null;
             description = "Extension IDs to force-install. Null = allow all, empty = block all.";
+          };
+
+          removedExtensions = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            description = ''
+              Extension IDs to uninstall and block (installation_mode = removed).
+              Use for bundled component extensions that duplicate force_installed ones.
+            '';
+          };
+
+          extensionUpdateUrl = mkOption {
+            type = types.str;
+            default = cwsUpdateUrl;
+            description = ''
+              CRX update URL for force_installed extensions. Helium must use
+              https://services.helium.imput.net/ext instead of the Chrome Web Store.
+            '';
           };
 
           policies = mkOption {
@@ -213,6 +231,22 @@ in
     let
       enabledBrowsers = filterAttrs (name: b: b.enable) cfg.browsers;
 
+      heliumInitialPreferences =
+        optionalAttrs (enabledBrowsers ? helium) {
+          helium = {
+            services = {
+              enabled = true;
+              ext_proxy = true;
+              consented = true;
+            };
+          };
+          vertical_tabs = {
+            enabled = true;
+            collapsed_state = false;
+            uncollapsed_width = 200;
+          };
+        };
+
       # Generate /etc/$browser/policies/managed/XXXX.json entries
       policyFiles = mapAttrs' (browserName: browserConfig:
         let p = browserConfig.policyPath; in
@@ -223,7 +257,11 @@ in
 
     in
     {
-      environment.etc = policyFiles;
+      environment.etc =
+        policyFiles
+        // optionalAttrs (heliumInitialPreferences != { }) {
+          "chromium/initial_preferences".text = builtins.toJSON heliumInitialPreferences;
+        };
 
       chromiumPolicies.hyprlandExtraConfig = mkHyprlandExtraConfig enabledBrowsers;
     }

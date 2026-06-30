@@ -13,6 +13,17 @@ in
   programs.ssh = {
     enable = true;
     extraConfig = ''
+      # hydra (Unraid) — passphrase-less automation/support-agent key. MUST precede the
+      # "Host *" block below so IdentityAgent/IdentityFile win (ssh takes the first value
+      # per option). Bypasses the Bitwarden agent (whose key hydra doesn't accept) and the
+      # passphrase-locked id_ed25519. Pubkey persists on hydra flash root.pubkeys.
+      Host hydra
+        HostName 192.168.0.222
+        User root
+        IdentityFile ~/.ssh/homelab_admin
+        IdentitiesOnly yes
+        IdentityAgent none
+
       Host *
         IdentityAgent ${bwSock}
 

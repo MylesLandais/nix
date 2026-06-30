@@ -10,7 +10,6 @@
 {
   imports = [
     ./hypr.nix
-    # ./nixvim  # Temporarily disabled
     ./hyprpanel.nix
     ./modules/pro.nix # Professional creative tools
     ./modules/firefox.nix # Firefox configuration
@@ -168,7 +167,7 @@
       obsidian
       opencloud-desktop
       inputs.codex-nix.packages.x86_64-linux.default
-      inputs.opencode.packages.x86_64-linux.default
+      inputs.llm.packages.x86_64-linux.opencode
       p7zip # Provides '7z' for .zip, .7z, etc.
       pavucontrol
       (hyprshot.overrideAttrs (oldAttrs: {
@@ -264,6 +263,9 @@
     ssh = {
       enable = true;
       matchBlocks = {
+        # NOTE: this root ./home.nix is NOT imported by any host (dead code — the live
+        # HM entrypoint is modules/home.nix). The active hydra SSH config lives in
+        # modules/features/ssh-bitwarden.nix. Left as-is to avoid a misleading half-edit.
         "hydra" = {
           hostname = "192.168.0.222";
           user = "root";
@@ -335,13 +337,19 @@
     };
     mpv = {
       enable = true;
+      # NOTE: gpu-api MUST stay opengl on cerberus. Vulkan fails to init a GPU
+      # context here, so mpv silently cascades to vo=vdpau over Xwayland -> blank
+      # 4K video + window lands off the visible Wayland monitors. vo=gpu-next +
+      # opengl + wayland is the verified-working path. Do not "fix" back to vulkan.
+      # See Vault/setup-mpv.md and memory workstation-vulkan-broken-mpv.
       config = {
+        vo = "gpu-next";
         gpu-context = "wayland";
-        hwdec = "auto-copy";
+        hwdec = "auto-safe";
         hwdec-codecs = "all";
         hr-seek-framedrop = "no";
         profile = "gpu-hq";
-        gpu-api = "vulkan";
+        gpu-api = "opengl";
         screenshot-format = "png";
         screenshot-high-bit-depth = "yes";
         screenshot-png-compression = "0";

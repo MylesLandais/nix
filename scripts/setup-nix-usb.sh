@@ -118,6 +118,9 @@ Missing required tools on this system.
 Recommended fallback:
   nix-shell -p parted gptfdisk exfatprogs dosfstools grub2_efi ntfs3g wget curl git rsync --run \\
     "sudo -E ./scripts/$SCRIPT_NAME --device /dev/sdX"
+
+GRUB-only refresh (use the block device that owns LACIE_EFI — often /dev/sdb):
+  nix-shell -p grub2_efi --run "sudo -E ./scripts/$SCRIPT_NAME --device /dev/sdX --grub-only"
 EOF
 }
 
@@ -272,42 +275,90 @@ menuentry "${title}" --class nixos {
 ENTRY
 }
 
+# Staged copy on live_nix (ext4) for installer — see scripts/stage-kali-for-install.sh
+KALI_EXT4_ISO_NAME="kali-installer-loopback.iso"
+
+generate_kali_installer_menuentry() {
+  local title="$1"
+  local isopart_label="$2"   # partition label: lacie_isos or live_nix
+  local isofile="$3"         # path on that partition, e.g. /kali-linux-....iso
+  local iso_mount="$4"       # loop-mount of the ISO (to verify gtk installer exists)
+
+  [[ -f "$iso_mount/install/gtk/vmlinuz" && -f "$iso_mount/install/gtk/initrd.gz" ]] || return 0
+
+  cat <<ENTRY
+menuentry "${title}" --class kali {
+  search --no-floppy --label --set=isopart ${isopart_label}
+  set isofile="${isofile}"
+  set iso_path=\$isofile
+  export iso_path
+  loopback loop (\$isopart)\$isofile
+  set root=(loop)
+  export root
+  linux (loop)/install/gtk/vmlinuz findiso=\$isofile iso-scan/filename=\$isofile live-media=/dev/disk/by-label/${isopart_label} priority=low vga=788 net.ifnames=0 --- quiet
+  initrd (loop)/install/gtk/initrd.gz
+}
+
+ENTRY
+}
+
 generate_debian_live_entry() {
   local iso_file="$1"
   local iso_mount="$2"
   local iso_grub_cfg="$iso_mount/boot/grub/grub.cfg"
 
-  # Debian/Kali live ISOs ship /boot/grub/grub.cfg with /live/vmlinuz-* paths.
-  # configfile (loop) does NOT work: inner linux/initrd lines lack (loop) and GRUB
-  # resolves them against LACIE_EFI ("file /live/vmlinuz-* not found").
+  # Debian/Kali live ISOs ship /boot/grub/grub.cfg (live, installer, persistence).
+  # Inner installer lines lack findiso — d-i fails with "incorrect installation media"
+  # when loopback from exFAT. Live menu: root=(loop) + source. Installer: explicit
+  # menuentry with findiso (exFAT may still fail — use stage-kali-for-install.sh).
   [[ -f "$iso_grub_cfg" ]] || return 1
+  grep -q 'findiso' "$iso_grub_cfg" || return 1
 
-  local linux_line initrd_line
-  linux_line=$(grep -m1 -E '^[[:space:]]*linux[[:space:]]+/live/vmlinuz' "$iso_grub_cfg" || true)
-  initrd_line=$(grep -m1 -E '^[[:space:]]*initrd[[:space:]]+/live/initrd' "$iso_grub_cfg" || true)
-  [[ -n "$linux_line" && -n "$initrd_line" ]] || return 1
-
-  local vmlinuz_rel initrd_rel kargs title
-  vmlinuz_rel=$(awk '{print $2}' <<<"$linux_line")
-  initrd_rel=$(awk '{print $2}' <<<"$initrd_line")
-  kargs=$(awk '{$1=$2=""; sub(/^[ \t]+/, ""); print}' <<<"$linux_line")
-  # Outer GRUB sets isofile; inner ISO grub.cfg expects findiso=${iso_path}.
-  kargs="${kargs//\$\{iso_path\}/\$isofile}"
-
-  [[ -f "$iso_mount$vmlinuz_rel" && -f "$iso_mount$initrd_rel" ]] || return 1
-
+  local title installer_entry
   title=$(basename "$iso_file" .iso | sed 's/-/ /g; s/\b./\u&/g')
+  installer_entry=$(
+    generate_kali_installer_menuentry \
+      "${title} (Graphical Install)" \
+      lacie_isos \
+      "/${iso_file}" \
+      "$iso_mount" 2>/dev/null || true
+  )
 
   cat <<ENTRY
-menuentry "${title}" --class linux {
+submenu "${title}" --class linux {
   search --no-floppy --label --set=isopart lacie_isos
   set isofile="/${iso_file}"
+  set iso_path=\$isofile
+  export iso_path
   loopback loop (\$isopart)\$isofile
-  linux (loop)${vmlinuz_rel} ${kargs}
-  initrd (loop)${initrd_rel}
+  set root=(loop)
+  export root
+  source /boot/grub/grub.cfg
+}
+${installer_entry}
+ENTRY
 }
 
-ENTRY
+generate_kali_ext4_installer_entry() {
+  local iso_mount="$1"
+  local live_mount="$2"
+  local staged="${live_mount}/${KALI_EXT4_ISO_NAME}"
+
+  [[ -f "$staged" ]] || return 1
+  mount -o loop,ro "$staged" "$iso_mount" 2>/dev/null || return 1
+
+  local entry title
+  title="Kali Graphical Install (ext4 on live_nix)"
+  entry=$(
+    generate_kali_installer_menuentry \
+      "$title" \
+      live_nix \
+      "/${KALI_EXT4_ISO_NAME}" \
+      "$iso_mount" 2>/dev/null || true
+  )
+  umount "$iso_mount" 2>/dev/null || true
+  [[ -n "$entry" ]] || return 1
+  printf '%s' "$entry"
 }
 
 generate_kali_entry() {
@@ -387,15 +438,32 @@ generate_iso_entries() {
 install_grub() {
   local efi_mount="${WORK_ROOT}/grub-install-tmp"
   local isos_mount="${WORK_ROOT}/grub-isos-tmp"
-  mkdir -p "$efi_mount" "$isos_mount"
-  mount "$EFI_PART" "$efi_mount"
+  local efi_writable=""
+  local umount_efi=0
 
-  grub-install \
-    --target=x86_64-efi \
-    --efi-directory="$efi_mount" \
-    --boot-directory="$efi_mount/boot" \
-    --removable \
-    --no-nvram
+  mkdir -p "$efi_mount" "$isos_mount"
+
+  if [[ -b "$EFI_PART" ]] && mount "$EFI_PART" "$efi_mount" 2>/dev/null; then
+    efi_writable="$efi_mount"
+    umount_efi=1
+  else
+    efi_writable=$(findmnt -n -o TARGET -L LACIE_EFI 2>/dev/null || true)
+  fi
+  [[ -n "$efi_writable" ]] || die "Cannot mount or find LABEL=LACIE_EFI (is the lacie drive attached?)"
+
+  resolve_grub_prefix
+  if command -v grub-install >/dev/null 2>&1; then
+    if ! grub-install \
+      --target=x86_64-efi \
+      --efi-directory="$efi_writable" \
+      --boot-directory="$efi_writable/boot" \
+      --removable \
+      --no-nvram 2>/dev/null; then
+      log "WARNING: grub-install failed — updating iso-entries.cfg only (use nix-shell -p grub2_efi)" >&2
+    fi
+  else
+    log "WARNING: grub-install not in PATH — updating iso-entries.cfg only" >&2
+  fi
 
   # Scan ISOs on the isos partition and generate explicit boot entries.
   # loopback.cfg is NOT used — it resolves paths relative to $root (LACIE_EFI),
@@ -415,18 +483,30 @@ install_grub() {
   else
     log "WARNING: could not mount isos partition — writing placeholder entries"
   fi
+
+  # Installer from ext4 copy (reliable); staged by scripts/stage-kali-for-install.sh
+  local live_mount tmp_loop="${WORK_ROOT}/kali-ext4-loop"
+  live_mount=$(findmnt -n -o TARGET -L live_nix 2>/dev/null || true)
+  if [[ -n "$live_mount" && -f "${live_mount}/${KALI_EXT4_ISO_NAME}" ]]; then
+    mkdir -p "$tmp_loop"
+    if ext4_entry=$(generate_kali_ext4_installer_entry "$tmp_loop" "$live_mount" 2>/dev/null); then
+      iso_entries+="${ext4_entry}"$'\n'
+      log "  added ext4 installer entry (${KALI_EXT4_ISO_NAME} on live_nix)" >&2
+    fi
+    rmdir "$tmp_loop" 2>/dev/null || true
+  fi
+
   rmdir "$isos_mount" 2>/dev/null || true
 
-  mkdir -p "$efi_mount/boot/grub"
+  mkdir -p "$efi_writable/boot/grub"
 
   # Write ISO entries to a separate file so nixos-install doesn't clobber them.
   # After nixos-install, NixOS's grub.cfg sources this file via extraEntries.
-  printf '%s\n' "$iso_entries" > "$efi_mount/boot/grub/iso-entries.cfg"
+  printf '%s\n' "$iso_entries" > "$efi_writable/boot/grub/iso-entries.cfg"
 
-  # Bootstrap grub.cfg — used before nixos-install runs.
-  # After nixos-install this file is replaced by NixOS's generated config,
-  # which also sources iso-entries.cfg via extraEntries.
-  cat > "$efi_mount/boot/grub/grub.cfg" <<'GRUBCFG'
+  # Bootstrap grub.cfg when we mounted EFI ourselves (avoid clobbering NixOS grub.cfg on automount).
+  if [[ $umount_efi -eq 1 ]]; then
+  cat > "$efi_writable/boot/grub/grub.cfg" <<'GRUBCFG'
 set timeout=30
 set default=0
 
@@ -442,10 +522,13 @@ source /boot/grub/iso-entries.cfg
 menuentry "Reboot"   { reboot }
 menuentry "Shutdown" { halt }
 GRUBCFG
+  fi
 
   sync
-  umount "$efi_mount"
-  rmdir "$efi_mount"
+  if [[ $umount_efi -eq 1 ]]; then
+    umount "$efi_mount" 2>/dev/null || true
+    rm -rf "$efi_mount"
+  fi
 }
 
 discover_latest_iso() {
@@ -535,6 +618,27 @@ dump_partition_debug() {
 }
 
 discover_layout() {
+  local by_label_efi by_label_isos by_label_live by_label_data
+
+  by_label_efi=$(blkid -L LACIE_EFI 2>/dev/null || true)
+  by_label_isos=$(blkid -L lacie_isos 2>/dev/null || true)
+
+  if [[ -n "$by_label_efi" && -n "$by_label_isos" ]]; then
+    EFI_PART="$by_label_efi"
+    ISOS_PART="$by_label_isos"
+    by_label_live=$(blkid -L live_nix 2>/dev/null || true)
+    LIVE_PART="${by_label_live:-$(part_path 3)}"
+    by_label_data=$(blkid -L persistent_data 2>/dev/null || true)
+    if [[ -n "$by_label_data" ]]; then
+      DATA_PART="$by_label_data"
+      HAS_DATA_PART=1
+    else
+      DATA_PART=""
+      HAS_DATA_PART=0
+    fi
+    return
+  fi
+
   EFI_PART="$(part_path 1)"
   ISOS_PART="$(part_path 2)"
   LIVE_PART="$(part_path 3)"
@@ -544,6 +648,19 @@ discover_layout() {
   else
     DATA_PART=""
   fi
+}
+
+resolve_grub_prefix() {
+  local gbin gdir candidate
+  gbin=$(command -v grub-install 2>/dev/null || true)
+  [[ -n "$gbin" ]] || return 0
+  gdir=$(dirname "$(readlink -f "$gbin" 2>/dev/null || echo "$gbin")")
+  for candidate in "$gdir/../lib/grub" "$gdir/../../lib/grub"; do
+    if [[ -f "$candidate/x86_64-efi/modinfo.sh" ]]; then
+      export GRUB_PREFIX_DIR="$candidate"
+      return 0
+    fi
+  done
 }
 
 layout_ready() {

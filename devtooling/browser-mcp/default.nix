@@ -10,12 +10,12 @@
   };
 
   config = lib.mkIf config.browser-mcp.enable {
-    # Script to launch Chrome with remote debugging for MCP
+    # Launch Helium with remote debugging for MCP / Hermes CDP tooling.
     home.file.".local/bin/chrome-with-mcp" = {
       executable = true;
       text = ''
         #!/usr/bin/env bash
-        google-chrome --remote-debugging-port=9222 "$@"
+        exec helium --remote-debugging-port=9222 "$@"
       '';
     };
 

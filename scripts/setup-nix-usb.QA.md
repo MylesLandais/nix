@@ -21,7 +21,7 @@ Validate the GRUB-first lacie recovery USB workflow:
 ```bash
 sudo ./scripts/setup-nix-usb.sh --device /dev/sdX --force-rebuild
 # or GRUB-only refresh after ISO changes:
-sudo ./scripts/setup-nix-usb.sh --device /dev/sdX --grub-only
+nix-shell -p grub2 --run 'sudo ./scripts/setup-nix-usb.sh --device /dev/sdX --grub-only'
 ```
 
 Confirm layout with `lsblk -f /dev/sdX`:
@@ -33,7 +33,17 @@ Confirm layout with `lsblk -f /dev/sdX`:
 | p3 | `live_nix` | ext4 |
 | p4 | `persistent_data` | ntfs |
 
-Confirm `iso-entries.cfg` on p1 contains `configfile (loop)` entries for staged ISOs.
+Confirm `iso-entries.cfg` on p1:
+
+- NixOS ISOs: `configfile (loop)/EFI/BOOT/grub.cfg` + `iso_path`
+- Kali ISOs: `submenu` + `set root=(loop)` + `source /boot/grub/grub.cfg` + `iso_path`
+
+```bash
+grep -E 'submenu|source|configfile|iso_path|Kali' /run/media/*/LACIE_EFI/boot/grub/iso-entries.cfg
+```
+
+Kali persistence (writable live): `sudo ./scripts/setup-kali-persistence.sh --device /dev/sdX --size-gib 32`
+then boot Kali submenu → **Live system with USB persistence**. See `docs/cluster/kali-lacie-boot.md`.
 
 ## QEMU boot QA (local feedback loop)
 
@@ -84,6 +94,10 @@ sudo ./scripts/test-usb-qemu.sh --partitions --serial --auto-device \
 ```
 
 Success: GRUB menu → ISO entry → same initrd milestones as Tier 1.
+
+For Kali: Tier 2 shows lacie menu → enter Kali **submenu** → Kali internal menu
+(live / installer / persistence). Serial cannot auto-navigate submenus; confirm on
+hardware or interact in QEMU display.
 
 ### Tier 3 — full USB passthrough (~10+ min)
 
@@ -137,11 +151,21 @@ Preflight without sudo: `./scripts/test-usb-qemu.sh --dry-run --auto-device --pa
 
 ## Hardware boot validation
 
+### home-office-installer
+
 - Plug LaCie into target laptop
 - F12 → LaCie → GRUB menu
-- Select installer ISO entry
+- Select **Home Office Installer**
 - Boot succeeds to live environment
 - Mount `LABEL=live_nix` and confirm repo/recovery dirs
+
+### Kali live (primary laptop deploy)
+
+- F12 → LaCie → **Kali** submenu → Kali internal menu visible
+- **Kali … (Graphical Install)** top-level entry (not submenu Advanced install) starts installer
+- If media detection fails on exFAT: `sudo ./scripts/stage-kali-for-install.sh` then **Kali Graphical Install (ext4 on live_nix)**
+- With `persistence` partition: **Live with USB persistence** → `touch /root/persist-test` survives reboot
+- WiFi: `nmcli device wifi connect ...` (persistence required to save profiles)
 
 ## Failure capture
 

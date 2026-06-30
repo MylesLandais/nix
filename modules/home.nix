@@ -3,11 +3,25 @@
   lib,
   config,
   inputs,
+  gpuType ? "none",
   ...
 }:
 let
   chromiumBrowsers = import ./chromium-browsers.nix { inherit lib; };
-  inherit (chromiumBrowsers) mkChromiumFlags;
+  inherit (chromiumBrowsers)
+    mkChromiumFlags
+    chromiumStandardBrowserFlags
+    ;
+
+  vaapiMode =
+    if gpuType == "nvidia" then
+      "nvidia"
+    else if gpuType == "amd" then
+      "generic"
+    else
+      false;
+
+  chromiumFlagsFile = mkChromiumFlags (chromiumStandardBrowserFlags // { inherit vaapiMode; });
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -28,21 +42,10 @@ in
     ./features/ssh-bitwarden.nix
     ./firefox.nix
     inputs.stylix.homeModules.stylix
-    inputs.nixvim.homeModules.nixvim
     inputs.noctalia.homeModules.default
     inputs.tokyonight.homeManagerModules.default
   ];
   fonts.fontconfig.enable = true;
-
-  age = {
-    identityPaths = [ "/home/franky/.ssh/age" ];
-    secrets = {
-      ollama = {
-        file = ../secrets/ollama.age;
-        mode = "400";
-      };
-    };
-  };
 
   home = {
     username = "franky";
@@ -57,11 +60,9 @@ in
     };
 
     file = {
-      "${config.xdg.configHome}/helium-flags.conf".text = mkChromiumFlags {
-        wayland = true;
-        verticalTabs = true;
-        vaapi = true;
-      };
+      "${config.xdg.configHome}/helium-flags.conf".text = chromiumFlagsFile;
+      "${config.xdg.configHome}/chromium-flags.conf".text = chromiumFlagsFile;
+      "${config.xdg.configHome}/vivaldi-flags.conf".text = chromiumFlagsFile;
     };
 
     packages = import ./packages.nix { inherit pkgs; };

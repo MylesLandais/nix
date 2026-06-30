@@ -9,11 +9,19 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-DEVICE="/dev/sda"
+# Default to the disk that owns LACIE_EFI (often /dev/sdb when /dev/sda is another drive).
+DEVICE=""
+if [[ -n "$(blkid -L LACIE_EFI 2>/dev/null)" ]]; then
+  DEVICE=$(lsblk -no PKNAME "$(blkid -L LACIE_EFI)" 2>/dev/null | head -1)
+  DEVICE="/dev/${DEVICE}"
+fi
+DEVICE="${DEVICE:-/dev/sda}"
 REMOTE_HOST=""
 LOG_DIR="${RECOVERY_LOG_DIR:-$REPO_ROOT/.nix-usb-logs}"
-mkdir -p "$LOG_DIR" 2>/dev/null || LOG_DIR="/tmp/nix-usb-logs"
-mkdir -p "$LOG_DIR"
+if ! mkdir -p "$LOG_DIR" 2>/dev/null || [[ ! -w "$LOG_DIR" ]]; then
+  LOG_DIR="/tmp/nix-usb-logs"
+  mkdir -p "$LOG_DIR"
+fi
 STAMP=$(date +%Y%m%d-%H%M%S)
 OUT="$LOG_DIR/recovery-preflight-$STAMP.log"
 
@@ -63,7 +71,34 @@ else
   MNT=$(udisksctl mount -b "$EFI_PART" 2>&1 | sed -n 's/.*at \(\/[^ ]*\).*/\1/p') || true
 fi
 if [[ -n "$MNT" && -f "$MNT/boot/grub/iso-entries.cfg" ]]; then
-  grep -E 'menuentry|configfile|iso_path|home-office' "$MNT/boot/grub/iso-entries.cfg" | tee -a "$OUT"
+  grep -E 'submenu|menuentry|configfile|source|iso_path|root=\(loop\)|home-office|Kali|kali' \
+    "$MNT/boot/grub/iso-entries.cfg" | tee -a "$OUT"
+  if grep -qi 'kali' "$MNT/boot/grub/iso-entries.cfg" 2>/dev/null; then
+    if grep -q 'submenu' "$MNT/boot/grub/iso-entries.cfg" \
+      && grep -q 'source /boot/grub/grub.cfg' "$MNT/boot/grub/iso-entries.cfg" \
+      && grep -q 'root=(loop)' "$MNT/boot/grub/iso-entries.cfg"; then
+      log "Kali GRUB block: OK (submenu + root=(loop) + source)"
+    else
+      log "WARNING: Kali ISO present but iso-entries.cfg missing submenu/source/root=(loop) — re-run --grub-only"
+    fi
+    if grep -q 'install/gtk/vmlinuz' "$MNT/boot/grub/iso-entries.cfg" \
+      && grep -q 'findiso=' "$MNT/boot/grub/iso-entries.cfg"; then
+      log "Kali installer entry: OK (findiso on gtk installer)"
+    else
+      log "WARNING: no dedicated Kali installer menuentry with findiso — re-run --grub-only"
+    fi
+    live_mnt=$(findmnt -n -o TARGET -L live_nix 2>/dev/null || true)
+    if [[ -n "$live_mnt" && -f "${live_mnt}/kali-installer-loopback.iso" ]]; then
+      log "Kali ext4 staged ISO: present (ext4 installer entry should appear in GRUB)"
+    else
+      log "NOTE: no kali-installer-loopback.iso on live_nix (run stage-kali-for-install.sh if installer fails)"
+    fi
+  fi
+  if blkid -L persistence >/dev/null 2>&1; then
+    log "Kali persistence partition: $(blkid -L persistence)"
+  else
+    log "NOTE: no LABEL=persistence partition (writable Kali live needs setup-kali-persistence.sh)"
+  fi
   [[ -z "$EFI_MNT" ]] && udisksctl unmount -b "$EFI_PART" >/dev/null 2>&1 || true
 elif [[ -n "$MNT" ]]; then
   log "WARNING: missing iso-entries.cfg on $EFI_PART"

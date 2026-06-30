@@ -22,6 +22,7 @@
         "noctalia"
         "caelestia"
         "hyprpanel"
+        "ricelin"
       ];
       description = "The desktop bar/panel to use.";
     };
@@ -99,6 +100,19 @@
       ];
       default = "default";
       description = "Host workload profile (latitudes imaged off lacie flip this to pentest).";
+    };
+    clusterRole = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "data-core"
+          "gateway"
+          "pipeline"
+          "presentation"
+          "worker"
+        ]
+      );
+      default = null;
+      description = "Staging cluster role for platform service placement.";
     };
     kali = {
       enable = lib.mkEnableOption "Kali visual identity (themes, icons, panel, menu) and restricted-minimal toolset. Requires host.desktop = \"xfce\".";

@@ -12,7 +12,10 @@
 
 let
   chromiumBrowsers = import ../../modules/chromium-browsers.nix { inherit lib; };
-  inherit (chromiumBrowsers) chromiumStandardExtensions;
+  inherit (chromiumBrowsers)
+    chromiumStandardExtensions
+    heliumBundledExtensionsToRemove
+    ;
 in
 {
   imports = [
@@ -27,6 +30,8 @@ in
 
   # ---------------------------------------------------------------------------
   # Chromium-based browser policies (Helium, Chromium, etc.)
+  # flags.vaapi here is metadata only; launch flags come from HM *-flags.conf
+  # with vaapiMode = "nvidia" (see modules/home.nix + gpuType in cerberus HM).
   # ---------------------------------------------------------------------------
   chromiumPolicies = {
     enable = true;
@@ -37,6 +42,18 @@ in
         # (see bwrap script line: --ro-bind-try /etc/chromium /etc/chromium)
         # so policies must go through the chromium path for the sandbox.
         policyPath = "chromium";
+        extensionUpdateUrl = "https://services.helium.imput.net/ext";
+        extensions = chromiumStandardExtensions;
+        removedExtensions = heliumBundledExtensionsToRemove;
+        flags = {
+          verticalTabs = true;
+          vaapi = true;
+          wayland = true;
+        };
+      };
+      vivaldi = {
+        enable = true;
+        policyPath = "opt/vivaldi";
         extensions = chromiumStandardExtensions;
         flags = {
           verticalTabs = true;
@@ -77,6 +94,15 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
+  # electron-39 went EOL in the nixpkgs bump but is still pulled in transitively
+  # by a desktop app. Permit it until that dependency moves to a newer electron.
+  # pnpm-10.29.2 was flagged insecure in the nixpkgs bump; it is only a
+  # build-time tool for vesktop (Discord), not runtime. Permit until nixpkgs
+  # ships a newer pnpm. (Not agent tooling — opencode/codex use bun.)
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-39.8.10"
+    "pnpm-10.29.2"
+  ];
 
   # ---------------------------------------------------------------------------
   # Boot
@@ -584,6 +610,10 @@ in
         }
         {
           command = "/home/warby/.config/nixos/scripts/iso-deploy.sh";
+          options = [ "NOPASSWD" "SETENV" ];
+        }
+        {
+          command = "/home/warby/.config/nixos/scripts/write-kali-usb.sh";
           options = [ "NOPASSWD" "SETENV" ];
         }
         {

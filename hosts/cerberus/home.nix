@@ -3,9 +3,44 @@
   lib,
   vars,
   config,
+  inputs,
   ...
 }:
 let
+  vesktopSafe = pkgs.writeShellApplication {
+    name = "vesktop";
+    runtimeInputs = [ pkgs.vesktop ];
+    text = ''
+      exec ${lib.getExe pkgs.vesktop} \
+        --disable-gpu-sandbox \
+        --ozone-platform-hint=auto \
+        "$@"
+    '';
+  };
+
+  cursorSafe = pkgs.writeShellApplication {
+    name = "cursor";
+    runtimeInputs = [ pkgs.code-cursor ];
+    text = ''
+      # Cerberus: native Wayland + GPU on NVIDIA (RTX 3090 Ti, driver 610+).
+      # GPU/hw-accel stays ON for performance, but using desktop GL instead of
+      # Vulkan ANGLE: native-Wayland + Vulkan crashed the GPU context under agent
+      # load. Dropped WaylandLinuxDrmSyncobj/VaapiVideoDecoder for the same reason.
+      export __GLX_VENDOR_LIBRARY_NAME=nvidia
+      export GBM_BACKEND=nvidia-drm
+      export LIBVA_DRIVER_NAME=nvidia
+      export GDK_BACKEND=wayland
+
+      exec ${pkgs.code-cursor}/bin/.cursor-wrapped \
+        --ozone-platform=wayland \
+        --enable-features=UseOzonePlatform,WaylandWindowDecorations \
+        --use-angle=gl \
+        --enable-wayland-ime \
+        --js-flags=--max-old-space-size=8192 \
+        "$@"
+    '';
+  };
+
   hyprland_workspace_recovery = pkgs.writeShellApplication {
     name = "hyprland-workspace-recovery";
     runtimeInputs = with pkgs; [
@@ -349,7 +384,57 @@ in
 
   hydra-smb.enable = true;
 
-  home.packages = [ hyprland_workspace_recovery ];
+  home.packages = [
+    (lib.hiPrio vesktopSafe)
+    (lib.hiPrio cursorSafe)
+    hyprland_workspace_recovery
+  ];
+
+  xdg.desktopEntries.vesktop = {
+    name = "Vesktop";
+    genericName = "Internet Messenger";
+    exec = "${vesktopSafe}/bin/vesktop %U";
+    icon = "vesktop";
+    terminal = false;
+    categories = [
+      "Network"
+      "InstantMessaging"
+      "Chat"
+    ];
+    mimeType = [ "x-scheme-handler/discord" ];
+  };
+
+  xdg.desktopEntries.cursor = {
+    name = "Cursor";
+    genericName = "Text Editor";
+    exec = "${cursorSafe}/bin/cursor %F";
+    icon = "cursor";
+    terminal = false;
+    categories = [
+      "Utility"
+      "TextEditor"
+      "Development"
+      "IDE"
+    ];
+    mimeType = [ "application/x-cursor-workspace" ];
+  };
+
+  xdg.desktopEntries.cursor-url-handler = {
+    name = "Cursor - URL Handler";
+    exec = "${cursorSafe}/bin/cursor --open-url %U";
+    icon = "cursor";
+    terminal = false;
+    noDisplay = true;
+    mimeType = [ "x-scheme-handler/cursor" ];
+  };
+
+  # Hardware acceleration re-enabled: the SIGILL crashes were a 550-era NVIDIA bug,
+  # fixed on driver 610+. Forcing this off was what made the agent window CPU-render
+  # (use-gl=disabled) and feel sluggish. The wrapper above runs native Wayland + Vulkan.
+  home.file."${config.xdg.configHome}/Cursor/argv.json".text =
+    builtins.toJSON {
+      disable-hardware-acceleration = false;
+    };
 
   xdg.configFile."hypr/hyprland.conf" = {
     force = true;
@@ -394,6 +479,7 @@ in
       hl.env("WLR_NO_HARDWARE_CURSORS", "1")
       hl.env("NIXOS_OZONE_WL", "1")
       hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
+      hl.env("QT_QPA_PLATFORM", "wayland;xcb")
       hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
       hl.env("XDG_SESSION_DESKTOP", "Hyprland")
       hl.env("XDG_CONFIG_HOME", "${config.xdg.configHome}")
@@ -418,7 +504,8 @@ in
       -- == Cerberus startup ==
       hl.on("hyprland.start", function()
         hl.exec_cmd("systemctl --user start gnome-keyring.service")
-        hl.exec_cmd("dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SSH_AUTH_SOCK && systemctl --user stop hyprland-session.target && systemctl --user start hyprland-session.target")
+        hl.exec_cmd("systemctl --user start gvfs-daemon.service")
+        hl.exec_cmd("dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS SSH_AUTH_SOCK && systemctl --user stop hyprland-session.target && systemctl --user start hyprland-session.target")
         hl.exec_cmd("${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1")
         hl.exec_cmd("hyprctl output create headless HEADLESS-1")
         hl.exec_cmd("blueman-applet")
@@ -438,24 +525,71 @@ in
     ];
   };
 
-  # Brave with CDP debug port -- enables Chrome DevTools Protocol access
+  # Helium with CDP debug port -- enables Chrome DevTools Protocol access
   # for Hermes agent to read tabs and capture page content.
-  home.file.".local/share/applications/brave-browser.desktop".text =
-    let brave = "${pkgs.brave}/bin/brave";
-    in ''
+  home.file.".local/share/applications/helium-browser-cdp.desktop".text = ''
       [Desktop Entry]
       Version=1.0
-      Name=Brave Web Browser
+      Name=Helium (CDP)
       GenericName=Web Browser
-      Comment=Access the internet
-      Exec=${brave} --remote-debugging-port=9222 %U
+      Comment=Helium with remote debugging for automation
+      Exec=helium --remote-debugging-port=9222 %U
       StartupNotify=true
       Terminal=false
-      Icon=brave-browser
+      Icon=helium
       Type=Application
       Categories=Network;WebBrowser;
       MimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;x-scheme-handler/unknown;application/xhtml+xml;application/xml;
     '';
+
+  # Hermes ACP agent in the app launcher -- opens the CLI agent in a ghostty terminal.
+  home.file.".local/share/applications/hermes.desktop".text = ''
+      [Desktop Entry]
+      Version=1.0
+      Type=Application
+      Name=Hermes
+      GenericName=AI Agent
+      Comment=Hermes ACP terminal agent
+      Exec=ghostty -e hermes
+      Terminal=false
+      Icon=utilities-terminal
+      Categories=Development;Utility;
+    '';
+
+  # Helium policy force-install uses the CWS update URL, which Helium rewrites to
+  # its /ext proxy. Without ext_proxy enabled, CRX fetch fails (policy reason 25).
+  # vertical_tabs.enabled must be true for the side tab strip (flags alone are not enough).
+  home.activation.ensureHeliumProfilePrefs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    pref="$HOME/.config/net.imput.helium/Default/Preferences"
+    if [ -f "$pref" ]; then
+      ${pkgs.python3}/bin/python3 - "$pref" <<'PY'
+import json, pathlib, sys
+p = pathlib.Path(sys.argv[1])
+data = json.loads(p.read_text())
+changed = False
+
+services = data.setdefault("helium", {}).setdefault("services", {})
+for key, value in {"enabled": True, "ext_proxy": True, "consented": True}.items():
+    if services.get(key) is not value:
+        services[key] = value
+        changed = True
+
+vt = data.setdefault("vertical_tabs", {})
+for key, value in {
+    "enabled": True,
+    "collapsed_state": False,
+    "uncollapsed_width": 200,
+}.items():
+    if vt.get(key) is not value:
+        vt[key] = value
+        changed = True
+
+if changed:
+    p.write_text(json.dumps(data, separators=(",", ":")))
+    print("Helium: updated profile prefs (ext_proxy, vertical_tabs.enabled)")
+PY
+    fi
+  '';
 
   systemd.user.services.hyprland-workspace-recovery = {
     Unit = {

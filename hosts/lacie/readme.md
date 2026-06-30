@@ -32,13 +32,25 @@ nix-shell -p parted ntfs3g exfatprogs dosfstools wget gnutar curl git rsync grub
 Refresh GRUB entries after ISO changes (no repartition):
 
 ```bash
-sudo ./scripts/setup-nix-usb.sh --device /dev/sda --grub-only
+nix-shell -p grub2_efi --run 'sudo ./scripts/setup-nix-usb.sh --device /dev/sdb --grub-only'
 ```
 
-Scans `lacie_isos` (`/run/media/warby/lacie_isos` when automounted) and writes
-`/boot/grub/iso-entries.cfg` on `LACIE_EFI`. Re-run after adding or renaming any
-`*.iso` (e.g. `kali-linux-2026.1-live-everything-amd64.iso`). Kali/Debian images
-chain-load their own `/boot/grub/grub.cfg` via loopback (`iso_path`).
+Scans `lacie_isos` and writes `/boot/grub/iso-entries.cfg` on `LACIE_EFI`.
+Kali/Debian ISOs get a **submenu** that sets `root=(loop)` and `source`s the
+ISO’s full `/boot/grub/grub.cfg` (live, installer, persistence options).
+
+**Kali on laptops:** see [`docs/cluster/kali-lacie-boot.md`](../../docs/cluster/kali-lacie-boot.md).
+For writable sessions and saved WiFi, create a `persistence` ext4 partition:
+
+```bash
+sudo ./scripts/setup-kali-persistence.sh --device /dev/sdb --size-gib 32
+```
+
+Then boot Kali submenu → **Live system with USB persistence**.
+
+**Kali graphical install** fails from the submenu on exFAT (“incorrect installation media”).
+Use lacie GRUB → **Kali … (Graphical Install)**, or stage on ext4:
+`sudo ./scripts/stage-kali-for-install.sh` — see [`docs/cluster/kali-lacie-boot.md`](../../docs/cluster/kali-lacie-boot.md).
 
 QA: [`scripts/setup-nix-usb.QA.md`](../../scripts/setup-nix-usb.QA.md).
 

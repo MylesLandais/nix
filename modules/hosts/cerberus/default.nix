@@ -17,6 +17,7 @@ in
       inputs.self.nixosModules.cerberus
       inputs.self.nixosModules.themeData
       inputs.self.nixosModules.desktops
+      inputs.self.nixosModules.gamehacking
       "${inputs.self}/modules/features/host-options.nix"
       "${inputs.self}/modules/features/env-packages.nix"
       "${inputs.self}/modules/features/nix-config.nix"
@@ -40,6 +41,7 @@ in
               ];
               home.username = lib.mkForce "warby";
               home.homeDirectory = lib.mkForce "/home/warby";
+              home.uid = lib.mkForce 1000;
               age.identityPaths = lib.mkForce [ "/home/warby/.ssh/age" ];
               # gnome-keyring user session: pkcs11 + secrets only.
               # `ssh` is intentionally excluded so bitwarden-ssh-agent stays
@@ -61,6 +63,7 @@ in
             inherit inputs vars;
             system = "x86_64-linux";
             self = inputs.self;
+            gpuType = "nvidia";
           };
         };
       }

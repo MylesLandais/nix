@@ -31,7 +31,7 @@
       nemo-fileroller # Nemo → "Open with Archive Manager" context menu bridge
       file-roller     # GNOME Archive Manager (backend for nemo-fileroller)
       evince          # GNOME document viewer (PDF, ePub, etc.)
-      gvfs            # SMB/network locations for Nemo (cosmic-files did not use GVfs)
+      pkgs.gnome.gvfs  # SMB/network locations for Nemo (matches services.gvfs on Cerberus)
 
       # Qt icon theme fallback: Papirus-Dark has complete freedesktop coverage.
       # The GTK icon theme (Kanagawa) inherits Yaru/gnome which are not installed,

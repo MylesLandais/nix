@@ -9,7 +9,6 @@ with pkgs;
   beads
   bind
   bitwarden-desktop
-  brave
   btop
   bulletty
   cava
@@ -80,12 +79,15 @@ with pkgs;
   python3
   revive
   ripgrep
+  rustdesk
+  virt-viewer
   sesh
   slack
   statix
   statping-ng
   teamspeak6-client
   telegram-desktop
+  ayugram-desktop
   terraform-ls
   tflint
   tldr
@@ -94,6 +96,20 @@ with pkgs;
   treefmt
   upower
   unzip
+  # windows-kit USB builders (scripts/write-windows-usb.sh, build-firmware-usb.sh,
+  # fetch-driver-pack.sh). Heavy VM deps (qemu_full/OVMFFull/swtpm) come from the
+  # `nix run .#test-windows-qemu` app instead.
+  wimlib
+  dosfstools
+  mtools
+  gptfdisk
+  parted
+  p7zip
+  rsync
+  # FOSS GRUB multiboot USB (scripts/setup-grub-multiboot-usb.sh)
+  grub2_efi
+  ntfs3g
+  vivaldi
   vesktop
   vial
   vulkan-tools

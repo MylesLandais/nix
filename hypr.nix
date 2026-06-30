@@ -529,7 +529,7 @@ in
         "CTRL, PRINT, exec, hyprshot -m window"  # Active window
         "CTRL SHIFT, PRINT, exec, hyprshot -m region --clipboard-only"  # Region to clipboard only (no save)
         "$mod SHIFT, R, exec, wlogout"
-        "$mod, D, exec, vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --ozone-platform-hint=auto"
+        "$mod, D, exec, vesktop"
         "$mod, H, movefocus, l"
         "$mod, L, movefocus, r"
         "$mod, K, movefocus, u"

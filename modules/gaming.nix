@@ -61,9 +61,9 @@ in
     # snes9x-gtk # Super Nintendo (Temporarily removed to unblock system rebuild)
     mednafen # Multi-system emulator
     pcsx2 # PlayStation 2
-    rpcs3 # PlayStation 3
-          # Temporarily disabled due to build failure:
-          # Error: builder failed with exit code 2 (C++ compilation errors)
+    # rpcs3 temporarily dropped: fails to link against glew on current nixpkgs
+    # (undefined reference to __glewXSwapIntervalEXT). Re-add once upstream fixes it.
+    # rpcs3 # PlayStation 3
     azahar # 3DS emulator (successor to Citra, best Fire Emblem Awakening compatibility)
     ryubing
   ];

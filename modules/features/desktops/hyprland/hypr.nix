@@ -27,14 +27,23 @@ let
     '';
   };
 
-  execOnce =
-    [
-      "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_ICON_THEME"
-      "nm-applet --indicator &"
-      "add_record_player"
-      "wl-paste --watch cliphist store &"
-    ]
-    ++ lib.optionals (osConfig.host.bar == "noctalia") [ "noctalia-shell" ];
+  ricelinScripts = "${config.home.homeDirectory}/.config/hypr/scripts";
+
+  execOnce = [
+    "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_ICON_THEME"
+    "nm-applet --indicator &"
+    "add_record_player"
+    "wl-paste --watch cliphist store &"
+  ]
+  ++ lib.optionals (osConfig.host.bar == "noctalia") [ "noctalia-shell" ]
+  ++ lib.optionals (osConfig.host.bar == "ricelin") [
+    "${ricelinScripts}/cliphist-watch.sh"
+    "${ricelinScripts}/pill-daemon.sh"
+    "${ricelinScripts}/topbar-daemon.sh"
+    "${ricelinScripts}/sidebar-daemon.sh"
+    "${ricelinScripts}/launcher-daemon.sh"
+    "${ricelinScripts}/lock-daemon.sh"
+  ];
 in
 {
   options = {
@@ -130,7 +139,12 @@ in
         -- == Gestures ==
         hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
         hl.gesture({ fingers = 3, direction = "down",       action = "close" })
-        hl.gesture({ fingers = 3, direction = "up",         action = (function() hl.exec_cmd("noctalia-shell ipc call launcher toggle") end) })
+        hl.gesture({ fingers = 3, direction = "up",         action = (function() hl.exec_cmd("${
+          if osConfig.host.bar == "ricelin" then
+            "${ricelinScripts}/launcher.sh"
+          else
+            "noctalia-shell ipc call launcher toggle"
+        }") end) })
 
         -- == Window Rules ==
         hl.window_rule({ float = true, pin = true, no_shadow = true, size = "(monitor_w*0.25) (monitor_h*0.25)", move = "(monitor_w - window_w - 20) 20", no_initial_focus = true, match = { title = "Picture-in-Picture" } })
@@ -139,10 +153,18 @@ in
         hl.window_rule({ float = true, pin = true, no_shadow = true, size = "(monitor_w*0.5) (monitor_h*0.5)", move = "(monitor_w - window_w - 20) 20", no_initial_focus = true, match = { class = "mpv" } })
         hl.window_rule({ opacity = 0.90, match = { class = "^(vesktop)$" } })
         hl.window_rule({ opacity = 1.0, no_blur = true, match = { class = "^(zen-beta)$" } })
-        ${if lib.attrByPath [ "chromiumPolicies" "enable" ] false osConfig then lib.attrByPath [ "chromiumPolicies" "hyprlandExtraConfig" ] "" osConfig else ""}
+        ${
+          if lib.attrByPath [ "chromiumPolicies" "enable" ] false osConfig then
+            lib.attrByPath [ "chromiumPolicies" "hyprlandExtraConfig" ] "" osConfig
+          else
+            ""
+        }
 
         -- == Binds ==
-        ${import ./config/bindings.nix { inherit lib mod; bar = osConfig.host.bar; }}
+        ${import ./config/bindings.nix {
+          inherit lib mod;
+          bar = osConfig.host.bar;
+        }}
 
         -- == Base env ==
         hl.env("XCURSOR_SIZE", "22")

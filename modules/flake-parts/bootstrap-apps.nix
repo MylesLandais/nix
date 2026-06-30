@@ -167,6 +167,88 @@
         '';
       };
 
+      windowsKitQemu = pkgs.runCommand "windows-kit-qemu" { } ''
+        mkdir -p $out
+        cp ${../../windows-kit/autounattend.xml} $out/autounattend.xml
+        cp ${../../windows-kit/quick_fix.ps1} $out/quick_fix.ps1
+        cp ${../../windows-kit/gamer_verify.ps1} $out/gamer_verify.ps1
+        cp ${../../windows-kit/install_rustdesk.ps1} $out/install_rustdesk.ps1
+        cp ${../../windows-kit/install_sunshine.ps1} $out/install_sunshine.ps1
+        cp ${../../windows-kit/install_virtio_win.ps1} $out/install_virtio_win.ps1
+      '';
+
+      winQemuRuntimeInputs = with pkgs; [
+        qemu_full
+        OVMFFull
+        swtpm
+        util-linux
+        coreutils
+        gnugrep
+        gnused
+        dosfstools
+        mtools
+        cdrkit
+        socat
+        virt-viewer
+        nix
+        openssh
+      ];
+
+      test-windows-qemu = pkgs.writeShellApplication {
+        name = "test-windows-qemu";
+        runtimeInputs = winQemuRuntimeInputs;
+        text = ''
+          # .ms variants carry the Microsoft-enrolled Secure Boot keys so the
+          # firmware actually verifies the Windows bootloader.
+          export OVMF_CODE="${pkgs.OVMFFull.fd}/FV/OVMF_CODE.fd"
+          export OVMF_VARS_SRC="${pkgs.OVMFFull.fd}/FV/OVMF_VARS.ms.fd"
+          export WINDOWS_KIT_DIR="${windowsKitQemu}"
+          ${builtins.readFile ../../scripts/lib/qemu-spice.sh}
+          ${builtins.readFile ../../scripts/test-windows-qemu.sh}
+        '';
+      };
+
+      boot-windows-golden = pkgs.writeShellApplication {
+        name = "boot-windows-golden";
+        runtimeInputs = winQemuRuntimeInputs;
+        text = ''
+          GOLDEN="$HOME/win-kit-staging/golden"
+          QCOW=$(find "$GOLDEN" -maxdepth 1 -name 'win11-pro-gamer-*.qcow2' -printf '%f\n' 2>/dev/null | sort | tail -1)
+          QCOW="${QCOW:+$GOLDEN/$QCOW}"
+          if [ -z "$QCOW" ]; then
+            echo "[boot-windows-golden] no golden qcow2 in $GOLDEN" >&2
+            exit 1
+          fi
+          exec ${test-windows-qemu}/bin/test-windows-qemu \
+            --boot-target --target "$QCOW" \
+            --payload-dir "$HOME/win-kit-staging" \
+            --ovmf-vars-persist "$GOLDEN/ovmf-vars.fd" \
+            --tpm-dir "$GOLDEN/swtpm" \
+            --user-net --open-spice "$@"
+        '';
+      };
+
+      seal-windows-golden = pkgs.writeShellApplication {
+        name = "seal-windows-golden";
+        runtimeInputs = with pkgs; [
+          qemu_full
+          coreutils
+        ];
+        text = ''
+          export WINDOWS_KIT_DIR="${windowsKitQemu}"
+          ${builtins.readFile ../../scripts/seal-windows-golden.sh}
+        '';
+      };
+
+      rustdesk-windows-qemu = pkgs.writeShellApplication {
+        name = "rustdesk-windows-qemu";
+        runtimeInputs = with pkgs; [
+          openssh
+        ];
+        # rustdesk: use system package from modules/packages.nix (unfree; not in flake closure)
+        text = builtins.readFile ../../scripts/rustdesk-windows-qemu.sh;
+      };
+
       extract-installer-boot = pkgs.writeShellApplication {
         name = "extract-installer-boot";
         runtimeInputs = with pkgs; [
@@ -214,6 +296,10 @@
     {
       packages.bootstrap-lacie = bootstrap-lacie;
       packages.test-usb-qemu = test-usb-qemu;
+      packages.test-windows-qemu = test-windows-qemu;
+      packages.boot-windows-golden = boot-windows-golden;
+      packages.seal-windows-golden = seal-windows-golden;
+      packages.rustdesk-windows-qemu = rustdesk-windows-qemu;
       packages.extract-installer-boot = extract-installer-boot;
       packages.recovery-preflight = recovery-preflight;
       packages.recovery-verify = recovery-verify;
@@ -225,6 +311,22 @@
       apps.test-usb-qemu = {
         type = "app";
         program = "${test-usb-qemu}/bin/test-usb-qemu";
+      };
+      apps.test-windows-qemu = {
+        type = "app";
+        program = "${test-windows-qemu}/bin/test-windows-qemu";
+      };
+      apps.boot-windows-golden = {
+        type = "app";
+        program = "${boot-windows-golden}/bin/boot-windows-golden";
+      };
+      apps.seal-windows-golden = {
+        type = "app";
+        program = "${seal-windows-golden}/bin/seal-windows-golden";
+      };
+      apps.rustdesk-windows-qemu = {
+        type = "app";
+        program = "${rustdesk-windows-qemu}/bin/rustdesk-windows-qemu";
       };
       apps.extract-installer-boot = {
         type = "app";
