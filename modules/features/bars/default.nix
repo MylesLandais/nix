@@ -6,6 +6,7 @@
   imports = [
     ./noctalia.nix
     ./hyprpanel.nix
+    ./ricelin.nix
   ];
 
   options = {
@@ -16,6 +17,7 @@
     bars = {
       noctalia.enable = lib.mkDefault false;
       hyprpanel.enable = lib.mkDefault false;
+      ricelin.enable = lib.mkDefault false;
     };
   };
 }
