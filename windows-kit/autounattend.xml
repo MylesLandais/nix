@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Windows 11 24H2 unattended answer file — gaming/support kit.
+
+  WHAT THIS DOES
+    * Removes the Microsoft-account / "let's connect you to a network" OOBE wall
+      (24H2 dropped bypassnro.cmd, so we set HKLM\...\OOBE\BypassNRO=1 + create a
+      local account directly).
+    * Selects Windows 11 Pro and accepts the EULA so setup runs hands-off.
+    * Wipes Disk 0 and lays down a clean UEFI/GPT layout.
+
+  WHAT THIS DELIBERATELY DOES NOT DO
+    * No TPM / Secure Boot / RAM / CPU bypass (LabConfig). Gaming anti-cheat
+      (Vanguard, EAC, BattlEye) requires TPM 2.0 + Secure Boot — keep them ON.
+    * No product activation. The key below is the PUBLIC Win11 Pro "KMS client
+      setup key": it only selects the edition, it does NOT activate. Install
+      stays unactivated until a real license is applied later.
+
+  !! WARNING: <DiskConfiguration> WipeDisk=true ERASES Disk 0. On a machine with
+     more than one drive, confirm Disk 0 is the target NVMe (or remove the
+     DiskConfiguration / ImageInstall blocks and partition interactively).
+
+  Place this file named exactly  autounattend.xml  at the ROOT of the install USB.
+-->
+<unattend xmlns="urn:schemas-microsoft-com:unattend"
+          xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <settings pass="windowsPE">
+    <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64"
+               publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+      <SetupUILanguage>
+        <UILanguage>en-US</UILanguage>
+      </SetupUILanguage>
+      <InputLocale>en-US</InputLocale>
+      <SystemLocale>en-US</SystemLocale>
+      <UILanguage>en-US</UILanguage>
+      <UserLocale>en-US</UserLocale>
+    </component>
+
+    <component name="Microsoft-Windows-Setup" processorArchitecture="amd64"
+               publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+      <DiskConfiguration>
+        <Disk wcm:action="add">
+          <DiskID>0</DiskID>
+          <WillWipeDisk>true</WillWipeDisk>
+          <CreatePartitions>
+            <CreatePartition wcm:action="add">
+              <Order>1</Order><Type>EFI</Type><Size>300</Size>
+            </CreatePartition>
+            <CreatePartition wcm:action="add">
+              <Order>2</Order><Type>MSR</Type><Size>16</Size>
+            </CreatePartition>
+            <CreatePartition wcm:action="add">
+              <Order>3</Order><Type>Primary</Type><Extend>true</Extend>
+            </CreatePartition>
+          </CreatePartitions>
+          <ModifyPartitions>
+            <ModifyPartition wcm:action="add">
+              <Order>1</Order><PartitionID>1</PartitionID><Format>FAT32</Format><Label>System</Label>
+            </ModifyPartition>
+            <ModifyPartition wcm:action="add">
+              <Order>2</Order><PartitionID>2</PartitionID>
+            </ModifyPartition>
+            <ModifyPartition wcm:action="add">
+              <Order>3</Order><PartitionID>3</PartitionID><Format>NTFS</Format><Label>Windows</Label>
+              <Letter>C</Letter>
+            </ModifyPartition>
+          </ModifyPartitions>
+        </Disk>
+        <WillShowUI>OnError</WillShowUI>
+      </DiskConfiguration>
+
+      <ImageInstall>
+        <OSImage>
+          <InstallTo><DiskID>0</DiskID><PartitionID>3</PartitionID></InstallTo>
+          <InstallToAvailablePartition>false</InstallToAvailablePartition>
+          <!-- If your install.swm holds multiple editions and setup still prompts,
+               uncomment and match the exact image name from:
+                 wimlib-imagex info sources/install.swm
+          <InstallFrom><MetaData wcm:action="add">
+            <Key>/IMAGE/NAME</Key><Value>Windows 11 Pro</Value>
+          </MetaData></InstallFrom>
+          -->
+        </OSImage>
+      </ImageInstall>
+
+      <UserData>
+        <AcceptEula>true</AcceptEula>
+        <ProductKey>
+          <!-- PUBLIC Win11 Pro KMS client setup key: edition selector ONLY, does NOT activate. -->
+          <Key>VK7JG-NPHTM-C97JM-9MPGT-3V66T</Key>
+          <WillShowUI>OnError</WillShowUI>
+        </ProductKey>
+      </UserData>
+    </component>
+  </settings>
+
+  <settings pass="specialize">
+    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64"
+               publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+      <ComputerName>*</ComputerName>
+      <RunSynchronous>
+        <!-- 24H2: re-enable the local-account path the OOBE otherwise blocks. -->
+        <RunSynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Path>reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE" /v BypassNRO /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+      </RunSynchronous>
+    </component>
+  </settings>
+
+  <settings pass="oobeSystem">
+    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64"
+               publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+      <OOBE>
+        <HideEULAPage>true</HideEULAPage>
+        <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+        <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+        <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+        <ProtectYourPC>3</ProtectYourPC>
+      </OOBE>
+      <UserAccounts>
+        <LocalAccounts>
+          <LocalAccount wcm:action="add">
+            <Name>Owner</Name>
+            <DisplayName>Owner</DisplayName>
+            <Group>Administrators</Group>
+            <!-- CHANGE-ME-AT-FIRST-BOOT — placeholder local password. -->
+            <Password><Value>ChangeMe!2026</Value><PlainText>true</PlainText></Password>
+          </LocalAccount>
+        </LocalAccounts>
+      </UserAccounts>
+      <!-- Optional: auto-run the post-install payload from the install USB on first logon.
+           Drive letter varies; quick_fix.ps1 resolves its own path, so point at the USB.
+      <FirstLogonCommands>
+        <SynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <CommandLine>powershell -NoProfile -ExecutionPolicy Bypass -File D:\quick_fix.ps1</CommandLine>
+          <Description>Post-install support payload</Description>
+        </SynchronousCommand>
+      </FirstLogonCommands>
+      -->
+    </component>
+  </settings>
+
+</unattend>

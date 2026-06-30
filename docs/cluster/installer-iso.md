@@ -75,12 +75,16 @@ udisksctl unmount -b /dev/sda4   # persistent_data
 |------|---------|
 | `home-office-installer.iso` | This ISO — cluster onboarding |
 | `latest-nixos-graphical-x86_64-linux.iso` | Upstream graphical installer, fallback |
-| `kali-linux-*-live-*.iso` | Kali live (GRUB chains to ISO's own menu) |
+| `kali-linux-*-live-*.iso` | **Primary** live deploy / pentest — full Kali GRUB submenu via loopback |
+
+Use **home-office-installer** for NixOS cluster install and SSH recovery.
+Use **Kali** for immediate laptop deployment (installer, persistence, tools).
+See [kali-lacie-boot.md](kali-lacie-boot.md).
 
 After copying a new ISO onto `lacie_isos`, refresh GRUB only:
 
 ```bash
-sudo ./scripts/setup-nix-usb.sh --device /dev/sda --grub-only
+nix-shell -p grub2_efi --run 'sudo ./scripts/setup-nix-usb.sh --device /dev/sdb --grub-only'
 ```
 
 ## Onboarding a new node from this ISO
