@@ -30,6 +30,7 @@ _: {
         inputs.claude-code.overlays.default
         inputs.nix-vscode-extensions.overlays.default
         inputs.nix-cachyos-kernel.overlays.pinned
+        (import "${inputs.self}/devtooling/cursor/overlay.nix")
       ];
 
       host = {

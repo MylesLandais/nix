@@ -39,10 +39,6 @@
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    cursor-flake = {
-      url = "github:omarcresp/cursor-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     thorium.url = "github:Rishabh5321/thorium_flake";
     noctalia = {
       # Held at this rev: newer noctalia-shell restructured its home-manager
