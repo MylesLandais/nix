@@ -567,7 +567,7 @@ in
       Comment=Hermes GUI desktop app
       Exec=hermes-desktop
       Terminal=false
-      Icon=utilities-terminal
+      Icon=${inputs.hermes-agent.packages.${pkgs.system}.desktop}/share/hermes-desktop/dist/hermes.png
       Categories=Development;Utility;
     '';
 
