@@ -47,9 +47,10 @@ let
   # Fallback ladder if blocky GIF/WebM artifacts persist on NVIDIA:
   # 1. [applied] Drop ZeroCopyGL from enableFeatures (see below)
   # 2. [applied] Disable UseChromeOSDirectVideoDecoder (see below)
-  # 3. [applied for Helium] Set vaapiMode = false (software decode; higher CPU)
-  #    See heliumFlagsFile in modules/home.nix — Helium still artifacted after
-  #    rungs 1-2, so it gets its own flags file with vaapiMode forced to false.
+  # 3. [applied for Helium + Vivaldi] Set vaapiMode = false (software decode;
+  #    higher CPU). See softwareDecodeFlagsFile in modules/home.nix — both
+  #    still artifacted after rungs 1-2, so they get vaapiMode forced to
+  #    false. Chromium proper has not shown the issue and keeps hw decode.
   mkChromiumFlags =
     {
       wayland ? true,
