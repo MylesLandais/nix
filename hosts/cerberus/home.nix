@@ -548,10 +548,24 @@ in
       [Desktop Entry]
       Version=1.0
       Type=Application
-      Name=Hermes
+      Name=Hermes (Terminal)
       GenericName=AI Agent
       Comment=Hermes ACP terminal agent
       Exec=ghostty -e hermes
+      Terminal=false
+      Icon=utilities-terminal
+      Categories=Development;Utility;
+    '';
+
+  # Hermes GUI desktop app -- Electron wrapper around the same hermes CLI agent.
+  home.file.".local/share/applications/hermes-desktop.desktop".text = ''
+      [Desktop Entry]
+      Version=1.0
+      Type=Application
+      Name=Hermes Desktop
+      GenericName=AI Agent
+      Comment=Hermes GUI desktop app
+      Exec=hermes-desktop
       Terminal=false
       Icon=utilities-terminal
       Categories=Development;Utility;

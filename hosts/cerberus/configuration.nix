@@ -763,6 +763,7 @@ in
     termius
     mosh
     nicotine-plus
+    inputs.hermes-agent.packages.${pkgs.system}.desktop # Hermes GUI (Electron), wraps the hermes CLI agent
   ];
 
   # ---------------------------------------------------------------------------
