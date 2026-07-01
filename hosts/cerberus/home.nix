@@ -31,7 +31,7 @@ let
       export LIBVA_DRIVER_NAME=nvidia
       export GDK_BACKEND=wayland
 
-      exec ${pkgs.code-cursor}/bin/.cursor-wrapped \
+      exec ${pkgs.code-cursor}/bin/cursor \
         --ozone-platform=wayland \
         --enable-features=UseOzonePlatform,WaylandWindowDecorations \
         --use-angle=gl \
