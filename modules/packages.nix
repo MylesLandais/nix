@@ -108,7 +108,8 @@ with pkgs;
   # FOSS GRUB multiboot USB (scripts/setup-grub-multiboot-usb.sh)
   grub2_efi
   ntfs3g
-  vivaldi
+  # vivaldi is provided via environment.systemPackages (vivaldiWithFlags in
+  # modules/features/env-packages.nix) so it actually reads vivaldi-flags.conf.
   vesktop
   vial
   vulkan-tools
