@@ -388,6 +388,7 @@ in
     (lib.hiPrio vesktopSafe)
     (lib.hiPrio cursorSafe)
     hyprland_workspace_recovery
+    inputs.llm.packages.${pkgs.system}.cursor-agent
   ];
 
   xdg.desktopEntries.vesktop = {
