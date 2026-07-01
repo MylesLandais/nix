@@ -37,7 +37,7 @@ let
     paths = [
       (pkgs.writeShellScriptBin "vivaldi" ''
         set -eu
-        vivaldi="${pkgs.vivaldi}/opt/vivaldi/vivaldi-bin"
+        vivaldi="${pkgs.vivaldi}/bin/.vivaldi-wrapped"
         flagsFile="''${XDG_CONFIG_HOME:-$HOME/.config}/vivaldi-flags.conf"
         extra=()
         if [ -r "$flagsFile" ]; then
