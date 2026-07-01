@@ -83,6 +83,18 @@ let
           vaapiFeatures
           (lib.optionals darkMode [ "WebUIDarkMode" ])
         ];
+      # Chromium only honors the *last* --disable-features flag on the command
+      # line, so every disabled feature must be combined into one list/flag
+      # rather than emitted as separate --disable-features occurrences.
+      disableFeatures =
+        lib.concatLists [
+          (lib.optionals (vaapiMode == "nvidia") [ "UseChromeOSDirectVideoDecoder" ])
+          # Explicit-sync (linux-drm-syncobj-v1) support in Chromium's Ozone/
+          # Wayland backend has the same corruption interaction with the
+          # nvidia driver that Hyprland's own explicit sync had to disable
+          # for (see hypr.nix). Disable it here too, independent of vaapiMode.
+          (lib.optionals wayland [ "WaylandLinuxDrmSyncobj" ])
+        ];
       lines =
         lib.optionals wayland [
           "--ozone-platform-hint=wayland"
@@ -92,8 +104,8 @@ let
           "--enable-features=${lib.concatStringsSep "," enableFeatures}"
         ]
         ++ lib.optionals (vaapiMode == "generic") [ "--ignore-gpu-blocklist" ]
-        ++ lib.optionals (vaapiMode == "nvidia") [
-          "--disable-features=UseChromeOSDirectVideoDecoder"
+        ++ lib.optionals (disableFeatures != [ ]) [
+          "--disable-features=${lib.concatStringsSep "," disableFeatures}"
         ]
         ++ lib.optionals darkMode [ "--force-dark-mode" ]
         ++ extra;
