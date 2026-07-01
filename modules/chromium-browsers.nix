@@ -45,8 +45,9 @@ let
   # - generic: Intel/AMD VA-API (VaapiVideoDecoder only; no encoder for playback)
   #
   # Fallback ladder if blocky GIF/WebM artifacts persist on NVIDIA:
-  # 1. Add to extra: "--disable-features=UseChromeOSDirectVideoDecoder"
-  # 2. Set vaapiMode = false (software decode; higher CPU)
+  # 1. [applied] Drop ZeroCopyGL from enableFeatures (see below)
+  # 2. [applied] Disable UseChromeOSDirectVideoDecoder (see below)
+  # 3. Set vaapiMode = false (software decode; higher CPU)
   mkChromiumFlags =
     {
       wayland ? true,
@@ -88,6 +89,9 @@ let
           "--enable-features=${lib.concatStringsSep "," enableFeatures}"
         ]
         ++ lib.optionals (vaapiMode == "generic") [ "--ignore-gpu-blocklist" ]
+        ++ lib.optionals (vaapiMode == "nvidia") [
+          "--disable-features=UseChromeOSDirectVideoDecoder"
+        ]
         ++ lib.optionals darkMode [ "--force-dark-mode" ]
         ++ extra;
     in
