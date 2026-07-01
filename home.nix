@@ -99,7 +99,6 @@
       EDITOR = "nvim";
       GDK_BACKEND = "wayland,x11";
       ANTHROPIC_API_KEY = "$ANTHROPIC_API_KEY";
-      ZAI_API_KEY = "$(cat /run/agenix/zai-api-key)";
     };
 
     # Shell aliases for build-time sleep inhibition

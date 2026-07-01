@@ -7,8 +7,6 @@ in
 {
   "ollama.age".publicKeys = users ++ systems;
   "anthropic-api-key.age".publicKeys = users ++ systems;
-  "zai-api-key.age".publicKeys = users ++ systems;
   "tailscale-auth-key.age".publicKeys = users ++ systems;
   "code-server-password.age".publicKeys = users ++ systems;
-  "hermes-env.age".publicKeys = users ++ systems;
 }

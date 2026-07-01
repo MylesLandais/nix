@@ -23,10 +23,6 @@
     enable = true;
     addToSystemPackages = true;
 
-    environmentFiles = [
-      config.age.secrets.hermes-env.path
-    ];
-
     settings = {
       model = {
         default = "deepseek-v4-flash";
