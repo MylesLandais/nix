@@ -22,6 +22,11 @@ let
       false;
 
   chromiumFlagsFile = mkChromiumFlags (chromiumStandardBrowserFlags // { inherit vaapiMode; });
+
+  # Helium still shows blocky WebM/GIF artifacts on nvidia even with
+  # UseChromeOSDirectVideoDecoder disabled; fall back to software decode
+  # (fallback ladder rung 3 in chromium-browsers.nix) for Helium only.
+  heliumFlagsFile = mkChromiumFlags (chromiumStandardBrowserFlags // { vaapiMode = false; });
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -60,7 +65,7 @@ in
     };
 
     file = {
-      "${config.xdg.configHome}/helium-flags.conf".text = chromiumFlagsFile;
+      "${config.xdg.configHome}/helium-flags.conf".text = heliumFlagsFile;
       "${config.xdg.configHome}/chromium-flags.conf".text = chromiumFlagsFile;
       "${config.xdg.configHome}/vivaldi-flags.conf".text = chromiumFlagsFile;
     };
