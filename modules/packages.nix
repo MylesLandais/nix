@@ -9,6 +9,7 @@ with pkgs;
   beads
   bind
   bitwarden-desktop
+  blender
   btop
   bulletty
   cava
