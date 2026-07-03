@@ -1,7 +1,11 @@
 { pkgs }:
 
+let
+  eurostile-bold-extended = pkgs.callPackage ./fonts/eurostile-bold-extended.nix { };
+in
 with pkgs;
 [
+  eurostile-bold-extended
 
   age
   ags
