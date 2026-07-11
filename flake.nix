@@ -19,6 +19,13 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/release-26.05";
+    };
+    home-manager-wsl = {
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixos-wsl/nixpkgs";
+    };
     import-tree.url = "github:vic/import-tree";
     helium.url = "github:FKouhai/helium2nix";
     agenix.url = "github:ryantm/agenix";

@@ -17,6 +17,7 @@ USBs at build time.
 | `install_rustdesk.ps1` | Silent RustDesk + firewall; password via `WIN_RUSTDESK_PASSWORD`. |
 | `install_sunshine.ps1` | Sunshine for Moonlight; PIN via `WIN_SUNSHINE_PIN`. |
 | `install_virtio_win.ps1` | virtio-win from staged ISO (required before SPICE virtio-vga). |
+| `bootstrap-wsl-agent.ps1` | Windows and NixOS-WSL bootstrap for the 7PZSZY2 remote-agent laptop. |
 | `driver-manifest.md` | Driver matrix for B850-E / 9850X3D / RX 9070 XT. |
 
 ## Staging layout (`~/win-kit-staging/`)
