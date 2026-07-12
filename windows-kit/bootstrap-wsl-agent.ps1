@@ -174,3 +174,4 @@ Write-Host '  4. git clone https://github.com/MylesLandais/nix.git && cd nix'
 Write-Host '  5. sudo nixos-rebuild switch --flake path:$HOME/Workspace-git/nix#7PZSZY2'
 Write-Host "  6. $chromeScript"
 Write-Host '  7. From WSL: curl http://127.0.0.1:9222/json/version'
+Write-Host '  8. .\setup-remote-development.ps1  # ChatGPT, Codex, Chrome policy, tailnet'
