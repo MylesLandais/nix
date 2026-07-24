@@ -16,6 +16,10 @@ let
       id = "eimadpbcbfnmbkopoojfekhnkhdbieeh";
       name = "Dark Reader";
     };
+    chatgpt = {
+      id = "hehggadaopoacecdllhhajmbjkdcmajg";
+      name = "ChatGPT";
+    };
   };
 
   chromiumStandardExtensions = map (e: e.id) (lib.attrValues chromiumExtensionPack);
