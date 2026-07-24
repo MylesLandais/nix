@@ -43,7 +43,7 @@ in
     steam-sunshine # Gamescope wrapper for Sunshine streaming
     gamescope # Compositor for gaming
     heroic # Epic/GOG game launcher
-    wineWowPackages.stable # Windows compatibility
+    wineWow64Packages.stable # Windows compatibility
     protontricks # Winetricks for Proton
     gamemode # CPU/GPU optimization
     runelite

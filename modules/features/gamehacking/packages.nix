@@ -38,7 +38,7 @@ with pkgs; [
   # ═══════════════════════════════════════════════
   # WINE + WINDOWS DEBUGGING
   # ═══════════════════════════════════════════════
-  wineWowPackages.stable   # Run x86 Windows binaries (Korean PC Lunar etc.)
+  wineWow64Packages.stable # Run x86 Windows binaries (Korean PC Lunar etc.)
   winetricks           # DLL overrides, debug flags
   protontricks         # Proton-specific winetricks for Steam games
 
