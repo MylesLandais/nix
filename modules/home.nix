@@ -28,6 +28,13 @@ let
   # decode (fallback ladder rung 3 in chromium-browsers.nix) for both.
   # Chromium proper has not shown the issue, so it keeps hardware decode.
   softwareDecodeFlagsFile = mkChromiumFlags (chromiumStandardBrowserFlags // { vaapiMode = false; });
+
+  patchedCodex = inputs.llm.packages.${pkgs.system}.codex.overrideAttrs (old: {
+    cargoBuildFlags = (old.cargoBuildFlags or []) ++ [ "--package" "codex-code-mode-host" ];
+    postInstall = (old.postInstall or "") + ''
+      install -m755 target/${pkgs.stdenv.hostPlatform.rust.rustcTarget}/release/codex-code-mode-host $out/bin/
+    '';
+  });
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -72,7 +79,8 @@ in
       "${config.xdg.configHome}/vivaldi-flags.conf".text = softwareDecodeFlagsFile;
     };
 
-    packages = import ./packages.nix { inherit pkgs; };
+    packages = (import ./packages.nix { inherit pkgs; })
+      ++ [ patchedCodex ];
     pointerCursor = {
       gtk.enable = true;
       package = pkgs.bibata-cursors;
