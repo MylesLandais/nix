@@ -391,6 +391,12 @@ in
     inputs.llm.packages.${pkgs.system}.cursor-agent
   ];
 
+  # Firefox otherwise falls back to CPU-heavy software HEVC decoding on NVIDIA.
+  programs.firefox.preferences = {
+    "media.ffmpeg.vaapi.enabled" = true;
+    "media.hardware-video-decoding.force-enabled" = true;
+  };
+
   mpv-mod.plexShim.enable = true;
 
   xdg.desktopEntries.vesktop = {

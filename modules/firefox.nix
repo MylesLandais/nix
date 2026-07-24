@@ -117,7 +117,10 @@ in
           # Experimental features - CONSERVATIVE
           "gfx.webrender.all" = true;
           "layers.acceleration.force-enabled" = false;    # DISABLED - can cause issues
-          "media.hardware-video-decoding.force-enabled" = false; # DISABLED - can cause issues
+          "media.ffmpeg.vaapi.enabled" =
+            cfg.preferences."media.ffmpeg.vaapi.enabled" or false;
+          "media.hardware-video-decoding.force-enabled" =
+            cfg.preferences."media.hardware-video-decoding.force-enabled" or false;
 
           # Disable telemetry and data collection
           "toolkit.telemetry.enabled" = false;
