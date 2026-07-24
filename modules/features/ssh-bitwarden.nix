@@ -76,11 +76,23 @@ in
 
   # Enable Bitwarden SSH agent in desktop settings (global_desktopSettings_sshAgentEnabled).
   # Bitwarden only creates ~/.bitwarden-ssh-agent.sock when this flag is true.
+  #
+  # Key names come from DesktopSettingsService in the app bundle, and the two settings are
+  # scoped differently:
+  #   SSH_AGENT_ENABLED         = KeyDefinition     "sshAgentEnabled"                -> global_*
+  #   SSH_AGENT_PROMPT_BEHAVIOR = UserKeyDefinition "sshAgentRememberAuthorizations" -> user_<uuid>_*
+  # There is no global prompt-behavior key; writing one is a no-op, so the user-scoped key is
+  # built from the active account id. Note the disk key does NOT match the in-app name
+  # "sshAgentPromptBehavior", which only appears as an i18n string and form control id.
   home.activation.bitwardenSshAgent = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [ -f ${lib.escapeShellArg bwData} ]; then
       ${pkgs.jq}/bin/jq '
-        .global_desktopSettings_sshAgentEnabled = true
-        | .global_desktopSettings_sshAgentPromptBehavior = "rememberUntilLock"
+        .global_account_activeAccountId as $uid
+        | .global_desktopSettings_sshAgentEnabled = true
+        | del(.global_desktopSettings_sshAgentPromptBehavior)
+        | if $uid then
+            .["user_" + $uid + "_desktopSettings_sshAgentRememberAuthorizations"] = "rememberUntilLock"
+          else . end
       ' ${lib.escapeShellArg bwData} > ${lib.escapeShellArg bwData}.tmp
       mv ${lib.escapeShellArg bwData}.tmp ${lib.escapeShellArg bwData}
     fi
