@@ -38,7 +38,6 @@
     libva-utils
     nvtopPackages.nvidia
     vulkan-tools
-    vulkan-validation-layers
     egl-wayland
     nvidia-vaapi-driver
   ];
