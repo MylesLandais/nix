@@ -165,7 +165,6 @@
        nwg-look
       obsidian
       opencloud-desktop
-      inputs.codex-nix.packages.x86_64-linux.default
       inputs.llm.packages.x86_64-linux.opencode
       p7zip # Provides '7z' for .zip, .7z, etc.
       pavucontrol
