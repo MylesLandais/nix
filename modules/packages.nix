@@ -64,7 +64,6 @@ with pkgs;
   lmstudio
   mcp-k8s-go
   mcp-grafana
-  mpv
   nitch
   nix-search-tv
   nixos-generators

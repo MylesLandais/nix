@@ -13,6 +13,7 @@
     ./hyprpanel.nix
     ./modules/pro.nix # Professional creative tools
     ./modules/firefox.nix # Firefox configuration
+    ./modules/features/mpv
     ./shelltools
     ./devtooling
     inputs.stylix.homeModules.stylix # System theming
@@ -177,7 +178,7 @@
         '';
       }))
       playerctl
-      plex-mpv-shim
+      # plex-mpv-shim # Plex cast target - managed via mpv-mod.plexShim
       pulseaudio
       pulseaudio-ctl
       pulsemixer
@@ -333,39 +334,6 @@
         };
       };
     };
-    mpv = {
-      enable = true;
-      # NOTE: gpu-api MUST stay opengl on cerberus. Vulkan fails to init a GPU
-      # context here, so mpv silently cascades to vo=vdpau over Xwayland -> blank
-      # 4K video + window lands off the visible Wayland monitors. vo=gpu-next +
-      # opengl + wayland is the verified-working path. Do not "fix" back to vulkan.
-      # See Vault/setup-mpv.md and memory workstation-vulkan-broken-mpv.
-      config = {
-        vo = "gpu-next";
-        gpu-context = "wayland";
-        hwdec = "auto-safe";
-        hwdec-codecs = "all";
-        hr-seek-framedrop = "no";
-        profile = "gpu-hq";
-        gpu-api = "opengl";
-        screenshot-format = "png";
-        screenshot-high-bit-depth = "yes";
-        screenshot-png-compression = "0";
-        screenshot-directory = "~/Pictures/mpv/";
-        screenshot-template = "%F - [%P] (%#01n)";
-        hr-seek = "yes";
-      };
-      extraInput = ''
-        , frame-step ; show-text "Frame forward"
-        . frame-back-step ; show-text "Frame backward"
-        [ ignore ; frame-back-step ; set time-pos ''${time-pos}; set ab-loop-a ''${time-pos}; show-text "A set at ''${time-pos}"
-        ] ignore ; frame-step ; set time-pos ''${time-pos}; set ab-loop-b ''${time-pos}; show-text "B set at ''${time-pos}"
-        l set ab-loop-a no; set ab-loop-b no; show-text "A-B loop cleared"
-      '';
-      scripts = with pkgs.mpvScripts; [ uosc ];
-    };
-    # mpv: Frame-accurate A-B looping with uosc for precise video analysis
-
     vscode = {
       enable = true;
       package = pkgs.vscode;
@@ -395,6 +363,8 @@
       };
     };
   };
+
+  mpv-mod.enable = true;
 
   qt = {
     enable = true;

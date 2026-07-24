@@ -43,6 +43,7 @@ in
     ./features/devtooling
     ./features/gtk
     ./features/terminals
+    ./features/mpv
     ./features/stylix
     ./features/flameshot.nix
     ./features/ssh-bitwarden.nix
@@ -88,6 +89,7 @@ in
   gtk-mod.enable = true;
   hyprland.enable = true;
   terminals.enable = true;
+  mpv-mod.enable = true;
 
   # Gammastep: auto-adjust screen color temperature for eye fatigue reduction.
   # Uses wayland backend for Hyprland. Coordinates default to Chicago (cerberus).

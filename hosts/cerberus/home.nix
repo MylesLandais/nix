@@ -391,6 +391,8 @@ in
     inputs.llm.packages.${pkgs.system}.cursor-agent
   ];
 
+  mpv-mod.plexShim.enable = true;
+
   xdg.desktopEntries.vesktop = {
     name = "Vesktop";
     genericName = "Internet Messenger";
