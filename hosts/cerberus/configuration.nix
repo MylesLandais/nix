@@ -28,6 +28,16 @@ in
     ../../modules/chromium-policy.nix
   ];
 
+  # Developer Lamia Browser Adapter. Nixpkgs Chromium resolves native hosts
+  # through this system registry rather than Chrome's per-user registry.
+  environment.etc."chromium/native-messaging-hosts/org.lamia.browser.json".text = builtins.toJSON {
+    name = "org.lamia.browser";
+    description = "Lamia Browser Adapter development host";
+    path = "/home/warby/Workspace-git/maya-unified/scripts/lamia-browser-host-dev.sh";
+    type = "stdio";
+    allowed_origins = [ "chrome-extension://mlpcnheempoikdefoabobmilgdnicdlm/" ];
+  };
+
   # ---------------------------------------------------------------------------
   # Chromium-based browser policies (Helium, Chromium, etc.)
   # flags.vaapi here is metadata only; launch flags come from HM *-flags.conf
@@ -453,10 +463,15 @@ in
   # Firewall configuration for Syncthing
   networking.firewall = {
     allowedTCPPorts = [
+      3000   # Plex MPV Shim control
       22000  # Syncthing file transfer
       8384   # Syncthing Web GUI
     ];
     allowedUDPPorts = [
+      32410  # Plex GDM discovery
+      32412  # Plex GDM discovery
+      32413  # Plex GDM discovery
+      32414  # Plex GDM discovery
       22000  # Syncthing discovery
       21027  # Syncthing local discovery
     ];
