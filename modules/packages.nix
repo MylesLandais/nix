@@ -73,6 +73,7 @@ with pkgs;
   oci-cli
   opentofu
   opencloud-desktop
+  penpot-desktop
   pavucontrol
   playerctl
   pulseaudio
