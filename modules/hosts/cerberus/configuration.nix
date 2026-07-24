@@ -31,6 +31,13 @@ _: {
         inputs.nix-vscode-extensions.overlays.default
         inputs.nix-cachyos-kernel.overlays.pinned
         (import "${inputs.self}/devtooling/cursor/overlay.nix")
+        (_final: prev: {
+          # oci-cli 3.88.0 declares setuptools <81, but nixpkgs supplies 82.
+          # The wheel builds successfully; only the metadata check is stale.
+          oci-cli = prev.oci-cli.overridePythonAttrs (_old: {
+            dontCheckRuntimeDeps = true;
+          });
+        })
       ];
 
       host = {
