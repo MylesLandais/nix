@@ -196,7 +196,13 @@ in
         StartLimitBurst = 5;
       };
       Service = {
-        ExecStart = gioMount;
+        # Run mountScript, not bare `gio mount`. The script already handles the
+        # already-mounted case (it symlinks the shortcut and exits 0), falls back
+        # across the public URIs, and prints actionable guidance on failure. The
+        # bare command exits 2 with "Location is already mounted" whenever the
+        # share is present — which is most of the time — so the unit failed on a
+        # working mount and retried until the start limit stopped it.
+        ExecStart = "${mountScript}/bin/mount-hydra-gvfs";
         Restart = "on-failure";
         RestartSec = "30s";
       };
