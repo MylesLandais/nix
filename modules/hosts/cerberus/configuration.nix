@@ -28,6 +28,7 @@ _: {
         "${inputs.self}/modules/_features/file-sharing.nix"
         "${inputs.self}/modules/_features/syncthing.nix"
         "${inputs.self}/modules/_features/hardware-tuning.nix"
+        "${inputs.self}/modules/_features/nix-ld.nix"
         "${inputs.self}/modules/_features/security.nix"
         "${inputs.self}/modules/_features/users.nix"
         "${inputs.self}/modules/_features/firefox-policy.nix"
