@@ -17,11 +17,12 @@
         package = pkgs.kanagawa-icon-theme;
         name = osConfig.host.themeData.gtk.iconName;
       };
-      theme = {
-        inherit (osConfig.host.themeData.gtk) name;
-        package = pkgs.kanagawa-gtk-theme;
-      };
-      gtk4.theme = config.gtk.theme;
+      # gtk.theme and gtk4.theme are both owned by stylix (stylix.targets.gtk.enable).
+      # It generates the widget theme from the Kanagawa base16Scheme, replacing
+      # pkgs.kanagawa-gtk-theme which nixpkgs removed along with its GTK2
+      # gtk-engine-murrine dependency. Setting either here collides with stylix.
+      # host.themeData.gtk.name ("Kanagawa-B") is now unused for the widget theme;
+      # iconName above is still live.
     };
 
     # GTK file manager: Nemo + archive integration

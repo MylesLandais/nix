@@ -25,9 +25,19 @@
     helium.url = "github:FKouhai/helium2nix";
     agenix.url = "github:ryantm/agenix";
     trigo.url = "github:FKouhai/trigo";
+    # Frozen nixpkgs for sunshine only. sunshine is built with cudaSupport = true,
+    # a non-default variant Hydra never builds — and CUDA is unfree, so it could not
+    # redistribute it anyway. Tracking the main nixpkgs meant every routine bump
+    # invalidated it and forced a local CUDA build. Pinned here so ordinary updates
+    # leave it alone; bump deliberately when you actually want a newer sunshine.
+    # Must stay a fixed rev — a second moving branch would recreate the problem.
+    sunshine-nixpkgs.url = "github:NixOS/nixpkgs/f13ff45afd1bb73e640eaa08a7066dbed07e3238";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
-    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.6.19";
+    # Pinned to a release tag on purpose — upstream treats Nix as best-effort, so a
+    # reproducible tag beats tracking main. Note a tag pin cannot be advanced by
+    # `nix flake update`; bump this line to move it.
+    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.8.3";
     nur.url = "github:nix-community/NUR";
     claude-code.url = "github:sadjow/claude-code-nix";
     # numtide multi-agent flake: opencode, codex, gemini-cli, etc. Tracks
@@ -62,7 +72,14 @@
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    # TODO(unsolved): held at the 2026-07-10 rev. The 2026-08-09 update pointed at
+    # zen release 1.21.13b, whose GitHub asset 404s —
+    # https://github.com/zen-browser/desktop/releases/download/1.21.13b/zen.linux-x86_64.tar.xz
+    # returns 404, so the fetch fails and the whole toplevel build fails with it.
+    # Upstream packaging bug, nothing to fix on our side.
+    # To resolve: drop the pin back to the bare URL once upstream publishes a release
+    # whose asset actually exists.
+    zen-browser.url = "github:0xc000022070/zen-browser-flake/71e156423dae9496d7fd9e89029a1a82516fb9d8";
     wallpapers = {
       url = "github:FKouhai/Kanagawa-wallpapers";
     };

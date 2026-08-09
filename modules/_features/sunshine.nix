@@ -2,8 +2,18 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
+let
+  # Built from a frozen nixpkgs (see flake.nix) so routine input updates stop
+  # invalidating this derivation. cudaSupport is a non-default variant that Hydra
+  # never publishes, so any hash change means a local CUDA build.
+  sunshinePkgs = import inputs.sunshine-nixpkgs {
+    inherit (pkgs) system;
+    config.allowUnfree = true;
+  };
+in
 {
   config = lib.mkIf config.host.remoteGaming.enable {
     boot.kernelModules = [
@@ -16,7 +26,10 @@
       autoStart = true;
       openFirewall = true;
       capSysAdmin = true;
-      package = pkgs.sunshine.override { cudaSupport = true; };
+      # cudaSupport drives SUNSHINE_ENABLE_CUDA, which primarily provides the NVFBC
+      # capture path (not simply "NVENC" — which capture and encoder actually get
+      # selected has to be read from a live stream's logs).
+      package = sunshinePkgs.sunshine.override { cudaSupport = true; };
 
       # Global Sunshine settings (rendered to sunshine.conf)
       settings = {

@@ -245,7 +245,11 @@
         runtimeInputs = with pkgs; [
           openssh
         ];
-        # rustdesk: use system package from modules/packages.nix (unfree; not in flake closure)
+        # TODO(unsolved): this shells out to a system `rustdesk` that is no longer
+        # installed — it was dropped from modules/_packages.nix on 2026-08-09 because
+        # the nixpkgs bump forced an uncached Rust+Flutter rebuild that blew the build
+        # budget. This wrapper will fail with "rustdesk: command not found" until the
+        # package is restored (see the note in modules/_packages.nix).
         text = builtins.readFile ../../scripts/rustdesk-windows-qemu.sh;
       };
 

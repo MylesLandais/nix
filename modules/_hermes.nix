@@ -18,15 +18,14 @@
   # the warby user). Override so interactive use points at the user-owned dir.
   environment.variables.HERMES_HOME = lib.mkForce "/home/warby/.hermes";
 
-  # TODO(unsolved): the gateway cannot start on the current hermes-agent pin —
-  # `from cron.scheduler_provider import resolve_cron_scheduler` raises
-  # ModuleNotFoundError in gateway/run.py, i.e. the module is missing from the
-  # packaged env. It crash-looped 12557 times at ~5s CPU per attempt before being
-  # held back here. wantedBy is cleared rather than setting enable = false so the
-  # `hermes` CLI and its config stay available for interactive/ACP use.
-  # To resolve: bump the hermes-agent input (50 days stale as of 2026-08-09) and
-  # re-test; if it still fails, the packaging gap is upstream.
-  systemd.services.hermes-agent.wantedBy = lib.mkForce [ ];
+  # The upstream module defaults to Restart="always" and exposes no start limit, so
+  # a gateway that cannot start has nothing stopping it. On the v2026.6.19 pin it
+  # crash-looped 12557 times at ~5s CPU per attempt. Cap it: five failures in five
+  # minutes and it stays failed, visible in `systemctl --failed`, instead of looping.
+  systemd.services.hermes-agent = {
+    startLimitIntervalSec = 300;
+    startLimitBurst = 5;
+  };
 
   services.hermes-agent = {
     enable = true;

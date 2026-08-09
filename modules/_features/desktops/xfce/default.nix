@@ -16,7 +16,7 @@
 
   config = lib.mkIf (config.xfce.enable && osConfig.host.desktop == "xfce") {
     home.packages = with pkgs; [
-      arc-theme
+      # arc-theme removed from nixpkgs (GTK2 gtk-engine-murrine); see system.nix.
       papirus-icon-theme
       xfce4-whiskermenu-plugin
       xfce4-pulseaudio-plugin

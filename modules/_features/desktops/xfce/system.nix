@@ -18,7 +18,8 @@
       xfce4-whiskermenu-plugin
       thunar-archive-plugin
       thunar-volman
-      arc-theme
+      # arc-theme removed from nixpkgs (GTK2 gtk-engine-murrine). XFCE falls back to
+      # Adwaita; this is the legacy X11 fallback desktop, not the daily driver.
       papirus-icon-theme
     ];
 

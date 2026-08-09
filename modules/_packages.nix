@@ -45,7 +45,8 @@ with pkgs;
   grim
   gowall
   gpgme
-  gtk-engine-murrine
+  # gtk-engine-murrine removed from nixpkgs (GTK2). It existed only to render
+  # kanagawa-gtk-theme, which went with it; stylix generates the theme now.
   gum
   hack-font
   pkgs.maple-mono.NF-unhinted
@@ -53,10 +54,12 @@ with pkgs;
   heroic
   hubble
   hyprshot
-  jetbrains.idea-oss
+  # jetbrains.idea-oss dropped: nixpkgs marks it insecure (NIXPKGS-2026-2269) and
+  # no longer updates it. Removed outright rather than swapped for jetbrains.idea.
   jetbrains-mono
   jq
-  kanagawa-gtk-theme
+  # kanagawa-gtk-theme removed from nixpkgs (GTK2 gtk-engine-murrine dependency);
+  # stylix generates the widget theme from the Kanagawa base16Scheme instead.
   kanagawa-icon-theme
   krita
   kubernetes-helm
@@ -85,7 +88,15 @@ with pkgs;
   python3
   revive
   ripgrep
-  rustdesk
+  # TODO(unsolved): rustdesk dropped 2026-08-09. The nixpkgs bump changed one of its
+  # dependencies, so 1.4.9 needed a fresh Rust+Flutter compile under a hash Hydra had
+  # not published (404 in cache.nixos.org, chaotic and nix-community). Cargo fans out
+  # inside each Nix job slot, so it drove load to 35 on a 12-core box even under
+  # --max-jobs 4 --cores 3, and blew the 20-minute build budget.
+  # This breaks `rustdesk-windows-qemu` (modules/flake-parts/bootstrap-apps.nix),
+  # which shells out to the system rustdesk. windows-kit/install_rustdesk.ps1 is
+  # unaffected — that installs on the Windows guest.
+  # To restore: re-add once Hydra publishes a cached build for the current nixpkgs.
   virt-viewer
   sesh
   slack
@@ -98,7 +109,8 @@ with pkgs;
   tflint
   tldr
   tmux
-  tokyonight-gtk-theme
+  # tokyonight-gtk-theme removed from nixpkgs (GTK2 gtk-engine-murrine), same as
+  # kanagawa-gtk-theme above. The tokyonight flake input still themes everything else.
   treefmt
   upower
   unzip
