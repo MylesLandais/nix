@@ -25,7 +25,11 @@
         "https://attic.xuyh0120.win/lantian"
         "https://cache.nixos.org/"
         "https://zed.cachix.org/"
-        "https://cache.garnix.io/"
+        # TODO(unsolved): cache.garnix.io disabled 2026-08-09 — it was timing out
+        # entirely (no response to /nix-cache-info), and Nix waits on it before
+        # falling through, so every cache miss paid the timeout. Re-enable once it
+        # responds again; nothing here depends on it exclusively.
+        # "https://cache.garnix.io/"
         "https://noctalia.cachix.org"
         "https://cache.numtide.com"
       ];
