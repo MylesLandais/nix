@@ -34,7 +34,11 @@ _: {
         (lib.mkIf (config.host.greeter == "sddm") {
           services.displayManager.sddm = {
             enable = true;
+            # Qt6 SDDM: required by sddm-astronaut-theme.
+            package = pkgs.kdePackages.sddm;
             wayland.enable = true;
+            # kwin over the weston default: better behaved on the NVIDIA driver.
+            wayland.compositor = "kwin";
             theme = lib.mkForce "sddm-astronaut-theme";
             extraPackages = [ sddm-astronaut ];
             settings.Theme.Current = "sddm-astronaut-theme";

@@ -65,7 +65,7 @@ _: {
         class = "desktop";
         bar = "noctalia";
         desktop = "hyprland";
-        greeter = "greetd";
+        greeter = "sddm";
         gpuType = "nvidia";
         theme = "kanagawa-dragon";
         workload = "default";
