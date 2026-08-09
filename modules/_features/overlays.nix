@@ -7,5 +7,9 @@
     inputs.nur.overlays.default
     inputs.claude-code.overlays.default
     inputs.nix-vscode-extensions.overlays.default
+    # Buzz has no upstream Nix packaging, so it is repackaged from the official
+    # .deb. Shared rather than host-local because nothing about it is host-specific;
+    # only desktop hosts pull env-packages.nix and actually build it.
+    (import "${inputs.self}/modules/_features/overlays/buzz-desktop.nix")
   ];
 }
