@@ -89,6 +89,19 @@
       };
     };
 
+    # TODO(unsolved): avahi-daemon will not restart in place. /run/avahi-daemon
+    # persists across a stop owned by root, and avahi — which creates and chowns
+    # that directory itself — then dies with "Failed to create runtime directory".
+    # Before that it dies on the stale pid inside it ("Failed to create PID file:
+    # File exists"). The practical effect is that the daemon survives only until
+    # something restarts it; it had been up untouched since 2026-08-03 and failed
+    # the moment a nixos-rebuild switch cycled it on 2026-08-09.
+    # Neither RuntimeDirectory nor an ExecStartPre cleanup fixes it: the unit's
+    # namespace hardening means a pre-start `rm` does not reach the real /run.
+    # A reboot clears it (fresh /run tmpfs). To resolve properly, work out who
+    # should own /run/avahi-daemon — likely a tmpfiles rule creating it as
+    # avahi:avahi before the unit starts.
+
     environment.systemPackages = [
       (pkgs.writeShellScriptBin "sunshine-stream" ''
         # Route audio to the Sunshine virtual sink
