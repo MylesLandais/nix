@@ -31,15 +31,74 @@ let
   # Chromium proper has not shown the issue, so it keeps hardware decode.
   softwareDecodeFlagsFile = mkChromiumFlags (chromiumStandardBrowserFlags // { vaapiMode = false; });
 
-  patchedCodex = inputs.llm.packages.${pkgs.system}.codex.overrideAttrs (old: {
-    cargoBuildFlags = (old.cargoBuildFlags or [ ]) ++ [
-      "--package"
-      "codex-code-mode-host"
+  # Codex ships an official portable package containing codex, codex-code-mode-host
+  # and their resources in one tree. Use it instead of overriding the llm flake's
+  # derivation: an override produces a store path nobody has published, so it fell
+  # back to a full Rust build — ~40 minutes on every `llm` bump.
+  #
+  # A symlinkJoin of the cached codex plus a standalone helper does NOT work.
+  # codex-rs/install-context/src/lib.rs canonicalizes std::env::current_exe() and
+  # resolves the helper as a sibling of the real binary; on Linux current_exe()
+  # reads /proc/self/exe, which follows symlinks straight back to the original store
+  # path, where the helper is absent. The whole package has to move together.
+  codexVersion = "0.147.0";
+  llmCodex = inputs.llm.packages.${pkgs.system}.codex;
+  llmCodexVersion = llmCodex.version or (lib.getVersion llmCodex.name);
+
+  # Fail loudly if the `llm` input moves codex without this release tag following it,
+  # rather than silently pairing a helper binary with a different codex.
+  patchedCodex =
+    assert lib.assertMsg (llmCodexVersion == codexVersion)
+      "codex release ${codexVersion} is out of sync with llm codex ${llmCodexVersion} — bump codexVersion and its hash in modules/_home.nix";
+    pkgs.stdenv.mkDerivation {
+      pname = "codex";
+      version = codexVersion;
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/openai/codex/releases/download/rust-v${codexVersion}/codex-package-x86_64-unknown-linux-musl.tar.gz";
+      hash = "sha256-vXWNU9VuQdxl4EX0WJ33mgOO0ZegEa3LUqJY5q1kz9o=";
+    };
+
+    # codex, codex-code-mode-host, rg and bwrap are static-pie and need nothing.
+    # codex-resources/zsh/bin/zsh is the one dynamically linked binary in the
+    # archive (interpreter /lib64/ld-linux-x86-64.so.2, needs libtinfo.so.6) and
+    # cannot exec on NixOS unpatched. Codex reaches it via bundled_zsh_path().
+    nativeBuildInputs = [ pkgs.autoPatchelfHook ];
+    buildInputs = [
+      pkgs.ncurses
+      pkgs.stdenv.cc.cc.lib
     ];
-    postInstall = (old.postInstall or "") + ''
-      install -m755 target/${pkgs.stdenv.hostPlatform.rust.rustcTarget}/release/codex-code-mode-host $out/bin/
+
+    dontUnpack = true;
+    dontStrip = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$TMPDIR/unpack" "$out"
+      tar -xzf "$src" -C "$TMPDIR/unpack"
+
+      packageRoot="$(find "$TMPDIR/unpack" -type f -name codex-package.json -printf '%h\n' -quit)"
+      if [ -z "$packageRoot" ]; then
+        echo "codex-package.json not found in release archive" >&2
+        exit 1
+      fi
+
+      cp -a "$packageRoot"/. "$out"/
+
+      test -f "$out/codex-package.json"
+      test -x "$out/bin/codex"
+      test -x "$out/bin/codex-code-mode-host"
+
+      runHook postInstall
     '';
-  });
+
+    meta = {
+      mainProgram = "codex";
+      platforms = [ "x86_64-linux" ];
+      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    };
+  };
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
