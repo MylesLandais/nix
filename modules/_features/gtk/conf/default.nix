@@ -23,6 +23,16 @@
       # gtk-engine-murrine dependency. Setting either here collides with stylix.
       # host.themeData.gtk.name ("Kanagawa-B") is now unused for the widget theme;
       # iconName above is still live.
+
+      # stylix names the theme "adw-gtk3" — the light variant — and relies on the
+      # prefer-dark flag for polarity, which it does not itself write into
+      # settings.ini. The old Kanagawa-B theme was inherently dark so never needed
+      # it. Without this, GTK3 renders light, and Chromium-based browsers (Helium,
+      # Vivaldi, Chromium) read the GTK theme to pick their own light/dark mode —
+      # so they flip to light too. dconf already carries color-scheme=prefer-dark;
+      # this is the GTK3-side equivalent.
+      gtk3.extraConfig."gtk-application-prefer-dark-theme" = 1;
+      gtk4.extraConfig."gtk-application-prefer-dark-theme" = 1;
     };
 
     # GTK file manager: Nemo + archive integration
