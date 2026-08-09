@@ -1,6 +1,11 @@
 _: {
   flake.nixosModules.valkeyInfra =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
       cfg = config.services.infra.valkey;
       dataDir = "/var/lib/valkey";
@@ -28,9 +33,16 @@ _: {
           description = "Valkey in-memory data store";
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
+          # TODO(unsolved): this restarted 22474 times because a Docker container
+          # (dev.valkey, from a stale duplicate crawler checkout) already held
+          # 0.0.0.0:6379, so bind always failed. The ceiling below turns a permanent
+          # conflict into a fast, visible failure instead of an infinite loop.
+          # See docs/infra/README.md for who is supposed to own :6379.
+          startLimitIntervalSec = 300;
+          startLimitBurst = 5;
           serviceConfig = {
             Type = "notify";
-            ExecStart = "${lib.getExe pkgs.valkey} --bind ${cfg.bind} --port ${toString cfg.port} --dir ${dataDir} --appendonly yes";
+            ExecStart = "${pkgs.valkey}/bin/valkey-server --bind ${cfg.bind} --port ${toString cfg.port} --dir ${dataDir} --appendonly yes";
             Restart = "on-failure";
             RestartSec = "5s";
             StateDirectory = "valkey";

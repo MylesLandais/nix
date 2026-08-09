@@ -41,7 +41,7 @@
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
-- [ ] I have tested the configuration with `home-manager switch` or `nixos-rebuild switch`
+- [ ] I have tested the configuration with `nix flake check` and/or `sudo nixos-rebuild switch --flake .#<host>`
 - [ ] New and existing unit tests pass locally with my changes
 
 ## Additional Notes

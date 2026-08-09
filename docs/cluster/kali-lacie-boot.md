@@ -132,6 +132,6 @@ after `write-kali-usb.sh`.
 ## Related
 
 - [lacie-multiboot-kali-notes.md](lacie-multiboot-kali-notes.md) — multiboot vs dd lessons, UEFI backlog
-- [hosts/lacie/readme.md](../../hosts/lacie/readme.md) — disk layout
+- [modules/hosts/lacie/configuration.nix](../../modules/hosts/lacie/configuration.nix) — lacie host / imaging options
 - [installer-iso.md](installer-iso.md) — home-office installer ISO
 - [recovery-hardware-qa.md](recovery-hardware-qa.md) — OptiPlex hardware drills

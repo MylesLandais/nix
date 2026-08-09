@@ -6,7 +6,7 @@ under **Legacy/CSM** on cluster laptops. **UEFI also fails on that dd stick** â€
 so UEFI trouble is **not lacie-specific**; treat as **target firmware + boot
 menu + Kali ISO** first, then lacie GRUB.
 
-Related: [kali-lacie-boot.md](kali-lacie-boot.md), [hosts/lacie/readme.md](../../hosts/lacie/readme.md).
+Related: [kali-lacie-boot.md](kali-lacie-boot.md), [modules/hosts/lacie/configuration.nix](../../modules/hosts/lacie/configuration.nix) (imaging / disk wiring).
 
 ## What worked (dedicated USB, `/dev/sdb` dd)
 

@@ -2,7 +2,12 @@
 # Intel i5-6500, 12 GB RAM, 238 GB SSD (sda, root) + 9.1 TB HDD (sdb, data)
 _: {
   flake.nixosModules.qmom2Hardware =
-    { config, lib, modulesPath, ... }:
+    {
+      config,
+      lib,
+      modulesPath,
+      ...
+    }:
     {
       imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -25,14 +30,21 @@ _: {
       fileSystems."/boot" = {
         device = "/dev/disk/by-uuid/04E9-801D";
         fsType = "vfat";
-        options = [ "fmask=0077" "dmask=0077" ];
+        options = [
+          "fmask=0077"
+          "dmask=0077"
+        ];
       };
 
       # 9.1 TB HDD — sdb1, XFS, data volume (reformatted 2026-05-16)
       fileSystems."/srv/data" = {
         device = "/dev/disk/by-uuid/2f206721-500c-409c-b147-a2fdb44544b0";
         fsType = "xfs";
-        options = [ "noatime" "nofail" "x-systemd.automount" ];
+        options = [
+          "noatime"
+          "nofail"
+          "x-systemd.automount"
+        ];
       };
 
       swapDevices = [

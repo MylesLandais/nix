@@ -17,7 +17,7 @@ let
       mkdir -p $out/share/wallpapers
       cp -r ${src}/wallpapers/* $out/share/wallpapers
     '';
-    buildPhase=''
+    buildPhase = ''
       echo ""
     '';
   };

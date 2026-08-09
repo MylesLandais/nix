@@ -1,6 +1,11 @@
 _: {
   flake.nixosModules.authentikInfra =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
       cfg = config.services.infra.authentik;
       secretKey =
@@ -52,6 +57,14 @@ _: {
           ];
           wants = [ "network-online.target" ];
           wantedBy = [ "multi-user.target" ];
+          # TODO(unsolved): all three authentik units looped 1162 times each on
+          # `password authentication failed for user "authentik"` — five Postgres
+          # instances are running on this box and the one answering :5432 does not
+          # hold the role. Blocked on consolidating to a single shared Postgres
+          # (see docs/infra/README.md). The demo key here is also a placeholder and
+          # must move to agenix before this is enabled anywhere real.
+          startLimitIntervalSec = 300;
+          startLimitBurst = 5;
           serviceConfig = {
             Type = "notify";
             Restart = "on-failure";
@@ -89,6 +102,8 @@ _: {
           description = "Authentik worker";
           after = [ "authentik-server.service" ];
           wantedBy = [ "multi-user.target" ];
+          startLimitIntervalSec = 300;
+          startLimitBurst = 5;
           serviceConfig = {
             Type = "notify";
             Restart = "on-failure";
@@ -125,6 +140,8 @@ _: {
           description = "Authentik Traefik proxy outpost";
           after = [ "authentik-server.service" ];
           wantedBy = [ "multi-user.target" ];
+          startLimitIntervalSec = 300;
+          startLimitBurst = 5;
           serviceConfig = {
             Type = "notify";
             Restart = "on-failure";

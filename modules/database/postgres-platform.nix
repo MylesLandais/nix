@@ -1,6 +1,11 @@
 _: {
   flake.nixosModules.postgresInfra =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
       cfg = config.services.infra.postgres;
     in

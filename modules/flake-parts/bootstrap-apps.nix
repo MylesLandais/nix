@@ -214,7 +214,7 @@
         text = ''
           GOLDEN="$HOME/win-kit-staging/golden"
           QCOW=$(find "$GOLDEN" -maxdepth 1 -name 'win11-pro-gamer-*.qcow2' -printf '%f\n' 2>/dev/null | sort | tail -1)
-          QCOW="${QCOW:+$GOLDEN/$QCOW}"
+          QCOW="${"QCOW:+$GOLDEN/$QCOW"}"
           if [ -z "$QCOW" ]; then
             echo "[boot-windows-golden] no golden qcow2 in $GOLDEN" >&2
             exit 1

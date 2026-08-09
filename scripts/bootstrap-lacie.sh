@@ -115,7 +115,7 @@ step "Phase 3: Generating hardware-configuration.nix"
 run nixos-generate-config --root "$MNT" --no-filesystems
 
 GENERATED="/etc/nixos/hardware-configuration.nix"
-TARGET="$MNT/nix-configs/hosts/lacie/hardware-configuration.nix"
+TARGET="$MNT/nix-configs/modules/hosts/lacie/hardware-configuration.nix"
 
 if [[ $DRY_RUN -eq 0 ]]; then
   if [[ -f "$GENERATED" ]]; then
@@ -204,6 +204,6 @@ Install complete. Before rebooting:
 
   5. SSH and git auth:
      Copy your private key to ~/.ssh/ or set up Tailscale for vault access.
-     See hosts/lacie/README.md for the vault trust bootstrap plan.
+     See docs/cluster/ for the vault trust bootstrap plan.
 
 EOF

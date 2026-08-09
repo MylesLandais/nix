@@ -2,7 +2,12 @@
 # Intel CPU, 16 GB RAM, 1 TB Samsung PM981 NVMe (nvme0n1, boot/swap/root) + 9.1 TB WD HDD (sda, /srv/data)
 _: {
   flake.nixosModules.tl0m2Hardware =
-    { config, lib, modulesPath, ... }:
+    {
+      config,
+      lib,
+      modulesPath,
+      ...
+    }:
     {
       imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -26,13 +31,20 @@ _: {
       fileSystems."/boot" = {
         device = "/dev/disk/by-label/BOOT";
         fsType = "vfat";
-        options = [ "fmask=0077" "dmask=0077" ];
+        options = [
+          "fmask=0077"
+          "dmask=0077"
+        ];
       };
 
       fileSystems."/srv/data" = {
         device = "/dev/disk/by-label/data";
         fsType = "xfs";
-        options = [ "noatime" "nofail" "x-systemd.automount" ];
+        options = [
+          "noatime"
+          "nofail"
+          "x-systemd.automount"
+        ];
       };
 
       swapDevices = [

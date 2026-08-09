@@ -8,7 +8,7 @@ _: {
       ...
     }:
     {
-      imports = [ "${inputs.self}/modules/features/ssh-keys.nix" ];
+      imports = [ "${inputs.self}/modules/_features/ssh-keys.nix" ];
 
       nixpkgs.config.allowUnfree = true;
 
@@ -18,12 +18,12 @@ _: {
         class = "desktop";
         bar = "noctalia";
         desktop = "xfce";
-      kali.enable = true;
+        kali.enable = true;
         kali.profile = "large";
         greeter = "greetd";
         gpuType = "none";
         theme = "kanagawa-dragon";
-        profile = "default";
+        workload = "default";
         wallpaper = "${inputs.wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/3895e.jpg";
         mainMonitor = {
           name = "Virtual-1";
@@ -58,6 +58,7 @@ _: {
         ];
         initialPassword = "kali";
         shell = pkgs.fish;
+        openssh.authorizedKeys.keys = config.users.users.warby.openssh.authorizedKeys.keys;
       };
 
       services.getty.autologinUser = lib.mkDefault "kali";

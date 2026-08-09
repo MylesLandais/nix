@@ -1,6 +1,11 @@
 _: {
   flake.nixosModules.mayaWorkerInfra =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
       infraLib = import ../infra/_lib.nix { inherit lib; };
       cfg = config.services.infra.mayaWorker;
@@ -8,36 +13,37 @@ _: {
       secretIdFile = "/run/agenix/maya-approle-secret-id";
     in
     {
-      options.services.infra.mayaWorker = lib.recursiveUpdate
-        (infraLib.mkServiceOptions {
-          name = "maya-worker";
-          domain = "maya-worker.homelab.lan";
-          authentik = false;
-          openbao = true;
-          traefik = false;
-        })
-        {
-          workspacePath = lib.mkOption {
-            type = lib.types.str;
-            default = "/home/warby/Workspace-internal";
-          };
+      options.services.infra.mayaWorker =
+        lib.recursiveUpdate
+          (infraLib.mkServiceOptions {
+            name = "maya-worker";
+            domain = "maya-worker.homelab.lan";
+            authentik = false;
+            openbao = true;
+            traefik = false;
+          })
+          {
+            workspacePath = lib.mkOption {
+              type = lib.types.str;
+              default = "/home/warby/Workspace-git/maya-unified";
+            };
 
-          openbaoRoleId = lib.mkOption {
-            type = lib.types.str;
-            default = "";
-            description = "AppRole role_id for maya-agent (non-secret).";
-          };
+            openbaoRoleId = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = "AppRole role_id for maya-agent (non-secret).";
+            };
 
-          discordSecretPath = lib.mkOption {
-            type = lib.types.str;
-            default = "maya/discord";
-          };
+            discordSecretPath = lib.mkOption {
+              type = lib.types.str;
+              default = "maya/discord";
+            };
 
-          pyloadSecretPath = lib.mkOption {
-            type = lib.types.str;
-            default = "pyload/maya-agent";
+            pyloadSecretPath = lib.mkOption {
+              type = lib.types.str;
+              default = "pyload/maya-agent";
+            };
           };
-        };
 
       config = lib.mkIf cfg.enable {
         systemd.tmpfiles.rules = [
@@ -57,6 +63,14 @@ _: {
           ];
           wants = [ "network-online.target" ];
           wantedBy = [ "multi-user.target" ];
+          # TODO(unsolved): restarted 11534 times with exit 2 — ExecStart points at
+          # ${workspacePath}/apps/maya-bot, but Workspace-internal/apps does not exist
+          # at all, so `uv run` could never spawn. Three maya trees are in play and
+          # none is declared canonical: Workspace/src/maya (last touched 2026-07-09),
+          # Workspace-git/maya-unified (2026-07-21), and this missing path. Pick one,
+          # point workspacePath at it, and retire the others before re-enabling.
+          startLimitIntervalSec = 300;
+          startLimitBurst = 5;
           serviceConfig = {
             Type = "simple";
             User = "warby";
@@ -71,7 +85,7 @@ _: {
               "PYLOAD_URL=http://127.0.0.1:8000"
               "OTEL_SERVICE_NAME=maya-bot"
             ];
-            ExecStart = "${pkgs.uv}/bin/uv run maya-bot";
+            ExecStart = "${pkgs.uv}/bin/uv run --project ${cfg.workspacePath}/apps/maya-bot maya-bot";
             Restart = "on-failure";
             RestartSec = "10s";
             PATH = "${pkgs.uv}/bin:${cfg.workspacePath}/.venv/bin";

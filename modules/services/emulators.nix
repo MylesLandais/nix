@@ -1,6 +1,11 @@
 _: {
   flake.nixosModules.emulators =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       options.host.emulators.enable = lib.mkEnableOption "console / handheld emulators";
 
@@ -8,13 +13,15 @@ _: {
         nixpkgs.config.allowUnfree = true;
 
         environment.systemPackages = with pkgs; [
-          (retroarch.withCores (cores: with cores; [
-            mgba
-            snes9x
-            mupen64plus
-            genesis-plus-gx
-            beetle-psx-hw
-          ]))
+          (retroarch.withCores (
+            cores: with cores; [
+              mgba
+              snes9x
+              mupen64plus
+              genesis-plus-gx
+              beetle-psx-hw
+            ]
+          ))
           dolphin-emu
           pcsx2
           mgba

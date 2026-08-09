@@ -41,18 +41,21 @@ _: {
         })
       ];
 
-      services.infra.authentik.secretKeyFile = lib.mkIf (config.infra.demo.enable && hasAuthentikKey)
-        config.age.secrets.authentik-secret-key.path;
+      services.infra.authentik.secretKeyFile = lib.mkIf (
+        config.infra.demo.enable && hasAuthentikKey
+      ) config.age.secrets.authentik-secret-key.path;
 
-      systemd.services.openbao-unseal = lib.mkIf (config.services.infra.openbao.enable && hasOpenbaoUnseal) {
-        description = "Unseal OpenBao after boot";
-        after = [ "openbao.service" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${pkgs.openbao}/bin/bao operator unseal $(cat ${config.age.secrets.openbao-unseal.path})";
-        };
-      };
+      systemd.services.openbao-unseal =
+        lib.mkIf (config.services.infra.openbao.enable && hasOpenbaoUnseal)
+          {
+            description = "Unseal OpenBao after boot";
+            after = [ "openbao.service" ];
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = "${pkgs.openbao}/bin/bao operator unseal $(cat ${config.age.secrets.openbao-unseal.path})";
+            };
+          };
     };
 }

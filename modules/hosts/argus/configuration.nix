@@ -1,8 +1,14 @@
 _: {
   flake.nixosModules.argus =
-    { config, lib, pkgs, inputs, ... }:
     {
-      imports = [ "${inputs.self}/modules/features/ssh-keys.nix" ];
+      config,
+      lib,
+      pkgs,
+      inputs,
+      ...
+    }:
+    {
+      imports = [ "${inputs.self}/modules/_features/ssh-keys.nix" ];
 
       nixpkgs.config.allowUnfree = true;
 
@@ -19,7 +25,10 @@ _: {
           systemd-boot.enable = true;
           efi.canTouchEfiVariables = true;
         };
-        supportedFilesystems = [ "ntfs" "exfat" ];
+        supportedFilesystems = [
+          "ntfs"
+          "exfat"
+        ];
         kernelParams = [
           # Quiet boot for a headless box, but keep early messages.
           "quiet"
@@ -51,10 +60,10 @@ _: {
         firewall = {
           enable = true;
           allowedTCPPorts = [
-            22    # SSH
-            8081  # booru (placeholder — adjust when you move the service)
-            8333  # SeaweedFS S3
-            9333  # SeaweedFS master
+            22 # SSH
+            8081 # booru (placeholder — adjust when you move the service)
+            8333 # SeaweedFS S3
+            9333 # SeaweedFS master
           ];
         };
       };
@@ -81,7 +90,7 @@ _: {
       # ---------------------------------------------------------------------------
       virtualisation.docker = {
         enable = true;
-        storageDriver = "btrfs";  # change to "overlay2" if root fs is ext4
+        storageDriver = "btrfs"; # change to "overlay2" if root fs is ext4
         enableOnBoot = true;
       };
 
@@ -104,7 +113,7 @@ _: {
           extraGroups = [
             "wheel"
             "docker"
-            "video"      # for NVIDIA device access
+            "video" # for NVIDIA device access
             "render"
             "disk"
           ];
@@ -131,7 +140,7 @@ _: {
         pciutils
         usbutils
         smartmontools
-        nvtopPackages.full   # GPU monitoring
+        nvtopPackages.full # GPU monitoring
         docker-compose
         tailscale
       ];
@@ -141,7 +150,11 @@ _: {
       # ---------------------------------------------------------------------------
       # Nix settings (override per-host trusted-users from nix-config.nix)
       # ---------------------------------------------------------------------------
-      nix.settings.trusted-users = [ "root" "warby" "@wheel" ];
+      nix.settings.trusted-users = [
+        "root"
+        "warby"
+        "@wheel"
+      ];
 
       system.stateVersion = "25.05";
     };

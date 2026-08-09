@@ -1,8 +1,8 @@
 _: {
   flake.nixosModules.tl0m2 =
-    { config, lib, pkgs, inputs, ... }:
+    { pkgs, inputs, ... }:
     {
-      imports = [ "${inputs.self}/modules/features/ssh-keys.nix" ];
+      imports = [ "${inputs.self}/modules/_features/ssh-keys.nix" ];
 
       nixpkgs.config.allowUnfree = true;
 
@@ -90,7 +90,11 @@ _: {
 
       programs.fish.enable = true;
 
-      nix.settings.trusted-users = [ "root" "warby" "@wheel" ];
+      nix.settings.trusted-users = [
+        "root"
+        "warby"
+        "@wheel"
+      ];
 
       system.stateVersion = "25.11";
     };

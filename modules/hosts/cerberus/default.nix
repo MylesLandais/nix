@@ -5,68 +5,53 @@ let
     config.allowUnfree = true;
   };
   vars = import "${inputs.self}/vars.nix" { pkgs = pkgsForVars; };
+  mkHostLib = import ../../flake-parts/_mk-host.nix { inherit inputs lib; };
+  inherit (inputs) self;
 in
 {
-  flake.nixosConfigurations.cerberus = inputs.nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    specialArgs = {
-      inherit inputs;
-      extra-types = null;
-    };
+  flake.nixosConfigurations.cerberus = mkHostLib.mkHost {
+    name = "cerberus";
+    desktop = true;
+    backupFileExtension = "hm-backup";
     modules = [
       inputs.self.nixosModules.cerberus
       inputs.self.nixosModules.themeData
       inputs.self.nixosModules.desktops
       inputs.self.nixosModules.gamehacking
-      "${inputs.self}/modules/features/host-options.nix"
-      "${inputs.self}/modules/features/env-packages.nix"
-      "${inputs.self}/modules/features/nix-config.nix"
-      "${inputs.self}/modules/features/fish-config.nix"
+      inputs.self.nixosModules.scbw
+      inputs.self.nixosModules.greeter
       inputs.chaotic.nixosModules.default
       inputs.agenix.nixosModules.default
       inputs.hermes-agent.nixosModules.default
-      inputs.home-manager.nixosModules.home-manager
-      {
-        home-manager = {
-          useUserPackages = true;
-          useGlobalPkgs = true;
-          backupFileExtension = "hm-backup";
-          sharedModules = [ inputs.agenix.homeManagerModules.age ];
-          users.warby =
-            { ... }:
-            {
-              imports = [
-                "${inputs.self}/modules/home.nix"
-                "${inputs.self}/hosts/cerberus/home.nix"
-              ];
-              home.username = lib.mkForce "warby";
-              home.homeDirectory = lib.mkForce "/home/warby";
-              home.uid = lib.mkForce 1000;
-              age.identityPaths = lib.mkForce [ "/home/warby/.ssh/age" ];
-              # gnome-keyring user session: pkcs11 + secrets only.
-              # `ssh` is intentionally excluded so bitwarden-ssh-agent stays
-              # the sole owner of SSH_AUTH_SOCK (see modules/home.nix:52).
-              services.gnome-keyring = {
-                enable = true;
-                components = [ "pkcs11" "secrets" ];
-              };
-              systemd.user.services.gnome-keyring = {
-                install = lib.mkOverride 0 {
-                  WantedBy = [
-                    "graphical-session-pre.target"
-                    "hyprland-session.target"
-                  ];
-                };
-              };
-            };
-          extraSpecialArgs = {
-            inherit inputs vars;
-            system = "x86_64-linux";
-            self = inputs.self;
-            gpuType = "nvidia";
+    ];
+    users.warby = {
+      homeModules = [
+        "${self}/modules/_home.nix"
+        "${self}/modules/hosts/cerberus/_home.nix"
+      ];
+      uid = 1000;
+      ageIdentity = "/home/warby/.ssh/age";
+      extraConfig = _: {
+        services.gnome-keyring = {
+          enable = true;
+          components = [
+            "pkcs11"
+            "secrets"
+          ];
+        };
+        systemd.user.services.gnome-keyring = {
+          install = lib.mkOverride 0 {
+            WantedBy = [
+              "graphical-session-pre.target"
+              "hyprland-session.target"
+            ];
           };
         };
-      }
-    ];
+      };
+    };
+    extraSpecialArgs = {
+      inherit vars;
+      gpuType = "nvidia";
+    };
   };
 }

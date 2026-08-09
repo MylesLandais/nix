@@ -1,42 +1,14 @@
 { inputs, lib, ... }:
+let
+  mkHostLib = import ../../flake-parts/_mk-host.nix { inherit inputs lib; };
+  node = (import ../_deploy-nodes.nix { inherit inputs lib; }).lacie;
+in
 {
-  flake.nixosConfigurations.lacie = inputs.nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    specialArgs = { inherit inputs; };
-    modules = [
-      inputs.self.nixosModules.lacie
-      inputs.self.nixosModules.lacieHardware
-      inputs.self.nixosModules.imaging
-      inputs.self.nixosModules.wifiProfiles
-      inputs.self.nixosModules.greeter
-      inputs.self.nixosModules.themeData
-      inputs.self.nixosModules.desktops
-      inputs.self.nixosModules.emulators
-      inputs.self.nixosModules.pentest
-      "${inputs.self}/modules/features/host-options.nix"
-      "${inputs.self}/modules/features/env-packages.nix"
-      "${inputs.self}/modules/features/nix-config.nix"
-      "${inputs.self}/modules/features/fish-config.nix"
-      inputs.home-manager.nixosModules.home-manager
-      {
-        home-manager = {
-          useUserPackages = true;
-          useGlobalPkgs = true;
-          sharedModules = [ inputs.agenix.homeManagerModules.age ];
-          users.warby =
-            { ... }:
-            {
-              imports = [ "${inputs.self}/modules/home.nix" ];
-              home.username = lib.mkForce "warby";
-              home.homeDirectory = lib.mkForce "/home/warby";
-              age.identityPaths = lib.mkForce [ "/home/warby/.ssh/age" ];
-            };
-          extraSpecialArgs = {
-            inherit inputs;
-            system = "x86_64-linux";
-          };
-        };
-      }
-    ];
+  flake.nixosConfigurations.lacie = mkHostLib.mkHost {
+    name = "lacie";
+    inherit (node) modules;
+    inherit (node) users;
+    inherit (node) desktop;
+    extraSpecialArgs = node.extraSpecialArgs or { };
   };
 }

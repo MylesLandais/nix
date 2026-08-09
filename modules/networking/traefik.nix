@@ -1,6 +1,6 @@
 _: {
   flake.nixosModules.traefikInfra =
-    { config, lib, pkgs, ... }:
+    { config, lib, ... }:
     let
       cfg = config.services.infra.traefik;
       acmeEmail = config.infra.acmeEmail;
@@ -56,7 +56,13 @@ _: {
         };
 
         networking.firewall.allowedTCPPorts =
-          if cfg.demoMode then [ 80 ] else [ 80 443 ];
+          if cfg.demoMode then
+            [ 80 ]
+          else
+            [
+              80
+              443
+            ];
       };
     };
 }

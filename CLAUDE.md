@@ -10,19 +10,17 @@ Do not skip /nix-check. Do not commit unvalidated changes. Do not apply changes 
 
 ## Where to Make Changes
 
-System configuration (kernel, boot, security, hardware, firewall, services): hosts/cerberus/configuration.nix
+System-wide behavior (services, security, desktop options, shared packages): declare in `modules/_features/<concern>.nix` or add a `flake.nixosModules.*` export under `modules/`. Wire modules into hosts via `inputs.self.nixosModules.*` in `modules/hosts/<host>/configuration.nix` or the host’s `mkHost` module list in `modules/hosts/<host>/default.nix`.
 
-User environment (shell, git config, dotfiles, programs): home.nix or devtooling/ modules
+Host-specific facts (hostname, disks, one-off flags): `modules/hosts/<host>/configuration.nix`.
 
-Development tools (git, claude-code, remmina, etc.): devtooling/TOOLNAME/default.nix
+Host composition (which flake modules and HM users apply): `modules/hosts/<host>/default.nix` (`mkHost` / `nixosSystem` wiring).
 
-Desktop environment (Hyprland, keybinds, panels): hypr.nix, hyprpanel.nix
+User environment (shell, dev tools, Hyprland, bars): `modules/_home.nix` (exported as `flake.homeManagerModules.base`) plus `modules/_features/` Home Manager modules imported there. Per-host overrides: `modules/hosts/<host>/_home.nix` or HM blocks in `default.nix`.
 
-System packages available globally: environment.systemPackages in hosts/cerberus/configuration.nix
+Shared helpers imported by path only (not in import-tree): underscore-prefixed files such as `modules/_packages.nix`, `modules/_chromium-browsers.nix`.
 
-User packages and dotfiles: home.packages or home.file in home.nix
-
-Shell functions and aliases: devtooling/shelltools/ (automatically imported)
+Validate with `nix build .#nixosConfigurations.<host>.config.system.build.toplevel` or `nix flake check`. Apply locally on Cerberus with `/nix-switch` (`nixos-rebuild switch --flake …#cerberus`). Do not run `home-manager switch` alone.
 
 ## Common Procedures
 
@@ -40,31 +38,31 @@ Clean up generated repo-local artifacts such as the `result` symlink after build
 
 ### Add a System Package
 
-Edit hosts/cerberus/configuration.nix. Find environment.systemPackages section. Add package name to list. Run /nix-check. If error "attribute missing", package doesn't exist in nixpkgs; search with nix search nixpkgs package-name. Commit with chore(packages): add package-name. Run /nix-switch.
+Edit `modules/_features/env-packages.nix` (shared) or the host’s `configuration.nix` for host-only packages. Add the package name. Run /nix-check. If error "attribute missing", the package doesn't exist in nixpkgs; search with `nix search nixpkgs package-name`. Commit with `chore(packages): add package-name`. Run /nix-switch.
 
 ### Add User Program or Dotfile
 
-Edit home.nix. Find home.packages section or create home.file entry for dotfiles. Use proper XDG paths for config files. Run /nix-check. If home-manager syntax error, error message shows file and line number. Commit appropriately. Run /nix-switch.
+Edit `modules/_home.nix` or a module under `modules/_features/`. Find `home.packages` or create a `home.file` entry. Use proper XDG paths for config files. Run /nix-check. If home-manager syntax error, the error message shows file and line number. Commit appropriately. Run /nix-switch.
 
 Important: Do NOT run home-manager switch alone. Always use nixos-rebuild switch which handles both system and home-manager.
 
 ### Update Git Configuration
 
-Edit devtooling/git/default.nix. Find programs.git.settings section. Add or modify setting. Run /nix-check. Commit with chore(git): add or update setting_name. Run /nix-switch.
+Edit `modules/_features/devtooling/git/default.nix`. Find `programs.git.settings` and add or modify the setting. Run /nix-check. Commit with `chore(git): add or update setting_name`. Run /nix-switch.
 
-Git config file at ~/.config/git/config is read-only (symlink to /nix/store). All changes must be in devtooling/git/default.nix. Verify changes after rebuild with cat ~/.config/git/config or git config --global key_name.
+Git config at `~/.config/git/config` is read-only (symlink to `/nix/store`). All changes must be in that module. Verify after rebuild with `git config --global key_name`.
 
 ### Add Passwordless Sudo Rule
 
-Edit hosts/cerberus/configuration.nix. Find security.sudo.extraRules section. Add new rule with command path and NOPASSWD option. Use /run/current-system/sw/bin/command for paths (not ${pkgs.command}). Run /nix-check. Commit with chore(sudo): add NOPASSWD for command_name. Run /nix-switch.
+Edit `modules/_features/security.nix` (shared) or the host’s `configuration.nix`. Find `security.sudo.extraRules`. Add a new rule with command path and NOPASSWD. Use `/run/current-system/sw/bin/command` for paths (not `${pkgs.command}`). Run /nix-check. Commit with `chore(sudo): add NOPASSWD for command_name`. Run /nix-switch.
 
 ### Fix Build Errors After /nix-check
 
-Read error message and note file path and line number. Common errors: "attribute X missing" means typo or package doesn't exist. "syntax error" means Nix syntax issue, check brackets and semicolons. "infinite recursion" means circular dependency. "Read-only file system" means trying to edit /nix/store; change the .nix source instead. Fix the issue. Run /nix-check again. Repeat until all phases pass.
+Read error message and note file path and line number. Common errors: "attribute X missing" means typo or package doesn't exist. "syntax error" means Nix syntax issue, check brackets and semicolons. "infinite recursion" means circular dependency. "Read-only file system" means trying to edit `/nix/store`; change the `.nix` source instead. Fix the issue. Run /nix-check again. Repeat until all phases pass.
 
 ### Handle Home-Manager Configuration Not Applying
 
-Changes to home.nix or devtooling/ should appear in ~/.config files after rebuild. If not: Verify rebuild ran by checking target file. If file is old, rebuild didn't apply. Cause is usually running home-manager switch instead of nixos-rebuild switch. Run: sudo nixos-rebuild switch --flake ~/.config/nixos#cerberus. Wait for completion. Check file again. If still missing, check module imports in home.nix and devtooling/default.nix. If still failing, run /nix-check for validation errors.
+Changes to `modules/_home.nix` or `modules/_features/` should appear in `~/.config` after rebuild. If not: Verify rebuild ran by checking the target file. If the file is old, rebuild didn't apply. Cause is usually running `home-manager switch` instead of `nixos-rebuild switch`. Run: `sudo nixos-rebuild switch --flake ~/.config/nixos#cerberus`. Wait for completion. Check file again. If still missing, check module imports in `modules/_home.nix` and `modules/hosts/<host>/default.nix`. If still failing, run /nix-check for validation errors.
 
 ### Shell Not Seeing Changes
 
@@ -74,60 +72,31 @@ Opening a new terminal window does NOT reload environment. Must restart the curr
 
 ## Remote Deployment
 
-Use deploy-rs to push NixOS configurations to remote machines (argus, lacie, secretcon, franktory, kraken, etc.). Local Cerberus changes use /nix-switch instead.
+Remote hosts are deployed with **Colmena**, not deploy-rs. Node definitions live in `colmena.nix`; each node’s system closure comes from the matching `flake.nixosConfigurations.<name>`.
 
-### Add a deploy-rs node
-
-Edit `flake.nix`. Add `deploy-rs` to `inputs` (if not present). In `outputs`, define `flake.deploy.nodes.<hostname>` with `hostname`, `profiles.system.path`, and `sshOpts`.
-
-Example for a headless server:
-
-```nix
-inputs.deploy-rs = {
-  url = "github:serokell/deploy-rs";
-  inputs.nixpkgs.follows = "nixpkgs";
-};
-
-outputs = inputs@{ flake-parts, deploy-rs, ... }:
-  flake-parts.lib.mkFlake { inherit inputs; } {
-    # ... existing imports ...
-    flake.deploy.nodes.argus = {
-      hostname = "argus.lan";
-      profiles.system = {
-        user = "root";
-        path = deploy-rs.lib.x86_64-linux.activate.nixos inputs.self.nixosConfigurations.argus;
-      };
-      sshOpts = [ "-i" "/home/warby/.ssh/id_ed25519" ];
-    };
-  };
-```
-
-### Deploy to a remote host
-
-Validate the target configuration locally first:
+Deploy after validating the target locally:
 
 ```bash
 nix build .#nixosConfigurations.<host>.config.system.build.toplevel
+nix run nixpkgs#colmena -- apply --on <host>
 ```
 
-Then run /nix-deploy or manually:
+See [docs/cluster/colmena.md](docs/cluster/colmena.md) and [.claude/commands/nix-deploy.md](.claude/commands/nix-deploy.md) for topology, SSH, and troubleshooting.
 
-```bash
-deploy .#<hostname>
-```
+Local Cerberus changes use `/nix-switch` instead of Colmena.
 
 ### Requirements on target
 
-- NixOS installed with flakes enabled
-- SSH key access for deploying user
-- Passwordless sudo for the profile user (or use `user = "root"`)
-- Matching system architecture (x86_64-linux for all current hosts)
+- NixOS with flakes enabled
+- SSH key access for the deploy user
+- Passwordless sudo for the Colmena profile user (or deploy as root)
+- `x86_64-linux` for current cluster nodes
 
 ### Deploy troubleshooting
 
-- SSH errors: verify `hostname` and key in `authorized_keys`
-- Sudo prompts: add NOPASSWD rule or use root profile user
-- Build failures: validate locally with `nix build .#nixosConfigurations.<host>.config.system.build.toplevel`
+- SSH: verify hostname and keys in `modules/_features/ssh-keys.nix` / target `authorized_keys`
+- Sudo prompts: add NOPASSWD or use root in `colmena.nix`
+- Build failures: reproduce with `nix build .#nixosConfigurations.<host>.config.system.build.toplevel`
 - Rollback on target: `sudo nixos-rebuild switch --rollback`
 
 ## Task Completion Pattern

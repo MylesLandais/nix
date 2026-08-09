@@ -5,18 +5,23 @@
 # live ISO after partitioning to get the real disk UUIDs, then paste them in.
 _: {
   flake.nixosModules.argusHardware =
-    { config, lib, modulesPath, ... }:
+    {
+      config,
+      lib,
+      modulesPath,
+      ...
+    }:
     {
       imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
       # USB/SATA boot support plus KVM for any future VMs.
       boot.initrd.availableKernelModules = [
-        "xhci_pci"     # USB 3.0
-        "ahci"         # SATA
-        "usb_storage"  # USB disks
-        "sd_mod"       # SD cards
-        "uas"          # USB-attached SCSI
-        "nvme"         # in case an NVMe adapter is ever added
+        "xhci_pci" # USB 3.0
+        "ahci" # SATA
+        "usb_storage" # USB disks
+        "sd_mod" # SD cards
+        "uas" # USB-attached SCSI
+        "nvme" # in case an NVMe adapter is ever added
       ];
       boot.initrd.kernelModules = [ ];
       boot.kernelModules = [ "kvm-intel" ];
@@ -33,7 +38,10 @@ _: {
       fileSystems."/boot" = {
         device = "/dev/disk/by-uuid/EFI_UUID";
         fsType = "vfat";
-        options = [ "fmask=0077" "dmask=0077" ];
+        options = [
+          "fmask=0077"
+          "dmask=0077"
+        ];
       };
 
       # 4TB bulk storage — ext4 is fine for a single-disk SeaweedFS backend.
@@ -41,7 +49,11 @@ _: {
       fileSystems."/srv/data" = {
         device = "/dev/disk/by-uuid/DATA_HDD_UUID";
         fsType = "ext4";
-        options = [ "noatime" "nofail" "x-systemd.automount" ];
+        options = [
+          "noatime"
+          "nofail"
+          "x-systemd.automount"
+        ];
       };
 
       swapDevices = [ ];

@@ -1,9 +1,13 @@
 _: {
   flake.nixosModules.openbaoInfra =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
       cfg = config.services.infra.openbao;
-      dataDir = "/var/lib/openbao";
     in
     {
       options.services.infra.openbao = {

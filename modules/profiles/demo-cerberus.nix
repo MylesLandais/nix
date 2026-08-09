@@ -15,7 +15,13 @@ _: {
           authentik = true;
         };
 
-        infra.ingress.enable = lib.mkDefault true;
+        infra.ingress = {
+          enable = lib.mkDefault true;
+          localRoutes.tint = {
+            domain = "tint.localhost";
+            internalPort = 45173;
+          };
+        };
         services.infra.traefik.demoMode = lib.mkDefault true;
         services.infra.pyload.enable = lib.mkDefault true;
         services.infra.pyload.ingress.traefik.entrypoint = lib.mkDefault "web";

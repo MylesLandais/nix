@@ -1,14 +1,13 @@
 _: {
   flake.nixosModules.lacie =
     {
-      config,
       lib,
       pkgs,
       inputs,
       ...
     }:
     {
-      imports = [ "${inputs.self}/modules/features/ssh-keys.nix" ];
+      imports = [ "${inputs.self}/modules/_features/ssh-keys.nix" ];
 
       nixpkgs.config.allowUnfree = true;
 
@@ -21,7 +20,7 @@ _: {
         greeter = "greetd";
         gpuType = "none";
         theme = "kanagawa-dragon";
-        profile = "default";
+        workload = "default";
         imaging = {
           enable = true;
           mode = "grub";

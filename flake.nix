@@ -44,7 +44,7 @@
     noctalia = {
       # Held at this rev: newer noctalia-shell restructured its home-manager
       # module (dropped `programs.noctalia-shell` + the noctalia-qs input),
-      # which breaks modules/features/bars/noctalia.nix. Bump intentionally
+      # which breaks modules/_features/bars/noctalia.nix. Bump intentionally
       # once that module is migrated to the new API.
       url = "github:noctalia-dev/noctalia-shell/b16dc50250af05d5048ac454dbf4e898d1adcac0";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -66,20 +66,18 @@
     wallpapers = {
       url = "github:FKouhai/Kanagawa-wallpapers";
     };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
     inputs@{ flake-parts, import-tree, ... }:
     (flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
-        (import-tree ./modules/hosts)
-        (import-tree ./modules/services)
-        (import-tree ./modules/infra)
-        (import-tree ./modules/database)
-        (import-tree ./modules/security)
-        (import-tree ./modules/networking)
-        (import-tree ./modules/profiles)
-        (import-tree ./modules/flake-parts)
+        inputs.treefmt-nix.flakeModule
+        (import-tree ./modules)
       ];
       systems = [ "x86_64-linux" ];
     })

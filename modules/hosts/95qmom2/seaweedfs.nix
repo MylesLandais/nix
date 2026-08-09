@@ -23,9 +23,17 @@ _: {
 
       systemd.services.seaweed-master = {
         description = "SeaweedFS master";
-        wants = [ "network-online.target" "tailscaled.service" ];
-        after = [ "network-online.target" "tailscaled.service" ];
+        wants = [
+          "network-online.target"
+          "tailscaled.service"
+        ];
+        after = [
+          "network-online.target"
+          "tailscaled.service"
+        ];
         wantedBy = [ "multi-user.target" ];
+        startLimitIntervalSec = 300;
+        startLimitBurst = 5;
         serviceConfig = {
           User = "seaweedfs";
           Group = "seaweedfs";
@@ -49,9 +57,17 @@ _: {
 
       systemd.services.seaweed-volume = {
         description = "SeaweedFS volume";
-        wants = [ "network-online.target" "seaweed-master.service" ];
-        after = [ "network-online.target" "seaweed-master.service" ];
+        wants = [
+          "network-online.target"
+          "seaweed-master.service"
+        ];
+        after = [
+          "network-online.target"
+          "seaweed-master.service"
+        ];
         wantedBy = [ "multi-user.target" ];
+        startLimitIntervalSec = 300;
+        startLimitBurst = 5;
         serviceConfig = {
           User = "seaweedfs";
           Group = "seaweedfs";

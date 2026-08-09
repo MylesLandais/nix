@@ -16,41 +16,41 @@
     modules = [
       "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
 
-      "${inputs.self}/modules/features/ssh-keys.nix"
+      "${inputs.self}/modules/_features/ssh-keys.nix"
 
       (
         { config, pkgs, ... }:
         let
-          flakeRev =
-            inputs.self.rev or inputs.self.dirtyRev or "unknown";
+          flakeRev = inputs.self.rev or inputs.self.dirtyRev or "unknown";
           flakeShortRev =
-            inputs.self.shortRev or
-              (if (inputs.self ? dirtyShortRev) then inputs.self.dirtyShortRev else "dirty");
+            inputs.self.shortRev
+              or (if (inputs.self ? dirtyShortRev) then inputs.self.dirtyShortRev else "dirty");
           nixpkgsRev = inputs.nixpkgs.rev or inputs.nixpkgs.shortRev or "unknown";
           authorizedKeys = config.users.users.warby.openssh.authorizedKeys.keys;
-          buildInfo = pkgs.runCommand "iso-build-info"
-            {
-              nativeBuildInputs = [ pkgs.openssh ];
-              keys = lib.concatStringsSep "\n" authorizedKeys + "\n";
-              passAsFile = [ "keys" ];
-            }
-            ''
+          buildInfo =
+            pkgs.runCommand "iso-build-info"
               {
-                echo "home-office-installer build info (shim)"
-                echo "========================================"
-                echo "flake-rev:       ${flakeRev}"
-                echo "flake-shortRev:  ${flakeShortRev}"
-                echo "nixpkgs-rev:     ${nixpkgsRev}"
-                echo "system:          x86_64-linux"
-                echo "edition:         minimal-shim"
-                echo
-                echo "authorized_keys fingerprints (warby == root):"
-                ssh-keygen -lf "$keysPath" || true
-                echo
-                echo "verify from cerberus:"
-                echo "  ssh warby@<ip> cat /etc/iso-build-info"
-              } > $out
-            '';
+                nativeBuildInputs = [ pkgs.openssh ];
+                keys = lib.concatStringsSep "\n" authorizedKeys + "\n";
+                passAsFile = [ "keys" ];
+              }
+              ''
+                {
+                  echo "home-office-installer build info (shim)"
+                  echo "========================================"
+                  echo "flake-rev:       ${flakeRev}"
+                  echo "flake-shortRev:  ${flakeShortRev}"
+                  echo "nixpkgs-rev:     ${nixpkgsRev}"
+                  echo "system:          x86_64-linux"
+                  echo "edition:         minimal-shim"
+                  echo
+                  echo "authorized_keys fingerprints (warby == root):"
+                  ssh-keygen -lf "$keysPath" || true
+                  echo
+                  echo "verify from cerberus:"
+                  echo "  ssh warby@<ip> cat /etc/iso-build-info"
+                } > $out
+              '';
         in
         {
           # `installation-cd-minimal.nix` forces isoImage.edition = "minimal"
@@ -129,8 +129,7 @@
             shell = pkgs.bash;
           };
 
-          users.users.root.openssh.authorizedKeys.keys =
-            config.users.users.warby.openssh.authorizedKeys.keys;
+          users.users.root.openssh.authorizedKeys.keys = config.users.users.warby.openssh.authorizedKeys.keys;
 
           # wheel without password — the live image is throwaway; pairing
           # this with key-only sshd keeps remote sessions safe.
@@ -182,10 +181,7 @@
     ];
   };
 
-  perSystem =
-    { ... }:
-    {
-      packages.installer-iso =
-        inputs.self.nixosConfigurations.installerIso.config.system.build.isoImage;
-    };
+  perSystem = _: {
+    packages.installer-iso = inputs.self.nixosConfigurations.installerIso.config.system.build.isoImage;
+  };
 }
