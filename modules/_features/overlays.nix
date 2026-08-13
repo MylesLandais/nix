@@ -11,5 +11,7 @@
     # .deb. Shared rather than host-local because nothing about it is host-specific;
     # only desktop hosts pull env-packages.nix and actually build it.
     (import "${inputs.self}/modules/_features/overlays/buzz-desktop.nix")
+    # Kimi Code 0.34.0 (new standalone CLI) — provides bin/kimi and bin/kimi-code.
+    (import "${inputs.self}/modules/_features/overlays/kimi-code.nix")
   ];
 }

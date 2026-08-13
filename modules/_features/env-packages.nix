@@ -86,6 +86,7 @@ in
     pkgs.nicotine-plus
     inputs.hermes-agent.packages.${pkgs.system}.desktop # Hermes GUI (Electron), wraps the hermes CLI agent
     pkgs.buzz-desktop # Buzz GUI (Tauri) plus its buzz/buzz-acp/buzz-agent/buzz-dev-mcp CLIs
+    pkgs.kimi-code # Kimi Code 0.34.0 (bin/kimi and bin/kimi-code)
   ]
   ++ lib.optional (config.host.bar == "noctalia") inputs.noctalia.packages.x86_64-linux.default;
 }

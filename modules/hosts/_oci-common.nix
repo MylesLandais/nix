@@ -117,10 +117,15 @@
   # ---------------------------------------------------------------------------
   # authKeyFile is placed out-of-band by nixos-anywhere --extra-files; see
   # modules/networking/tailscale.nix for why it is not an agenix secret.
+  # No --advertise-tags: tag:oci-stage is not defined in the tailnet ACL
+  # (tagOwners is still commented out), and `tailscale up` fails outright when
+  # asked to advertise a tag the policy does not permit. The nodes therefore
+  # join as user-owned devices. Key expiry is disabled per-device in the admin
+  # console instead; switch to a tagged key once tagOwners exists, which also
+  # makes expiry a non-issue.
   services.infra.tailscale = {
     enable = true;
     authKeyFile = "/etc/tailscale/authkey";
-    extraUpFlags = [ "--advertise-tags=tag:oci-stage" ];
   };
 
   # ---------------------------------------------------------------------------
