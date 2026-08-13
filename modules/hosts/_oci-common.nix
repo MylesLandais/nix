@@ -10,10 +10,18 @@
   lib,
   pkgs,
   inputs,
+  modulesPath,
   ...
 }:
 {
   imports = [
+    # Stands in for a generated hardware-configuration.nix. Not generated on
+    # purpose: import-tree auto-imports every non-underscore .nix under
+    # modules/, so a hardware-configuration.nix dropped in a host directory is
+    # read as a flake-parts module rather than a NixOS one and evaluation dies
+    # with "infinite recursion". disko already declares the filesystems, so the
+    # qemu-guest profile plus the initrd modules below is all that was missing.
+    (modulesPath + "/profiles/qemu-guest.nix")
     "${inputs.self}/modules/_features/ssh-keys.nix"
     inputs.self.nixosModules.tailscaleNode
     inputs.disko.nixosModules.disko
@@ -76,11 +84,15 @@
       "console=tty1"
     ];
 
+    # Matches what nixos-generate-config detected on the instance, plus the
+    # virtio block/net drivers.
     initrd.availableKernelModules = [
+      "xhci_pci"
       "virtio_pci"
       "virtio_scsi"
       "virtio_blk"
       "virtio_net"
+      "usbhid"
       "sd_mod"
     ];
   };
