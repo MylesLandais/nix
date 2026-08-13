@@ -24,6 +24,13 @@
     import-tree.url = "github:vic/import-tree";
     helium.url = "github:FKouhai/helium2nix";
     agenix.url = "github:ryantm/agenix";
+    # Declarative partitioning for the OCI aarch64 hosts (stage-edge, stage-db).
+    # These are installed with nixos-anywhere, which wipes and repartitions the
+    # Oracle boot volume from the disko config rather than reusing Oracle's LVM layout.
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     trigo.url = "github:FKouhai/trigo";
     # Frozen nixpkgs for sunshine only. sunshine is built with cudaSupport = true,
     # a non-default variant Hydra never builds — and CUDA is unfree, so it could not
