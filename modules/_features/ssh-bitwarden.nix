@@ -17,7 +17,10 @@ in
       # "Host *" block below so IdentityAgent/IdentityFile win (ssh takes the first value
       # per option). Bypasses the Bitwarden agent (whose key hydra doesn't accept) and the
       # passphrase-locked id_ed25519. Pubkey persists on hydra flash root.pubkeys.
-      Host hydra
+      # The literal IP forms are listed here too: without them they fall through to the
+      # "192.168.0.*"/"100.107.*" installer block below, which pins IdentitiesOnly to
+      # ~/.ssh/id_ed25519 (absent on cerberus) and so drops straight to a password prompt.
+      Host hydra 192.168.0.222 100.116.206.117
         HostName 192.168.0.222
         User root
         IdentityFile ~/.ssh/homelab_admin
