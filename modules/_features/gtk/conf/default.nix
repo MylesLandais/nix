@@ -62,7 +62,7 @@
       defaultApplications = {
         "inode/directory" = [ "nemo.desktop" ];
         "application/pdf" = [ "org.gnome.Evince.desktop" ];
-        "application/epub+zip" = [ "org.gnome.Evince.desktop" ];
+        "application/epub+zip" = [ "com.github.johnfactotum.Foliate.desktop" ];
         "image/png" = [
           "org.gnome.eog.desktop"
           "ristretto.desktop"
