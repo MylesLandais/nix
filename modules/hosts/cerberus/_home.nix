@@ -22,24 +22,23 @@ let
     "99" = "HEADLESS-1";
   };
 
-  # A/B switch for the Samsung TV (fourthMonitor). Its EDID advertises no
-  # 3840x2160@60 -- only 4K at 30 Hz or below -- so the real choice is sharpness
-  # (4K30) vs. smoothness (1080p60), and which one wins is a feel question the
-  # config can't answer. `tv-mode 4k` / `tv-mode 1080` flips it live through
-  # hyprctl, no rebuild and no logout. Once one of them clearly wins, copy its
-  # numbers into vars.nix:fourthMonitor to make it the boot default.
+  # Live mode switch for the Samsung TV (fourthMonitor). The link is HDMI 1.4
+  # (300 MHz max TMDS), so 4K and 60 Hz are mutually exclusive -- see vars.nix.
+  # Every mode keeps bitdepth 8, which is part of the wake fix, not a preference.
   #
-  # If Input Signal Plus ever gets enabled on that HDMI input, the TV should
-  # start advertising 4K60 and this whole tradeoff goes away.
+  #   tv-mode 1080     1920x1080@60  -- default; 60 Hz native retro content
+  #   tv-mode 4k       3840x2160@30  -- sharpest the link can carry
+  #   tv-mode 1080-30  1920x1080@30  -- the pre-2026-08 config, if detection sulks
   tvMode = pkgs.writeShellScriptBin "tv-mode" ''
     set -euo pipefail
     out="${m.fourthMonitor.name}"
     case "''${1:-}" in
-      4k)   mode="3840x2160@30"; pos="7180x0" ;;
-      1080) mode="1920x1080@60"; pos="8140x1080" ;;
-      *) echo "usage: tv-mode 4k|1080" >&2; exit 2 ;;
+      1080)    mode="1920x1080@60"; pos="8140x1080" ;;
+      4k)      mode="3840x2160@30"; pos="7180x0" ;;
+      1080-30) mode="1920x1080@30"; pos="8140x1080" ;;
+      *) echo "usage: tv-mode 1080|4k|1080-30" >&2; exit 2 ;;
     esac
-    hyprctl eval "hl.monitor({ output = \"$out\", mode = \"$mode\", position = \"$pos\", scale = 1 })" >/dev/null
+    hyprctl eval "hl.monitor({ output = \"$out\", mode = \"$mode\", position = \"$pos\", scale = 1, bitdepth = 8 })" >/dev/null
     hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '
       .[] | select(.description | test("SAMSUNG"))
       | "\(.name) now \(.width)x\(.height)@\(.refreshRate|round) at \(.x)x\(.y)"'
@@ -78,7 +77,7 @@ in
     hl.monitor({ output = "${m.tertiaryMonitor.name}", mode = "${toString m.tertiaryMonitor.width}x${toString m.tertiaryMonitor.height}@${toString m.tertiaryMonitor.refresh}", position = "5900x2160", scale = 1 })
     hl.monitor({ output = "${m.mainMonitor.name}",     mode = "${toString m.mainMonitor.width}x${toString m.mainMonitor.height}@${toString m.mainMonitor.refresh}",         position = "7820x2160", scale = 1 })
     hl.monitor({ output = "${m.secondaryMonitor.name}", mode = "${toString m.secondaryMonitor.width}x${toString m.secondaryMonitor.height}@${toString m.secondaryMonitor.refresh}", position = "10380x2160", scale = 1 })
-    hl.monitor({ output = "${m.fourthMonitor.name}",   mode = "${toString m.fourthMonitor.width}x${toString m.fourthMonitor.height}@${toString m.fourthMonitor.refresh}",     position = "7180x0",  scale = 1 })
+    hl.monitor({ output = "${m.fourthMonitor.name}",   mode = "${toString m.fourthMonitor.width}x${toString m.fourthMonitor.height}@${toString m.fourthMonitor.refresh}",     position = "8140x1080",  scale = 1, bitdepth = ${toString m.fourthMonitor.bitdepth} })
     hl.monitor({ output = "HEADLESS-1", mode = "2160x1440@60", position = "auto", scale = 1 })
 
     -- == Cerberus workspace pins ==

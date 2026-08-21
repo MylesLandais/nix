@@ -51,13 +51,24 @@ in
     refresh = 60.0;
   };
 
+  # The TV. Its EDID declares "Maximum TMDS clock: 300 MHz" -- the HDMI 1.4
+  # ceiling -- so 4K is only ever offered at 30 Hz or below; 4K60 would need
+  # 594 MHz. That held on every input tried, so 4K30 is the hardware ceiling,
+  # not a setting waiting to be found.
+  #
+  # 1080p60 is the better half of that trade: retro content is 60 Hz native, and
+  # 4K buys nothing for 240p/480p sources that get upscaled anyway. `tv-mode 4k`
+  # switches live if sharpness ever matters more than motion.
+  #
+  # bitdepth 8 is load-bearing, not cosmetic: together with 1080p it is what
+  # fixed the TV failing to wake until a session had fully loaded. Commit 8716cf8
+  # carried the resolution over from the old nwg-displays config but dropped the
+  # bitdepth; this restores it.
   fourthMonitor = {
     name = "desc:Samsung Electric Company SAMSUNG 0x01000E00";
-    width = 3840;
-    height = 2160;
-    # The TV's EDID tops out at 4K30 -- it advertises no 3840x2160@60 at all,
-    # which means Input Signal Plus is off for this HDMI input (or the path is
-    # HDMI 1.4). Enable it on the TV and this can go to 60.
-    refresh = 30.0;
+    width = 1920;
+    height = 1080;
+    refresh = 60.0;
+    bitdepth = 8;
   };
 }
