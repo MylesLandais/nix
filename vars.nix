@@ -53,8 +53,11 @@ in
 
   fourthMonitor = {
     name = "desc:Samsung Electric Company SAMSUNG 0x01000E00";
-    width = 1920;
-    height = 1080;
-    refresh = 29.97;
+    width = 3840;
+    height = 2160;
+    # The TV's EDID tops out at 4K30 -- it advertises no 3840x2160@60 at all,
+    # which means Input Signal Plus is off for this HDMI input (or the path is
+    # HDMI 1.4). Enable it on the TV and this can go to 60.
+    refresh = 30.0;
   };
 }

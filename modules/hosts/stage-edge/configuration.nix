@@ -1,34 +1,58 @@
 _: {
   flake.nixosModules.stageEdge =
-    { inputs, ... }:
+    { config, pkgs, inputs, ... }:
+    let
+      labPort = config.services.infra.lumen.port;
+    in
     {
-      imports = [ "${inputs.self}/modules/hosts/_oci-common.nix" ];
+      imports = [
+        "${inputs.self}/modules/hosts/_oci-common.nix"
+        inputs.self.nixosModules.lumenInfra
+      ];
 
       networking.hostName = "stage-edge";
 
       # -------------------------------------------------------------------------
-      # Placeholder service
+      # CineMaya (Lumen)
       # -------------------------------------------------------------------------
-      # Deliberately plain nginx rather than the repo's traefikInfra module:
-      # traefik drives ACME over an HTTP-01 challenge, which cannot complete on a
-      # host with no public ingress. This exists only to prove the chain
-      # NixOS -> tailnet -> reverse proxy -> second device. Swap in Traefik and
-      # the real project once that path is verified, using DNS-01 or Tailscale
-      # certs for TLS.
+      # Static SPA from nginx; everything under /api proxied to the lab backend
+      # on loopback. The frontend builds all its API calls relatively and derives
+      # the watch-party socket from window.location.host, so a single vhost
+      # covers the whole app with no CORS and no absolute URLs to rewrite.
+      services.infra.lumen.enable = true;
+
       services.nginx = {
         enable = true;
+        recommendedGzipSettings = true;
+        recommendedOptimisation = true;
+
         virtualHosts."stage-edge" = {
           default = true;
-          locations."/".return = "200 'stage-edge placeholder OK\\n'";
-          extraConfig = ''
-            default_type text/plain;
-          '';
+          root = "${pkgs.lumen-web}";
+
+          # react-router owns the client-side routes, so unknown paths must fall
+          # back to the shell rather than 404 (e.g. /watch/<id> on a hard reload).
+          locations."/".tryFiles = "$uri $uri/ /index.html";
+
+          locations."/api" = {
+            proxyPass = "http://127.0.0.1:${toString labPort}";
+            # /api/party is a WebSocket relay for watch-together.
+            proxyWebsockets = true;
+            extraConfig = ''
+              # /api/proxy streams HLS/MP4. Buffering it would add latency and
+              # churn memory on a 1-OCPU box, and long-lived party sockets must
+              # not be reaped by the default 60s read timeout.
+              proxy_buffering off;
+              proxy_read_timeout 1h;
+              proxy_send_timeout 1h;
+            '';
+          };
         };
       };
 
-      # Reachable over the tailnet only — never on the VCN interface. This
-      # per-interface firewall idiom is the repo's existing tailnet trust
-      # boundary (see modules/security/openbao.nix, modules/database/valkey.nix).
+      # Tailnet-only, unchanged from the placeholder: port 80 is accepted on
+      # tailscale0 and refused on the VCN interface. The lab backend is never
+      # exposed — it binds 127.0.0.1 and is only reachable through nginx.
       networking.firewall.interfaces."tailscale0".allowedTCPPorts = [ 80 ];
     };
 }

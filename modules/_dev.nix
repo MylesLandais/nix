@@ -15,8 +15,6 @@
 
   config = lib.mkIf config.dev.enable {
 
-    hardware.nvidia-container-toolkit.enable = true;
-
     virtualisation = {
       docker = {
         enable = true;
@@ -52,43 +50,14 @@
           #   };
           # };
 
-          vllm = {
-            image = "vllm/vllm-openai:latest";
-            autoStart = false;
-            ports = [ "8000:8000" ];
-            extraOptions = [
-              "--device=nvidia.com/gpu=all"
-              "--ipc=host"
-            ];
-            volumes = [
-              "/home/warby/.cache/huggingface:/root/.cache/huggingface"
-            ];
-            environment = {
-              TZ = "America/New_York";
-            };
-            cmd = [
-              "--model"
-              "Qwen/Qwen2.5-0.5B"
-            ];
-          };
         };
       };
     };
-
-    networking.firewall.allowedTCPPorts = [
-      8000
-      # 8188  # ComfyUI port (disabled)
-    ];
 
     # Add useful packages
     environment.systemPackages = with pkgs; [
       lazydocker
       # inputs.kiro.packages.${system}.default  # TODO: Add kiro input to flake.nix if needed
     ];
-
-    # FIX: Workaround for nvidia-container-toolkit issue
-    # https://github.com/NixOS/nixpkgs/issues/463525
-    systemd.services.nvidia-container-toolkit-cdi-generator.serviceConfig.ExecStartPre =
-      lib.mkForce null;
   };
 }

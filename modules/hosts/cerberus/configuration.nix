@@ -46,6 +46,8 @@ _: {
         inputs.self.nixosModules.pyloadInfra
         inputs.self.nixosModules.mayaWorkerInfra
         inputs.self.nixosModules.agenixInfra
+        inputs.self.nixosModules.llmRouter
+        inputs.self.nixosModules.deepseekHarnessInfra
       ];
 
       nixpkgs.overlays = [
@@ -100,6 +102,87 @@ _: {
       # container publishing them, and Authentik needs a real key via agenix (its
       # current one is literally "demo-...-replace-with-agenix-before-prod").
       infra.demo.enable = false;
+
+      # Local LLM evaluation rig. One RTX 3090 Ti (24 GB) holds exactly one of
+      # these at a time, so llama-swap fronts them all on 127.0.0.1:8000 and
+      # swaps the resident model based on the "model" field of each request.
+      # See modules/services/llm-router.nix for why this is not oci-containers.
+      #
+      # VRAM budget is genuinely tight — weights alone are 17-21.6 GB of the
+      # 24 GB, and Hyprland/browsers hold some of the rest. If a model OOMs on
+      # load, lower --max-model-len first, then --gpu-memory-utilization.
+      services.infra.llmRouter = {
+        enable = true;
+        models = {
+          # NVFP4 (21.6 GB) does not fit: only ~19.6 GB is free with the
+          # desktop running, and Ampere has no FP4 tensor cores so the NVFP4
+          # checkpoint never shrinks below its safetensors size anyway. The
+          # smallest usable GGUF is Q4_0 at 18.9 GB, which is still tight — if
+          # it OOMs, drop -ngl below 99 to spill a few layers into system RAM
+          # (there is 125 GB of it). vLLM cannot do that; llama.cpp can.
+          nemotron = {
+            backend = "llamacpp";
+            model = "ggml-org/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF";
+            file = "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-Q4_0.gguf";
+            extraArgs = [
+              "-ngl 99"
+              # 8192 is the practical ceiling: measured 22.3 GB resident at this
+              # setting, leaving 1.8 GB spare on a 24 GB card that is also
+              # driving the desktop. More context does not fit.
+              #
+              # CONSEQUENCE: this model cannot drive the DeepSeek Harness. dsh
+              # sends 10,280 tokens of system prompt and tool definitions before
+              # the first user message, so it errors with
+              # CONTEXT_WINDOW_EXCEEDED here (verified). Nemotron is usable for
+              # direct chat only; use qwen38 or muse-glimmer for agent work.
+              "-c 8192"
+              # This model reasons hard — a one-sentence greeting cost 818
+              # completion tokens, ~2.9 KB of it in reasoning_content. Clients
+              # capping max_tokens near 500 get an empty `content` and
+              # finish_reason "length", which looks like a failure but is the
+              # budget being spent mid-thought.
+              "--reasoning-format"
+              "auto"
+            ];
+          };
+
+          # Muse-Glimmer ships no vLLM-loadable 24 GB checkpoint: the base repo is
+          # BF16 (59.6 GB) and the NVFP4 conversions are 23.4 GB. The only variant
+          # that fits is Meta's own K-Quant GGUF (16.8 GB), and GGUF is where
+          # llama.cpp is the right engine rather than a compromise — vLLM's GGUF
+          # support is experimental and ignores the mmproj/draft files entirely.
+          muse-glimmer = {
+            backend = "llamacpp";
+            model = "meta-models/Muse-Glimmer-30B-GGUF";
+            file = "Muse-Glimmer-30B-KQuant-17GB-Q4_K_M.gguf";
+            extraArgs = [
+              "-ngl 99"
+              "-c 16384"
+            ];
+          };
+
+          # Qwen3.8-27B-FP8 does not fit (27 GB, and no Ampere FP8 path). The
+          # community AWQ-4bit is worse, not better, at 27.7 GB — Qwen3.8 is a
+          # hybrid whose 48 Gated DeltaNet layers quantize badly and stay BF16,
+          # so naive 4-bit barely shrinks it. Q5 is out of reach too
+          # (UD-Q5_K_M is 19.8 GB, over the free-VRAM budget before any KV
+          # cache), which makes UD-Q4_K_M at 16.5 GB the comfortable pick.
+          qwen38 = {
+            backend = "llamacpp";
+            model = "unsloth/Qwen3.8-27B-GGUF";
+            file = "Qwen3.8-27B-UD-Q4_K_M.gguf";
+            extraArgs = [
+              "-ngl 99"
+              # 32k verified: 22.6 GB resident, and the DeepSeek Harness ran a
+              # full headless task against it. This is the agent-capable model.
+              "-c 32768"
+            ];
+          };
+        };
+      };
+
+      # Agent harness driving the router above; see /etc/deepseek-harness/env.
+      services.infra.deepseek-harness.enable = true;
 
       # Developer Lamia Browser Adapter. Nixpkgs Chromium resolves native hosts
       # through this system registry rather than Chrome's per-user registry.

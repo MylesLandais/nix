@@ -13,5 +13,12 @@
     (import "${inputs.self}/modules/_features/overlays/buzz-desktop.nix")
     # Kimi Code 0.34.0 (new standalone CLI) — provides bin/kimi and bin/kimi-code.
     (import "${inputs.self}/modules/_features/overlays/kimi-code.nix")
+    # CineMaya/Lumen — built from our own source, served from stage-edge.
+    # Only that host references lumen-web/lumen-lab, so nothing else builds it.
+    (import "${inputs.self}/modules/_features/overlays/lumen.nix")
+    # DeepSeek Harness (dsh) — agent harness driving the local LLM router on
+    # cerberus. Vendored from the npm release with a committed lock; only
+    # cerberus enables the service, so nothing else builds it.
+    (import "${inputs.self}/modules/_features/overlays/deepseek-harness.nix")
   ];
 }
