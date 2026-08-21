@@ -69,6 +69,7 @@ in
     pkgs.wireguard-tools
     pkgs.nmap
     pkgs.ntfs3g
+    pkgs.bubblewrap # codex warns on every launch without a bwrap on PATH
     pkgs.polkit_gnome # GTK polkit auth agent for keyring unlock prompts
     pkgs.libsecret # secret-tool CLI for keyring debugging
     pkgs.libgnome-keyring # legacy compat for older apps (VS Code etc.)
