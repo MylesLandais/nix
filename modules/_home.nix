@@ -41,7 +41,7 @@ let
   # resolves the helper as a sibling of the real binary; on Linux current_exe()
   # reads /proc/self/exe, which follows symlinks straight back to the original store
   # path, where the helper is absent. The whole package has to move together.
-  codexVersion = "0.147.0";
+  codexVersion = "0.149.0";
   llmCodex = inputs.llm.packages.${pkgs.system}.codex;
   llmCodexVersion = llmCodex.version or (lib.getVersion llmCodex.name);
 
@@ -54,51 +54,51 @@ let
       pname = "codex";
       version = codexVersion;
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/openai/codex/releases/download/rust-v${codexVersion}/codex-package-x86_64-unknown-linux-musl.tar.gz";
-      hash = "sha256-vXWNU9VuQdxl4EX0WJ33mgOO0ZegEa3LUqJY5q1kz9o=";
+      src = pkgs.fetchurl {
+        url = "https://github.com/openai/codex/releases/download/rust-v${codexVersion}/codex-package-x86_64-unknown-linux-musl.tar.gz";
+        hash = "sha256-HAi6Jiggt41J6nqT8ya2tDC3Ll/kaDDkM+3vEuUSMkQ=";
+      };
+
+      # codex, codex-code-mode-host, rg and bwrap are static-pie and need nothing.
+      # codex-resources/zsh/bin/zsh is the one dynamically linked binary in the
+      # archive (interpreter /lib64/ld-linux-x86-64.so.2, needs libtinfo.so.6) and
+      # cannot exec on NixOS unpatched. Codex reaches it via bundled_zsh_path().
+      nativeBuildInputs = [ pkgs.autoPatchelfHook ];
+      buildInputs = [
+        pkgs.ncurses
+        pkgs.stdenv.cc.cc.lib
+      ];
+
+      dontUnpack = true;
+      dontStrip = true;
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p "$TMPDIR/unpack" "$out"
+        tar -xzf "$src" -C "$TMPDIR/unpack"
+
+        packageRoot="$(find "$TMPDIR/unpack" -type f -name codex-package.json -printf '%h\n' -quit)"
+        if [ -z "$packageRoot" ]; then
+          echo "codex-package.json not found in release archive" >&2
+          exit 1
+        fi
+
+        cp -a "$packageRoot"/. "$out"/
+
+        test -f "$out/codex-package.json"
+        test -x "$out/bin/codex"
+        test -x "$out/bin/codex-code-mode-host"
+
+        runHook postInstall
+      '';
+
+      meta = {
+        mainProgram = "codex";
+        platforms = [ "x86_64-linux" ];
+        sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+      };
     };
-
-    # codex, codex-code-mode-host, rg and bwrap are static-pie and need nothing.
-    # codex-resources/zsh/bin/zsh is the one dynamically linked binary in the
-    # archive (interpreter /lib64/ld-linux-x86-64.so.2, needs libtinfo.so.6) and
-    # cannot exec on NixOS unpatched. Codex reaches it via bundled_zsh_path().
-    nativeBuildInputs = [ pkgs.autoPatchelfHook ];
-    buildInputs = [
-      pkgs.ncurses
-      pkgs.stdenv.cc.cc.lib
-    ];
-
-    dontUnpack = true;
-    dontStrip = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p "$TMPDIR/unpack" "$out"
-      tar -xzf "$src" -C "$TMPDIR/unpack"
-
-      packageRoot="$(find "$TMPDIR/unpack" -type f -name codex-package.json -printf '%h\n' -quit)"
-      if [ -z "$packageRoot" ]; then
-        echo "codex-package.json not found in release archive" >&2
-        exit 1
-      fi
-
-      cp -a "$packageRoot"/. "$out"/
-
-      test -f "$out/codex-package.json"
-      test -x "$out/bin/codex"
-      test -x "$out/bin/codex-code-mode-host"
-
-      runHook postInstall
-    '';
-
-    meta = {
-      mainProgram = "codex";
-      platforms = [ "x86_64-linux" ];
-      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    };
-  };
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
