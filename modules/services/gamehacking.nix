@@ -7,6 +7,8 @@ _: {
       ...
     }:
     {
+      imports = [ ../_features/citra-agent.nix ];
+
       options.host.gamehacking.enable = lib.mkEnableOption "game reverse engineering and ROM hacking tools";
 
       config = lib.mkIf config.host.gamehacking.enable {

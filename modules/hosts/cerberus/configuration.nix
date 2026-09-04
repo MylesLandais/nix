@@ -73,6 +73,10 @@ _: {
         theme = "kanagawa-dragon";
         workload = "default";
         gamehacking.enable = true;
+        citraAgent = {
+          enable = true;
+          gameRoot = "/home/warby/Games/roms/3ds";
+        };
         scbw.enable = true;
         remoteGaming.enable = true;
         syncthing.enable = true;

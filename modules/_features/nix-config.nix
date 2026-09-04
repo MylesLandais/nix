@@ -46,6 +46,15 @@
         "nix-command"
         "flakes"
       ];
+      # 115k .drv files were being retained for no benefit — every derivation
+      # here is re-instantiable from the flake, so keeping them only burns
+      # inodes and blocks the GC from reclaiming their inputs.
+      keep-derivations = false;
+      # Let the daemon GC opportunistically mid-build instead of filling / to
+      # 100%, which it did twice in Sept 2026. Below 50 GiB free it collects
+      # until 200 GiB is free.
+      min-free = 53687091200; # 50 GiB
+      max-free = 214748364800; # 200 GiB
       trusted-users = [
         "root"
         "franky"
@@ -53,10 +62,16 @@
       ];
     };
     optimise.automatic = true;
+    # NOTE: this prunes *system* generations only. Per-user `nix profile`
+    # generations need `nix profile wipe-history`, which nix-collect-garbage
+    # cannot do — see modules/_features/nix-user-gc.nix for that half.
     gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 3d";
+      # 7d rather than 3d: the 3d window was never what caused the store to
+      # grow (stale gcroots were), and a week of generations is a more useful
+      # rollback range.
+      options = "--delete-older-than 7d";
     };
   };
 }
