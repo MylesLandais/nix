@@ -33,7 +33,10 @@
         lazygit.enable = true;
         mpv.enable = true;
         opencode.enable = true;
-        noctalia-shell.enable = true;
+        # Noctalia regenerates colors.json from the wallpaper at runtime.
+        # Enabling this target makes that file a read-only Nix store symlink,
+        # causing its template processor to fail on every session start.
+        noctalia-shell.enable = false;
         vesktop.enable = true;
         wofi.enable = true;
       };
