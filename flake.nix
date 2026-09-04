@@ -22,7 +22,10 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
-    helium.url = "github:FKouhai/helium2nix";
+    helium = {
+      url = "github:FKouhai/helium2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     agenix.url = "github:ryantm/agenix";
     # Declarative partitioning for the OCI aarch64 hosts (stage-edge, stage-db).
     # These are installed with nixos-anywhere, which wipes and repartitions the
@@ -31,7 +34,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    trigo.url = "github:FKouhai/trigo";
+    trigo = {
+      url = "github:FKouhai/trigo";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Frozen nixpkgs for sunshine only. sunshine is built with cudaSupport = true,
     # a non-default variant Hydra never builds — and CUDA is unfree, so it could not
     # redistribute it anyway. Tracking the main nixpkgs meant every routine bump
@@ -39,25 +45,47 @@
     # leave it alone; bump deliberately when you actually want a newer sunshine.
     # Must stay a fixed rev — a second moving branch would recreate the problem.
     sunshine-nixpkgs.url = "github:NixOS/nixpkgs/f13ff45afd1bb73e640eaa08a7066dbed07e3238";
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    nix-cachyos-kernel = {
+      url = "github:xddxdd/nix-cachyos-kernel/release";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    chaotic = {
+      url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Pinned to a release tag on purpose — upstream treats Nix as best-effort, so a
     # reproducible tag beats tracking main. Note a tag pin cannot be advanced by
     # `nix flake update`; bump this line to move it.
+    #
+    # Deliberately does NOT follow nixpkgs. Every other input here does, to keep
+    # one glibc/llvm/coreutils in the closure, but hermes-agent's tag is only
+    # cached against its own pin: adding `follows` puts 934 derivations
+    # (nodejs + electron + the whole npm tree) into a local build. A duplicated
+    # closure is cheaper than that compile.
     hermes-agent.url = "github:NousResearch/hermes-agent/v2026.8.3";
     nur.url = "github:nix-community/NUR";
-    claude-code.url = "github:sadjow/claude-code-nix";
+    claude-code = {
+      url = "github:sadjow/claude-code-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # numtide multi-agent flake: opencode, codex, gemini-cli, etc. Tracks
     # upstream agent releases — `nix flake update llm` keeps them all current.
-    llm.url = "github:numtide/llm-agents.nix";
+    llm = {
+      url = "github:numtide/llm-agents.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    thorium.url = "github:Rishabh5321/thorium_flake";
+    thorium = {
+      url = "github:Rishabh5321/thorium_flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     noctalia = {
       # Held at this rev: newer noctalia-shell restructured its home-manager
       # module (dropped `programs.noctalia-shell` + the noctalia-qs input),
@@ -86,9 +114,13 @@
     # Upstream packaging bug, nothing to fix on our side.
     # To resolve: drop the pin back to the bare URL once upstream publishes a release
     # whose asset actually exists.
-    zen-browser.url = "github:0xc000022070/zen-browser-flake/71e156423dae9496d7fd9e89029a1a82516fb9d8";
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake/71e156423dae9496d7fd9e89029a1a82516fb9d8";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     wallpapers = {
       url = "github:FKouhai/Kanagawa-wallpapers";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
