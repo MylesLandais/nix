@@ -92,6 +92,18 @@ _:
       };
       terminal.backend = "local";
       toolsets = [ "all" ];
+
+      # The dashboard refuses any request whose Host header is not the exact
+      # address it bound to, so the tailnet IP alone would 400 even though it
+      # routes fine. public_url is the one supported way to trust a second
+      # hostname: urlparse().hostname is taken from it (the port is stripped)
+      # and added to the accepted set, so both the MagicDNS name and the raw
+      # 100.x address work. Only ONE extra host can be declared this way.
+      #
+      # This value is snapshotted once at startup — the request middleware
+      # never re-reads config — so changing it needs a service restart, not
+      # just an activation.
+      dashboard.public_url = "http://100.112.41.69:9119";
     };
 
     # SOUL.md must live in hermesHomeFiles, not documents: hermes reads it from
