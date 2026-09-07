@@ -2,7 +2,7 @@ name: nix flake check
 
 on:
   push:
-    branches: [main, dendritic]
+    branches: [stable, dev, dendritic]
   pull_request:
 
 jobs:

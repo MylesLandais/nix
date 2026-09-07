@@ -152,3 +152,7 @@ The NVIDIA driver is configured in `hosts/cerberus/configuration.nix`. It uses t
 ## Usage
 
 To apply changes: `sudo nixos-rebuild switch --flake .#cerberus`.
+
+## Source and collaboration
+
+See [nixos Git history and collaboration](docs/infra/git-history.md) for stable/dev branches, preserved history, cloning, and mirror recovery.

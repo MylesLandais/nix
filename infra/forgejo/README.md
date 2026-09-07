@@ -142,3 +142,7 @@ account recovery is wanted. Local backups and Git mirrors serve different
 purposes: Git replication does not preserve Forgejo accounts, permissions, or
 database state. Do not rerun the disruptive integration test while teammates
 are working without scheduling its brief outage.
+
+## Shared repositories
+
+The canonical organization is `nebula`, owned by `warbee` and `lain`, with private `end`, `tint`, and `nixos` repositories. See [Git history and collaboration](../../docs/infra/git-history.md). `warbee/nix` remains the earlier pull mirror and is not the canonical working repository.
