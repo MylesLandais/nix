@@ -488,6 +488,12 @@ _: {
             to = 61000;
           } # Mosh
         ];
+
+        # Hermes dashboard, tailnet-only. The backend binds the MagicDNS name
+        # (see modules/_hermes.nix), never the LAN address, and the port is
+        # accepted on tailscale0 alone — deliberately not in allowedTCPPorts,
+        # which would open it to the whole LAN.
+        interfaces."tailscale0".allowedTCPPorts = [ 9119 ];
       };
 
       system.stateVersion = "25.05";

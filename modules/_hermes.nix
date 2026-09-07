@@ -1,11 +1,14 @@
-# TODO(unsolved): ~/.hermes/config.yaml is NOT managed by Nix. It is a live user
-# file that hermes reads directly and it takes precedence over any settings defined
-# in the services.hermes-agent.settings block below. Changes made here (model,
-# terminal.backend, etc.) may be silently ignored if config.yaml defines the same
-# keys. There is currently no mechanism to manage config.yaml via home.file or
-# similar because the hermes module does not expose a way to disable its own
-# config generation. Until resolved, treat config.yaml as the source of truth for
-# runtime settings and keep this block as documentation only.
+# ~/.hermes/config.yaml is shared between Nix and hermes itself. Activation deep-
+# merges the `settings` block below into the file on disk: the keys declared here
+# replace the keys on disk, and every other key is left alone. The file stays a
+# real writable file and not a store symlink, because hermes saves to it at
+# runtime. So `settings` is authoritative for what it names and nothing else —
+# an earlier comment here claimed config.yaml could not be managed from Nix,
+# which stopped being true once the module grew the merge script.
+#
+# Secrets must NOT go in `settings`: it renders to a world-readable file in the
+# Nix store. They belong in ~/.hermes/.env (mode 0600), which activation leaves
+# untouched as long as `environment` and `environmentFiles` are both empty.
 #
 # This is a Home Manager module, not a NixOS one. The NixOS module runs hermes as
 # a dedicated system user with HERMES_HOME=/var/lib/hermes/.hermes, which is a
@@ -48,7 +51,19 @@ _:
     # credentials configured before a client can connect at all.
     backend = {
       mode = "dashboard";
-      host = "127.0.0.1";
+      # Bind the MagicDNS name, not the 100.x address. The dashboard refuses any
+      # request whose Host header differs from the address it bound to, as a
+      # defence against DNS rebinding, so binding the IP would 400 every request
+      # that arrives by name.
+      #
+      # Binding anything other than loopback also engages the authentication
+      # gate, and hermes refuses to start when no auth provider is registered.
+      # The credentials live in ~/.hermes/.env, not here.
+      host = "cerberus.cerberus-bonito.ts.net";
+      # A systemd *user* unit cannot order itself after the system
+      # tailscaled.service — After= and Requires= are silent no-ops across that
+      # boundary — so the name may not resolve yet at login. Poll for it.
+      waitFor = "hostname";
       port = 9119;
     };
 
