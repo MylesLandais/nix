@@ -31,6 +31,17 @@
     enable = true;
     addToSystemPackages = true;
 
+    # The browser admin panel. `serve` and `dashboard` are the same entry point
+    # with one flag of difference; only `dashboard` serves the web application,
+    # so `serve` answers 404 on every path but /docs. Keep host on loopback:
+    # any other address turns on the dashboard authentication gate, which needs
+    # credentials configured before a client can connect at all.
+    backend = {
+      mode = "dashboard";
+      host = "127.0.0.1";
+      port = 9119;
+    };
+
     settings = {
       model = {
         # Not every opencode-go model works through hermes. Verified 2026-09-07:
