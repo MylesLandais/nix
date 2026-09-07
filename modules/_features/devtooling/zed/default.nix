@@ -74,6 +74,9 @@ in
       [profiles.pi]
       GEMINI_API_KEY = { description = "Google AI Studio key", required = true }
       OPENROUTER_API_KEY = { description = "OpenRouter key", required = true }
+
+      [profiles.hermes]
+      OPENCODE_GO_API_KEY = { description = "OpenCode Go subscription key", required = true }
     '';
 
     programs.zed-editor = {

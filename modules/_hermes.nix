@@ -33,10 +33,19 @@
 
     settings = {
       model = {
-        default = "deepseek-v4-flash";
+        # deepseek-v4-flash is listed by /v1/models but 403s: "only available
+        # hosted in China and requires explicit opt in". glm-5 works.
+        default = "glm-5";
         provider = "opencode-go";
         base_url = "https://opencode.ai/zen/go/v1";
         api_mode = "chat_completions";
+        # The OpenCode Go relay rejects requests without x-opencode-session
+        # (HTTP 400, "cannot be routed efficiently"). hermes-agent 0.20.0 never
+        # emits it, so inject it here. Regenerate the uuid freely; the relay
+        # only needs a stable opaque id per client.
+        default_headers = {
+          "x-opencode-session" = "ae72de72-ea03-48eb-bce1-bd8a802e5afa";
+        };
       };
       terminal.backend = "local";
       toolsets = [ "all" ];
