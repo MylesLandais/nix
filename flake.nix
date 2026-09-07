@@ -134,11 +134,28 @@
       imports = [
         inputs.treefmt-nix.flakeModule
         (import-tree ./modules)
-        ./modules/services/forgejo.nix
       ];
       systems = [ "x86_64-linux" ];
     })
     // {
+      devShells = inputs.nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (
+        system:
+        let
+          pkgs = import inputs.nixpkgs { inherit system; };
+        in
+        {
+          forgejo = pkgs.mkShell {
+            packages = with pkgs; [
+              opentofu
+              docker-compose
+              openssl
+              jq
+              postgresql_16
+              skopeo
+            ];
+          };
+        }
+      );
       colmena = import ./colmena.nix { inherit inputs; };
     };
 }

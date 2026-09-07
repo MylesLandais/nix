@@ -5,10 +5,6 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "5.24.0"
     }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.7"
-    }
     local = {
       source  = "hashicorp/local"
       version = "~> 2.5"
@@ -20,16 +16,10 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
-resource "random_password" "tunnel_secret" {
-  length  = 32
-  special = false
-}
-
 resource "cloudflare_zero_trust_tunnel_cloudflared" "forgejo" {
-  account_id    = var.cloudflare_account_id
-  name          = "nebula-1-forgejo"
-  config_src    = "cloudflare"
-  tunnel_secret = random_password.tunnel_secret.result
+  account_id = var.cloudflare_account_id
+  name       = "nebula-1-forgejo"
+  config_src = "cloudflare"
 }
 
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "forgejo" {

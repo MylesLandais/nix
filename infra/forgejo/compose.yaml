@@ -1,0 +1,83 @@
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:2026.8.3@sha256:51c9cefcb4569df44e1ad403ab1d3d8065aa8e84339bcfc6aee75502e1140339
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:-}
+    restart: unless-stopped
+    networks:
+      forgejo:
+        ipv4_address: 172.30.42.2
+    depends_on:
+      forgejo:
+        condition: service_healthy
+
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:15.0.7-rootless@sha256:1131f4c646d6115577b7cb9ccfe8cd2c289bb54a1e1ed42400be0e22916af924
+    user: "1000:1000"
+    environment:
+      GITEA_APP_INI: /etc/gitea/app.ini
+      FORGEJO__database__DB_TYPE: postgres
+      FORGEJO__database__HOST: postgres:5432
+      FORGEJO__database__NAME: ${POSTGRES_DB:?}
+      FORGEJO__database__USER: ${POSTGRES_USER:?}
+      FORGEJO__database__PASSWD: ${DB_PASSWORD:?}
+      FORGEJO__database__SSL_MODE: disable
+      FORGEJO__server__DOMAIN: ${DOMAIN:?}
+      FORGEJO__server__ROOT_URL: https://${DOMAIN}/
+      FORGEJO__server__SSH_DOMAIN: ${DOMAIN}
+      FORGEJO__server__SSH_PORT: "2222"
+      FORGEJO__server__SSH_LISTEN_PORT: "2222"
+      FORGEJO__server__START_SSH_SERVER: "true"
+      FORGEJO__service__DISABLE_REGISTRATION: "false"
+      FORGEJO__service__SHOW_REGISTRATION_BUTTON: "true"
+      FORGEJO__service__REGISTER_MANUAL_CONFIRM: "true"
+      FORGEJO__service__REGISTER_EMAIL_CONFIRM: "false"
+      FORGEJO__service__REQUIRE_SIGNIN_VIEW: "true"
+      FORGEJO__security__SECRET_KEY: ${FORGEJO_SECRET_KEY:?}
+      FORGEJO__security__REVERSE_PROXY_TRUSTED_PROXIES: "172.30.42.2/32"
+      FORGEJO__security__INSTALL_LOCK: "true"
+    volumes:
+      - /var/lib/forgejo/data:/var/lib/gitea
+      - /var/lib/forgejo/conf:/etc/gitea
+    ports:
+      - "${TAILSCALE_ADDRESS:?}:2222:2222"
+    networks:
+      forgejo:
+        ipv4_address: 172.30.42.3
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, wget, --spider, -q, http://127.0.0.1:3000/api/healthz]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 60s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16.15-alpine@sha256:cf78e76683b9ca8c5733cbbdce6c9262b45b6767934dd0a95e671f9a0fc20685
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?}
+      POSTGRES_DB: ${POSTGRES_DB:?}
+    volumes:
+      - /var/lib/forgejo/postgres:/var/lib/postgresql/data
+    networks:
+      forgejo:
+        ipv4_address: 172.30.42.4
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 10s
+      timeout: 5s
+      retries: 18
+
+networks:
+  forgejo:
+    driver_opts:
+      com.docker.network.bridge.name: br-forgejo
+    ipam:
+      config:
+        - subnet: 172.30.42.0/24
