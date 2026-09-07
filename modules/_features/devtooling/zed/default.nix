@@ -64,9 +64,12 @@ in
       revision = "1.0"
 
       # One profile per agent, so each wrapper only demands the keys it needs.
-      # `default` must declare at least one secret, so it mirrors gemini.
+      # `default` must declare at least one secret, but every profile inherits
+      # its entries — so a required key here is demanded by *all* agents (that
+      # is why the hermes profile was failing on GEMINI_API_KEY). Declare it,
+      # do not require it; the gemini and pi profiles require it themselves.
       [profiles.default]
-      GEMINI_API_KEY = { description = "Google AI Studio key", required = true }
+      GEMINI_API_KEY = { description = "Google AI Studio key", required = false }
 
       [profiles.gemini]
       GEMINI_API_KEY = { description = "Google AI Studio key", required = true }
