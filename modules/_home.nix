@@ -134,6 +134,8 @@ in
     inputs.stylix.homeModules.stylix
     inputs.noctalia.homeModules.default
     inputs.tokyonight.homeManagerModules.default
+    inputs.hermes-agent.homeManagerModules.default
+    ./_hermes.nix
   ];
   fonts.fontconfig.enable = true;
 

@@ -23,7 +23,6 @@ in
       inputs.self.nixosModules.greeter
       inputs.chaotic.nixosModules.default
       inputs.agenix.nixosModules.default
-      inputs.hermes-agent.nixosModules.default
     ];
     users.warby = {
       homeModules = [

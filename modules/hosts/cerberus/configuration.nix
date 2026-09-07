@@ -22,7 +22,6 @@ _: {
         inputs.self.nixosModules.gaming
         inputs.self.nixosModules.dev
         inputs.self.nixosModules.agenixHost
-        inputs.self.nixosModules.hermes
         inputs.self.nixosModules.chromiumPolicy
         "${inputs.self}/modules/_features/audio.nix"
         "${inputs.self}/modules/_features/sunshine.nix"

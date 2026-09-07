@@ -6,30 +6,40 @@
 # similar because the hermes module does not expose a way to disable its own
 # config generation. Until resolved, treat config.yaml as the source of truth for
 # runtime settings and keep this block as documentation only.
-{
-  lib,
-  ...
-}:
+#
+# This is a Home Manager module, not a NixOS one. The NixOS module runs hermes as
+# a dedicated system user with HERMES_HOME=/var/lib/hermes/.hermes, which is a
+# different state directory from the ~/.hermes that the desktop app and the CLI
+# use — so the dashboard showed an empty session list while 1479 sessions sat in
+# the user's home. Hermes is an agent for one person: the credentials, memory,
+# sessions and cron jobs all belong to that person. The user-level module runs
+# everything as warby against ~/.hermes, so every front end shares one store.
+_:
 
 {
-  # The hermes-agent flake's nixosModule sets HERMES_HOME=/var/lib/hermes/.hermes
-  # system-wide, which leaks into interactive shells and makes the user-facing
-  # `hermes` CLI try to read /var/lib/hermes/.hermes/.env (no read permission for
-  # the warby user). Override so interactive use points at the user-owned dir.
-  environment.variables.HERMES_HOME = lib.mkForce "/home/warby/.hermes";
+  programs.hermes-agent = {
+    # Replaces the NixOS module's addToSystemPackages. Also exports
+    # HERMES_HOME, which is why the old environment.variables mkForce
+    # override is gone: hermesHome already defaults to ~/.hermes.
+    enable = true;
+  };
 
   # The upstream module defaults to Restart="always" and exposes no start limit, so
   # a gateway that cannot start has nothing stopping it. On the v2026.6.19 pin it
   # crash-looped 12557 times at ~5s CPU per attempt. Cap it: five failures in five
-  # minutes and it stays failed, visible in `systemctl --failed`, instead of looping.
-  systemd.services.hermes-agent = {
-    startLimitIntervalSec = 300;
-    startLimitBurst = 5;
+  # minutes and it stays failed, visible in `systemctl --user --failed`, instead of
+  # looping.
+  systemd.user.services.hermes-agent.Unit = {
+    StartLimitIntervalSec = 300;
+    StartLimitBurst = 5;
   };
 
   services.hermes-agent = {
     enable = true;
-    addToSystemPackages = true;
+
+    # Not enabled by default on this module, unlike the NixOS one. Without it
+    # the messaging gateway (Telegram, Discord, Slack) does not run at all.
+    gateway.enable = true;
 
     # The browser admin panel. `serve` and `dashboard` are the same entry point
     # with one flag of difference; only `dashboard` serves the web application,
