@@ -33,8 +33,15 @@
 
     settings = {
       model = {
-        # deepseek-v4-flash is listed by /v1/models but 403s: "only available
-        # hosted in China and requires explicit opt in". glm-5 works.
+        # Not every opencode-go model works through hermes. Verified 2026-09-07:
+        #   OK      deepseek-*, glm-*, hy*, kimi-*, longcat-2.0, mimo-*, omen-alpha
+        #   500     muse-spark-1.2/1.3-contributor, gpt-5.6-luna (relay-side)
+        #   401     grok-4.6 ("not supported for format oa-compat")
+        #   broken  minimax-*, qwen* — these work at the relay over
+        #           chat_completions, but runtime_provider.py hard-overrides
+        #           api_mode for opencode providers and forces them onto
+        #           anthropic_messages, whose client never merges the
+        #           x-opencode-session header below. Not fixable from config.
         default = "glm-5";
         provider = "opencode-go";
         base_url = "https://opencode.ai/zen/go/v1";
