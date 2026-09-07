@@ -1,6 +1,16 @@
 # NixOS dotfiles
 This repo contains the nix configurations for my main workstations
 
+## OCI and team Git hosting
+
+The ARM64 OCI hosts run NixOS and use Tailscale for administration. Forgejo is
+live at [git.nebula-1.com](https://git.nebula-1.com), served from `stage-db`
+through Cloudflare Tunnel. Public signup requires administrator activation.
+
+- [OCI inventory and routing](docs/infra/oci-forgejo.md)
+- [Forgejo deployment, signup, backups, and recovery](infra/forgejo/README.md)
+- [GitHub source and automatic Forgejo mirror](docs/infra/repository-mirroring.md)
+
 ## TODO:
 - missing package gemini-cli
 - feat:
