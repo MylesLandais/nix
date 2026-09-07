@@ -13,6 +13,7 @@
     ./remmina
     ./rust
     ./tmux
+    ./zed
   ];
 
   options = {
@@ -27,5 +28,6 @@
     remmina.enable = lib.mkDefault true;
     rust.enable = lib.mkDefault true;
     tmux.enable = lib.mkDefault true;
+    zed.enable = lib.mkDefault true;
   };
 }

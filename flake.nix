@@ -134,6 +134,7 @@
       imports = [
         inputs.treefmt-nix.flakeModule
         (import-tree ./modules)
+        ./modules/services/forgejo.nix
       ];
       systems = [ "x86_64-linux" ];
     })
