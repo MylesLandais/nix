@@ -8,10 +8,12 @@
 #
 #   client -> llama-swap :8000 -> docker run <backend> on an ephemeral ${PORT}
 #
-# Two backends, because no single engine covers the models under test:
+# Three backends, because no single engine covers the models under test:
 #
 #   vllm      the fast path for safetensors checkpoints with a real vLLM
 #             quantization (NVFP4/W4A16, GPTQ, AWQ, compressed-tensors).
+#   sglang    an alternate OpenAI-compatible CUDA runtime for profiling the
+#             same named model through SGLang's scheduler and radix cache.
 #   llamacpp  for GGUF-only releases. vLLM's GGUF support is experimental and
 #             does not cover mmproj (multimodal) or draft models at all, which
 #             some of these checkpoints ship as their only 24 GB-viable form.
@@ -91,14 +93,77 @@ _: {
           # shorthand expects a quant *label* and rejects a full filename with
           # "exactly one out metadata, path_model, and file must be defined",
           # which these repos need because they ship several quants each.
+          #
+          # A vision model needs its projector named explicitly for the same
+          # reason: auto-download picks one only when the repo ships exactly
+          # one, and these repos ship an f16 beside several quantised pairs.
           args = [
             "--hf-repo ${m.model}"
             "--hf-file ${m.file}"
             "--port ${upstreamPort}"
             "--host 0.0.0.0"
             "--alias ${name}"
-          ];
+          ]
+          ++ lib.optional (
+            m.mmproj != null
+          ) "--mmproj-url https://huggingface.co/${m.model}/resolve/main/${m.mmproj}";
         };
+        sglang =
+          name: m:
+          let
+            tokenizer = if m.tokenizer != null then m.tokenizer else m.model;
+            modelResolver =
+              if m.file == null then
+                "model_path=${lib.escapeShellArg m.model}"
+              else
+                ''
+                  model_path="$(
+                    python3 -c 'import sys; from huggingface_hub import hf_hub_download; print(hf_hub_download(repo_id=sys.argv[1], filename=sys.argv[2], cache_dir="/root/.cache/llama.cpp"))' \
+                      ${lib.escapeShellArg m.model} ${lib.escapeShellArg m.file}
+                  )"
+                '';
+            serverArgs = [
+              "python3 -m sglang.launch_server"
+              "--model-path ${lib.escapeShellArg m.model}"
+              "--tokenizer-path ${lib.escapeShellArg tokenizer}"
+              "--served-model-name ${lib.escapeShellArg name}"
+              "--port ${upstreamPort}"
+              "--host 0.0.0.0"
+            ];
+            launch = ''
+              set -euo pipefail
+              ${modelResolver}
+              exec python3 -m sglang.launch_server \
+                --model-path "$model_path" \
+                --tokenizer-path ${lib.escapeShellArg tokenizer} \
+                --load-format gguf \
+                --served-model-name ${lib.escapeShellArg name} \
+                --port ${upstreamPort} \
+                --host 0.0.0.0 \
+                ${lib.concatStringsSep " " m.extraArgs}
+            '';
+          in
+          {
+            docker = [
+              "-v ${cfg.hfCacheDir}:/root/.cache/huggingface"
+              "-v ${cfg.llamaCacheDir}:/root/.cache/llama.cpp"
+              "-v ${cfg.sglangCacheDir}:/root/.cache/sglang"
+              "-e HF_HOME=/root/.cache/huggingface"
+              "-e SGLANG_CACHE_DIR=/root/.cache/sglang"
+              # SGLang's first Triton autotune briefly needs another 256 MiB.
+              # Expandable segments avoid losing that headroom to allocator
+              # fragmentation on tightly packed 24 GB cards.
+              "-e PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
+            ];
+            # Hugging Face models need no shell interpolation. Keeping their
+            # argv direct avoids YAML/shell quoting dropping --model-path.
+            # GGUF filenames still need a shell to resolve the cached path.
+            args =
+              if m.file == null then
+                serverArgs ++ m.extraArgs
+              else
+                [ "/bin/bash -lc ${lib.escapeShellArg launch}" ];
+          };
       };
 
       mkCmd =
@@ -107,7 +172,9 @@ _: {
           image = if m.image != null then m.image else cfg.images.${m.backend};
           b = backendArgs.${m.backend} name m;
         in
-        lib.concatStringsSep " " (dockerRun name image b.docker ++ b.args ++ m.extraArgs);
+        lib.concatStringsSep " " (
+          dockerRun name image b.docker ++ b.args ++ lib.optionals (m.backend != "sglang") m.extraArgs
+        );
 
       settings = {
         # A 30B has to be pulled off disk and packed onto the card before it
@@ -130,7 +197,23 @@ _: {
     in
     {
       options.services.infra.llmRouter = {
-        enable = lib.mkEnableOption "llama-swap LLM router with vLLM/llama.cpp backends";
+        enable = lib.mkEnableOption "llama-swap LLM router with vLLM/SGLang/llama.cpp backends";
+
+        address = lib.mkOption {
+          type = lib.types.str;
+          default = "127.0.0.20";
+          description = ''
+            Dedicated loopback address. The whole 127/8 is loopback, so giving
+            this service its own IP prevents its port from colliding with other
+            services on the host.
+          '';
+        };
+
+        hostName = lib.mkOption {
+          type = lib.types.str;
+          default = "llm";
+          description = "Host alias for the router address, so clients use a stable name.";
+        };
 
         port = lib.mkOption {
           type = lib.types.port;
@@ -157,6 +240,14 @@ _: {
             default = "ghcr.io/ggml-org/llama.cpp:server-cuda";
             description = "Default llama.cpp server image (CUDA build).";
           };
+          sglang = lib.mkOption {
+            type = lib.types.str;
+            default = "lmsysorg/sglang:v0.5.18-runtime";
+            description = ''
+              Pinned SGLang runtime image. Mutable latest/dev tags are refused
+              here because model and kernel support changes with the image.
+            '';
+          };
         };
 
         hfCacheDir = lib.mkOption {
@@ -175,6 +266,17 @@ _: {
           default = "/home/${cfg.user}/.cache/llm/llama.cpp";
           defaultText = lib.literalExpression ''"/home/''${cfg.user}/.cache/llm/llama.cpp"'';
           description = "Host-side GGUF cache for llama.cpp backends.";
+        };
+
+        sglangCacheDir = lib.mkOption {
+          type = lib.types.path;
+          default = "/home/${cfg.user}/.cache/llm/sglang";
+          defaultText = lib.literalExpression ''"/home/''${cfg.user}/.cache/llm/sglang"'';
+          description = ''
+            Persistent SGLang/Triton kernel cache. Qwen3.8 needs several minutes
+            to compile its first request on Ampere; retaining these artifacts
+            makes later llama-swap loads immediately reusable.
+          '';
         };
 
         ttl = lib.mkOption {
@@ -206,6 +308,7 @@ _: {
                 backend = lib.mkOption {
                   type = lib.types.enum [
                     "vllm"
+                    "sglang"
                     "llamacpp"
                   ];
                   default = "vllm";
@@ -219,9 +322,27 @@ _: {
                   type = lib.types.nullOr lib.types.str;
                   default = null;
                   description = ''
-                    llamacpp only: the exact .gguf filename within the repo. These
-                    repos ship many quants and there is no sane default — picking
-                    the wrong one silently loads a model that does not fit.
+                    Exact .gguf filename within the repo for llamacpp or SGLang.
+                    SGLang leaves this null for ordinary safetensors checkpoints.
+                  '';
+                };
+                mmproj = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  description = ''
+                    Multimodal projector filename within `model`'s repo, for a
+                    vision model on the llamacpp backend. Without it llama-server
+                    loads the language tower only and silently ignores image
+                    content parts, which reads downstream as a model that cannot
+                    see rather than as a misconfiguration.
+                  '';
+                };
+                tokenizer = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  description = ''
+                    SGLang-only tokenizer repo/path override. Useful when the
+                    weights live in a GGUF conversion repository.
                   '';
                 };
                 image = lib.mkOption {
@@ -251,10 +372,16 @@ _: {
         assertions = lib.mapAttrsToList (name: m: {
           assertion = m.backend != "llamacpp" || m.file != null;
           message = "services.infra.llmRouter.models.${name}: the llamacpp backend requires `file` (the .gguf filename).";
+        }) cfg.models
+        ++ lib.mapAttrsToList (name: m: {
+          assertion = m.mmproj == null || m.backend == "llamacpp";
+          message = "services.infra.llmRouter.models.${name}: `mmproj` is llamacpp-only; vLLM and SGLang load the vision tower from the checkpoint itself.";
         }) cfg.models;
 
         virtualisation.docker.enable = true;
         hardware.nvidia-container-toolkit.enable = true;
+
+        networking.hosts.${cfg.address} = [ cfg.hostName ];
 
         # FIX: Workaround for nvidia-container-toolkit issue
         # https://github.com/NixOS/nixpkgs/issues/463525
@@ -273,6 +400,7 @@ _: {
         systemd.tmpfiles.rules = [
           "d ${cfg.hfCacheDir} 0755 ${cfg.user} users - -"
           "d ${cfg.llamaCacheDir} 0755 ${cfg.user} users - -"
+          "d ${cfg.sglangCacheDir} 0755 ${cfg.user} users - -"
         ];
 
         systemd.services.llama-swap = {
@@ -297,7 +425,7 @@ _: {
             # this is an unauthenticated endpoint that will run arbitrary
             # generation for anyone who can reach it. Putting it on the tailnet
             # should be a deliberate, separate change.
-            ExecStart = "${pkgs.llama-swap}/bin/llama-swap --config ${configFile} --listen 127.0.0.1:${toString cfg.port}";
+            ExecStart = "${pkgs.llama-swap}/bin/llama-swap --config ${configFile} --listen ${cfg.address}:${toString cfg.port}";
 
             User = cfg.user;
             Restart = "on-failure";

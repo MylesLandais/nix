@@ -23,7 +23,16 @@ let
     else
       false;
 
-  chromiumFlagsFile = mkChromiumFlags (chromiumStandardBrowserFlags // { inherit vaapiMode; });
+  chromiumFlagsFile = mkChromiumFlags (
+    chromiumStandardBrowserFlags
+    // {
+      inherit vaapiMode;
+      # The current login keyring is locked, and Chromium blocks all requests
+      # while waiting for libsecret. Bitwarden owns browser passwords here, so
+      # bypass the broken system keyring rather than hanging the browser.
+      extra = chromiumStandardBrowserFlags.extra ++ [ "--password-store=basic" ];
+    }
+  );
 
   # Helium and Vivaldi both still show blocky WebM/GIF artifacts on nvidia
   # even with UseChromeOSDirectVideoDecoder disabled; fall back to software
@@ -41,7 +50,7 @@ let
   # resolves the helper as a sibling of the real binary; on Linux current_exe()
   # reads /proc/self/exe, which follows symlinks straight back to the original store
   # path, where the helper is absent. The whole package has to move together.
-  codexVersion = "0.149.0";
+  codexVersion = "0.153.2";
   llmCodex = inputs.llm.packages.${pkgs.system}.codex;
   llmCodexVersion = llmCodex.version or (lib.getVersion llmCodex.name);
 
@@ -56,7 +65,7 @@ let
 
       src = pkgs.fetchurl {
         url = "https://github.com/openai/codex/releases/download/rust-v${codexVersion}/codex-package-x86_64-unknown-linux-musl.tar.gz";
-        hash = "sha256-HAi6Jiggt41J6nqT8ya2tDC3Ll/kaDDkM+3vEuUSMkQ=";
+        hash = "sha256-4Q+gzueOnwvTlYgPA/1P0ifZA8p69km7wI0WSRAekiU=";
       };
 
       # codex, codex-code-mode-host, rg and bwrap are static-pie and need nothing.

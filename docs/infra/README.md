@@ -53,19 +53,51 @@ Snapshot of the violations, 2026-08-09 (42 containers across 16 compose projects
 
 | Service | Instances found | Target |
 | --- | ---: | --- |
-| Valkey / Redis | 4 — `dev.valkey` (:6379), penpot 8.1, langfuse 8-alpine, Nix `valkey.service` | 1, Nix-managed on `:6379` |
-| Postgres | 5 — `dev.postgres` 16.13 (:5433), `dev.postgres19-canary` **19beta2** (:5434), penpot pg15, langfuse pg16, Nix `postgresql_16` (:5432) | **2** (see exception below) |
+| Valkey / Redis | 4 — `dev.valkey` (:6379), ~~penpot 8.1~~ (dropped 2026-09-06), langfuse 8-alpine, Nix `valkey.service` | 1, Nix-managed on `:6379` |
+| Postgres | 5 — `dev.postgres` 16.13 (:5433), `dev.postgres19-canary` **19beta2** (:5434), ~~penpot pg15~~ (dropped 2026-09-06), langfuse pg16, Nix `postgresql_16` (:5432) | **2** — see the tier table below |
 | Object storage | 2 — minio (dead), `dev.seaweedfs` | 1 — seaweedfs |
 | Host agent | 4 — maya-bot ×3, hermes-agent | 1 |
 
-### Declared exceptions
+### Database tiers (established 2026-09-06)
 
-Not every duplicate is redundancy. These are deliberate and must survive cleanup:
+Postgres consolidates onto **two** instances, addressed by canonical aliases on the
+`dev` Docker network rather than by container name. Both are declared in
+`~/Workspace-internal/src/crawler/docker-compose.yml`.
 
-- **`dev.postgres19-canary` — PostgreSQL 19beta2 on `:5434`.** Pinned for the graph
-  language (SQL/PGQ), which the shared PG16 cannot provide. `dev.booru-internal` is
-  built against it (`workspace-internal-booru:pg19`). Do not fold this into the
-  shared instance.
+| Tier | Alias | Version | Loopback | Container |
+| --- | --- | --- | ---: | --- |
+| **beta** — default for new work | `warbee-dev-db` | 19beta2 | `:5434` | `dev.postgres19-canary` |
+| **stable / LTS** — fallback | `warbee-dev-db-stable` | 16.13 | `:5433` | `dev.postgres` |
+
+The beta tier is the default target: new consumers connect to `warbee-dev-db` and
+get SQL/PGQ and everything else 19 adds. The stable tier exists for consumers that
+cannot run on a pre-release — a fallback, not a second default. Any consumer should
+be able to switch tiers by changing one host variable; wire that variable rather
+than hardcoding a hostname.
+
+The alias is deliberately not the container name. `dev.postgres19-canary` keeps its
+name and its SQL/PGQ canary role, so `dev.booru-internal` (built against
+`workspace-internal-booru:pg19`) and every other existing caller keeps resolving
+what it already resolves. Nothing is migrated implicitly; cutovers are per-caller.
+
+**Beta means beta.** 19beta2 is pre-release and its on-disk format is not guaranteed
+stable across beta revisions — a `19beta3` bump may require dump/restore rather than
+a binary upgrade. Do not put anything on the beta tier whose loss would hurt without
+a dump. Note the stage environment pins `19beta3`
+(`~/Workspace-end/nix/stage/modules/postgres.nix`); local is one revision behind.
+
+Verify a consumer against the beta before cutting it over, rather than assuming.
+Penpot 2.16.2 was checked this way on 2026-09-06 — a throwaway database, all 151
+migrations applied, backend booted — and then moved.
+
+#### Not yet on a tier
+
+These still run their own Postgres and are unconverted:
+
+- `endless-dev-postgres` — PG18 on `:5432`, from `~/Workspace-end/docker/compose.dev.yaml`.
+  Also the reason the Nix-declared `services.infra.postgres` loses the `:5432` port
+  race, and therefore why `infra.demo.enable` is still `false`.
+- `manus-langfuse-postgres-1` — PG16, langfuse-internal, not published.
 
 ### Re-enabling the demo spine
 

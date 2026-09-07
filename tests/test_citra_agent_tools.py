@@ -67,6 +67,25 @@ class CitraAgentBridgeTest(unittest.TestCase):
         with self.assertRaisesRegex(bridge_module.BridgeError, "existing 3DS image"):
             self.bridge._validate_rom(str(wrong_type))
 
+    def test_start_uses_azahar_short_gdb_option(self) -> None:
+        rom = self.games / "owned.3ds"
+        rom.write_bytes(b"synthetic fixture")
+        process = mock.Mock(pid=1234)
+        process.poll.return_value = None
+
+        with (
+            mock.patch.object(bridge_module.subprocess, "Popen", return_value=process) as popen,
+            mock.patch.object(self.bridge, "_find_window", return_value=5678),
+            mock.patch.object(self.bridge, "_start_window_stream"),
+        ):
+            self.bridge.start({"rom_path": str(rom)})
+
+        self.assertEqual(
+            popen.call_args.args[0],
+            ["false", "-g", "24689", str(rom)],
+        )
+        self.bridge.process = None
+
     def test_input_rejects_unknown_buttons_before_touching_x11(self) -> None:
         with self.assertRaisesRegex(bridge_module.BridgeError, "unknown buttons"):
             self.bridge.press({"buttons": ["A", "SELF_DESTRUCT"]})

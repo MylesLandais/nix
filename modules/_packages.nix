@@ -2,6 +2,7 @@
 
 let
   eurostile-bold-extended = pkgs.callPackage ./fonts/_eurostile-bold-extended.nix { };
+  chatgpt-linux = pkgs.callPackage ./_chatgpt-linux.nix { };
 in
 with pkgs;
 [
@@ -17,6 +18,7 @@ with pkgs;
   btop
   bulletty
   cava
+  chatgpt-linux
   cliphist
   code-cursor
   coreutils
@@ -33,6 +35,7 @@ with pkgs;
   fd
   ffmpeg
   firefox
+  google-chrome
   chromium
   gamemode
   gcc

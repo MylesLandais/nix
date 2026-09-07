@@ -239,7 +239,7 @@ class Bridge:
             self._clear_stream_dir()
             command = [
                 self.config.azahar_bin,
-                "--gdbport",
+                "-g",
                 str(self.state.gdb_port),
                 str(rom),
             ]

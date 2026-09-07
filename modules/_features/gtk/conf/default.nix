@@ -41,6 +41,7 @@
       nemo # Cinnamon file manager (GTK, works great standalone under Hyprland)
       nemo-fileroller # Nemo → "Open with Archive Manager" context menu bridge
       file-roller # GNOME Archive Manager (backend for nemo-fileroller)
+      ffmpegthumbnailer # Video thumbnails in Nemo, including WebM
       evince # GNOME document viewer (PDF, ePub, etc.)
       pkgs.gnome.gvfs # SMB/network locations for Nemo (matches services.gvfs on Cerberus)
 

@@ -20,13 +20,40 @@ let
       set -euo pipefail
       action="''${1:-ui}"
       shift || true
+
+      start_session() {
+        waydroid session start >/dev/null 2>&1 &
+        for _ in $(seq 1 45); do
+          if waydroid status 2>/dev/null | grep -q 'Session:[[:space:]]*RUNNING'; then
+            return 0
+          fi
+          sleep 2
+        done
+        echo "Waydroid did not become ready within 90 seconds." >&2
+        return 1
+      }
+
+      ensure_portrait_session() {
+        configured_width=$(waydroid prop get persist.waydroid.width 2>/dev/null || true)
+        configured_height=$(waydroid prop get persist.waydroid.height 2>/dev/null || true)
+        start_session
+        waydroid prop set persist.waydroid.width ${toString cfg.width}
+        waydroid prop set persist.waydroid.height ${toString cfg.height}
+        waydroid prop set persist.waydroid.multi_windows true
+
+        if [ "$configured_width" != "${toString cfg.width}" ] || [ "$configured_height" != "${toString cfg.height}" ]; then
+          echo "Restarting Waydroid to apply ${toString cfg.width}x${toString cfg.height} portrait geometry."
+          waydroid session stop
+          start_session
+        fi
+      }
+
       case "$action" in
         ui) waydroid show-full-ui "$@" ;;
         stop) waydroid session stop || true ;;
         status) waydroid status ;;
         store)
-          waydroid session start >/dev/null 2>&1 &
-          sleep 3
+          start_session
           waydroid app launch com.android.vending
           ;;
         install)
@@ -36,8 +63,7 @@ let
           waydroid app launch com.android.vending
           ;;
         play)
-          waydroid session start >/dev/null 2>&1 &
-          sleep 3
+          ensure_portrait_session
           waydroid app launch ${androidPackage}
           ;;
         shell) exec waydroid shell "$@" ;;
@@ -57,7 +83,10 @@ let
     text = ''
       failed=0
       check() { if eval "$2"; then printf 'PASS  %s\n' "$1"; else printf 'FAIL  %s\n' "$1"; failed=1; fi; }
+      # The expressions are intentionally passed unevaluated to check().
+      # shellcheck disable=SC2016
       check "x86_64 host" '[ "$(uname -m)" = x86_64 ]'
+      # shellcheck disable=SC2016
       check "Wayland session" '[ -n "''${WAYLAND_DISPLAY:-}" ]'
       check "NVIDIA display adapter" 'lspci | grep -Eqi "(VGA|3D).*NVIDIA"'
       check "Waydroid installed" 'command -v waydroid >/dev/null'
@@ -179,9 +208,14 @@ let
       echo "Capture running for $seconds seconds; exercise title screen and one guest battle."
       sleep "$seconds"
       sudo waydroid shell -- screencap -p /sdcard/feh-test.png || true
+      # Redirects are intentionally performed by this unprivileged evidence collector.
+      # shellcheck disable=SC2024
       sudo waydroid shell -- cat /sdcard/feh-test.png >"$out/screenshot.png" 2>/dev/null || true
+      # shellcheck disable=SC2024
       sudo waydroid shell -- dumpsys package ${androidPackage} >"$out/package.txt" 2>&1 || true
+      # shellcheck disable=SC2024
       sudo waydroid shell -- dumpsys activity activities >"$out/activity.txt" 2>&1 || true
+      # shellcheck disable=SC2024
       sudo waydroid shell -- logcat -d >"$out/logcat.txt" 2>&1 || true
       if grep -Eqi 'FATAL EXCEPTION|SIG(SEGV|ABRT)|Process com\.nintendo\.zaba .* died' "$out/logcat.txt"; then verdict=FAIL-CRASH; else verdict=PASS-PENDING-VISUAL; fi
       printf '%s\n' "$verdict" | tee "$out/verdict.txt"
@@ -266,9 +300,6 @@ in
   config = lib.mkIf cfg.enable {
     virtualisation.waydroid.enable = true;
     networking.nftables.enable = lib.mkIf cfg.useNftables true;
-    users.users.${cfg.user}.extraGroups = [ "adbusers" ];
-    programs.adb.enable = true;
-
     environment.systemPackages = [
       pkgs.android-tools
       pkgs.scrcpy

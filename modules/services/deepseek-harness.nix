@@ -1,6 +1,6 @@
 # DeepSeek Harness (`dsh`) — agent harness web UI.
 #
-# Points at the local llama-swap endpoint (modules/services/vllm.nix) rather than
+# Points at the local llama-swap endpoint (modules/services/llm-router.nix) rather than
 # DeepSeek's hosted API, so the models under test are driven through the same
 # agent loop they would be in production.
 #
@@ -44,7 +44,7 @@ _: {
 
         baseUrl = lib.mkOption {
           type = lib.types.str;
-          default = "http://127.0.0.1:8000/v1";
+          default = "http://llm:8000/v1";
           description = ''
             OpenAI-compatible endpoint the harness drives — by default the local
             llama-swap router (services.infra.llmRouter), exported as
@@ -82,6 +82,11 @@ _: {
           startLimitBurst = 5;
 
           environment = {
+            # dsh resolves its home during boot. DynamicUser accounts have no
+            # passwd home, so use the writable StateDirectory already managed
+            # and owned by systemd for this unit.
+            HOME = "/var/lib/deepseek-harness";
+            DSH_HOME = "/var/lib/deepseek-harness";
             # Upstream binds 127.0.0.1 by default; pin it explicitly so an
             # upstream default change cannot quietly expose the agent UI, which
             # has filesystem and shell tools attached to it.

@@ -8,6 +8,7 @@ let
   hyprlandClassFor =
     browserName:
     {
+      chrome = "^(?i)(google-chrome|chrome)$";
       helium = "^(?i)(helium|chromium)$";
       chromium = "^(?i)(chromium|helium)$";
       vivaldi = "^(?i)vivaldi$";

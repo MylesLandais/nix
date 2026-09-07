@@ -21,17 +21,34 @@
   };
   services.blueman.enable = true;
 
-  # Compressed RAM swap - gives the kernel a release valve under memory
-  # pressure without touching disk. 128 GB RAM => ~16 GB effective swap.
+  # Compressed RAM swap - first-tier release valve under memory pressure.
+  # 128 GB RAM => ~64 GB of zram disksize. zstd measures ~3.3:1 on this
+  # workload, so that costs roughly 19 GB of real RAM when saturated.
   zramSwap = {
     enable = true;
     algorithm = "zstd";
-    memoryPercent = 25;
+    memoryPercent = 50;
+    priority = 100;
   };
+
+  # Second-tier disk swap. zram alone is a hard wall: once its disksize is
+  # exhausted the kernel's only remaining reclaim target is file-backed
+  # memory, so it evicts executable pages and then immediately major-faults
+  # them back in. That thrash presents as UI stalls (tab switches, video
+  # start) rather than an OOM. This swapfile absorbs the overflow instead.
+  # Lower priority than zram, so it is only touched after zram fills.
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 32 * 1024;
+      priority = 10;
+    }
+  ];
 
   # VM tuning for interactive desktop responsiveness
   boot.kernel.sysctl = {
-    # Prefer zram swap over keeping idle anon pages resident
+    # Prefer zram swap over keeping idle anon pages resident. Valid with a
+    # fast compressed first tier; the disk swapfile below is overflow only.
     "vm.swappiness" = 180;
     # Flush dirty pages sooner — defaults allow 25 GB to accumulate
     "vm.dirty_ratio" = 5;

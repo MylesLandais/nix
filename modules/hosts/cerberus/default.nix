@@ -18,6 +18,7 @@ in
       inputs.self.nixosModules.themeData
       inputs.self.nixosModules.desktops
       inputs.self.nixosModules.gamehacking
+      inputs.self.nixosModules.iw4x
       inputs.self.nixosModules.scbw
       inputs.self.nixosModules.greeter
       inputs.chaotic.nixosModules.default

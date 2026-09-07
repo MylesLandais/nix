@@ -46,6 +46,7 @@ let
 in
 {
   imports = [
+    ../../_features/blender-mcp.nix
     ../../_features/hydra-smb.nix
     ../../_features/hermes-desktop.nix
   ];
@@ -92,6 +93,10 @@ in
     hl.workspace_rule({ workspace = "9",  monitor = "${m.secondaryMonitor.name}" })
     hl.workspace_rule({ workspace = "10", monitor = "${m.fourthMonitor.name}",    default = true })
     hl.workspace_rule({ workspace = "99", monitor = "HEADLESS-1",                 default = true })
+
+    -- Keep FEH out of the tiling tree, then size and center its portrait surface.
+    hl.window_rule({ float = true, match = { class = "waydroid.com.nintendo.zaba" } })
+    hl.window_rule({ size = "720 1280", move = "(monitor_w-window_w)/2 (monitor_h-window_h)/2", opacity = 1.0, no_blur = true, idle_inhibit = "always", match = { class = "waydroid.com.nintendo.zaba" } })
 
     -- == Cerberus env ==
     hl.env("LIBVA_DRIVER_NAME", "nvidia")

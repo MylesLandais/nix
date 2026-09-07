@@ -7,6 +7,9 @@
     inputs.nur.overlays.default
     inputs.claude-code.overlays.default
     inputs.nix-vscode-extensions.overlays.default
+    # Stable PCSX2 fast-path: reuse nixpkgs' build recipe while pinning the
+    # immutable upstream release and patches snapshot locally.
+    (import "${inputs.self}/modules/_features/overlays/pcsx2.nix")
     # Buzz has no upstream Nix packaging, so it is repackaged from the official
     # .deb. Shared rather than host-local because nothing about it is host-specific;
     # only desktop hosts pull env-packages.nix and actually build it.

@@ -1,6 +1,7 @@
 _: {
   flake.nixosModules.cerberus =
     {
+      config,
       inputs,
       lib,
       pkgs,
@@ -28,6 +29,8 @@ _: {
         "${inputs.self}/modules/_features/file-sharing.nix"
         "${inputs.self}/modules/_features/syncthing.nix"
         "${inputs.self}/modules/_features/hardware-tuning.nix"
+        "${inputs.self}/modules/_features/waydroid-feh.nix"
+        "${inputs.self}/modules/_features/pokeforce.nix"
         "${inputs.self}/modules/_features/fhs-compat.nix"
         "${inputs.self}/modules/_features/security.nix"
         "${inputs.self}/modules/_features/users.nix"
@@ -49,6 +52,8 @@ _: {
         inputs.self.nixosModules.llmRouter
         inputs.self.nixosModules.deepseekHarnessInfra
       ];
+
+      networking.hostName = config.host.hostName;
 
       nixpkgs.overlays = [
         inputs.nix-cachyos-kernel.overlays.pinned
@@ -77,6 +82,8 @@ _: {
           enable = true;
           gameRoot = "/home/warby/Games/roms/3ds";
         };
+        iw4x.enable = true;
+        pokeforce.enable = true;
         scbw.enable = true;
         remoteGaming.enable = true;
         syncthing.enable = true;
@@ -108,8 +115,9 @@ _: {
       infra.demo.enable = false;
 
       # Local LLM evaluation rig. One RTX 3090 Ti (24 GB) holds exactly one of
-      # these at a time, so llama-swap fronts them all on 127.0.0.1:8000 and
-      # swaps the resident model based on the "model" field of each request.
+      # these at a time, so llama-swap fronts them all on the named loopback
+      # endpoint llm:8000 and swaps the resident model based on each request's
+      # "model" field.
       # See modules/services/llm-router.nix for why this is not oci-containers.
       #
       # VRAM budget is genuinely tight — weights alone are 17-21.6 GB of the
@@ -117,7 +125,50 @@ _: {
       # load, lower --max-model-len first, then --gpu-memory-utilization.
       services.infra.llmRouter = {
         enable = true;
+        # Reuse the already validated/downloaded CUDA matrix cache rather than
+        # downloading another copy of the vLLM checkpoints into ~/.cache.
+        hfCacheDir = "/home/warby/Workspace-git/maya-unified/data/model-cache/huggingface";
         models = {
+          # Validated on this 3090 Ti through Maya's pinned vLLM 0.27.1 image.
+          # This needs CPU offload because the NVFP4 checkpoint plus its runtime
+          # working set does not fit beside the desktop entirely in VRAM.
+          gemma4 = {
+            backend = "vllm";
+            image = "vllm/vllm-openai:v0.27.1";
+            model = "nvidia/Gemma-4-26B-A4B-NVFP4";
+            extraArgs = [
+              "--max-model-len 4096"
+              "--gpu-memory-utilization 0.78"
+              "--max-num-seqs 1"
+              "--cpu-offload-gb 6"
+              "--language-model-only"
+              "--moe-backend marlin"
+              "--kv-cache-dtype bfloat16"
+              "--reasoning-parser gemma4"
+              "--tool-call-parser gemma4"
+              "--enable-auto-tool-choice"
+              "--trust-remote-code"
+              "--hf-overrides '{\"architectures\":[\"Gemma4ForCausalLM\"],\"text_config\":{\"allow_global_per_layer_attribute_access\":true,\"global_head_dim\":512,\"num_global_key_value_heads\":2}}'"
+            ];
+          };
+
+          # The only vision model here. Small on purpose: at ~5 GB it loads in
+          # seconds rather than the tens of seconds a 30B swap costs, which
+          # matters because a describe call is a single request rather than a
+          # conversation, and the caller pays the load every time the router
+          # has swapped away. gemma4 is multimodal on paper but is served
+          # --language-model-only, so it cannot cover this.
+          qwen25vl = {
+            backend = "llamacpp";
+            model = "ggml-org/Qwen2.5-VL-7B-Instruct-GGUF";
+            file = "Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf";
+            mmproj = "mmproj-Qwen2.5-VL-7B-Instruct-f16.gguf";
+            extraArgs = [
+              "-c 8192"
+              "-ngl 99"
+            ];
+          };
+
           # NVFP4 (21.6 GB) does not fit: only ~19.6 GB is free with the
           # desktop running, and Ampere has no FP4 tensor cores so the NVFP4
           # checkpoint never shrinks below its safetensors size anyway. The
@@ -150,6 +201,35 @@ _: {
             ];
           };
 
+          # The separately validated NVFP4 fast path. Keep the shorter
+          # `nemotron` GGUF alias above as the lower-risk llama.cpp fallback.
+          "nemotron-3.5-lightning-nvfp4" = {
+            backend = "vllm";
+            image = "vllm/vllm-openai:v0.27.1";
+            model = "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-NVFP4";
+            extraArgs = [
+              "--max-model-len 2048"
+              "--gpu-memory-utilization 0.80"
+              "--max-num-seqs 1"
+              "--cpu-offload-gb 2.0"
+              "--enforce-eager"
+              "--no-enable-prefix-caching"
+              "--max-num-batched-tokens 2048"
+              "--kv-cache-memory 268435456"
+              "--attention-backend TRITON_ATTN"
+              "--kv-cache-dtype bfloat16"
+              "--moe-backend marlin"
+              "--linear-backend marlin"
+              "--quantization modelopt_fp4"
+              "--mamba-backend flashinfer"
+              "--mamba-cache-mode align"
+              "--mamba-ssu-algorithm simple"
+              "--reasoning-parser nemotron_v3"
+              "--tool-call-parser qwen3_coder"
+              "--enable-auto-tool-choice"
+            ];
+          };
+
           # Muse-Glimmer ships no vLLM-loadable 24 GB checkpoint: the base repo is
           # BF16 (59.6 GB) and the NVFP4 conversions are 23.4 GB. The only variant
           # that fits is Meta's own K-Quant GGUF (16.8 GB), and GGUF is where
@@ -165,21 +245,86 @@ _: {
             ];
           };
 
-          # Qwen3.8-27B-FP8 does not fit (27 GB, and no Ampere FP8 path). The
-          # community AWQ-4bit is worse, not better, at 27.7 GB — Qwen3.8 is a
-          # hybrid whose 48 Gated DeltaNet layers quantize badly and stay BF16,
-          # so naive 4-bit barely shrinks it. Q5 is out of reach too
-          # (UD-Q5_K_M is 19.8 GB, over the free-VRAM budget before any KV
-          # cache), which makes UD-Q4_K_M at 16.5 GB the comfortable pick.
+          # Preserve the public alias used by the earlier Maya CUDA matrix.
+          # It resolves to the same cached Meta GGUF as `muse-glimmer`.
+          muse-glimmer-30b = {
+            backend = "llamacpp";
+            model = "meta-models/Muse-Glimmer-30B-GGUF";
+            file = "Muse-Glimmer-30B-KQuant-17GB-Q4_K_M.gguf";
+            extraArgs = [
+              "-ngl 99"
+              "-c 4096"
+              "--flash-attn on"
+              "--fit on"
+              "--fit-target 1536"
+              "--top-k 64"
+              "--jinja"
+              "--reasoning-format deepseek"
+              "--chat-template-kwargs '{\"reasoning_strength\":\"low\"}'"
+              "--no-mmproj"
+              "--no-webui"
+            ];
+          };
+
+          # Exercise Qwen3.8 through SGLang while preserving the public qwen38
+          # alias already stored in Maya connection profiles. SGLang 0.5.18
+          # cannot load Qwen3.5-family GGUF yet, and AWQ quantizes the 96-wide
+          # GDN projections into a shape its Marlin repacker rejects. This
+          # AutoRound checkpoint deliberately leaves those projections in BF16.
+          #
+          # The checkpoint is multimodal, but the vision tower is dead weight for
+          # Maya chat. Overriding language_model_only skips it and saves ~0.6 GB.
+          # The resulting measured 4K footprint is ~17.0 GB weights + 0.29 GB
+          # Mamba state + 0.26 GB KV, leaving ~0.5 GB after cached Triton kernels
+          # on this live desktop. 4K also admits the UI's 2048-token preset.
           qwen38 = {
+            backend = "sglang";
+            model = "Frozenlock/Qwen3.8-27B-int4-AutoRound";
+            extraArgs = [
+              "--quantization auto-round"
+              "--json-model-override-args '{\"language_model_only\":true}'"
+              "--context-length 4096"
+              "--max-total-tokens 4096"
+              "--max-running-requests 1"
+              "--mem-fraction-static 0.99"
+              "--chunked-prefill-size 512"
+              "--attention-backend triton"
+              "--cuda-graph-backend-decode disabled"
+              "--cuda-graph-backend-prefill disabled"
+              "--disable-overlap-schedule"
+              "--trust-remote-code"
+              "--reasoning-parser qwen3"
+              "--tool-call-parser qwen3_coder"
+              "--mamba-radix-cache-strategy no_buffer"
+              "--max-mamba-cache-size 3"
+              "--mamba-ssm-dtype bfloat16"
+              "--mamba-full-memory-ratio 1.0"
+            ];
+          };
+
+          # Known-good rollback and long-context path for the same checkpoint.
+          qwen38-llamacpp = {
             backend = "llamacpp";
             model = "unsloth/Qwen3.8-27B-GGUF";
             file = "Qwen3.8-27B-UD-Q4_K_M.gguf";
             extraArgs = [
               "-ngl 99"
-              # 32k verified: 22.6 GB resident, and the DeepSeek Harness ran a
-              # full headless task against it. This is the agent-capable model.
               "-c 32768"
+            ];
+          };
+
+          # The validated official FP8/vLLM variant. Keep it available beside
+          # the SGLang qwen38 alias for engine-to-engine comparisons.
+          "qwen3.8-27b-fp8" = {
+            backend = "vllm";
+            image = "vllm/vllm-openai:v0.27.1";
+            model = "Qwen/Qwen3.8-27B-FP8";
+            extraArgs = [
+              "--max-model-len 4096"
+              "--gpu-memory-utilization 0.75"
+              "--max-num-seqs 1"
+              "--cpu-offload-gb 14"
+              "--language-model-only"
             ];
           };
         };
@@ -204,6 +349,16 @@ _: {
       chromiumPolicies = {
         enable = true;
         browsers = {
+          chrome = {
+            enable = true;
+            policyPath = "opt/chrome";
+            extensions = chromiumStandardExtensions;
+            flags = {
+              verticalTabs = false;
+              vaapi = true;
+              wayland = true;
+            };
+          };
           helium = {
             enable = true;
             # Helium AppImage sandbox maps /etc/chromium into the bwrap container
@@ -273,7 +428,19 @@ _: {
         plugins = with pkgs; [ networkmanager-openvpn ];
       };
 
-      services.tailscale.enable = true;
+      services.tailscale = {
+        enable = true;
+        # Resolve private tailnet hostnames through MagicDNS.
+        extraSetFlags = [ "--accept-dns=true" ];
+      };
+
+      services.fehWaydroid = {
+        enable = true;
+        user = "warby";
+        width = 720;
+        height = 1280;
+        useNftables = true;
+      };
 
       services.adguardhome = {
         enable = true;
