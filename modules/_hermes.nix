@@ -58,7 +58,10 @@
       toolsets = [ "all" ];
     };
 
-    documents = {
+    # SOUL.md must live in hermesHomeFiles, not documents: hermes reads it from
+    # HERMES_HOME. Since v2026.8.31 `documents` also asserts an explicit
+    # workingDirectory, which this module does not set.
+    hermesHomeFiles = {
       "SOUL.md" = ''
         You are Hermes, an AI agent on a NixOS workstation named Cerberus.
         You have local terminal access. Be concise and direct.
