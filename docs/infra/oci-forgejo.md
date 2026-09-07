@@ -71,5 +71,11 @@ activation, local daily backups, and isolated recovery checks. Both `warbee`
 and `lain` are Forgejo administrators; this does not create OS accounts or
 grant Tailscale membership. New registrants require manual activation.
 
+Jovan has an explicit, separate root SSH grant on `stage-db`, using the ed25519
+key registered to `lain` in Forgejo (`jovan@VE-18022026657`). It is declared in
+`modules/hosts/stage-db/configuration.nix`. From a device with Tailscale access
+and that private key, connect with `ssh root@100.123.116.99` (host SSH port 22).
+This grant does not apply to `stage-edge`.
+
 The existing [Cerberus infrastructure demo](README.md) is a separate disabled
 workstation stack. Its database migration work is not part of this OCI deployment.
