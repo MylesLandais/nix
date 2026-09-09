@@ -1,3 +1,3 @@
 _: {
-  flake.homeManagerModules.base = import ./_home.nix;
+  flake.modules.homeManager.base = import ./_home.nix;
 }

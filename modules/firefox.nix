@@ -1,3 +1,3 @@
 _: {
-  flake.homeManagerModules.firefox = import ./_firefox.nix;
+  flake.modules.homeManager.firefox = import ./_firefox.nix;
 }

@@ -15,7 +15,7 @@ _: {
         hostName = "lacie";
         isDesktop = false;
         class = "laptop";
-        bar = "hyprpanel";
+        bar = "noctalia";
         desktop = "hyprland";
         greeter = "greetd";
         gpuType = "none";

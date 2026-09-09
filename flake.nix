@@ -139,6 +139,7 @@
     inputs@{ flake-parts, import-tree, ... }:
     (flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
+        inputs.flake-parts.flakeModules.modules
         inputs.treefmt-nix.flakeModule
         (import-tree ./modules)
       ];
