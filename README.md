@@ -9,7 +9,7 @@ through Cloudflare Tunnel. Public signup requires administrator activation.
 
 - [OCI inventory and routing](docs/infra/oci-forgejo.md)
 - [Forgejo deployment, signup, backups, and recovery](infra/forgejo/README.md)
-- [GitHub source and automatic Forgejo mirror](docs/infra/repository-mirroring.md)
+- [Personal Forgejo repository and GitHub mirror](docs/infra/repository-mirroring.md)
 
 ## TODO:
 - missing package gemini-cli

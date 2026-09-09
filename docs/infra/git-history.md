@@ -1,9 +1,10 @@
 # Git history and collaboration
 
-Forgejo is canonical: https://git.nebula-1.com/nebula/nixos
+Forgejo is canonical: https://git.nebula-1.com/warbee/nix
 GitHub mirror: https://github.com/MylesLandais/nix
-The private nebula organization is owned by warbee and lain.
-GitHub remains public, including mirrored dev and historical branches.
+This is a personal configuration repository owned by `warbee`; it is not a
+shared `nebula` organization configuration. GitHub remains public, including
+mirrored dev and historical branches.
 
 ## Branches
 
@@ -23,13 +24,17 @@ The administrators retain a private migration archive with source-ref inventorie
 ## Cloning and synchronization
 
 ```sh
-git clone --recurse-submodules https://git.nebula-1.com/nebula/nixos.git
+git clone --recurse-submodules https://git.nebula-1.com/warbee/nix.git
 ```
 
-Use your own Forgejo access token for HTTPS or your registered SSH key through the tailnet Git endpoint. Local `origin` points to Forgejo and `github` retains the original GitHub URL. Push and merge in Forgejo. A repository-scoped SSH deploy key permits Forgejo to update GitHub after pushes, with an hourly retry. Check Settings → Repository → Mirror Settings for the last result and use Synchronize Now to retry.
+Use your own Forgejo access token for HTTPS or your registered SSH key through the tailnet Git endpoint. Local `origin` points to the personal Forgejo repository and `github` points to the public mirror. Push and merge in Forgejo. Configure the Forgejo repository mirror to update GitHub after pushes, then check Settings → Repository → Mirror Settings for the last result and use Synchronize Now to retry.
 
-Do not independently push to GitHub: its refs are replicas and can be overwritten by synchronization. Preserve an unexpected GitHub-only commit in Forgejo before retrying a mirror. Private repositories require explicit repository or organization membership.
+Do not independently push to GitHub: its refs are replicas and can be
+overwritten by synchronization. Preserve an unexpected GitHub-only commit in
+Forgejo before retrying a mirror.
 
 ## Validation baseline
 
-Cerberus builds successfully. OpenTofu formatting and validation pass. Broad flake evaluation currently fails on the pre-existing installer use of the archived hyprpanel package; this is outside the migration changes. ARM stage validation is recorded separately in the migration report. No systems were activated by this migration.
+Cerberus builds successfully and the broad flake evaluation passes. OpenTofu
+formatting and validation pass. ARM stage validation is recorded separately in
+the migration report.
