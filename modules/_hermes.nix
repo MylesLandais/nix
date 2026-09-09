@@ -95,6 +95,14 @@ _:
       terminal.backend = "local";
       toolsets = [ "all" ];
 
+      # Goal judge: with no override it inherits the main runtime model
+      # (muse-spark-1.3-contributor, known relay-flaky per the note above),
+      # whose 500s auto-paused a goal loop 5 turns running. Pin the judge to
+      # a verified opencode-go model; relay model list 2026-09-09.
+      auxiliary.goal_judge.provider = "opencode-go";
+      auxiliary.goal_judge.model = "glm-5.3";
+      auxiliary.goal_judge.timeout = 60;
+
       # The dashboard refuses any request whose Host header is not the exact
       # address it bound to, so the tailnet IP alone would 400 even though it
       # routes fine. public_url is the one supported way to trust a second
