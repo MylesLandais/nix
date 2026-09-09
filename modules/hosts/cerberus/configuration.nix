@@ -20,6 +20,7 @@ _: {
         "${inputs.self}/modules/_features/ssh-keys.nix"
         inputs.self.nixosModules.nvidia
         inputs.self.nixosModules.gaming
+        inputs.self.nixosModules.gitMirrors
         inputs.self.nixosModules.dev
         inputs.self.nixosModules.agenixHost
         inputs.self.nixosModules.chromiumPolicy
@@ -112,6 +113,13 @@ _: {
       # container publishing them, and Authentik needs a real key via agenix (its
       # current one is literally "demo-...-replace-with-agenix-before-prod").
       infra.demo.enable = false;
+
+      # GitHub -> Forgejo pull mirrors. The server pulls; this box only runs
+      # the one-shot setup/sync command (Bitwarden unlock is human-in-the-loop):
+      #   bw login   # one time per machine
+      #   export BW_SESSION=$(bw unlock --raw) && forgejo-mirror-sync
+      # See modules/services/git-mirrors.nix for the mapping and token items.
+      services.infra.gitMirrors.enable = true;
 
       # Local LLM evaluation rig. One RTX 3090 Ti (24 GB) holds exactly one of
       # these at a time, so llama-swap fronts them all on the named loopback
