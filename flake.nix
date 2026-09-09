@@ -164,6 +164,5 @@
           };
         }
       );
-      colmena = import ./colmena.nix { inherit inputs; };
     };
 }

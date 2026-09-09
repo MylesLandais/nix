@@ -7,12 +7,13 @@ GitHub remains public, including mirrored dev and historical branches.
 
 ## Branches
 
-- `dev` is the default working tree. Branch from it for new work and send reviews to Forgejo.
-- `stable` is the former GitHub `main` baseline. Promote tested work through reviewed merge commits; it is not an automatic deployment branch.
+- `dev` is the complete working tree. It contains Cerberus, the other host configurations, and the deployment/recovery tooling. Branch from it for new work and send reviews to Forgejo.
+- `main` is the Cerberus release tree. It intentionally contains only the Cerberus configuration and the shared modules needed to build and operate it.
+- `stable` points at the current Cerberus release commit. Promote tested work through reviewed merge commits; it is not an automatic deployment branch.
 - Imported feature branches retain their names. `archive/github/*`, `archive/local/*`, and (for Tint) `archive/standalone/*` preserve the exact source tips observed during migration. They are historical snapshots, not additional supported source trees.
 - Original commits, authors, merges, and tags are retained. Divergent same-name tags use `archive/<source>/...` names.
 
-The dev tree includes the current workstation and service source, deployed Forgejo configuration, and the reconciled GitHub WSL and Windows-host history. NixOS and OpenTofu remain the sources of truth for systems and OCI/network infrastructure. Publishing source does not deploy it.
+The dev tree includes the current workstation and service source, deployed Forgejo configuration, and the reconciled GitHub WSL and Windows-host history. The release branches intentionally omit those non-Cerberus host entrypoints; their source remains on `dev`. NixOS and OpenTofu remain the sources of truth for systems and OCI/network infrastructure. Publishing source does not deploy it.
 
 ## Context and recovery
 

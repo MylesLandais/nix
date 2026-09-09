@@ -156,3 +156,7 @@ To apply changes: `sudo nixos-rebuild switch --flake .#cerberus`.
 ## Source and collaboration
 
 See [nixos Git history and collaboration](docs/infra/git-history.md) for stable/dev branches, preserved history, cloning, and mirror recovery.
+
+The complete source tree lives on `dev`. Release branches (`main` and `stable`)
+contain the Cerberus workstation configuration and the shared modules required to
+build it; cluster and recovery host entrypoints remain on `dev`.
