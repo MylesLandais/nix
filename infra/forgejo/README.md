@@ -145,4 +145,7 @@ are working without scheduling its brief outage.
 
 ## Shared repositories
 
-The canonical organization is `nebula`, owned by `warbee` and `lain`, with private `end`, `tint`, and `nixos` repositories. See [Git history and collaboration](../../docs/infra/git-history.md). `warbee/nix` remains the earlier pull mirror and is not the canonical working repository.
+The personal configuration repository is `warbee/nix`; it is the canonical
+source for this workstation tree and mirrors to GitHub. The `nebula`
+organization remains for shared infrastructure repositories such as `end` and
+`tint`. See [Git history and collaboration](../../docs/infra/git-history.md).
