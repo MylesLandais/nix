@@ -44,6 +44,11 @@ _: {
       # covers the whole app with no CORS and no absolute URLs to rewrite.
       services.infra.lumen.enable = true;
 
+      # Public ingress at https://cinemaya.nebula-1.com via the nebula-1-lumen
+      # tunnel (infra/lumen/). The connector dials out; the OCI firewall and
+      # the tailscale0-only port 80 rule below stay untouched.
+      services.infra.lumen.tunnel.enable = true;
+
       services.nginx = {
         enable = true;
         recommendedGzipSettings = true;

@@ -42,6 +42,26 @@ _: {
           defaultText = lib.literalExpression "pkgs.lumen-lab";
           description = "Backend package providing server.mjs.";
         };
+
+        tunnel = {
+          enable = lib.mkEnableOption "Cloudflare Tunnel exposing nginx publicly";
+
+          hostname = lib.mkOption {
+            type = lib.types.str;
+            default = "cinemaya.nebula-1.com";
+            description = "Public hostname routed to nginx via the tunnel.";
+          };
+
+          tokenEnvFile = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
+            default = "/etc/lumen/.env.tunnel";
+            description = ''
+              EnvironmentFile supplying TUNNEL_TOKEN for the connector. Shipped
+              by infra/lumen/deploy.sh from OpenTofu output; must live outside
+              the Nix store. The unit stays inactive until the file exists.
+            '';
+          };
+        };
       };
 
       config = lib.mkIf cfg.enable {
@@ -84,6 +104,42 @@ _: {
               "AF_INET"
               "AF_INET6"
             ];
+          };
+        };
+
+        # Public ingress via Cloudflare Tunnel. cloudflared dials out to
+        # Cloudflare and forwards to nginx on loopback — no public OCI
+        # HTTP/HTTPS ingress is opened, same posture as the Forgejo tunnel on
+        # stage-db. Inactive until deploy.sh ships the token file.
+        systemd.services.lumen-tunnel = lib.mkIf cfg.tunnel.enable {
+          description = "CineMaya (Lumen) Cloudflare Tunnel connector";
+          after = [
+            "network-online.target"
+            "nginx.service"
+          ];
+          wants = [ "network-online.target" ];
+          wantedBy = [ "multi-user.target" ];
+
+          startLimitIntervalSec = 300;
+          startLimitBurst = 5;
+
+          serviceConfig = {
+            ExecCondition = lib.mkIf (cfg.tunnel.tokenEnvFile != null) [
+              "${pkgs.coreutils}/bin/test -s ${cfg.tunnel.tokenEnvFile}"
+            ];
+            ExecStart = "${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run";
+            EnvironmentFile = lib.mkIf (cfg.tunnel.tokenEnvFile != null) [
+              cfg.tunnel.tokenEnvFile
+            ];
+
+            Restart = "on-failure";
+            RestartSec = "5s";
+
+            DynamicUser = true;
+            ProtectSystem = "strict";
+            ProtectHome = true;
+            NoNewPrivileges = true;
+            PrivateTmp = true;
           };
         };
       };

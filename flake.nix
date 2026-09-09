@@ -169,6 +169,13 @@
               skopeo
             ];
           };
+          lumen = pkgs.mkShell {
+            packages = with pkgs; [
+              opentofu
+              openssl
+              jq
+            ];
+          };
         }
       );
       colmena = import ./colmena.nix { inherit inputs; };

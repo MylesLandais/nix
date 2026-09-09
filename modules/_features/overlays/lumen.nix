@@ -9,17 +9,19 @@
 #
 # The upstream repo is a monorepo whose full tree is ~137 MB for a 1.3 MB app,
 # so the source is fetched with sparseCheckout.
+# The release pin lives in infra/lumen/version.nix — a release bumps that one
+# file (procedure: docs/infra/lumen-releases.md). This overlay only reads it.
 _final: prev:
 let
-  owner = "System-Nebula";
-  repo = "maya-unified";
-  # First commit of apps/lumen (2026-08-13), from the canonical cinemaya(2).zip.
-  rev = "27cecccc3bb5242907875611587037cbca94d665";
+  pin = import ../../../infra/lumen/version.nix;
+  inherit (pin) rev;
 
   src = prev.fetchFromGitHub {
-    inherit owner repo rev;
+    owner = "System-Nebula";
+    repo = "maya-unified";
+    inherit rev;
     sparseCheckout = [ "apps/lumen" ];
-    hash = "sha256-3WbpEpGsfpg7LhdWsY8BMwHD4kJzXVWi+z1nrQRAjoo=";
+    hash = pin.srcHash;
   };
 
   # The root package.json declares
@@ -35,12 +37,12 @@ in
 {
   lumen-web = prev.buildNpmPackage {
     pname = "lumen-web";
-    version = "0-unstable-2026-08-13";
+    version = pin.version;
 
     inherit src;
     sourceRoot = "${src.name}/apps/lumen";
 
-    npmDepsHash = "sha256-yuY8uD/EARRyWE0LBQFK2TaZWwP0NSewX3fm3Ky75aE=";
+    npmDepsHash = pin.webNpmDepsHash;
 
     postPatch = dropPostinstall;
 
@@ -82,12 +84,12 @@ in
 
   lumen-lab = prev.buildNpmPackage {
     pname = "lumen-lab";
-    version = "0.1.0";
+    version = pin.version;
 
     inherit src;
     sourceRoot = "${src.name}/apps/lumen/lab";
 
-    npmDepsHash = "sha256-qvagkp7NAtmDQqJWXq6wuACrAprkO50+bDvGl10cn00=";
+    npmDepsHash = pin.labNpmDepsHash;
 
     # Pure-JS dependencies (cheerio, undici, ws, tweetnacl, …); nothing to
     # compile and no build script.
