@@ -4,7 +4,7 @@
 # NOTE: This is a scaffold. Run `nixos-generate-config --root /mnt` from the
 # live ISO after partitioning to get the real disk UUIDs, then paste them in.
 _: {
-  flake.nixosModules.argusHardware =
+  flake.modules.nixos.argusHardware =
     {
       config,
       lib,

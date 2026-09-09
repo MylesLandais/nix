@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.openbaoInfra =
+  flake.modules.nixos.openbaoInfra =
     {
       config,
       lib,

@@ -1,10 +1,10 @@
 _: {
-  flake.nixosModules.stageDb =
+  flake.modules.nixos.stageDb =
     { inputs, lib, ... }:
     {
       imports = [
         "${inputs.self}/modules/hosts/_oci-common.nix"
-        inputs.self.nixosModules.forgejo
+        inputs.self.modules.nixos.forgejo
       ];
 
       networking.hostName = "stage-db";

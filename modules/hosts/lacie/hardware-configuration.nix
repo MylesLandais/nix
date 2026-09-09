@@ -3,7 +3,7 @@
 # FileSystems for imaging mode are owned by nixosModules.imaging; this module
 # supplies kernel modules and hostPlatform only once imaging is enabled.
 _: {
-  flake.nixosModules.lacieHardware =
+  flake.modules.nixos.lacieHardware =
     {
       lib,
       modulesPath,

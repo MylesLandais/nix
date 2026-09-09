@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.profileInfraSpine =
+  flake.modules.nixos.profileInfraSpine =
     { config, lib, ... }:
     {
       options.infra.spine = {

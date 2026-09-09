@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.scbw =
+  flake.modules.nixos.scbw =
     {
       config,
       lib,

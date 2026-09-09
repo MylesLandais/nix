@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.emulators =
+  flake.modules.nixos.emulators =
     {
       config,
       lib,

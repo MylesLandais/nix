@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.agenixInfra =
+  flake.modules.nixos.agenixInfra =
     {
       config,
       inputs,

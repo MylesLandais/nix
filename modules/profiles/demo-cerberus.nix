@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.profileDemoCerberus =
+  flake.modules.nixos.profileDemoCerberus =
     { config, lib, ... }:
     {
       config = lib.mkIf config.infra.demo.enable {

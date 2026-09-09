@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.authentikInfra =
+  flake.modules.nixos.authentikInfra =
     {
       config,
       lib,

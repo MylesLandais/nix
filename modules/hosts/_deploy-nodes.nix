@@ -12,8 +12,8 @@ in
     ];
     desktop = false;
     modules = [
-      inputs.self.nixosModules.argus
-      inputs.self.nixosModules.argusHardware
+      inputs.self.modules.nixos.argus
+      inputs.self.modules.nixos.argusHardware
     ];
     users.warby.homeModules = [ serverHome ];
   };
@@ -25,10 +25,10 @@ in
     ];
     desktop = false;
     modules = [
-      inputs.self.nixosModules.tl0m2
-      inputs.self.nixosModules.tl0m2Hardware
-      inputs.self.nixosModules.tl0m2Postgres
-      inputs.self.nixosModules.tl0m2Seaweedfs
+      inputs.self.modules.nixos.tl0m2
+      inputs.self.modules.nixos.tl0m2Hardware
+      inputs.self.modules.nixos.tl0m2Postgres
+      inputs.self.modules.nixos.tl0m2Seaweedfs
     ];
     users.warby.homeModules = [ serverHome ];
   };
@@ -44,10 +44,10 @@ in
     ];
     desktop = false;
     modules = [
-      inputs.self.nixosModules.qmom2
-      inputs.self.nixosModules.qmom2Hardware
-      inputs.self.nixosModules.qmom2Postgres
-      inputs.self.nixosModules.qmom2Seaweedfs
+      inputs.self.modules.nixos.qmom2
+      inputs.self.modules.nixos.qmom2Hardware
+      inputs.self.modules.nixos.qmom2Postgres
+      inputs.self.modules.nixos.qmom2Seaweedfs
     ];
     users.warby.homeModules = [ serverHome ];
   };
@@ -59,15 +59,15 @@ in
     ];
     desktop = true;
     modules = [
-      inputs.self.nixosModules.lacie
-      inputs.self.nixosModules.lacieHardware
-      inputs.self.nixosModules.imaging
-      inputs.self.nixosModules.wifiProfiles
-      inputs.self.nixosModules.greeter
-      inputs.self.nixosModules.themeData
-      inputs.self.nixosModules.desktops
-      inputs.self.nixosModules.emulators
-      inputs.self.nixosModules.pentest
+      inputs.self.modules.nixos.lacie
+      inputs.self.modules.nixos.lacieHardware
+      inputs.self.modules.nixos.imaging
+      inputs.self.modules.nixos.wifiProfiles
+      inputs.self.modules.nixos.greeter
+      inputs.self.modules.nixos.themeData
+      inputs.self.modules.nixos.desktops
+      inputs.self.modules.nixos.emulators
+      inputs.self.modules.nixos.pentest
     ];
     users.warby = {
       homeModules = [ homeNix ];
@@ -83,10 +83,10 @@ in
     ];
     desktop = true;
     modules = [
-      inputs.self.nixosModules.kaliVm
-      inputs.self.nixosModules.kaliVmHardware
-      inputs.self.nixosModules.themeData
-      inputs.self.nixosModules.desktops
+      inputs.self.modules.nixos.kaliVm
+      inputs.self.modules.nixos.kaliVmHardware
+      inputs.self.modules.nixos.themeData
+      inputs.self.modules.nixos.desktops
     ];
     users.kali.homeModules = [ homeNix ];
     extraSpecialArgs.gpuType = "none";

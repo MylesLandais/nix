@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.postgresInfra =
+  flake.modules.nixos.postgresInfra =
     {
       config,
       lib,

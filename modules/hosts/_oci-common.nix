@@ -23,7 +23,7 @@
     # qemu-guest profile plus the initrd modules below is all that was missing.
     (modulesPath + "/profiles/qemu-guest.nix")
     "${inputs.self}/modules/_features/ssh-keys.nix"
-    inputs.self.nixosModules.tailscaleNode
+    inputs.self.modules.nixos.tailscaleNode
     inputs.disko.nixosModules.disko
   ];
 

@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.infraIngress =
+  flake.modules.nixos.infraIngress =
     { config, lib, ... }:
     let
       cfg = config.infra.ingress;

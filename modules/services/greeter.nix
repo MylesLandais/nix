@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.greeter =
+  flake.modules.nixos.greeter =
     {
       config,
       lib,

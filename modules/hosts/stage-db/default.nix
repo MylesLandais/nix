@@ -8,7 +8,7 @@ in
   flake.nixosConfigurations.stage-db = mkHostLib.mkHost {
     name = "stage-db";
     system = "aarch64-linux";
-    modules = [ inputs.self.nixosModules.stageDb ];
+    modules = [ inputs.self.modules.nixos.stageDb ];
     users = { };
   };
 }

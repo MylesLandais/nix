@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.infraSecrets =
+  flake.modules.nixos.infraSecrets =
     { config, lib, ... }:
     let
       cfg = config.infra.secrets;

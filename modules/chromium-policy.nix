@@ -1,3 +1,3 @@
 _: {
-  flake.nixosModules.chromiumPolicy = import ./_chromium-policy.nix;
+  flake.modules.nixos.chromiumPolicy = import ./_chromium-policy.nix;
 }

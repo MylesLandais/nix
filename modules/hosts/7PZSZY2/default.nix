@@ -11,7 +11,7 @@ in
     system = "x86_64-linux";
     specialArgs = { inherit inputs; };
     modules = [
-      inputs.self.nixosModules."7PZSZY2"
+      inputs.self.modules.nixos."7PZSZY2"
       "${inputs.self}/modules/_features/wsl-agent.nix"
       "${inputs.self}/modules/_features/fish-config.nix"
       "${inputs.self}/modules/_features/ssh-keys.nix"

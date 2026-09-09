@@ -1,7 +1,7 @@
 # Dell OptiPlex 7050 (Service Tag 94TL0M2)
 # Intel CPU, 16 GB RAM, 1 TB Samsung PM981 NVMe (nvme0n1, boot/swap/root) + 9.1 TB WD HDD (sda, /srv/data)
 _: {
-  flake.nixosModules.tl0m2Hardware =
+  flake.modules.nixos.tl0m2Hardware =
     {
       config,
       lib,

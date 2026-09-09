@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.forgejo =
+  flake.modules.nixos.forgejo =
     {
       config,
       lib,

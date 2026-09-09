@@ -86,13 +86,13 @@
           fi
 
           # Wrap the raw nixos-generate-config output as a flake module that
-          # declares flake.nixosModules.lacieHardware (matches dendritic style).
+          # declares flake.modules.nixos.lacieHardware (matches dendritic style).
           GENERATED="$MNT/etc/nixos/hardware-configuration.nix"
           TARGET="$REPO_PATH/modules/hosts/lacie/hardware-configuration.nix"
           echo "==> Wrapping generated hw-config -> $TARGET"
           sudo tee "$TARGET" >/dev/null <<'WRAPPER_HEADER'
           _: {
-            flake.nixosModules.lacieHardware =
+            flake.modules.nixos.lacieHardware =
               { config, lib, modulesPath, ... }:
           WRAPPER_HEADER
           # Strip the outer `{ ... }: { ... }` wrapper from the generated file

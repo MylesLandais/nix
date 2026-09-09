@@ -38,7 +38,7 @@
 #     build of vLLM is hours of uncached compiling (see sunshine.nix for the same
 #     reasoning applied to a frozen nixpkgs).
 _: {
-  flake.nixosModules.llmRouter =
+  flake.modules.nixos.llmRouter =
     {
       config,
       lib,

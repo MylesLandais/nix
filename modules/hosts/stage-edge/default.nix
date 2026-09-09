@@ -12,7 +12,7 @@ in
   flake.nixosConfigurations.stage-edge = mkHostLib.mkHost {
     name = "stage-edge";
     system = "aarch64-linux";
-    modules = [ inputs.self.nixosModules.stageEdge ];
+    modules = [ inputs.self.modules.nixos.stageEdge ];
     users = { };
   };
 }

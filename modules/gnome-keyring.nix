@@ -1,3 +1,3 @@
 _: {
-  flake.nixosModules.gnomeKeyring = import ./_gnome-keyring.nix;
+  flake.modules.nixos.gnomeKeyring = import ./_gnome-keyring.nix;
 }

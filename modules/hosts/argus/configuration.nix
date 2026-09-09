@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.argus =
+  flake.modules.nixos.argus =
     {
       config,
       lib,

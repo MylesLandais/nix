@@ -1,3 +1,3 @@
 _: {
-  flake.nixosModules.nvidia = import ./_nvidia.nix;
+  flake.modules.nixos.nvidia = import ./_nvidia.nix;
 }

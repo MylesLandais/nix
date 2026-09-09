@@ -2,11 +2,11 @@ _: {
   # Pre-staged NetworkManager profiles. Dropped into
   # /etc/NetworkManager/system-connections/ as 0600 root-owned files so they
   # auto-connect on first boot. Enable via host config:
-  #   imports = [ inputs.self.nixosModules.wifiProfiles ];
+  #   imports = [ inputs.self.modules.nixos.wifiProfiles ];
   #
   # TODO: PSKs in plaintext — migrate to agenix during secrets rework
   # (broader merge plan). Acceptable interim for home-office SSIDs.
-  flake.nixosModules.wifiProfiles =
+  flake.modules.nixos.wifiProfiles =
     { lib, ... }:
     {
       networking.networkmanager.enable = lib.mkDefault true;

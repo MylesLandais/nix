@@ -1,3 +1,3 @@
 _: {
-  flake.nixosModules.agenixHost = import ./_agenix.nix;
+  flake.modules.nixos.agenixHost = import ./_agenix.nix;
 }

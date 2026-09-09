@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.qmom2 =
+  flake.modules.nixos.qmom2 =
     { pkgs, inputs, ... }:
     {
       imports = [ "${inputs.self}/modules/_features/ssh-keys.nix" ];

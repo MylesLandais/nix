@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.mayaWorkerInfra =
+  flake.modules.nixos.mayaWorkerInfra =
     {
       config,
       lib,

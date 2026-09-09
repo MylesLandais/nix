@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.qmom2Postgres =
+  flake.modules.nixos.qmom2Postgres =
     { pkgs, ... }:
     {
       services.postgresql = {

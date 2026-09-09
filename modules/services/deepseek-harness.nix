@@ -8,7 +8,7 @@
 # is a matter of the `model` name it sends — llama-swap does the load/unload. No
 # configuration here changes when you switch models.
 _: {
-  flake.nixosModules.deepseekHarnessInfra =
+  flake.modules.nixos.deepseekHarnessInfra =
     {
       config,
       lib,

@@ -1,7 +1,7 @@
 # QEMU/virtio stub for kali-vm. Enough for nixosConfigurations.kali-vm to
 # evaluate and for `nixos-rebuild build-vm`.
 _: {
-  flake.nixosModules.kaliVmHardware =
+  flake.modules.nixos.kaliVmHardware =
     { lib, modulesPath, ... }:
     {
       imports = [

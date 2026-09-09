@@ -1,3 +1,3 @@
 _: {
-  flake.nixosModules.gaming = import ./_gaming.nix;
+  flake.modules.nixos.gaming = import ./_gaming.nix;
 }

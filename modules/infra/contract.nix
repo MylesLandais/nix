@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.infraContract =
+  flake.modules.nixos.infraContract =
     { lib, ... }:
     {
       options.infra = {

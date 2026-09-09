@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.cerberus =
+  flake.modules.nixos.cerberus =
     {
       config,
       inputs,
@@ -16,13 +16,13 @@ _: {
     in
     {
       imports = [
-        inputs.self.nixosModules.cerberusHardware
+        inputs.self.modules.nixos.cerberusHardware
         "${inputs.self}/modules/_features/ssh-keys.nix"
-        inputs.self.nixosModules.nvidia
-        inputs.self.nixosModules.gaming
-        inputs.self.nixosModules.dev
-        inputs.self.nixosModules.agenixHost
-        inputs.self.nixosModules.chromiumPolicy
+        inputs.self.modules.nixos.nvidia
+        inputs.self.modules.nixos.gaming
+        inputs.self.modules.nixos.dev
+        inputs.self.modules.nixos.agenixHost
+        inputs.self.modules.nixos.chromiumPolicy
         "${inputs.self}/modules/_features/audio.nix"
         "${inputs.self}/modules/_features/sunshine.nix"
         "${inputs.self}/modules/_features/file-sharing.nix"
@@ -35,21 +35,21 @@ _: {
         "${inputs.self}/modules/_features/users.nix"
         "${inputs.self}/modules/_features/firefox-policy.nix"
         inputs.agenix.nixosModules.default
-        inputs.self.nixosModules.infraContract
-        inputs.self.nixosModules.infraSecrets
-        inputs.self.nixosModules.infraIngress
-        inputs.self.nixosModules.profileInfraSpine
-        inputs.self.nixosModules.profileDemoCerberus
-        inputs.self.nixosModules.postgresInfra
-        inputs.self.nixosModules.valkeyInfra
-        inputs.self.nixosModules.openbaoInfra
-        inputs.self.nixosModules.traefikInfra
-        inputs.self.nixosModules.authentikInfra
-        inputs.self.nixosModules.pyloadInfra
-        inputs.self.nixosModules.mayaWorkerInfra
-        inputs.self.nixosModules.agenixInfra
-        inputs.self.nixosModules.llmRouter
-        inputs.self.nixosModules.deepseekHarnessInfra
+        inputs.self.modules.nixos.infraContract
+        inputs.self.modules.nixos.infraSecrets
+        inputs.self.modules.nixos.infraIngress
+        inputs.self.modules.nixos.profileInfraSpine
+        inputs.self.modules.nixos.profileDemoCerberus
+        inputs.self.modules.nixos.postgresInfra
+        inputs.self.modules.nixos.valkeyInfra
+        inputs.self.modules.nixos.openbaoInfra
+        inputs.self.modules.nixos.traefikInfra
+        inputs.self.modules.nixos.authentikInfra
+        inputs.self.modules.nixos.pyloadInfra
+        inputs.self.modules.nixos.mayaWorkerInfra
+        inputs.self.modules.nixos.agenixInfra
+        inputs.self.modules.nixos.llmRouter
+        inputs.self.modules.nixos.deepseekHarnessInfra
       ];
 
       networking.hostName = config.host.hostName;

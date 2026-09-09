@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.tl0m2Postgres =
+  flake.modules.nixos.tl0m2Postgres =
     { pkgs, ... }:
     {
       services.postgresql = {

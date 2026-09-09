@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.iw4x =
+  flake.modules.nixos.iw4x =
     {
       config,
       lib,

@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.valkeyInfra =
+  flake.modules.nixos.valkeyInfra =
     {
       config,
       lib,

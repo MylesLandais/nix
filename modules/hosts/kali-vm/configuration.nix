@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.kaliVm =
+  flake.modules.nixos.kaliVm =
     {
       config,
       lib,

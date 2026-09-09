@@ -1,3 +1,3 @@
 _: {
-  flake.nixosModules.dev = import ./_dev.nix;
+  flake.modules.nixos.dev = import ./_dev.nix;
 }

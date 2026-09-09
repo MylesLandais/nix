@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.tl0m2Seaweedfs =
+  flake.modules.nixos.tl0m2Seaweedfs =
     { pkgs, ... }:
     let
       # TODO: set to this node's tailnet IP after first `tailscale up` post-install.

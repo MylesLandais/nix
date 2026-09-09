@@ -1,7 +1,7 @@
 # Dell OptiPlex 7050 (Service Tag 95QMOM2)
 # Intel i5-6500, 12 GB RAM, 238 GB SSD (sda, root) + 9.1 TB HDD (sdb, data)
 _: {
-  flake.nixosModules.qmom2Hardware =
+  flake.modules.nixos.qmom2Hardware =
     {
       config,
       lib,

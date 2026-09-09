@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.themeData =
+  flake.modules.nixos.themeData =
     { config, ... }:
     let
       themes = {

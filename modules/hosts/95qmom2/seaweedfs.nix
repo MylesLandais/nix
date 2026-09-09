@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.qmom2Seaweedfs =
+  flake.modules.nixos.qmom2Seaweedfs =
     { pkgs, ... }:
     let
       tailscaleIp = "100.107.224.21";

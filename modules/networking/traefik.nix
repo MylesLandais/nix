@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.traefikInfra =
+  flake.modules.nixos.traefikInfra =
     { config, lib, ... }:
     let
       cfg = config.services.infra.traefik;

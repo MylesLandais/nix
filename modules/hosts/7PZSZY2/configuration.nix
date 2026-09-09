@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules."7PZSZY2" =
+  flake.modules.nixos."7PZSZY2" =
     { pkgs, ... }:
     {
       nixpkgs.config.allowUnfree = true;

@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.stageEdge =
+  flake.modules.nixos.stageEdge =
     { config, pkgs, inputs, ... }:
     let
       labPort = config.services.infra.lumen.port;
@@ -7,7 +7,7 @@ _: {
     {
       imports = [
         "${inputs.self}/modules/hosts/_oci-common.nix"
-        inputs.self.nixosModules.lumenInfra
+        inputs.self.modules.nixos.lumenInfra
       ];
 
       networking.hostName = "stage-edge";

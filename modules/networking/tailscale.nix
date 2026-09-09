@@ -12,7 +12,7 @@
 # nixos-anywhere --extra-files. Move to agenix once these hosts hold real
 # credentials and their host keys are recipients in secrets/secrets.nix.
 _: {
-  flake.nixosModules.tailscaleNode =
+  flake.modules.nixos.tailscaleNode =
     {
       config,
       lib,

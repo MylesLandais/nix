@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.tl0m2 =
+  flake.modules.nixos.tl0m2 =
     { pkgs, inputs, ... }:
     {
       imports = [ "${inputs.self}/modules/_features/ssh-keys.nix" ];

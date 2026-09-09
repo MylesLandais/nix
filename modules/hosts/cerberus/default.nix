@@ -14,13 +14,13 @@ in
     desktop = true;
     backupFileExtension = "hm-backup";
     modules = [
-      inputs.self.nixosModules.cerberus
-      inputs.self.nixosModules.themeData
-      inputs.self.nixosModules.desktops
-      inputs.self.nixosModules.gamehacking
-      inputs.self.nixosModules.iw4x
-      inputs.self.nixosModules.scbw
-      inputs.self.nixosModules.greeter
+      inputs.self.modules.nixos.cerberus
+      inputs.self.modules.nixos.themeData
+      inputs.self.modules.nixos.desktops
+      inputs.self.modules.nixos.gamehacking
+      inputs.self.modules.nixos.iw4x
+      inputs.self.modules.nixos.scbw
+      inputs.self.modules.nixos.greeter
       inputs.chaotic.nixosModules.default
       inputs.agenix.nixosModules.default
     ];

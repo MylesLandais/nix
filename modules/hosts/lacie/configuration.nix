@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.lacie =
+  flake.modules.nixos.lacie =
     {
       lib,
       pkgs,

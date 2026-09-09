@@ -4,7 +4,7 @@
 # whichever host enables this; see modules/hosts/stage-edge/configuration.nix.
 # This module only runs the Node backend that the SPA talks to over /api.
 _: {
-  flake.nixosModules.lumenInfra =
+  flake.modules.nixos.lumenInfra =
     {
       config,
       lib,

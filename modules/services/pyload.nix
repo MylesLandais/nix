@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.pyloadInfra =
+  flake.modules.nixos.pyloadInfra =
     {
       config,
       lib,

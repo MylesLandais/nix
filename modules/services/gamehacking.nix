@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.gamehacking =
+  flake.modules.nixos.gamehacking =
     {
       config,
       lib,

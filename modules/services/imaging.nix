@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.imaging =
+  flake.modules.nixos.imaging =
     {
       config,
       lib,
