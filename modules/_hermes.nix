@@ -96,11 +96,11 @@ _:
       toolsets = [ "all" ];
 
       # Goal judge: with no override it inherits the main runtime model.
-      # Pinned explicitly so judge traffic stays on the same working
-      # model; relay model list 2026-09-09.
+      # Goal judge pinned to a strong reasoning model: per operator 2026-09-13,
+      # the judge should reason about ambiguous completion, not just check boxes.
       auxiliary.goal_judge.provider = "opencode-go";
-      auxiliary.goal_judge.model = "muse-spark-1.3-contributor";
-      auxiliary.goal_judge.timeout = 60;
+      auxiliary.goal_judge.model = "glm-5.3";
+      auxiliary.goal_judge.timeout = 120;
 
       # The dashboard refuses any request whose Host header is not the exact
       # address it bound to, so the tailnet IP alone would 400 even though it
