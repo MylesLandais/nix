@@ -39,13 +39,13 @@ _: {
       };
       mappingFile = pkgs.writeText "git-mirrors.json" (
         builtins.toJSON {
-          forgejoUrl = cfg.forgejoUrl;
+          inherit (cfg) forgejoUrl;
           mirrors = map (m: {
-            name = m.name;
-            github = m.github;
-            forgejoOwner = m.forgejoOwner;
-            interval = m.interval;
-            private = m.private;
+            inherit (m) name;
+            inherit (m) github;
+            inherit (m) forgejoOwner;
+            inherit (m) interval;
+            inherit (m) private;
           }) cfg.mirrors;
         }
       );

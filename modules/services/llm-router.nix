@@ -369,14 +369,15 @@ _: {
       config = lib.mkIf cfg.enable {
         # Catch this at build time: llama-server would otherwise start, download
         # nothing, and fail deep in model loading with an opaque message.
-        assertions = lib.mapAttrsToList (name: m: {
-          assertion = m.backend != "llamacpp" || m.file != null;
-          message = "services.infra.llmRouter.models.${name}: the llamacpp backend requires `file` (the .gguf filename).";
-        }) cfg.models
-        ++ lib.mapAttrsToList (name: m: {
-          assertion = m.mmproj == null || m.backend == "llamacpp";
-          message = "services.infra.llmRouter.models.${name}: `mmproj` is llamacpp-only; vLLM and SGLang load the vision tower from the checkpoint itself.";
-        }) cfg.models;
+        assertions =
+          lib.mapAttrsToList (name: m: {
+            assertion = m.backend != "llamacpp" || m.file != null;
+            message = "services.infra.llmRouter.models.${name}: the llamacpp backend requires `file` (the .gguf filename).";
+          }) cfg.models
+          ++ lib.mapAttrsToList (name: m: {
+            assertion = m.mmproj == null || m.backend == "llamacpp";
+            message = "services.infra.llmRouter.models.${name}: `mmproj` is llamacpp-only; vLLM and SGLang load the vision tower from the checkpoint itself.";
+          }) cfg.models;
 
         virtualisation.docker.enable = true;
         hardware.nvidia-container-toolkit.enable = true;

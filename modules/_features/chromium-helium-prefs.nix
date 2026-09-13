@@ -1,6 +1,7 @@
 # Helium profile prefs (ext_proxy, vertical tabs) and CDP launcher desktop entry.
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -53,36 +54,10 @@ in
       NoDisplay=false
     '';
 
-    home.activation.ensureHeliumProfilePrefs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-            pref="$HOME/.config/net.imput.helium/Default/Preferences"
-            if [ -f "$pref" ]; then
-              ${pkgs.python3}/bin/python3 - "$pref" <<'PY'
-      import json, pathlib, sys
-      p = pathlib.Path(sys.argv[1])
-      data = json.loads(p.read_text())
-      changed = False
-
-      services = data.setdefault("helium", {}).setdefault("services", {})
-      for key, value in {"enabled": True, "ext_proxy": True, "consented": True}.items():
-          if services.get(key) is not value:
-              services[key] = value
-              changed = True
-
-      vt = data.setdefault("vertical_tabs", {})
-      for key, value in {
-          "enabled": True,
-          "collapsed_state": False,
-          "uncollapsed_width": 200,
-      }.items():
-          if vt.get(key) is not value:
-              vt[key] = value
-              changed = True
-
-      if changed:
-          p.write_text(json.dumps(data, separators=(",", ":")))
-          print("Helium: updated profile prefs (ext_proxy, vertical_tabs.enabled)")
-      PY
-            fi
+    home.activation.ensureHeliumProfile = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      ${pkgs.python3}/bin/python3 ${inputs.self}/scripts/helium-profile-guard.py \
+        --data-dir "${config.xdg.configHome}/net.imput.helium" \
+        --profile-directory Default --quiet || true
     '';
   };
 }

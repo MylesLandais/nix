@@ -69,7 +69,7 @@
     # cached against its own pin: adding `follows` puts 934 derivations
     # (nodejs + electron + the whole npm tree) into a local build. A duplicated
     # closure is cheaper than that compile.
-    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.8.31";
+    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.9.11";
     nur.url = "github:nix-community/NUR";
     claude-code = {
       url = "github:sadjow/claude-code-nix";
@@ -94,10 +94,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia = {
-      # Held at this rev: newer noctalia-shell restructured its home-manager
-      # module (dropped `programs.noctalia-shell` + the noctalia-qs input),
-      # which breaks modules/_features/bars/noctalia.nix. Bump intentionally
-      # once that module is migrated to the new API.
+      # Compatibility hold: Noctalia v5 replaces the QML/Quickshell plugin API
+      # with Luau. Keep the working Clipper combination until a separately
+      # validated migration preserves saved clips, notecards and keybindings.
       url = "github:noctalia-dev/noctalia-shell/b16dc50250af05d5048ac454dbf4e898d1adcac0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -114,15 +113,9 @@
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # TODO(unsolved): held at the 2026-07-10 rev. The 2026-08-09 update pointed at
-    # zen release 1.21.13b, whose GitHub asset 404s —
-    # https://github.com/zen-browser/desktop/releases/download/1.21.13b/zen.linux-x86_64.tar.xz
-    # returns 404, so the fetch fails and the whole toplevel build fails with it.
-    # Upstream packaging bug, nothing to fix on our side.
-    # To resolve: drop the pin back to the bare URL once upstream publishes a release
-    # whose asset actually exists.
+    # The former missing-release-asset hold was resolved by Zen 1.22.1b.
     zen-browser = {
-      url = "github:0xc000022070/zen-browser-flake/71e156423dae9496d7fd9e89029a1a82516fb9d8";
+      url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     wallpapers = {

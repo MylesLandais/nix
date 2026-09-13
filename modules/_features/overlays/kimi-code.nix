@@ -5,7 +5,7 @@
 # pattern as buzz-desktop.
 #
 # Replaces the legacy kimi-cli 1.x line entirely: this package provides both
-# bin/kimi (primary) and bin/kimi-code (explicit alias). Pin stays at 0.34.0
+# bin/kimi (primary) and bin/kimi-code (explicit alias). Pin stays at a release
 # deliberately — do not float to main; bump with a hash refresh per release.
 _final: prev: {
   kimi-code = prev.callPackage (
@@ -18,7 +18,7 @@ _final: prev: {
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "kimi-code";
-      version = "0.34.0";
+      version = "0.42.0";
 
       src = fetchurl {
         url =
@@ -26,7 +26,7 @@ _final: prev: {
           + "%40moonshot-ai/kimi-code%40${finalAttrs.version}/"
           + "kimi-code-linux-x64.zip";
         # Matches the sha256 digest GitHub reports for the release asset itself.
-        hash = "sha256-iFWH8gpR2U3KGPyb/xEkZULAF/t6xFmpaTu6o8pnsZk=";
+        hash = "sha256-+TfuZkNDAxEu3FQ2nkYxuqkjHCrTsEWpgpNcEgv7Cqw=";
       };
 
       nativeBuildInputs = [

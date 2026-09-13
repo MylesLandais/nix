@@ -7,12 +7,35 @@
 }:
 let
   heliumUpstream = inputs.helium.defaultPackage.x86_64-linux;
+  heliumProfileGuard = pkgs.writeShellScriptBin "helium-profile-guard" ''
+    exec ${pkgs.python3}/bin/python3 ${inputs.self}/scripts/helium-profile-guard.py "$@"
+  '';
   # Upstream `helium` hardcodes --enable-features=VaapiVideoDecoder and ignores
   # ~/.config/helium-flags.conf. Call .helium-wrapped directly and inject HM flags.
   heliumWithFlags = pkgs.writeShellScriptBin "helium" ''
     set -eu
     helium="${heliumUpstream}/bin/.helium-wrapped"
     flagsFile="''${XDG_CONFIG_HOME:-$HOME/.config}/helium-flags.conf"
+    dataDir="''${HELIUM_USER_DATA_DIR:-''${XDG_CONFIG_HOME:-$HOME/.config}/net.imput.helium}"
+    explicitDataDir=0
+    explicitProfileDir=0
+    for arg in "$@"; do
+      case "$arg" in
+        --user-data-dir|--user-data-dir=*) explicitDataDir=1 ;;
+        --profile-directory|--profile-directory=*) explicitProfileDir=1 ;;
+      esac
+    done
+
+    launchArgs=("$@")
+    if (( ! explicitDataDir )); then
+      launchArgs+=(--user-data-dir="$dataDir")
+      if (( ! explicitProfileDir )); then
+        launchArgs+=(--profile-directory=Default)
+        ${heliumProfileGuard}/bin/helium-profile-guard \
+          --data-dir "$dataDir" --profile-directory Default --quiet || true
+      fi
+    fi
+
     extra=()
     if [ -r "$flagsFile" ]; then
       while IFS= read -r line; do
@@ -20,9 +43,9 @@ let
       done < <(grep -Ev '^(#|$)' "$flagsFile")
     fi
     if ((''${#extra[@]})); then
-      exec -a helium "$helium" "''${extra[@]}" "$@"
+      exec -a helium "$helium" "''${extra[@]}" "''${launchArgs[@]}"
     else
-      exec -a helium "$helium" --enable-features=VaapiVideoDecoder "$@"
+      exec -a helium "$helium" --enable-features=VaapiVideoDecoder "''${launchArgs[@]}"
     fi
   '';
 
@@ -60,6 +83,7 @@ in
     inputs.llm.packages.x86_64-linux.opencode
     inputs.wallpapers.packages.x86_64-linux.default
     heliumWithFlags
+    heliumProfileGuard
     vivaldiWithFlags
     inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-ide
     inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-cli

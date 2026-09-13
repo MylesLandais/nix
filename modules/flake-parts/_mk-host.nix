@@ -99,10 +99,9 @@ in
 
   mkHost =
     {
-      # Optional label for callers; unused by nixosSystem (attr name is set by the host file).
-      # deadnix: skip — deliberately accepted-and-ignored. `nix fmt` runs deadnix,
-      # which strips this as unused; host files still pass `name`, so removing it
-      # breaks evaluation with "called with unexpected argument 'name'".
+      # deadnix: skipped via treefmt -L flag (lambda pattern names are not
+      # checked); host files still pass `name`, so removing it breaks
+      # evaluation with "called with unexpected argument 'name'".
       name ? null,
       system ? "x86_64-linux",
       modules,

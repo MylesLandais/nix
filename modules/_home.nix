@@ -50,7 +50,7 @@ let
   # resolves the helper as a sibling of the real binary; on Linux current_exe()
   # reads /proc/self/exe, which follows symlinks straight back to the original store
   # path, where the helper is absent. The whole package has to move together.
-  codexVersion = "0.153.2";
+  codexVersion = "0.154.0";
   llmCodex = inputs.llm.packages.${pkgs.system}.codex;
   llmCodexVersion = llmCodex.version or (lib.getVersion llmCodex.name);
 
@@ -65,7 +65,7 @@ let
 
       src = pkgs.fetchurl {
         url = "https://github.com/openai/codex/releases/download/rust-v${codexVersion}/codex-package-x86_64-unknown-linux-musl.tar.gz";
-        hash = "sha256-4Q+gzueOnwvTlYgPA/1P0ifZA8p69km7wI0WSRAekiU=";
+        hash = "sha256-/G4+O4Xyz31mRSDuXGan/kqhK659RoNPR+LxZf0Nb3g=";
       };
 
       # codex, codex-code-mode-host, rg and bwrap are static-pie and need nothing.

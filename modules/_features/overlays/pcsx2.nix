@@ -7,22 +7,22 @@
 _final: prev:
 
 let
-  version = "2.8.0";
+  version = "2.8.2";
 
   source = prev.fetchFromGitHub {
     pname = "pcsx2-source";
     owner = "PCSX2";
     repo = "pcsx2";
     tag = "v${version}";
-    hash = "sha256-qXOcGe5zLmX0vfr5+7tg2KbIVXko99BrfMK95KeyAuA=";
+    hash = "sha256-sXVeOTVkd/c04M6BduPl34inqSUoJwfJoWCvpFdR4VQ=";
   };
 
-  patchesRev = "6ed7b62cf1d7dacf11e9bf64e193934e899808d0";
+  patchesRev = "57e7089511430020ad9a8b22c6d27a593057d50a";
   patches = prev.fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
     rev = patchesRev;
-    hash = "sha256-FvqX9BVm0wIB0OCZR79INzGfUiSs3DOMMO2RzSNAU3s=";
+    hash = "sha256-tua44ywpqCsbMMhS8G5K4nJJyQNIUvB35EBkTf7WurI=";
   };
 in
 {

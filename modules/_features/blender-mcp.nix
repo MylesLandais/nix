@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   server = "${config.home.homeDirectory}/.local/bin/blender-mcp";
   startup = pkgs.writeText "blender-mcp-start.py" ''

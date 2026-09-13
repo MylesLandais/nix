@@ -55,7 +55,7 @@ in
     ];
     dbus.packages = [
       pkgs.pass-secret-service
-      pkgs.gcr # GVfs / gnome-keyring integration (was in monolithic hypr.nix pre-dendritic)
+      pkgs.gcr_3 # GVfs / gnome-keyring integration (same ABI as the former gcr alias)
       pkgs.gnome-settings-daemon
       pkgs.libsecret
     ];

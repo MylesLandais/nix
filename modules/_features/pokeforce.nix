@@ -23,7 +23,13 @@ let
     src = launcherAppImage;
 
     extraInstallCommands = ''
-      install -Dm644 ${pkgs.appimageTools.extractType2 { pname = "pokeforce-extracted"; version = "beta-2026-09-04"; src = launcherAppImage; }}/PokeForce.png \
+      install -Dm644 ${
+        pkgs.appimageTools.extractType2 {
+          pname = "pokeforce-extracted";
+          version = "beta-2026-09-04";
+          src = launcherAppImage;
+        }
+      }/PokeForce.png \
         "$out/share/icons/hicolor/256x256/apps/pokeforce.png"
 
       install -Dm644 /dev/stdin "$out/share/applications/pokeforce.desktop" <<EOF
@@ -39,19 +45,20 @@ let
       EOF
     '';
 
-    extraPkgs = pkgs': with pkgs'; [
-      fontconfig
-      freetype
-      fribidi
-      harfbuzz
-      libGL
-      libdrm
-      libgbm
-      libx11
-      libxcb
-      stdenv.cc.cc.lib
-      zlib
-    ];
+    extraPkgs =
+      pkgs': with pkgs'; [
+        fontconfig
+        freetype
+        fribidi
+        harfbuzz
+        libGL
+        libdrm
+        libgbm
+        libx11
+        libxcb
+        stdenv.cc.cc.lib
+        zlib
+      ];
 
     meta = {
       description = "Launcher for the PokéForce fan-made Pokémon MMORPG";
