@@ -98,8 +98,10 @@ _:
       # Goal judge: with no override it inherits the main runtime model.
       # Goal judge pinned to a strong reasoning model: per operator 2026-09-13,
       # the judge should reason about ambiguous completion, not just check boxes.
+      # GPT 5.6 Luna: reasoning-grade at the best req-budget/price on Go's
+      # heavyweight tier (~10x Grok/GLM 5.3 ceiling, $15 monthly cap).
       auxiliary.goal_judge.provider = "opencode-go";
-      auxiliary.goal_judge.model = "glm-5.3";
+      auxiliary.goal_judge.model = "gpt-5.6-luna";
       auxiliary.goal_judge.timeout = 120;
 
       # The dashboard refuses any request whose Host header is not the exact
