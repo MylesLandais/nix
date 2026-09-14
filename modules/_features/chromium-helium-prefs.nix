@@ -51,7 +51,10 @@ in
       Icon=helium
       Type=Application
       Categories=Network;WebBrowser;Development;
-      NoDisplay=false
+      # Keep the automation-only profile out of normal app launchers. It must
+      # remain available to automation by desktop ID / direct command, but it
+      # must never be mistaken for the daily-driver browser.
+      NoDisplay=true
     '';
 
     home.activation.ensureHeliumProfile = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
