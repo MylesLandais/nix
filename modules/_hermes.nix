@@ -100,8 +100,21 @@ _:
       # the judge should reason about ambiguous completion, not just check boxes.
       # GPT 5.6 Luna: reasoning-grade at the best req-budget/price on Go's
       # heavyweight tier (~10x Grok/GLM 5.3 ceiling, $15 monthly cap).
+      # 2026-09-13 later that day: luna 500s are DETERMINISTIC at the relay
+      # (every call, verified across repeated probes), not transient. Same-provider
+      # transient retries exhaust, no fallback predicate matches a bare 500
+      # (auth/payment/429/400 don't apply), so the judge fail-opens to "continue"
+      # every time. Repointed to kimi-k3 (reasoning-grade, verified 200 live with
+      # judge-shaped JSON prompts same day). Restore luna here once the relay
+      # returns 200 on a probe like:
+      #   curl -sS -m 60 -w "\nHTTP:%{http_code}" \
+      #     https://opencode.ai/zen/go/v1/chat/completions \
+      #     -H "Authorization: Bearer $OPENCODE_GO_API_KEY" \
+      #     -H "Content-Type: application/json" \
+      #     -H "x-opencode-session: ae72de72-ea03-48eb-bce1-bd8a802e5afa" \
+      #     -d '{"model":"gpt-5.6-luna","messages":[{"role":"user","content":"say ok"}],"max_tokens":10,"temperature":0}'
       auxiliary.goal_judge.provider = "opencode-go";
-      auxiliary.goal_judge.model = "gpt-5.6-luna";
+      auxiliary.goal_judge.model = "kimi-k3";
       auxiliary.goal_judge.timeout = 120;
 
       # The dashboard refuses any request whose Host header is not the exact
