@@ -48,11 +48,23 @@ resource "cloudflare_dns_record" "forgejo" {
   ttl     = 1
 }
 
+resource "cloudflare_dns_record" "forgejo_ssh" {
+  count   = var.ssh_nlb_ip != "" ? 1 : 0
+  zone_id = var.cloudflare_zone_id
+  name    = "ssh"
+  type    = "A"
+  content = var.ssh_nlb_ip
+  proxied = false
+  ttl     = 1
+}
+
 resource "local_sensitive_file" "docker_env" {
   filename        = "${path.module}/.env.tf"
   file_permission = "0600"
   content = templatefile("${path.module}/docker.env.tftpl", {
     domain       = var.domain
+    ssh_domain   = var.ssh_domain
+    ssh_port     = var.ssh_port
     tunnel_token = data.cloudflare_zero_trust_tunnel_cloudflared_token.forgejo.token
   })
 }

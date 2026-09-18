@@ -25,8 +25,8 @@ services:
       FORGEJO__database__SSL_MODE: disable
       FORGEJO__server__DOMAIN: ${DOMAIN:?}
       FORGEJO__server__ROOT_URL: https://${DOMAIN}/
-      FORGEJO__server__SSH_DOMAIN: ${DOMAIN}
-      FORGEJO__server__SSH_PORT: "2222"
+      FORGEJO__server__SSH_DOMAIN: ${SSH_DOMAIN:-ssh.nebula-1.com}
+      FORGEJO__server__SSH_PORT: "${SSH_PORT:-22}"
       FORGEJO__server__SSH_LISTEN_PORT: "2222"
       FORGEJO__server__START_SSH_SERVER: "true"
       FORGEJO__service__DISABLE_REGISTRATION: "false"
@@ -41,7 +41,7 @@ services:
       - /var/lib/forgejo/data:/var/lib/gitea
       - /var/lib/forgejo/conf:/etc/gitea
     ports:
-      - "${TAILSCALE_ADDRESS:?}:2222:2222"
+      - "2222:2222"
     networks:
       forgejo:
         ipv4_address: 172.30.42.3

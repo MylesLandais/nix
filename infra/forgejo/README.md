@@ -71,8 +71,17 @@ account, select **Activated account**, and save **Update user account**. Grant
 **Administrator account** only when that level of access is intended. Account
 activation alone does not grant access to another user's private repositories.
 
-For Git HTTPS, use a personal access token. For Git SSH, add this locally:
+For Git HTTPS, use a personal access token.
 
+For **Public Git SSH** (contributors outside Tailscale):
+Use the public endpoint on standard SSH port 22:
+```sh
+git clone git@ssh.nebula-1.com:<user>/<repo>.git
+```
+No special client tools or SSH configuration files are required.
+
+For **Private Git SSH over Tailscale** (administrators and tailnet members):
+Add this to `~/.ssh/config`:
 ```sshconfig
 Host git.nebula-1.com
     HostName 100.123.116.99

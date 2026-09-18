@@ -31,7 +31,7 @@ _: {
           ${text}
         '';
       compose = script "forgejo-compose" ''
-        unset DOMAIN POSTGRES_USER POSTGRES_DB DB_PASSWORD FORGEJO_SECRET_KEY TUNNEL_TOKEN TAILSCALE_ADDRESS
+        unset DOMAIN SSH_DOMAIN SSH_PORT POSTGRES_USER POSTGRES_DB DB_PASSWORD FORGEJO_SECRET_KEY TUNNEL_TOKEN TAILSCALE_ADDRESS
         exec docker compose --project-name forgejo --file /etc/forgejo/compose.yaml \
           --env-file /etc/forgejo/.env.tf --env-file /etc/forgejo/.env.local "$@"
       '';
@@ -48,7 +48,7 @@ _: {
           mv "$tmp" /etc/forgejo/.env.local
         fi
         if ! test -e /etc/forgejo/.env.tf; then
-          printf 'DOMAIN=git.nebula-1.com\nPOSTGRES_USER=forgejo\nPOSTGRES_DB=forgejo\nTUNNEL_TOKEN=\nTAILSCALE_ADDRESS=${cfg.tailnetAddress}\n' > /etc/forgejo/.env.tf
+          printf 'DOMAIN=git.nebula-1.com\nSSH_DOMAIN=ssh.nebula-1.com\nSSH_PORT=22\nPOSTGRES_USER=forgejo\nPOSTGRES_DB=forgejo\nTUNNEL_TOKEN=\nTAILSCALE_ADDRESS=${cfg.tailnetAddress}\n' > /etc/forgejo/.env.tf
         fi
         chmod 0600 /etc/forgejo/.env.tf /etc/forgejo/.env.local
         install -d -m 0750 -o 1000 -g 1000 /var/lib/forgejo/data /var/lib/forgejo/conf
@@ -73,6 +73,7 @@ _: {
         iptables -w -A FORGEJO-IN -m conntrack --ctstate ESTABLISHED,RELATED -j RETURN
         iptables -w -A FORGEJO-IN -i br-forgejo -j RETURN
         iptables -w -A FORGEJO-IN -i tailscale0 -p tcp --dport 2222 -j RETURN
+        iptables -w -A FORGEJO-IN -i ${cfg.vcnInterface} -p tcp --dport 2222 -j RETURN
         iptables -w -A FORGEJO-IN -j DROP
         while iptables -w -C FORWARD -o br-forgejo -j FORGEJO-IN 2>/dev/null; do
           iptables -w -D FORWARD -o br-forgejo -j FORGEJO-IN
@@ -86,6 +87,11 @@ _: {
         tailnetAddress = lib.mkOption {
           type = lib.types.str;
           default = "100.123.116.99";
+        };
+        vcnInterface = lib.mkOption {
+          type = lib.types.str;
+          default = "enp0s6";
+          description = "Internal VCN interface for OCI Network Load Balancer ingress";
         };
       };
       config = lib.mkIf cfg.enable {
@@ -102,6 +108,7 @@ _: {
         };
         environment.systemPackages = [ pkgs.docker-compose ];
         networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 2222 ];
+        networking.firewall.interfaces."${cfg.vcnInterface}".allowedTCPPorts = [ 2222 ];
         systemd.services.docker.postStart = "${firewall}";
         systemd.services.forgejo = {
           description = "Forgejo and PostgreSQL";
