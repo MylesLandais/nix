@@ -7,3 +7,6 @@ output "hostname" {
 output "env_file" {
   value = local_sensitive_file.docker_env.filename
 }
+output "ssh_domain" {
+  value = var.ssh_domain
+}

@@ -16,7 +16,7 @@ forwarding is the emergency path. The Oracle Cloud Agent managed-SSH method
 does not survive the move to NixOS. Do not run disko or nixos-anywhere against
 these installed hosts as an update procedure.
 
-## Public HTTPS and private SSH
+## Public HTTPS and public/private Git SSH
 
 ```mermaid
 flowchart LR
@@ -25,7 +25,9 @@ flowchart LR
     Tunnel --> Connector[cloudflared on stage-db]
     Connector --> Forgejo[forgejo:3000]
     Forgejo --> DB[postgres:5432]
-    GitSSH[Git SSH client on Tailscale] --> SSH[100.123.116.99:2222]
+    GitPublic[Git SSH Contributor] -->|TCP:22| NLB[ssh.nebula-1.com / OCI NLB]
+    NLB -->|TCP:2222 enp0s6| Forgejo
+    GitSSH[Git SSH client on Tailscale] -->|TCP:2222 tailscale0| SSH[100.123.116.99:2222]
     SSH --> Forgejo
 ```
 
@@ -36,11 +38,12 @@ was added. OpenTofu manages tunnel `nebula-1-forgejo`
 Only the `git` hostname routes to `http://forgejo:3000`; other tunnel requests
 receive 404. The apex `nebula-1.com` was not changed.
 
-Git SSH uses Tailscale port 2222 and the host mapping in the
-[Forgejo runbook](../../infra/forgejo/README.md#administrator-and-signup).
-Neither Forgejo HTTP nor PostgreSQL is published on a host port. The Docker
-forwarding guard allows the Git SSH port only from `tailscale0` and is restored
-after Docker restarts. Forgejo trusts proxy headers only from the connector's
+Public Git SSH is routed through an Always Free OCI Network Load Balancer at
+`ssh.nebula-1.com` listening on standard port 22, forwarding to `stage-db` at
+`10.0.6.242:2222`. Git SSH also remains directly reachable over Tailscale at
+`100.123.116.99:2222`. The Docker forwarding guard allows the Git SSH port from
+both `tailscale0` and internal VCN interface `enp0s6` and is restored after
+Docker restarts. Forgejo trusts proxy headers only from the connector's
 fixed container address `172.30.42.2`.
 
 ## Configuration ownership
@@ -51,7 +54,8 @@ fixed container address `172.30.42.2`.
 | Forgejo host and 1/2 GiB Nix GC thresholds | `modules/hosts/stage-db/configuration.nix` |
 | Service lifecycle, firewall, backup timer | `modules/services/forgejo.nix` |
 | Pinned containers, signup and URL settings | `infra/forgejo/compose.yaml` |
-| Cloudflare resources | `infra/forgejo/main.tf` |
+| Cloudflare tunnel and HTTP routing | `infra/forgejo/main.tf` |
+| OCI Network Load Balancer and SSH DNS | `infra/oci/main.tf` |
 | Reproducible tools | Root `flake.nix`, `nix develop .#forgejo` |
 
 Application secrets live in `/etc/forgejo/.env.local`, generated once on the
