@@ -49,12 +49,13 @@ variable "auth" {
 variable "public_subnet_ocid" {
   type        = string
   description = "OCID of the public subnet where the Network Load Balancer will receive public traffic"
+  default     = "ocid1.subnet.oc1.us-chicago-1.aaaaaaaapm7gon4sm2nkda6rmww7yiy2g4t7nevvtf3dixnzmlukhw3tlnua"
 }
 
 variable "vcn_ocid" {
   type        = string
   description = "OCID of the VCN (required if manage_security_list is true)"
-  default     = ""
+  default     = "ocid1.vcn.oc1.us-chicago-1.amaaaaaapizkb5iaewmfo4konfy72plp6f636clpwob5w5wqwx2eedvq2j3q"
 }
 
 variable "vcn_cidr" {

@@ -18,6 +18,6 @@ variable "ssh_port" {
 }
 variable "ssh_nlb_ip" {
   type        = string
-  default     = ""
+  default     = "170.9.247.244"
   description = "Public IPv4 address of the OCI Network Load Balancer for Git SSH"
 }
