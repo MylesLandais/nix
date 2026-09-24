@@ -52,10 +52,13 @@
     # leave it alone; bump deliberately when you actually want a newer sunshine.
     # Must stay a fixed rev — a second moving branch would recreate the problem.
     sunshine-nixpkgs.url = "github:NixOS/nixpkgs/f13ff45afd1bb73e640eaa08a7066dbed07e3238";
-    nix-cachyos-kernel = {
-      url = "github:xddxdd/nix-cachyos-kernel/release";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # Deliberately does NOT follow nixpkgs. The `release` branch is built by
+    # upstream's own Hydra CI (hydra.lantian.pub) and cached there, but only
+    # against the exact nixpkgs rev pinned in nix-cachyos-kernel's own
+    # flake.lock — the `.overlays.pinned` overlay (used on cerberus) relies on
+    # that pin to hit the cache. `follows` here silently rebuilds it from
+    # source instead. Same rationale as the sunshine-nixpkgs freeze below.
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     chaotic = {
       url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
       inputs.nixpkgs.follows = "nixpkgs";
