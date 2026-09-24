@@ -7,7 +7,7 @@
 # unaudited third party.
 #
 # Packaged as a fixed-output derivation rather than buildNpmPackage, which is a
-# deliberate departure from the other npm overlays here (see lumen.nix). dsh
+# deliberate departure from the other npm overlays here. dsh
 # fans out into ~40 scoped @deepseek-ai/* packages, and `npm install
 # --package-lock-only` against that graph does not terminate in practice — it ran
 # 50 minutes at 100% CPU and 3.5 GB RSS without emitting a lockfile, so there is
@@ -22,7 +22,7 @@
 # since native addons are compiled against it inside the FOD.
 _final: prev:
 let
-  version = "0.1.5-rc.1";
+  version = "0.1.5-rc.3";
   packageManifest = prev.writeText "deepseek-harness-package.json" (
     builtins.toJSON {
       name = "deepseek-harness-dependencies";
@@ -32,8 +32,8 @@ let
       # prepare the native PTY/FFI modules and restore spawn-helper's executable
       # bit; silently skipping them produces an installed but broken harness.
       allowScripts = {
-        "@deepseek-ai/dsh-subprocess-local@0.1.5-rc.2" = true;
-        "koffi@3.2.1" = true;
+        "@deepseek-ai/dsh-subprocess-local@0.1.5-rc.3" = true;
+        "koffi@3.3.1" = true;
         "node-pty@1.2.0-beta.15" = true;
         "@google/genai@1.52.0" = true;
         "protobufjs@7.6.6" = true;
@@ -98,7 +98,7 @@ let
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-lfFMiJT4XtXq86Mqb7tmQyodHKRAPHVWSmgPtVNKeLg=";
+    outputHash = "sha256-iJ8qG6+DlxrI1FyeVtV3xW2LbAdyyo8nBOQ55joiqfE=";
   };
 in
 {

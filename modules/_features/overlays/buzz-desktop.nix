@@ -59,12 +59,12 @@ _final: prev: {
     in
     stdenv.mkDerivation (finalAttrs: {
       pname = "buzz-desktop";
-      version = "0.5.23";
+      version = "0.5.24";
 
       src = fetchurl {
         url = "https://github.com/block/buzz/releases/download/desktop-v${finalAttrs.version}/Buzz_${finalAttrs.version}_amd64.deb";
         # Matches the sha256 digest GitHub reports for the release asset itself.
-        hash = "sha256-lPHlACH4j4hk9WjIao6is5mT2mTj/o2Gv3Mc0AwcnM4=";
+        hash = "sha256-fI9ntaGMlY86Llp/bHvNPLthayzPyFaLkq65fBTkKfU=";
       };
 
       # No unpackPhase needed: dpkg's setup hook extracts .deb sources into root/,
