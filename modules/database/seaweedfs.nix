@@ -52,7 +52,16 @@ _: {
 
         volumePort = lib.mkOption {
           type = lib.types.port;
-          default = 8080;
+          default = 8280;
+          description = ''
+            Not the SeaweedFS default (8080): that collides with
+            services.adguardhome's admin UI on this host. Not 8181 either —
+            that's `-s3.port.iceberg`'s default (this seaweedfs release starts
+            an Iceberg REST catalog alongside S3 unless told otherwise), which
+            collided the same way. The Docker container this replaced never
+            hit either conflict because it only ever published 8333/9333 to
+            the host, never the volume port, and predated the Iceberg feature.
+          '';
         };
 
         filerPort = lib.mkOption {
@@ -88,7 +97,8 @@ _: {
                 -master.port=${toString cfg.masterPort} \
                 -volume.port=${toString cfg.volumePort} \
                 -filer -filer.port=${toString cfg.filerPort} \
-                -s3 -s3.port=${toString cfg.s3Port} -s3.config=${cfg.s3ConfigFile}
+                -s3 -s3.port=${toString cfg.s3Port} -s3.config=${cfg.s3ConfigFile} \
+                -s3.port.iceberg=0
             '';
             Restart = "on-failure";
             RestartSec = "5s";
