@@ -72,7 +72,7 @@
     # cached against its own pin: adding `follows` puts 934 derivations
     # (nodejs + electron + the whole npm tree) into a local build. A duplicated
     # closure is cheaper than that compile.
-    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.9.11";
+    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.9.24";
     nur.url = "github:nix-community/NUR";
     claude-code = {
       url = "github:sadjow/claude-code-nix";
