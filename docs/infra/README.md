@@ -55,7 +55,7 @@ Snapshot of the violations, 2026-08-09 (42 containers across 16 compose projects
 | --- | ---: | --- |
 | Valkey / Redis | 4 — `dev.valkey` (:6379), ~~penpot 8.1~~ (dropped 2026-09-06), langfuse 8-alpine, Nix `valkey.service` | 1, Nix-managed on `:6379` |
 | Postgres | 5 — `dev.postgres` 16.13 (:5433), `dev.postgres19-canary` **19beta2** (:5434), ~~penpot pg15~~ (dropped 2026-09-06), langfuse pg16, Nix `postgresql_16` (:5432) | **2** — see the tier table below |
-| Object storage | 2 — minio (dead), `dev.seaweedfs` | 1 — seaweedfs |
+| Object storage | ~~2 — minio (dead), `dev.seaweedfs`~~ (consolidated 2026-09-24) | 1, Nix-managed on `:8333` (S3), `:9333` (master), `:8888` (filer) |
 | Host agent | 4 — maya-bot ×3, hermes-agent | 1 |
 
 ### Database tiers (established 2026-09-06)
@@ -98,6 +98,34 @@ These still run their own Postgres and are unconverted:
   Also the reason the Nix-declared `services.infra.postgres` loses the `:5432` port
   race, and therefore why `infra.demo.enable` is still `false`.
 - `manus-langfuse-postgres-1` — PG16, langfuse-internal, not published.
+
+### Object storage (consolidated 2026-09-24)
+
+`services.infra.seaweedfs` (`modules/database/seaweedfs.nix`) replaces the Docker
+container `dev.seaweedfs`. Single-node `weed server` (master + volume + filer + S3),
+running as `warby`, `-dir=/srv/data/seaweedfs-data` — the same data directory the
+Docker container migrated onto via `scripts/cutover_seaweedfs.sh`
+(Workspace-internal), so the `raw-data` bucket and its contents carried over with no
+re-upload.
+
+Bound `0.0.0.0`, not loopback-only like Valkey's default: Docker containers on the
+`dev` bridge reach it via `host.docker.internal` (a host-gateway route to the host's
+real interface, which a strict `127.0.0.1` bind would refuse), and it is not opened
+on `tailscale0` — off the tailnet/LAN. Host-run scripts already default to
+`http://localhost:8333` (see e.g. `src/crawler/config.py`), so they're unaffected.
+
+S3 identities/bucket grants come from `~/.local/share/seaweedfs-config/s3.json`
+(outside the Nix store — holds credentials, predates this module): `collector`
+(`raw-data`, `browser`), `endless-music` (`music`), `maya` (admin), `vision`
+(`vision-archive`), `nebula-music-inbox` (`downloads`).
+
+Docker-network consumers (compose files using the `dev.seaweedfs:8333` hostname)
+were repointed at `http://host.docker.internal:8333` with the matching
+`extra_hosts: ["host.docker.internal:host-gateway"]` entry — the same idiom
+`maya-unified/infra/docker-compose.dev.yml` already used for reaching ComfyUI on
+the host. Updated: `Workspace-internal/src/crawler/docker-compose.yml` (also
+dropped its own `seaweedfs` service block and volume),
+`Workspace-internal/docker-compose.booru.yml`, `maya-unified/infra/docker-compose.dev.yml`.
 
 ### Re-enabling the demo spine
 

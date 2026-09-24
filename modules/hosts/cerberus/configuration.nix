@@ -43,6 +43,7 @@ _: {
         inputs.self.nixosModules.profileDemoCerberus
         inputs.self.nixosModules.postgresInfra
         inputs.self.nixosModules.valkeyInfra
+        inputs.self.nixosModules.seaweedfsInfra
         inputs.self.nixosModules.openbaoInfra
         inputs.self.nixosModules.traefikInfra
         inputs.self.nixosModules.authentikInfra
@@ -339,6 +340,11 @@ _: {
 
       # Agent harness driving the router above; see /etc/deepseek-harness/env.
       services.infra.deepseek-harness.enable = true;
+
+      # Canonical object storage for Workspace-internal/maya-unified dev
+      # projects, replacing the Docker container `dev.seaweedfs`. See
+      # docs/infra/README.md "Shared developer services".
+      services.infra.seaweedfs.enable = true;
 
       # Developer Lamia Browser Adapter. Nixpkgs Chromium resolves native hosts
       # through this system registry rather than Chrome's per-user registry.
