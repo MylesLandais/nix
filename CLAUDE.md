@@ -20,6 +20,8 @@ User environment (shell, dev tools, Hyprland, bars): `modules/_home.nix` (export
 
 Shared helpers imported by path only (not in import-tree): underscore-prefixed files such as `modules/_packages.nix`, `modules/_chromium-browsers.nix`.
 
+Anything that adds a boot-time service, a `home.activation` script, or a dependency on `docker.service` must follow CONTRIBUTING.md §9 (boot path): Docker is socket-activated and must never be pulled in at boot, and HM activation blocks the login screen.
+
 Validate with `nix build .#nixosConfigurations.<host>.config.system.build.toplevel` or `nix flake check`. Apply locally on Cerberus with `/nix-switch` (`nixos-rebuild switch --flake …#cerberus`). Do not run `home-manager switch` alone.
 
 ## Common Procedures
