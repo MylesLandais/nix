@@ -411,7 +411,13 @@ _: {
             "docker.service"
           ];
           wants = [ "network-online.target" ];
-          requires = [ "docker.service" ];
+          # Deliberately no `requires = [ "docker.service" ]`: Docker is
+          # socket-activated (enableOnBoot = false in _dev.nix), and requiring it
+          # here dragged dockerd up at boot, restoring every restart-policy
+          # container while home-manager activation and the greeter were still
+          # waiting on the same disk (~2min to graphical.target, ~36s of HM
+          # activation). llama-swap only touches Docker from `docker run` on the
+          # first model request, which hits docker.sock and starts it on demand.
           wantedBy = [ "multi-user.target" ];
 
           # Repo-wide convention: bound restart loops rather than letting a
