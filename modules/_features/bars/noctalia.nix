@@ -39,16 +39,82 @@
         '';
 
       # Restart noctalia-shell after every rebuild so the launcher index reflects
-      # newly installed packages. Quickshell's DesktopEntries inotify watcher
-      # misses NixOS's atomic profile symlink swap and won't fire onValuesChanged
-      # on its own. Only runs inside an active Wayland session.
+      # newly installed packages, and — just as importantly — so IPC keybinds
+      # (Mod+R launcher, Mod+C clipboard, etc.) keep working at all: noctalia-shell
+      # is a plain Hyprland exec-once with no supervision, so whenever a rebuild
+      # changes its store path (any nixpkgs bump can do this, not just a direct
+      # noctalia change), the running instance is silently orphaned — same store
+      # path but a different hash, `noctalia-shell ipc call ...` can no longer
+      # find it, and it never restarts on its own.
+      #
+      # `pgrep -x noctalia-shell` never actually matched here: quickshell execs
+      # into the real binary rather than preserving argv[0], so /proc/<pid>/comm
+      # is the truncated wrapper name (".quickshell-wra"), not "noctalia-shell" —
+      # this whole activation step was a silent no-op. Match on the binary path
+      # instead (Quickshell's DesktopEntries inotify watcher also misses NixOS's
+      # atomic profile symlink swap and won't fire onValuesChanged on its own).
+      #
+      # The relaunch has to be `systemd-run --scope`, not a bare backgrounded
+      # subshell: activation runs inside home-manager-warby.service's cgroup, and
+      # a plain `(cmd &)` gets reaped along with it once activation finishes —
+      # confirmed live: the pkill half ran, the relaunch didn't survive, and the
+      # launcher was gone until restarted by hand. Only runs inside an active
+      # Wayland session.
       home.activation.reloadNoctalia = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        if [ -n "''${WAYLAND_DISPLAY:-}" ] && ${pkgs.procps}/bin/pgrep -x noctalia-shell > /dev/null 2>&1; then
-          $DRY_RUN_CMD ${pkgs.procps}/bin/pkill -x noctalia-shell || true
+        if [ -n "''${WAYLAND_DISPLAY:-}" ]; then
+          # Tear down the previous reload scope first. `--collect` only removes
+          # a scope once its cgroup is empty, and noctalia leaves helpers
+          # (wl-paste, nmcli) running in it, so the scope stays "active" after
+          # the shell itself dies. Reusing the fixed `-u` name would then fail
+          # with "already loaded", silently leaving no bar. Stop it outright.
+          $DRY_RUN_CMD ${pkgs.systemd}/bin/systemctl --user stop noctalia-shell-reload.scope || true
+          $DRY_RUN_CMD ${pkgs.procps}/bin/pkill -f 'bin/quickshell' || true
           if [ -z "''${DRY_RUN_CMD:-}" ]; then
-            (sleep 1 && ${
-              inputs.noctalia.packages.${pkgs.system}.default
-            }/bin/noctalia-shell >/dev/null 2>&1 &)
+            # Wait for every quickshell process to actually exit before
+            # relaunching. A fixed `sleep` races a slow (or multiple
+            # concurrent) graceful shutdown: the replacement starts while the
+            # previous instance still holds quickshell's single-instance IPC
+            # lock and immediately exits. Escalate to SIGKILL if one lingers.
+            i=0
+            while [ "$i" -lt 50 ] && ${pkgs.procps}/bin/pgrep -f 'bin/quickshell' > /dev/null 2>&1; do
+              ${pkgs.coreutils}/bin/sleep 0.2
+              i=$((i + 1))
+            done
+            if ${pkgs.procps}/bin/pgrep -f 'bin/quickshell' > /dev/null 2>&1; then
+              ${pkgs.procps}/bin/pkill -9 -f 'bin/quickshell' || true
+              ${pkgs.coreutils}/bin/sleep 0.5
+            fi
+            ${pkgs.systemd}/bin/systemctl --user reset-failed noctalia-shell-reload.scope >/dev/null 2>&1 || true
+            # home-manager's activation service runs with a bare environment:
+            # hm-setup-env imports only WAYLAND_DISPLAY/DISPLAY/DBUS_SESSION_BUS_ADDRESS/
+            # XDG_RUNTIME_DIR, and the unit itself sets QT_QPA_PLATFORM=offscreen.
+            # `systemd-run --scope` inherits that environment, so a relaunched
+            # noctalia would come up with no panel backend ("No PanelWindow
+            # backend loaded") and exit within ~2s.
+            #
+            # Set QT_QPA_PLATFORM to exactly what the compositor gives session
+            # children (Hyprland's `hl.env` in modules/hosts/cerberus/_home.nix,
+            # which keybind clients also inherit). quickshell derives the IPC
+            # instance's "display connection" identity from it (qs
+            # src/launch/command.cpp getDisplayConnection): unset or exactly
+            # "wayland" yields "wayland,wayland-1", while a compound value
+            # yields "unk,wayland" — and an `ipc call` keybind only talks to an
+            # instance with a matching identity.
+            export QT_QPA_PLATFORM='wayland;xcb'
+            # HYPRLAND_INSTANCE_SIGNATURE is needed for Hyprland IPC features.
+            hypr_sig=$(${pkgs.systemd}/bin/systemctl --user show-environment | ${pkgs.gnused}/bin/sed -n 's/^HYPRLAND_INSTANCE_SIGNATURE=//p')
+            if [ -n "$hypr_sig" ]; then
+              export HYPRLAND_INSTANCE_SIGNATURE="$hypr_sig"
+            fi
+            # `--scope` execs as the target process itself (it doesn't fork a
+            # child and return) — it has to be backgrounded here, or activation
+            # blocks until the shell daemon exits. Registering the scope is
+            # what matters and happens synchronously before that exec, so the
+            # backgrounded job is already outside home-manager-warby.service's
+            # cgroup by the time this shell returns.
+            ${pkgs.systemd}/bin/systemd-run --user --scope --collect \
+              -u noctalia-shell-reload \
+              ${inputs.noctalia.packages.${pkgs.system}.default}/bin/noctalia-shell >/dev/null 2>&1 &
           fi
         fi
       '';
