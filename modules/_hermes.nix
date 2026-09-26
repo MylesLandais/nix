@@ -128,6 +128,15 @@ _:
       # never re-reads config — so changing it needs a service restart, not
       # just an activation.
       dashboard.public_url = "http://100.112.41.69:9119";
+
+      # The Petdex mascot sits in its own layout row above the prompt, but the
+      # /model picker and command palette size their scroll viewport as if only
+      # the input and status bar were below them (reserved_below = 6 in
+      # _compute_model_picker_viewport). On Ghostty the Kitty-graphics sprite
+      # takes ~10 more rows, so long lists lose their tail and bottom border.
+      # Still unfixed on upstream main as of v2026.9.24; re-enable once the
+      # viewport subtracts _pet_widget_height().
+      display.pet.enabled = false;
     };
 
     # SOUL.md must live in hermesHomeFiles, not documents: hermes reads it from
