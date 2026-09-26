@@ -106,6 +106,15 @@
             if [ -n "$hypr_sig" ]; then
               export HYPRLAND_INSTANCE_SIGNATURE="$hypr_sig"
             fi
+            # PATH likewise has to be the session's, not activation's (which is
+            # only coreutils/sed/etc.). On Hyprland's Lua dispatch syntax
+            # noctalia switches workspaces by exec'ing `hyprctl dispatch …`
+            # from PATH, so a relaunch without it left workspace clicks dead
+            # while everything over the IPC socket kept working.
+            session_path=$(${pkgs.systemd}/bin/systemctl --user show-environment | ${pkgs.gnused}/bin/sed -n 's/^PATH=//p')
+            if [ -n "$session_path" ]; then
+              export PATH="$session_path"
+            fi
             # `--scope` execs as the target process itself (it doesn't fork a
             # child and return) — it has to be backgrounded here, or activation
             # blocks until the shell daemon exits. Registering the scope is
