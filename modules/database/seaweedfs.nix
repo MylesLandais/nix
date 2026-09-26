@@ -82,6 +82,11 @@ _: {
           # same reasoning as the valkey.nix port-conflict guard.
           startLimitIntervalSec = 300;
           startLimitBurst = 5;
+          # dataDir lives on a separate disk (/srv/data on cerberus, mounted
+          # `nofail`). Without this the unit can start before the mount — or
+          # with the disk absent — and write a fresh empty store onto the root
+          # filesystem underneath the mount point.
+          unitConfig.RequiresMountsFor = [ cfg.dataDir ];
           serviceConfig = {
             User = cfg.user;
             # Binds 0.0.0.0, unlike valkey's loopback-only default: Docker
