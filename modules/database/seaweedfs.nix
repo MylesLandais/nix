@@ -68,6 +68,19 @@ _: {
           type = lib.types.port;
           default = 8888;
         };
+
+        volumeMax = lib.mkOption {
+          type = lib.types.ints.unsigned;
+          default = 0;
+          description = ''
+            `-volume.max`: how many volumes this server may hold. 0 sizes it
+            from free disk space divided by the volume size limit. Left unset,
+            SeaweedFS defaults to 8, and a store already holding ~1,600
+            volumes (many from an old 1 GB volumeSizeLimit) can then create no
+            new volume: collections become readable but unwritable ("No
+            writable volumes and no free volumes left").
+          '';
+        };
       };
 
       config = lib.mkIf cfg.enable {
@@ -101,6 +114,7 @@ _: {
                 -ip.bind=0.0.0.0 \
                 -master.port=${toString cfg.masterPort} \
                 -volume.port=${toString cfg.volumePort} \
+                -volume.max=${toString cfg.volumeMax} \
                 -filer -filer.port=${toString cfg.filerPort} \
                 -s3 -s3.port=${toString cfg.s3Port} -s3.config=${cfg.s3ConfigFile} \
                 -s3.port.iceberg=0
