@@ -110,13 +110,13 @@ let
 in
 stdenv.mkDerivation (_finalAttrs: {
   pname = "chatgpt-linux";
-  version = "26.917.71314";
+  version = "26.924.50649";
 
   src = fetchurl {
     # This is OpenAI's official x64 Linux preview package. The stable apt URL is
     # intentionally content-pinned by the hash below; bump version + hash together.
     url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_amd64.deb";
-    hash = "sha256-hR7Ci2W94v8dqfN9zfW24gqRXHVo+LLOmTwAQo8BiuU=";
+    hash = "sha256-oPy4RcWhx6Gu5RNyh8c6Qxw6UcROzeabf6gzbcgiiGs=";
   };
 
   nativeBuildInputs = [
