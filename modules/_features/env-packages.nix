@@ -106,6 +106,7 @@ in
     pkgs.bitwarden-cli
     pkgs.dolphin-emu
     pkgs.teamspeak6-client
+    pkgs.mixxx
     pkgs.termius
     pkgs.mosh
     pkgs.nicotine-plus
