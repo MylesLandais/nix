@@ -40,7 +40,7 @@ in
           ];
         };
         systemd.user.services.gnome-keyring = {
-          install = lib.mkOverride 0 {
+          Install = lib.mkOverride 0 {
             WantedBy = [
               "graphical-session-pre.target"
               "hyprland-session.target"
