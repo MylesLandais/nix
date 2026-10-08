@@ -34,6 +34,7 @@ let
       allowScripts = {
         "@deepseek-ai/dsh-subprocess-local@0.1.5-rc.3" = true;
         "koffi@3.3.1" = true;
+        "koffi@3.3.2" = true;
         "node-pty@1.2.0-beta.15" = true;
         "@google/genai@1.52.0" = true;
         "protobufjs@7.6.6" = true;
@@ -98,7 +99,7 @@ let
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-iJ8qG6+DlxrI1FyeVtV3xW2LbAdyyo8nBOQ55joiqfE=";
+    outputHash = "sha256-u7dW7vtdCMivPFVBE8izVV7IAdvlfja/k2UnSQx85sg=";
   };
 in
 {

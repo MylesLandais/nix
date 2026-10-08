@@ -5,7 +5,7 @@
 {
   nixpkgs.overlays = [
     inputs.nur.overlays.default
-    inputs.claude-code.overlays.default
+    (import "${inputs.self}/modules/_features/overlays/claude-code.nix")
     inputs.nix-vscode-extensions.overlays.default
     # Stable PCSX2 fast-path: reuse nixpkgs' build recipe while pinning the
     # immutable upstream release and patches snapshot locally.

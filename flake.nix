@@ -74,16 +74,14 @@
     # closure is cheaper than that compile.
     hermes-agent.url = "github:NousResearch/hermes-agent/v2026.9.24";
     nur.url = "github:nix-community/NUR";
-    claude-code = {
-      url = "github:sadjow/claude-code-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # numtide multi-agent flake: opencode, codex, gemini-cli, etc. Tracks
     # upstream agent releases — `nix flake update llm` keeps them all current.
-    llm = {
-      url = "github:numtide/llm-agents.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #
+    # Deliberately does NOT follow nixpkgs. Numtide's binary cache
+    # (cache.numtide.com) is built against its own pinned nixpkgs. Setting
+    # `follows` invalidates the cache and forces a ~50-minute local Cargo
+    # compile of codex from source. A duplicated closure is far cheaper.
+    llm.url = "github:numtide/llm-agents.nix";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
