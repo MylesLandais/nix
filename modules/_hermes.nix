@@ -17,9 +17,21 @@
 # the user's home. Hermes is an agent for one person: the credentials, memory,
 # sessions and cron jobs all belong to that person. The user-level module runs
 # everything as warby against ~/.hermes, so every front end shares one store.
-_:
+{ lib, ... }:
 
 {
+  # Upstream hermes-agent blocks saving provider API keys to ~/.hermes/.env via the
+  # desktop UI / CLI whenever ~/.hermes/.managed is set to "home-manager".
+  # Since Nix deliberately leaves secrets to ~/.hermes/.env (see lines 9-11),
+  # ensure ~/.hermes/.managed is set to "false" after hermesAgentSetup and override
+  # HERMES_MANAGED so that the desktop UI and runtime can persist credentials.
+  home.activation.hermesUnmanageMarker = lib.hm.dag.entryAfter [ "hermesAgentSetup" ] ''
+    echo "false" > "$HOME/.hermes/.managed"
+  '';
+
+  systemd.user.services.hermes-agent.Service.Environment = [ "HERMES_MANAGED=false" ];
+  systemd.user.services.hermes-backend.Service.Environment = [ "HERMES_MANAGED=false" ];
+
   programs.hermes-agent = {
     # Replaces the NixOS module's addToSystemPackages. Also exports
     # HERMES_HOME, which is why the old environment.variables mkForce
@@ -69,28 +81,25 @@ _:
 
     settings = {
       model = {
-        # Not every opencode-go model works through hermes. Verified 2026-09-07:
-        #   OK      deepseek-*, glm-*, hy*, kimi-*, longcat-2.0, mimo-*, omen-alpha
-        #   500     muse-spark-1.2-contributor (1.3-contributor re-verified
-        #           working but demoted from default per operator 2026-09-13)
-        #           gpt-5.6-luna (relay-side)
-        #   401     grok-4.6 ("not supported for format oa-compat")
-        #   broken  minimax-*, qwen* — these work at the relay over
-        #           chat_completions, but runtime_provider.py hard-overrides
-        #           api_mode for opencode providers and forces them onto
-        #           anthropic_messages, whose client never merges the
-        #           x-opencode-session header below. Not fixable from config.
-        default = "glm-5.3-flash";
-        provider = "opencode-go";
-        base_url = "https://opencode.ai/zen/go/v1";
+        # Repointed from opencode-go to commandcode 2026-10-09: the operator's
+        # OpenCode Go subscription lapsed (HTTP 403 "active OpenCode Go
+        # subscription is required"), while commandcode was already set up as
+        # its replacement (COMMANDCODE_API_KEY in ~/.hermes/.env, credential
+        # pool in auth.json). Because this settings block deep-merges over
+        # ~/.hermes/config.yaml on every activation, leaving opencode-go here
+        # silently reverted the operator's config on each rebuild — the Oct 9
+        # regression. Verified 2026-10-09 via live catalog probe + end-to-end
+        # `hermes chat` (provider=commandcode, 200).
+        # NOTE: z-ai/glm-5.3-flash rejects response_format json_schema (HTTP
+        # 400, "Supported formats: json_object") and hermes' structured-output
+        # retry does not classify that wording, so title generation 400s every
+        # call. Workaround lives OUTSIDE this block (so activation never
+        # overwrites it): auxiliary.title_generation pinned to openrouter
+        # google/gemini-2.5-flash-lite in ~/.hermes/config.yaml.
+        default = "z-ai/glm-5.3-flash";
+        provider = "commandcode";
+        base_url = "https://api.commandcode.ai/provider/v1";
         api_mode = "chat_completions";
-        # The OpenCode Go relay rejects requests without x-opencode-session
-        # (HTTP 400, "cannot be routed efficiently"). hermes-agent 0.20.0 never
-        # emits it, so inject it here. Regenerate the uuid freely; the relay
-        # only needs a stable opaque id per client.
-        default_headers = {
-          "x-opencode-session" = "ae72de72-ea03-48eb-bce1-bd8a802e5afa";
-        };
       };
       terminal.backend = "local";
       toolsets = [ "all" ];
@@ -98,23 +107,18 @@ _:
       # Goal judge: with no override it inherits the main runtime model.
       # Goal judge pinned to a strong reasoning model: per operator 2026-09-13,
       # the judge should reason about ambiguous completion, not just check boxes.
-      # GPT 5.6 Luna: reasoning-grade at the best req-budget/price on Go's
-      # heavyweight tier (~10x Grok/GLM 5.3 ceiling, $15 monthly cap).
-      # 2026-09-13 later that day: luna 500s are DETERMINISTIC at the relay
-      # (every call, verified across repeated probes), not transient. Same-provider
-      # transient retries exhaust, no fallback predicate matches a bare 500
-      # (auth/payment/429/400 don't apply), so the judge fail-opens to "continue"
-      # every time. Repointed to kimi-k3 (reasoning-grade, verified 200 live with
-      # judge-shaped JSON prompts same day). Restore luna here once the relay
-      # returns 200 on a probe like:
-      #   curl -sS -m 60 -w "\nHTTP:%{http_code}" \
-      #     https://opencode.ai/zen/go/v1/chat/completions \
-      #     -H "Authorization: Bearer $OPENCODE_GO_API_KEY" \
-      #     -H "Content-Type: application/json" \
-      #     -H "x-opencode-session: ae72de72-ea03-48eb-bce1-bd8a802e5afa" \
-      #     -d '{"model":"gpt-5.6-luna","messages":[{"role":"user","content":"say ok"}],"max_tokens":10,"temperature":0}'
-      auxiliary.goal_judge.provider = "opencode-go";
-      auxiliary.goal_judge.model = "kimi-k3";
+      # 2026-10-09: repointed alongside the model block — opencode-go is dead
+      # (lapsed subscription, HTTP 403) and the pin was silently failing every
+      # cron job ("HTTP 429: Go usage limit exceeded"). moonshotai/Kimi-K3 on
+      # commandcode verified live 2026-10-09 (judge-shaped JSON prompt, 200).
+      # History: gpt-5.6-luna on opencode-go 500'd deterministically at the
+      # relay (every call, verified across repeated probes) — same-provider
+      # transient retries exhausted, no fallback predicate matched a bare 500
+      # (auth/payment/429/400 don't apply), so the judge fail-opened to
+      # "continue" every time. kimi-k3 (Go's unqualified id) replaced it, then
+      # the whole provider was dropped 2026-10-09.
+      auxiliary.goal_judge.provider = "commandcode";
+      auxiliary.goal_judge.model = "moonshotai/Kimi-K3";
       auxiliary.goal_judge.timeout = 120;
 
       # The dashboard refuses any request whose Host header is not the exact
