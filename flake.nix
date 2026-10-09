@@ -72,7 +72,7 @@
     # cached against its own pin: adding `follows` puts 934 derivations
     # (nodejs + electron + the whole npm tree) into a local build. A duplicated
     # closure is cheaper than that compile.
-    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.9.24";
+    hermes-agent.url = "github:NousResearch/hermes-agent/v0.21.6";
     nur.url = "github:nix-community/NUR";
     # numtide multi-agent flake: opencode, codex, gemini-cli, etc. Tracks
     # upstream agent releases — `nix flake update llm` keeps them all current.
