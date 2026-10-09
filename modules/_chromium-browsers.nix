@@ -20,6 +20,10 @@ let
       id = "hehggadaopoacecdllhhajmbjkdcmajg";
       name = "ChatGPT";
     };
+    shazam = {
+      id = "mmioliijnhnoblpgimnlajmefafdfilb";
+      name = "Shazam";
+    };
   };
 
   chromiumStandardExtensions = map (e: e.id) (lib.attrValues chromiumExtensionPack);
