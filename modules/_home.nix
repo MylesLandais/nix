@@ -13,6 +13,7 @@ let
   inherit (chromiumBrowsers)
     mkChromiumFlags
     chromiumStandardBrowserFlags
+    chromiumWebgpuFlags
     ;
 
   vaapiMode =
@@ -23,10 +24,13 @@ let
     else
       false;
 
+  # Hardware WebGPU needs ANGLE on Vulkan; measured only on NVIDIA (see chromium-browsers.nix).
+  webgpu = gpuType == "nvidia";
+
   chromiumFlagsFile = mkChromiumFlags (
     chromiumStandardBrowserFlags
     // {
-      inherit vaapiMode;
+      inherit vaapiMode webgpu;
       # The current login keyring is locked, and Chromium blocks all requests
       # while waiting for libsecret. Bitwarden owns browser passwords here, so
       # bypass the broken system keyring rather than hanging the browser.
@@ -39,6 +43,15 @@ let
   # decode (fallback ladder rung 3 in chromium-browsers.nix) for both.
   # Chromium proper has not shown the issue, so it keeps hardware decode.
   softwareDecodeFlagsFile = mkChromiumFlags (chromiumStandardBrowserFlags // { vaapiMode = false; });
+  # Vivaldi keeps softwareDecodeFlagsFile: the GPU probe cannot attach to it over CDP, so
+  # WebGPU flags there are unmeasured.
+  heliumFlagsFile = mkChromiumFlags (
+    chromiumStandardBrowserFlags
+    // {
+      vaapiMode = false;
+      inherit webgpu;
+    }
+  );
 
   # Codex ships an official portable package containing codex, codex-code-mode-host
   # and their resources in one tree. Use it instead of overriding the llm flake's
@@ -151,12 +164,21 @@ in
     };
 
     file = {
-      "${config.xdg.configHome}/helium-flags.conf".text = softwareDecodeFlagsFile;
+      "${config.xdg.configHome}/helium-flags.conf".text = heliumFlagsFile;
       "${config.xdg.configHome}/chromium-flags.conf".text = chromiumFlagsFile;
       "${config.xdg.configHome}/vivaldi-flags.conf".text = softwareDecodeFlagsFile;
     };
 
-    packages = (import ./_packages.nix { inherit pkgs; }) ++ [ patchedCodex ];
+    # Chrome's wrapper reads no flags file, so its WebGPU flags go in through commandLineArgs.
+    packages =
+      map (
+        p:
+        if webgpu && lib.getName p == "google-chrome" then
+          p.override { commandLineArgs = lib.concatStringsSep " " chromiumWebgpuFlags; }
+        else
+          p
+      ) (import ./_packages.nix { inherit pkgs; })
+      ++ [ patchedCodex ];
     pointerCursor = {
       gtk.enable = true;
       package = pkgs.bibata-cursors;
