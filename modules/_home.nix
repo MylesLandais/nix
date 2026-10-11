@@ -169,11 +169,19 @@ in
       "${config.xdg.configHome}/vivaldi-flags.conf".text = softwareDecodeFlagsFile;
     };
 
-    # Chrome's wrapper reads no flags file, so its WebGPU flags go in through commandLineArgs.
+    # The nixpkgs Chrome and Chromium wrappers read no flags file (chromium-flags.conf is
+    # ignored), so their WebGPU flags go in through commandLineArgs. Chromium's override
+    # must match programs.chromium.commandLineArgs below so both resolve to one store path.
     packages =
       map (
         p:
-        if webgpu && lib.getName p == "google-chrome" then
+        if
+          webgpu
+          && builtins.elem (lib.getName p) [
+            "google-chrome"
+            "chromium"
+          ]
+        then
           p.override { commandLineArgs = lib.concatStringsSep " " chromiumWebgpuFlags; }
         else
           p
@@ -231,7 +239,10 @@ in
     firefox.enable = true;
     # Extensions and policies for Helium / Chromium come from chromiumPolicies
     # on Cerberus (see hosts/cerberus/configuration.nix).
-    chromium.enable = true;
+    chromium = {
+      enable = true;
+      commandLineArgs = lib.optionals webgpu chromiumWebgpuFlags;
+    };
     btop = {
       enable = true;
       settings = {
