@@ -50,14 +50,18 @@ let
 
   # WebGPU on NVIDIA/Wayland. Without these, navigator.gpu.requestAdapter()
   # returns null in Helium, Chromium and Chrome (chrome://gpu still claims
-  # "Hardware accelerated"). --enable-unsafe-webgpu alone only exposes the
-  # SwiftShader fallback adapter; Dawn reaches the GPU once ANGLE runs on
-  # Vulkan. Measured with ~/Workspace/scripts/gpu-probe --headed: WebGL2 and
-  # WebGPU both on the RTX 3090 Ti, video decode still hardware accelerated.
+  # "Hardware accelerated"). Dawn reaches the GPU once ANGLE runs on Vulkan
+  # and the GPU blocklist stops vetoing the adapter. Measured with
+  # ~/Workspace/scripts/gpu-probe --headed: WebGL2 and WebGPU both on the
+  # RTX 3090 Ti, video decode still hardware accelerated.
+  # --ignore-gpu-blocklist, not --enable-unsafe-webgpu: both unlock the
+  # adapter, but the unsafe flag also exposes Dawn's unsafe APIs to every
+  # site and makes Chrome show an "unsupported command-line flag" infobar.
+  # --use-angle=vulkan alone leaves requestAdapter() null.
   # The Vulkan *feature* (Vulkan compositing) is deliberately absent: on
   # Wayland it broke WebGL2 presentation and still left WebGPU on SwiftShader.
   chromiumWebgpuFlags = [
-    "--enable-unsafe-webgpu"
+    "--ignore-gpu-blocklist"
     "--use-angle=vulkan"
   ];
 
