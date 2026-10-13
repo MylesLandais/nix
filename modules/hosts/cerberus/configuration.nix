@@ -86,6 +86,7 @@ _: {
         iw4x.enable = true;
         pokeforce.enable = true;
         scbw.enable = true;
+        warcraft3.enable = true;
         remoteGaming.enable = true;
         syncthing.enable = true;
         wallpaper = "${inputs.wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/3895e.jpg";

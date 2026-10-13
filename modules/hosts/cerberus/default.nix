@@ -20,6 +20,7 @@ in
       inputs.self.nixosModules.gamehacking
       inputs.self.nixosModules.iw4x
       inputs.self.nixosModules.scbw
+      inputs.self.nixosModules.warcraft3
       inputs.self.nixosModules.greeter
       inputs.chaotic.nixosModules.default
       inputs.agenix.nixosModules.default
