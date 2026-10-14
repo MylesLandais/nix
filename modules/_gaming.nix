@@ -21,6 +21,8 @@ let
   '';
 in
 {
+  imports = [ ./_features/gaming/diagnostics.nix ];
+
   # Steam gaming platform
   programs.steam = {
     enable = true;
