@@ -135,7 +135,7 @@ in
     hl.on("hyprland.start", function()
       hl.exec_cmd("systemctl --user start gnome-keyring.service")
       hl.exec_cmd("systemctl --user start gvfs-daemon.service")
-      hl.exec_cmd("dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS SSH_AUTH_SOCK && systemctl --user stop hyprland-session.target && systemctl --user start hyprland-session.target")
+      hl.exec_cmd("dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS SSH_AUTH_SOCK && systemctl --user start hyprland-session.target")
       hl.exec_cmd("${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1")
       hl.exec_cmd("hyprctl output create headless HEADLESS-1")
       hl.exec_cmd("blueman-applet")
