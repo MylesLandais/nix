@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 repo="$(cd "$(dirname "$0")/.." && pwd)"
-bash -n "$repo/scripts/desktop-session-audit.sh" "$repo/scripts/warcraft3-linux-audit.sh"
+for script in "$repo/scripts/desktop-session-audit.sh" "$repo/scripts/warcraft3-linux-audit.sh"; do
+  bash -n "$script"
+done
 td="$(mktemp -d)"
 trap 'rm -rf "$td"' EXIT
 mkdir -p "$td/user/applications" "$td/sys/applications" "$td/user/autostart"
