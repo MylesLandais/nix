@@ -53,6 +53,7 @@ _: {
       ];
 
       networking.hostName = config.host.hostName;
+      games_.diagnostics.enable = true;
 
       nixpkgs.overlays = [
         inputs.nix-cachyos-kernel.overlays.pinned
