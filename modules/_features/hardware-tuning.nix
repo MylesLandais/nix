@@ -107,8 +107,8 @@
   # ("Reached maximum concurrent process limit for user '1000'"), so browser
   # and game audio threads fell back to SCHED_OTHER and crackled under load.
   security.rtkit.args = [
-    "--max-processes-per-user=64"
-    "--max-threads-per-user=256"
+    "--processes-per-user-max=64"
+    "--threads-per-user-max=256"
   ];
 
   # sched_ext LAVD: latency-criticality-aware scheduling for interactive and
