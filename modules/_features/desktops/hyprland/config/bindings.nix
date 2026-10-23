@@ -2,6 +2,7 @@
   lib,
   mod,
   bar,
+  app2unit,
 }:
 let
   bind = keys: action: "hl.bind(\"${keys}\", ${action})";
@@ -14,6 +15,11 @@ let
     keys: action: opts:
     "hl.bind(\"${keys}\", ${action}, ${optsToLua opts})";
   exec = cmd: "hl.dsp.exec_cmd(\"${cmd}\")";
+  # GUI apps get their own systemd scope under app.slice instead of joining
+  # the compositor's session scope, so systemd-oomd can single out one
+  # runaway app (and per-app usage shows up in systemd-cgtop). Ghostty
+  # already creates its own scopes.
+  app = cmd: exec "${app2unit} -- ${cmd}";
   focus = dir: "hl.dsp.focus({ direction = \"${dir}\" })";
   wMove = dir: "hl.dsp.window.move({ direction = \"${dir}\" })";
   wResize =
@@ -23,11 +29,11 @@ let
 in
 ''
   ${bind "${mod} + RETURN" (exec "ghostty")}
-  ${bind "${mod} + W" (exec "helium")}
-  ${bind "${mod} + D" (exec "vesktop")}
+  ${bind "${mod} + W" (app "helium")}
+  ${bind "${mod} + D" (app "vesktop")}
   ${bind "${mod} + Q" "hl.dsp.window.close()"}
   ${bind "${mod} + M" "hl.dsp.exit()"}
-  ${bind "${mod} + E" (exec "nemo")}
+  ${bind "${mod} + E" (app "nemo")}
   ${bind "${mod} + V" "hl.dsp.window.float()"}
   ${bind "${mod} + P" (exec "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy")}
   ${bind "${mod} + H" (focus "l")}
@@ -60,7 +66,7 @@ in
   ${bind "${mod} + S" (exec "hyprshot -m region --clipboard-only")}
   ${bind "${mod} + SHIFT + R" (exec "noctalia-shell ipc call sessionMenu toggle")}
   ${bind "${mod} + X" (exec "noctalia-shell ipc call settings toggle")}
-  ${bind "${mod} + SHIFT + S" (exec "obs")}
+  ${bind "${mod} + SHIFT + S" (app "obs")}
   ${bind "${mod} + SHIFT + N" (exec "noctalia-shell ipc call nightLight toggle")}
   ${bind "${mod} + N" (exec "noctalia-shell ipc call notifications toggleHistory")}
   ${bind "${mod} + SHIFT + W" (exec "noctalia-shell ipc call wallpaper toggle")}

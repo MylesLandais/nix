@@ -124,6 +124,18 @@
   # ask for them (JVMs, databases, vLLM) and nothing else.
   boot.kernelParams = [ "transparent_hugepage=madvise" ];
 
+  # Let systemd-oomd kill the single worst app under sustained memory
+  # pressure instead of the whole box thrashing through swap. Scoped to
+  # user@.service on purpose: its descendants are the per-app scopes that
+  # app2unit creates (see hyprland bindings.nix / noctalia), while the
+  # compositor lives in the logind session scope outside it, so Hyprland is
+  # never a candidate. Deliberately not systemd.oomd.enableUserSlices, which
+  # puts ManagedOOMSwap on user-.slice where the session scope could be picked.
+  systemd.services."user@".serviceConfig = {
+    ManagedOOMMemoryPressure = "kill";
+    ManagedOOMMemoryPressureLimit = "60%";
+  };
+
   # nvidia-container-toolkit CDI generator workaround
   systemd.services.nvidia-container-toolkit-cdi-generator.serviceConfig.ExecStartPre =
     lib.mkForce null;

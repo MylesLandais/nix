@@ -51,6 +51,7 @@ in
   config = lib.mkIf config.hypr.enable {
     home.packages = [
       add_record_player
+      pkgs.app2unit
       pkgs.networkmanagerapplet
     ];
     dbus.packages = [
@@ -162,6 +163,7 @@ in
         ${import ./config/bindings.nix {
           inherit lib mod;
           bar = osConfig.host.bar;
+          app2unit = lib.getExe pkgs.app2unit;
         }}
 
         -- == Base env ==

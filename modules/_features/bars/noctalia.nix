@@ -137,8 +137,10 @@
         settings = {
           appLauncher = {
             autoPasteClipboard = false;
-            customLaunchPrefix = ">";
-            customLaunchPrefixEnabled = false;
+            # Launch apps into their own systemd scopes (see hyprland bindings.nix).
+            # This noctalia rev ignores useApp2Unit; the prefix is what it honours.
+            customLaunchPrefix = "${lib.getExe pkgs.app2unit} --";
+            customLaunchPrefixEnabled = true;
             enableClipPreview = true;
             enableClipboardHistory = true;
             iconMode = "tabler";
