@@ -57,7 +57,6 @@ _: {
       networking.hostName = config.host.hostName;
 
       nixpkgs.overlays = [
-        inputs.nix-cachyos-kernel.overlays.pinned
         (import "${inputs.self}/modules/_features/overlays/cursor.nix")
         (_final: prev: {
           # oci-cli 3.88.0 declares setuptools <81, but nixpkgs supplies 82.
@@ -430,7 +429,12 @@ _: {
           systemd-boot.enable = true;
           efi.canTouchEfiVariables = true;
         };
-        kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+        # CachyOS kernel from chaotic-nyx (overlay via chaotic.nixosModules.default
+        # in default.nix). The kernel and its nvidia-open module are both served
+        # from nyx-cache.chaotic.cx, which already supplies the NVIDIA userspace.
+        # Replaced xddxdd/nix-cachyos-kernel on 2026-10-22 after its cache was
+        # compromised (github.com/xddxdd/nix-cachyos-kernel/issues/110).
+        kernelPackages = pkgs.linuxPackages_cachyos;
         kernelParams = [
           "usbcore.autosuspend=-1"
           "quiet"
