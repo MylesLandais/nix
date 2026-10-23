@@ -49,6 +49,7 @@ in
     ../../_features/blender-mcp.nix
     ../../_features/hydra-smb.nix
     ../../_features/hermes-desktop.nix
+    ../../_features/workspace-budget-home.nix
   ];
 
   hydra-smb.enable = true;

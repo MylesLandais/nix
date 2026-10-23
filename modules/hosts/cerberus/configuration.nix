@@ -29,6 +29,7 @@ _: {
         "${inputs.self}/modules/_features/file-sharing.nix"
         "${inputs.self}/modules/_features/syncthing.nix"
         "${inputs.self}/modules/_features/hardware-tuning.nix"
+        "${inputs.self}/modules/_features/workspace-budget.nix"
         "${inputs.self}/modules/_features/waydroid-feh.nix"
         "${inputs.self}/modules/_features/pokeforce.nix"
         "${inputs.self}/modules/_features/fhs-compat.nix"

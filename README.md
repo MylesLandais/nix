@@ -12,6 +12,8 @@ through Cloudflare Tunnel. Public signup requires administrator activation.
 - [Personal Forgejo repository and GitHub mirror](docs/infra/repository-mirroring.md)
 
 ## TODO:
+
+- [Workspace compute budget](docs/infra/workspace-compute-budget.md): Cerberus CPU/memory ceilings for workspace and Nix workloads; container placement still open.
 - missing package gemini-cli
 - feat:
  with api secrets and inject .env api keys
