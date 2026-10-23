@@ -83,6 +83,47 @@
     ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/read_ahead_kb}="256"
   '';
 
+  # Builds must never compete with the desktop. With max-jobs=auto and
+  # cores=0 a single rebuild could fan out to 12 x 12 threads at normal
+  # priority; on 2026-10-22 load sat at ~49 on 12 threads with CPU pressure at
+  # 89%, which surfaced as 2-3 s click latency and audio crackle. Idle
+  # scheduling plus a low weight lets builds use only otherwise-idle CPU.
+  # Cargo/cmake fan out inside each job slot regardless of --cores, so the
+  # slot count is what actually bounds a Rust build.
+  nix = {
+    daemonCPUSchedPolicy = "idle";
+    daemonIOSchedClass = "idle";
+    settings = {
+      max-jobs = 2;
+      cores = 6;
+    };
+  };
+  systemd.services.nix-daemon.serviceConfig = {
+    CPUWeight = 20;
+    IOWeight = 20;
+  };
+
+  # rtkit's default of 15 RT-capable processes per user was exhausted
+  # ("Reached maximum concurrent process limit for user '1000'"), so browser
+  # and game audio threads fell back to SCHED_OTHER and crackled under load.
+  security.rtkit.args = [
+    "--max-processes-per-user=64"
+    "--max-threads-per-user=256"
+  ];
+
+  # sched_ext LAVD: latency-criticality-aware scheduling for interactive and
+  # gaming workloads under heavy background load. The CachyOS kernel ships
+  # sched_ext; roll back at runtime with `systemctl stop scx`.
+  services.scx = {
+    enable = true;
+    scheduler = "scx_lavd";
+  };
+
+  # THP `always` makes khugepaged/compaction stall on a box that is
+  # constantly swapping into zram. madvise keeps huge pages for the apps that
+  # ask for them (JVMs, databases, vLLM) and nothing else.
+  boot.kernelParams = [ "transparent_hugepage=madvise" ];
+
   # nvidia-container-toolkit CDI generator workaround
   systemd.services.nvidia-container-toolkit-cdi-generator.serviceConfig.ExecStartPre =
     lib.mkForce null;
