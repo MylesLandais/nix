@@ -413,9 +413,9 @@
             enabled = true;
             location = "top_right";
             lowUrgencyDuration = 3;
-            monitors = [
-
-            ];
+            # Quickshell matches the connector name (not Hyprland's desc:), so
+            # this pins toasts to the Dell S2716DG 1440p on Cerberus.
+            monitors = [ "DP-3" ];
             normalUrgencyDuration = 8;
             overlayLayer = true;
             respectExpireTimeout = false;
