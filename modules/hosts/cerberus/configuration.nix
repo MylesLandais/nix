@@ -132,11 +132,26 @@ _: {
       # VRAM budget is genuinely tight — weights alone are 17-21.6 GB of the
       # 24 GB, and Hyprland/browsers hold some of the rest. If a model OOMs on
       # load, lower --max-model-len first, then --gpu-memory-utilization.
+      # Dedicated workspace + model repository: the 886 GB Btrfs partition on
+      # the Samsung 970 EVO Plus, by UUID because the nvme0/nvme1 kernel names
+      # swap between boots. Moving the ~151 GB HF model cache here takes it off
+      # the root disk. Design and runbook:
+      # ~/Vault/nix-issues/cerberus-nvme-workspace-and-model-storage-plan.md
+      fileSystems."/home/warby/Workspace" = {
+        device = "/dev/disk/by-uuid/016ecaf4-f6fd-4457-aa2e-3dcebce80832";
+        fsType = "btrfs";
+        options = [
+          "subvol=@workspace"
+          "compress=zstd:1"
+          "noatime"
+          "nofail"
+        ];
+      };
+
       services.infra.llmRouter = {
         enable = true;
-        # Reuse the already validated/downloaded CUDA matrix cache rather than
-        # downloading another copy of the vLLM checkpoints into ~/.cache.
-        hfCacheDir = "/home/warby/Workspace-git/maya-unified/data/model-cache/huggingface";
+        # Fast NVMe model cache on Samsung 970 EVO Plus (nvme0n1p6 @workspace)
+        hfCacheDir = "/home/warby/Workspace/data/model-cache/huggingface";
         models = {
           # Validated on this 3090 Ti through Maya's pinned vLLM 0.27.1 image.
           # This needs CPU offload because the NVFP4 checkpoint plus its runtime
@@ -346,6 +361,7 @@ _: {
       # projects, replacing the Docker container `dev.seaweedfs`. See
       # docs/infra/README.md "Shared developer services".
       services.infra.seaweedfs.enable = true;
+      services.infra.seaweedfs.volumeMax = 1850;
 
       # Developer Lamia Browser Adapter. Nixpkgs Chromium resolves native hosts
       # through this system registry rather than Chrome's per-user registry.
