@@ -43,15 +43,6 @@ let
   # decode (fallback ladder rung 3 in chromium-browsers.nix) for both.
   # Chromium proper has not shown the issue, so it keeps hardware decode.
   softwareDecodeFlagsFile = mkChromiumFlags (chromiumStandardBrowserFlags // { vaapiMode = false; });
-  # Vivaldi keeps softwareDecodeFlagsFile: the GPU probe cannot attach to it over CDP, so
-  # WebGPU flags there are unmeasured.
-  heliumFlagsFile = mkChromiumFlags (
-    chromiumStandardBrowserFlags
-    // {
-      vaapiMode = false;
-      inherit webgpu;
-    }
-  );
 
   # Codex ships an official portable package containing codex, codex-code-mode-host
   # and their resources in one tree. Use it instead of overriding the llm flake's
@@ -164,7 +155,8 @@ in
     };
 
     file = {
-      "${config.xdg.configHome}/helium-flags.conf".text = heliumFlagsFile;
+      # Helium stays off the WebGPU flags: --use-angle=vulkan broke its video playback.
+      "${config.xdg.configHome}/helium-flags.conf".text = softwareDecodeFlagsFile;
       "${config.xdg.configHome}/chromium-flags.conf".text = chromiumFlagsFile;
       "${config.xdg.configHome}/vivaldi-flags.conf".text = softwareDecodeFlagsFile;
     };
