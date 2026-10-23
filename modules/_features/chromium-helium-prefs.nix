@@ -16,10 +16,11 @@ in
 
   config = lib.mkIf cfg.enable {
     # The daily-driver launcher. Upstream ships no usable helium.desktop here
-    # (our env-packages wrapper is a bare writeShellScriptBin), so without this
-    # the CDP entry below was the only Helium launcher on the system -- every
-    # ordinary launch opened port 9222 and let any local CDP client attach and
-    # leave tabs sitting in "Paused in debugger".
+    # (our env-packages wrapper is a bare writeShellScriptBin). The daily
+    # profile now exposes CDP on 9222 deliberately via helium-flags.conf
+    # (modules/_home.nix). If tabs start sitting in "Paused in debugger"
+    # again, that flag is the cause: a local CDP client attached and left a
+    # breakpoint.
     home.file.".local/share/applications/helium.desktop".text = ''
       [Desktop Entry]
       Version=1.0
@@ -45,7 +46,7 @@ in
       Name=Helium (CDP)
       GenericName=Web Browser
       Comment=Helium with remote debugging for automation (isolated profile)
-      Exec=helium --remote-debugging-port=9222 --user-data-dir=${config.xdg.dataHome}/helium-cdp %U
+      Exec=helium --remote-debugging-port=9223 --user-data-dir=${config.xdg.dataHome}/helium-cdp %U
       StartupNotify=true
       Terminal=false
       Icon=helium

@@ -157,7 +157,12 @@ in
 
     file = {
       # Helium stays off the WebGPU flags: --use-angle=vulkan broke its video playback.
-      "${config.xdg.configHome}/helium-flags.conf".text = softwareDecodeFlagsFile;
+      # CDP on the daily profile lets automation attach to the existing browser
+      # context instead of opening windows. Loopback-only (Chromium's default
+      # bind); the isolated helium-cdp launcher overrides this with 9223, since
+      # the wrapper places these flags before the launch arguments.
+      "${config.xdg.configHome}/helium-flags.conf".text =
+        softwareDecodeFlagsFile + "\n--remote-debugging-port=9222\n";
       "${config.xdg.configHome}/chromium-flags.conf".text = chromiumFlagsFile;
       "${config.xdg.configHome}/vivaldi-flags.conf".text = softwareDecodeFlagsFile;
     };
