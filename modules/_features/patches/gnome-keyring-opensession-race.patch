@@ -1,0 +1,75 @@
+diff -u -N -r a/daemon/dbus/gkd-secret-service.c b/daemon/dbus/gkd-secret-service.c
+--- a/daemon/dbus/gkd-secret-service.c	2026-10-04 01:17:00.888620182 -0500
++++ b/daemon/dbus/gkd-secret-service.c	2026-10-04 01:17:26.495350912 -0500
+@@ -424,6 +424,7 @@
+ 	GVariant *input_payload;
+ 
+ 	caller = g_dbus_method_invocation_get_sender (invocation);
++	gkd_secret_service_ensure_client (self, caller);
+ 
+ 	/* Now we can create a session with this information */
+ 	session = gkd_secret_session_new (self, caller);
+@@ -435,6 +436,10 @@
+ 
+ 	if (error != NULL) {
+ 		g_dbus_method_invocation_take_error (invocation, error);
++	} else if (output == NULL) {
++		g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR,
++							       G_DBUS_ERROR_FAILED,
++							       "Failed to negotiate secret session.");
+ 	} else {
+ 		gkd_secret_service_publish_dispatch (self, caller,
+ 						     GKD_SECRET_DISPATCH (session));
+@@ -1246,6 +1251,10 @@
+ 	g_return_val_if_fail (caller, NULL);
+ 
+ 	client = g_hash_table_lookup (self->clients, caller);
++	if (client == NULL) {
++		gkd_secret_service_ensure_client (self, caller);
++		client = g_hash_table_lookup (self->clients, caller);
++	}
+ 	g_return_val_if_fail (client, NULL);
+ 
+ 	/* Open a new session if necessary */
+@@ -1381,6 +1390,10 @@
+ 
+ 	/* Take ownership of the session */
+ 	client = g_hash_table_lookup (self->clients, caller);
++	if (client == NULL) {
++		gkd_secret_service_ensure_client (self, caller);
++		client = g_hash_table_lookup (self->clients, caller);
++	}
+ 	g_return_if_fail (client);
+ 	path = gkd_secret_dispatch_get_object_path (object);
+ 	g_return_if_fail (!g_hash_table_lookup (client->dispatch, path));
+diff -u -N -r a/daemon/dbus/gkd-secret-session.c b/daemon/dbus/gkd-secret-session.c
+--- a/daemon/dbus/gkd-secret-session.c	2026-10-04 01:17:00.888737192 -0500
++++ b/daemon/dbus/gkd-secret-session.c	2026-10-04 01:17:26.495585262 -0500
+@@ -183,7 +183,12 @@
+ 	gboolean ret;
+ 
+ 	session = gkd_secret_service_get_pkcs11_session (self->service, self->caller);
+-	g_return_val_if_fail (session, FALSE);
++	if (session == NULL) {
++		g_set_error_literal (error_out, G_DBUS_ERROR,
++				     G_DBUS_ERROR_FAILED,
++				     "Failed to obtain pkcs11 session for secret service.");
++		return FALSE;
++	}
+ 
+ 	if (!aes_create_dh_keys (session, "ietf-ike-grp-modp-1024", &pub, &priv)) {
+ 		g_set_error_literal (error_out, G_DBUS_ERROR,
+@@ -250,7 +255,12 @@
+ 	GckSession *session;
+ 
+ 	session = gkd_secret_service_get_pkcs11_session (self->service, self->caller);
+-	g_return_val_if_fail (session, FALSE);
++	if (session == NULL) {
++		g_set_error_literal (error_out, G_DBUS_ERROR,
++				     G_DBUS_ERROR_FAILED,
++				     "Failed to obtain pkcs11 session for secret service.");
++		return FALSE;
++	}
+ 
+ 	gck_builder_add_ulong (&builder, CKA_CLASS, CKO_SECRET_KEY);
+ 	gck_builder_add_ulong (&builder, CKA_KEY_TYPE, CKK_G_NULL);

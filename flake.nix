@@ -52,10 +52,13 @@
     # leave it alone; bump deliberately when you actually want a newer sunshine.
     # Must stay a fixed rev — a second moving branch would recreate the problem.
     sunshine-nixpkgs.url = "github:NixOS/nixpkgs/f13ff45afd1bb73e640eaa08a7066dbed07e3238";
-    nix-cachyos-kernel = {
-      url = "github:xddxdd/nix-cachyos-kernel/release";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # Deliberately does NOT follow nixpkgs. The `release` branch is built by
+    # upstream's own Hydra CI (hydra.lantian.pub) and cached there, but only
+    # against the exact nixpkgs rev pinned in nix-cachyos-kernel's own
+    # flake.lock — the `.overlays.pinned` overlay (used on cerberus) relies on
+    # that pin to hit the cache. `follows` here silently rebuilds it from
+    # source instead. Same rationale as the sunshine-nixpkgs freeze below.
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     chaotic = {
       url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -69,18 +72,16 @@
     # cached against its own pin: adding `follows` puts 934 derivations
     # (nodejs + electron + the whole npm tree) into a local build. A duplicated
     # closure is cheaper than that compile.
-    hermes-agent.url = "github:NousResearch/hermes-agent/v2026.8.31";
+    hermes-agent.url = "github:NousResearch/hermes-agent/v0.21.6";
     nur.url = "github:nix-community/NUR";
-    claude-code = {
-      url = "github:sadjow/claude-code-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # numtide multi-agent flake: opencode, codex, gemini-cli, etc. Tracks
     # upstream agent releases — `nix flake update llm` keeps them all current.
-    llm = {
-      url = "github:numtide/llm-agents.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #
+    # Deliberately does NOT follow nixpkgs. Numtide's binary cache
+    # (cache.numtide.com) is built against its own pinned nixpkgs. Setting
+    # `follows` invalidates the cache and forces a ~50-minute local Cargo
+    # compile of codex from source. A duplicated closure is far cheaper.
+    llm.url = "github:numtide/llm-agents.nix";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -94,10 +95,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia = {
-      # Held at this rev: newer noctalia-shell restructured its home-manager
-      # module (dropped `programs.noctalia-shell` + the noctalia-qs input),
-      # which breaks modules/_features/bars/noctalia.nix. Bump intentionally
-      # once that module is migrated to the new API.
+      # Compatibility hold: Noctalia v5 replaces the QML/Quickshell plugin API
+      # with Luau. Keep the working Clipper combination until a separately
+      # validated migration preserves saved clips, notecards and keybindings.
       url = "github:noctalia-dev/noctalia-shell/b16dc50250af05d5048ac454dbf4e898d1adcac0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -114,15 +114,9 @@
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # TODO(unsolved): held at the 2026-07-10 rev. The 2026-08-09 update pointed at
-    # zen release 1.21.13b, whose GitHub asset 404s —
-    # https://github.com/zen-browser/desktop/releases/download/1.21.13b/zen.linux-x86_64.tar.xz
-    # returns 404, so the fetch fails and the whole toplevel build fails with it.
-    # Upstream packaging bug, nothing to fix on our side.
-    # To resolve: drop the pin back to the bare URL once upstream publishes a release
-    # whose asset actually exists.
+    # The former missing-release-asset hold was resolved by Zen 1.22.1b.
     zen-browser = {
-      url = "github:0xc000022070/zen-browser-flake/71e156423dae9496d7fd9e89029a1a82516fb9d8";
+      url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     wallpapers = {
@@ -167,13 +161,6 @@
               jq
               postgresql_16
               skopeo
-            ];
-          };
-          lumen = pkgs.mkShell {
-            packages = with pkgs; [
-              opentofu
-              openssl
-              jq
             ];
           };
         }

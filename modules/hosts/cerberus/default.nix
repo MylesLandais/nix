@@ -20,6 +20,7 @@ in
       inputs.self.modules.nixos.gamehacking
       inputs.self.modules.nixos.iw4x
       inputs.self.modules.nixos.scbw
+      inputs.self.modules.nixos.warcraft3
       inputs.self.modules.nixos.greeter
       inputs.chaotic.nixosModules.default
       inputs.agenix.nixosModules.default
@@ -40,7 +41,7 @@ in
           ];
         };
         systemd.user.services.gnome-keyring = {
-          install = lib.mkOverride 0 {
+          Install = lib.mkOverride 0 {
             WantedBy = [
               "graphical-session-pre.target"
               "hyprland-session.target"

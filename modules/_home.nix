@@ -13,6 +13,7 @@ let
   inherit (chromiumBrowsers)
     mkChromiumFlags
     chromiumStandardBrowserFlags
+    chromiumWebgpuFlags
     ;
 
   vaapiMode =
@@ -23,10 +24,13 @@ let
     else
       false;
 
+  # Hardware WebGPU needs ANGLE on Vulkan; measured only on NVIDIA (see chromium-browsers.nix).
+  webgpu = gpuType == "nvidia";
+
   chromiumFlagsFile = mkChromiumFlags (
     chromiumStandardBrowserFlags
     // {
-      inherit vaapiMode;
+      inherit vaapiMode webgpu;
       # The current login keyring is locked, and Chromium blocks all requests
       # while waiting for libsecret. Bitwarden owns browser passwords here, so
       # bypass the broken system keyring rather than hanging the browser.
@@ -50,7 +54,7 @@ let
   # resolves the helper as a sibling of the real binary; on Linux current_exe()
   # reads /proc/self/exe, which follows symlinks straight back to the original store
   # path, where the helper is absent. The whole package has to move together.
-  codexVersion = "0.153.2";
+  codexVersion = "0.158.0";
   llmCodex = inputs.llm.packages.${pkgs.system}.codex;
   llmCodexVersion = llmCodex.version or (lib.getVersion llmCodex.name);
 
@@ -65,7 +69,7 @@ let
 
       src = pkgs.fetchurl {
         url = "https://github.com/openai/codex/releases/download/rust-v${codexVersion}/codex-package-x86_64-unknown-linux-musl.tar.gz";
-        hash = "sha256-4Q+gzueOnwvTlYgPA/1P0ifZA8p69km7wI0WSRAekiU=";
+        hash = "sha256-szzUJsmsq5s0xakyALpP6DyOYUwYzl71KyvzZAi44Yw=";
       };
 
       # codex, codex-code-mode-host, rg and bwrap are static-pie and need nothing.
@@ -130,6 +134,8 @@ in
     ./_features/flameshot.nix
     ./_features/ssh-bitwarden.nix
     ./_features/nix-user-gc.nix
+    ./_features/cargo-target-sweep.nix
+    ./_features/disk-playbook.nix
     ./_firefox.nix
     inputs.stylix.homeModules.stylix
     inputs.noctalia.homeModules.default
@@ -150,12 +156,35 @@ in
     };
 
     file = {
-      "${config.xdg.configHome}/helium-flags.conf".text = softwareDecodeFlagsFile;
+      # Helium stays off the WebGPU flags: --use-angle=vulkan broke its video playback.
+      # CDP on the daily profile lets automation attach to the existing browser
+      # context instead of opening windows. Loopback-only (Chromium's default
+      # bind); the isolated helium-cdp launcher overrides this with 9223, since
+      # the wrapper places these flags before the launch arguments.
+      "${config.xdg.configHome}/helium-flags.conf".text =
+        softwareDecodeFlagsFile + "\n--remote-debugging-port=9222\n";
       "${config.xdg.configHome}/chromium-flags.conf".text = chromiumFlagsFile;
       "${config.xdg.configHome}/vivaldi-flags.conf".text = softwareDecodeFlagsFile;
     };
 
-    packages = (import ./_packages.nix { inherit pkgs; }) ++ [ patchedCodex ];
+    # The nixpkgs Chrome and Chromium wrappers read no flags file (chromium-flags.conf is
+    # ignored), so their WebGPU flags go in through commandLineArgs. Chromium's override
+    # must match programs.chromium.commandLineArgs below so both resolve to one store path.
+    packages =
+      map (
+        p:
+        if
+          webgpu
+          && builtins.elem (lib.getName p) [
+            "google-chrome"
+            "chromium"
+          ]
+        then
+          p.override { commandLineArgs = lib.concatStringsSep " " chromiumWebgpuFlags; }
+        else
+          p
+      ) (import ./_packages.nix { inherit pkgs; })
+      ++ [ patchedCodex ];
     pointerCursor = {
       gtk.enable = true;
       package = pkgs.bibata-cursors;
@@ -208,7 +237,10 @@ in
     firefox.enable = true;
     # Extensions and policies for Helium / Chromium come from chromiumPolicies
     # on Cerberus (see hosts/cerberus/configuration.nix).
-    chromium.enable = true;
+    chromium = {
+      enable = true;
+      commandLineArgs = lib.optionals webgpu chromiumWebgpuFlags;
+    };
     btop = {
       enable = true;
       settings = {

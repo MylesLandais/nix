@@ -5,7 +5,7 @@
 {
   nixpkgs.overlays = [
     inputs.nur.overlays.default
-    inputs.claude-code.overlays.default
+    (import "${inputs.self}/modules/_features/overlays/claude-code.nix")
     inputs.nix-vscode-extensions.overlays.default
     # Stable PCSX2 fast-path: reuse nixpkgs' build recipe while pinning the
     # immutable upstream release and patches snapshot locally.
@@ -14,11 +14,8 @@
     # .deb. Shared rather than host-local because nothing about it is host-specific;
     # only desktop hosts pull env-packages.nix and actually build it.
     (import "${inputs.self}/modules/_features/overlays/buzz-desktop.nix")
-    # Kimi Code 0.34.0 (new standalone CLI) — provides bin/kimi and bin/kimi-code.
+    # Kimi Code (standalone CLI) — provides bin/kimi and bin/kimi-code.
     (import "${inputs.self}/modules/_features/overlays/kimi-code.nix")
-    # CineMaya/Lumen — built from our own source, served from stage-edge.
-    # Only that host references lumen-web/lumen-lab, so nothing else builds it.
-    (import "${inputs.self}/modules/_features/overlays/lumen.nix")
     # DeepSeek Harness (dsh) — agent harness driving the local LLM router on
     # cerberus. Vendored from the npm release with a committed lock; only
     # cerberus enables the service, so nothing else builds it.

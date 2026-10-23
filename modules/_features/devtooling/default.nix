@@ -10,6 +10,7 @@
     ./go
     ./kubernetes
     ./lua
+    ./pi
     ./remmina
     ./rust
     ./tmux
@@ -25,6 +26,7 @@
     go.enable = lib.mkDefault true;
     kubernetes.enable = lib.mkDefault true;
     lua.enable = lib.mkDefault true;
+    pi-agent.enable = lib.mkDefault true;
     remmina.enable = lib.mkDefault true;
     rust.enable = lib.mkDefault true;
     tmux.enable = lib.mkDefault true;

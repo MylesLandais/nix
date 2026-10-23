@@ -97,10 +97,10 @@ _: {
       # ---------------------------------------------------------------------------
       # Services — headless, no audio/X11/desktop
       # ---------------------------------------------------------------------------
-      services.journald.extraConfig = ''
-        SystemMaxUse=500M
-        MaxFileSec=7day
-      '';
+      services.journald.settings.Journal = {
+        SystemMaxUse = "500M";
+        MaxFileSec = "7day";
+      };
 
       # ---------------------------------------------------------------------------
       # Users

@@ -20,6 +20,10 @@ let
       id = "hehggadaopoacecdllhhajmbjkdcmajg";
       name = "ChatGPT";
     };
+    shazam = {
+      id = "mmioliijnhnoblpgimnlajmefafdfilb";
+      name = "Shazam";
+    };
   };
 
   chromiumStandardExtensions = map (e: e.id) (lib.attrValues chromiumExtensionPack);
@@ -44,6 +48,23 @@ let
     extra = [ "--no-default-browser-check" ];
   };
 
+  # WebGPU on NVIDIA/Wayland. Without these, navigator.gpu.requestAdapter()
+  # returns null in Helium, Chromium and Chrome (chrome://gpu still claims
+  # "Hardware accelerated"). Dawn reaches the GPU once ANGLE runs on Vulkan
+  # and the GPU blocklist stops vetoing the adapter. Measured with
+  # ~/Workspace/scripts/gpu-probe --headed: WebGL2 and WebGPU both on the
+  # RTX 3090 Ti, video decode still hardware accelerated.
+  # --ignore-gpu-blocklist, not --enable-unsafe-webgpu: both unlock the
+  # adapter, but the unsafe flag also exposes Dawn's unsafe APIs to every
+  # site and makes Chrome show an "unsupported command-line flag" infobar.
+  # --use-angle=vulkan alone leaves requestAdapter() null.
+  # The Vulkan *feature* (Vulkan compositing) is deliberately absent: on
+  # Wayland it broke WebGL2 presentation and still left WebGPU on SwiftShader.
+  chromiumWebgpuFlags = [
+    "--ignore-gpu-blocklist"
+    "--use-angle=vulkan"
+  ];
+
   # vaapiMode: false | "generic" | "nvidia"
   # - nvidia: upstream-recommended bundle for nvidia-vaapi-driver on Wayland
   # - generic: Intel/AMD VA-API (VaapiVideoDecoder only; no encoder for playback)
@@ -61,6 +82,7 @@ let
       verticalTabs ? false,
       vaapiMode ? false,
       darkMode ? false,
+      webgpu ? false,
       extra ? [ ],
     }:
     let
@@ -110,6 +132,7 @@ let
           "--disable-features=${lib.concatStringsSep "," disableFeatures}"
         ]
         ++ lib.optionals darkMode [ "--force-dark-mode" ]
+        ++ lib.optionals webgpu chromiumWebgpuFlags
         ++ extra;
     in
     lib.concatStringsSep "\n" lines;
@@ -121,6 +144,7 @@ in
     chromiumExtensionMeta
     chromiumStandardBrowserFlags
     heliumBundledExtensionsToRemove
+    chromiumWebgpuFlags
     mkChromiumFlags
     ;
 }

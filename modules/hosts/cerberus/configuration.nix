@@ -20,6 +20,7 @@ _: {
         "${inputs.self}/modules/_features/ssh-keys.nix"
         inputs.self.modules.nixos.nvidia
         inputs.self.modules.nixos.gaming
+        inputs.self.modules.nixos.gitMirrors
         inputs.self.modules.nixos.dev
         inputs.self.modules.nixos.agenixHost
         inputs.self.modules.nixos.chromiumPolicy
@@ -42,6 +43,7 @@ _: {
         inputs.self.modules.nixos.profileDemoCerberus
         inputs.self.modules.nixos.postgresInfra
         inputs.self.modules.nixos.valkeyInfra
+        inputs.self.modules.nixos.seaweedfsInfra
         inputs.self.modules.nixos.openbaoInfra
         inputs.self.modules.nixos.traefikInfra
         inputs.self.modules.nixos.authentikInfra
@@ -84,6 +86,7 @@ _: {
         iw4x.enable = true;
         pokeforce.enable = true;
         scbw.enable = true;
+        warcraft3.enable = true;
         remoteGaming.enable = true;
         syncthing.enable = true;
         wallpaper = "${inputs.wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/3895e.jpg";
@@ -113,6 +116,13 @@ _: {
       # current one is literally "demo-...-replace-with-agenix-before-prod").
       infra.demo.enable = false;
 
+      # GitHub -> Forgejo pull mirrors. The server pulls; this box only runs
+      # the one-shot setup/sync command (Bitwarden unlock is human-in-the-loop):
+      #   bw login   # one time per machine
+      #   export BW_SESSION=$(bw unlock --raw) && forgejo-mirror-sync
+      # See modules/services/git-mirrors.nix for the mapping and token items.
+      services.infra.gitMirrors.enable = true;
+
       # Local LLM evaluation rig. One RTX 3090 Ti (24 GB) holds exactly one of
       # these at a time, so llama-swap fronts them all on the named loopback
       # endpoint llm:8000 and swaps the resident model based on each request's
@@ -122,11 +132,26 @@ _: {
       # VRAM budget is genuinely tight — weights alone are 17-21.6 GB of the
       # 24 GB, and Hyprland/browsers hold some of the rest. If a model OOMs on
       # load, lower --max-model-len first, then --gpu-memory-utilization.
+      # Dedicated workspace + model repository: the 886 GB Btrfs partition on
+      # the Samsung 970 EVO Plus, by UUID because the nvme0/nvme1 kernel names
+      # swap between boots. Moving the ~151 GB HF model cache here takes it off
+      # the root disk. Design and runbook:
+      # ~/Vault/nix-issues/cerberus-nvme-workspace-and-model-storage-plan.md
+      fileSystems."/home/warby/Workspace" = {
+        device = "/dev/disk/by-uuid/016ecaf4-f6fd-4457-aa2e-3dcebce80832";
+        fsType = "btrfs";
+        options = [
+          "subvol=@workspace"
+          "compress=zstd:1"
+          "noatime"
+          "nofail"
+        ];
+      };
+
       services.infra.llmRouter = {
         enable = true;
-        # Reuse the already validated/downloaded CUDA matrix cache rather than
-        # downloading another copy of the vLLM checkpoints into ~/.cache.
-        hfCacheDir = "/home/warby/Workspace-git/maya-unified/data/model-cache/huggingface";
+        # Fast NVMe model cache on Samsung 970 EVO Plus (nvme0n1p6 @workspace)
+        hfCacheDir = "/home/warby/Workspace/data/model-cache/huggingface";
         models = {
           # Validated on this 3090 Ti through Maya's pinned vLLM 0.27.1 image.
           # This needs CPU offload because the NVFP4 checkpoint plus its runtime
@@ -331,6 +356,12 @@ _: {
 
       # Agent harness driving the router above; see /etc/deepseek-harness/env.
       services.infra.deepseek-harness.enable = true;
+
+      # Canonical object storage for Workspace-internal/maya-unified dev
+      # projects, replacing the Docker container `dev.seaweedfs`. See
+      # docs/infra/README.md "Shared developer services".
+      services.infra.seaweedfs.enable = true;
+      services.infra.seaweedfs.volumeMax = 1850;
 
       # Developer Lamia Browser Adapter. Nixpkgs Chromium resolves native hosts
       # through this system registry rather than Chrome's per-user registry.

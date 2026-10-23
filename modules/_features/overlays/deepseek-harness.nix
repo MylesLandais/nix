@@ -7,7 +7,7 @@
 # unaudited third party.
 #
 # Packaged as a fixed-output derivation rather than buildNpmPackage, which is a
-# deliberate departure from the other npm overlays here (see lumen.nix). dsh
+# deliberate departure from the other npm overlays here. dsh
 # fans out into ~40 scoped @deepseek-ai/* packages, and `npm install
 # --package-lock-only` against that graph does not terminate in practice — it ran
 # 50 minutes at 100% CPU and 3.5 GB RSS without emitting a lockfile, so there is
@@ -22,7 +22,25 @@
 # since native addons are compiled against it inside the FOD.
 _final: prev:
 let
-  version = "0.1.0-rc.7";
+  version = "0.1.5-rc.3";
+  packageManifest = prev.writeText "deepseek-harness-package.json" (
+    builtins.toJSON {
+      name = "deepseek-harness-dependencies";
+      private = true;
+      dependencies."@deepseek-ai/dsh" = version;
+      # npm 11.19 blocks dependency install scripts by default. These scripts
+      # prepare the native PTY/FFI modules and restore spawn-helper's executable
+      # bit; silently skipping them produces an installed but broken harness.
+      allowScripts = {
+        "@deepseek-ai/dsh-subprocess-local@0.1.5-rc.3" = true;
+        "koffi@3.3.1" = true;
+        "koffi@3.3.2" = true;
+        "node-pty@1.2.0-beta.15" = true;
+        "@google/genai@1.52.0" = true;
+        "protobufjs@7.6.6" = true;
+      };
+    }
+  );
 
   nodeModules = prev.stdenvNoCC.mkDerivation {
     pname = "deepseek-harness-node-modules";
@@ -51,8 +69,8 @@ let
       export npm_config_nodedir=${prev.nodejs}
 
       mkdir -p $out
-      npm install --prefix $out --no-audit --no-fund --omit=dev \
-        @deepseek-ai/dsh@${version}
+      cp ${packageManifest} $out/package.json
+      npm install --prefix $out --no-audit --no-fund --omit=dev --strict-allow-scripts
     '';
 
     installPhase = ''
@@ -81,7 +99,7 @@ let
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-3nqfbGsR9UxWmLRJEbx6nYET1Q0iKBZlbPza6OpNCa8=";
+    outputHash = "sha256-u7dW7vtdCMivPFVBE8izVV7IAdvlfja/k2UnSQx85sg=";
   };
 in
 {

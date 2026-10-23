@@ -8,6 +8,37 @@ All changes follow this sequence: Edit, Validate with /nix-check, Commit, Apply 
 
 Do not skip /nix-check. Do not commit unvalidated changes. Do not apply changes to live system without validation. Do not deploy to remote hosts without first building the target configuration locally.
 
+### Before /nix-switch: show the effect
+
+A switch restarts every unit whose file changed, and it applies everything
+dirty in the tree, not only your edit. Before asking for confirmation:
+
+1. `git status --short`. List the other dirty files the switch will also apply
+   (flake.lock bumps, other agents' edits). Commit only your own files, by
+   explicit path.
+2. `nixos-rebuild build --flake .#cerberus` (no sudo, no activation). The flake
+   output is `cerberus`; `$(hostname)` is `cerberus-nix`, and that name doesn't
+   work.
+3. List the changed units: compare each `result/etc/systemd/system/*.service`
+   against `/run/current-system/etc/systemd/system/` (`cmp` on the resolved
+   paths). For each service you touched, show the `ExecStart` diff.
+4. Check whether anything is using the services that will restart. SeaweedFS
+   is used by the crawler and booru containers and by the music worker
+   (`nebula-library-reconcile.service`). Postgres runs in Docker and isn't
+   restarted by a switch.
+5. Remove the `result` symlink afterwards.
+
+### Sessions started outside this repo
+
+The `/nix-*` commands and the permissions in `.claude/settings.local.json`
+(git commit, `sudo nixos-rebuild`) load only in sessions started in
+`~/.config/nixos`. A session started elsewhere (for example `~/Workspace`) can
+edit and build here. Its classifier may still refuse the commit or the switch.
+When that happens, don't work around it: give the user the exact command
+(`sudo nixos-rebuild switch --flake ~/.config/nixos#cerberus --show-trace -L`)
+or suggest running `/nix-switch` from a session started here. `nixos-rebuild`
+is NOPASSWD for `warby`.
+
 ## Where to Make Changes
 
 System-wide behavior (services, security, desktop options, shared packages): declare in `modules/_features/<concern>.nix` or add a `flake.nixosModules.*` export under `modules/`. Wire modules into hosts via `inputs.self.nixosModules.*` in `modules/hosts/<host>/configuration.nix` or the host’s `mkHost` module list in `modules/hosts/<host>/default.nix`.
@@ -19,6 +50,8 @@ Host composition (which flake modules and HM users apply): `modules/hosts/<host>
 User environment (shell, dev tools, Hyprland, bars): `modules/_home.nix` (exported as `flake.homeManagerModules.base`) plus `modules/_features/` Home Manager modules imported there. Per-host overrides: `modules/hosts/<host>/_home.nix` or HM blocks in `default.nix`.
 
 Shared helpers imported by path only (not in import-tree): underscore-prefixed files such as `modules/_packages.nix`, `modules/_chromium-browsers.nix`.
+
+Anything that adds a boot-time service, a `home.activation` script, or a dependency on `docker.service` must follow CONTRIBUTING.md §9 (boot path): Docker is socket-activated and must never be pulled in at boot, and HM activation blocks the login screen.
 
 Validate with `nix build .#nixosConfigurations.<host>.config.system.build.toplevel` or `nix flake check`. Apply locally on Cerberus with `/nix-switch` (`nixos-rebuild switch --flake …#cerberus`). Do not run `home-manager switch` alone.
 

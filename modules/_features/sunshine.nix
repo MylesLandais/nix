@@ -102,18 +102,16 @@ in
       };
     };
 
-    # TODO(unsolved): avahi-daemon will not restart in place. /run/avahi-daemon
-    # persists across a stop owned by root, and avahi — which creates and chowns
-    # that directory itself — then dies with "Failed to create runtime directory".
-    # Before that it dies on the stale pid inside it ("Failed to create PID file:
-    # File exists"). The practical effect is that the daemon survives only until
-    # something restarts it; it had been up untouched since 2026-08-03 and failed
-    # the moment a nixos-rebuild switch cycled it on 2026-08-09.
-    # Neither RuntimeDirectory nor an ExecStartPre cleanup fixes it: the unit's
-    # namespace hardening means a pre-start `rm` does not reach the real /run.
-    # A reboot clears it (fresh /run tmpfs). To resolve properly, work out who
-    # should own /run/avahi-daemon — likely a tmpfiles rule creating it as
-    # avahi:avahi before the unit starts.
+    # Upstream tmpfiles owns this directory as avahi:avahi. The daemon starts
+    # as root with reduced capabilities before dropping privileges, so it
+    # cannot remove an avahi-owned stale PID file during that first phase.
+    # Permit runtime writes under ProtectSystem=strict and clean only the PID
+    # file with a privileged pre-start; leave the socket managed by systemd.
+    # A stale PID also breaks openresolv's Avahi notification hook on switch.
+    systemd.services.avahi-daemon.serviceConfig = {
+      ReadWritePaths = [ "/run/avahi-daemon" ];
+      ExecStartPre = [ "+${pkgs.coreutils}/bin/rm -f /run/avahi-daemon/pid" ];
+    };
 
     environment.systemPackages = [
       (pkgs.writeShellScriptBin "sunshine-stream" ''

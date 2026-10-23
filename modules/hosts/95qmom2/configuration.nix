@@ -48,10 +48,10 @@ _: {
         enableOnBoot = true;
       };
 
-      services.journald.extraConfig = ''
-        SystemMaxUse=500M
-        MaxFileSec=7day
-      '';
+      services.journald.settings.Journal = {
+        SystemMaxUse = "500M";
+        MaxFileSec = "7day";
+      };
 
       users = {
         defaultUserShell = pkgs.fish;

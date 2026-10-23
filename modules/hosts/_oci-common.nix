@@ -120,9 +120,9 @@
   # on stage-db could never be root-caused — the reboot that fixed it destroyed
   # the evidence. Do not repeat that.
   services.journald.storage = "persistent";
-  services.journald.extraConfig = ''
-    SystemMaxUse=512M
-  '';
+  services.journald.settings.Journal = {
+    SystemMaxUse = "512M";
+  };
 
   # ---------------------------------------------------------------------------
   # Tailscale

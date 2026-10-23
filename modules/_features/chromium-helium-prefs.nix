@@ -1,6 +1,7 @@
 # Helium profile prefs (ext_proxy, vertical tabs) and CDP launcher desktop entry.
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -15,10 +16,11 @@ in
 
   config = lib.mkIf cfg.enable {
     # The daily-driver launcher. Upstream ships no usable helium.desktop here
-    # (our env-packages wrapper is a bare writeShellScriptBin), so without this
-    # the CDP entry below was the only Helium launcher on the system -- every
-    # ordinary launch opened port 9222 and let any local CDP client attach and
-    # leave tabs sitting in "Paused in debugger".
+    # (our env-packages wrapper is a bare writeShellScriptBin). The daily
+    # profile now exposes CDP on 9222 deliberately via helium-flags.conf
+    # (modules/_home.nix). If tabs start sitting in "Paused in debugger"
+    # again, that flag is the cause: a local CDP client attached and left a
+    # breakpoint.
     home.file.".local/share/applications/helium.desktop".text = ''
       [Desktop Entry]
       Version=1.0
@@ -44,45 +46,22 @@ in
       Name=Helium (CDP)
       GenericName=Web Browser
       Comment=Helium with remote debugging for automation (isolated profile)
-      Exec=helium --remote-debugging-port=9222 --user-data-dir=${config.xdg.dataHome}/helium-cdp %U
+      Exec=helium --remote-debugging-port=9223 --user-data-dir=${config.xdg.dataHome}/helium-cdp %U
       StartupNotify=true
       Terminal=false
       Icon=helium
       Type=Application
       Categories=Network;WebBrowser;Development;
-      NoDisplay=false
+      # Keep the automation-only profile out of normal app launchers. It must
+      # remain available to automation by desktop ID / direct command, but it
+      # must never be mistaken for the daily-driver browser.
+      NoDisplay=true
     '';
 
-    home.activation.ensureHeliumProfilePrefs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-            pref="$HOME/.config/net.imput.helium/Default/Preferences"
-            if [ -f "$pref" ]; then
-              ${pkgs.python3}/bin/python3 - "$pref" <<'PY'
-      import json, pathlib, sys
-      p = pathlib.Path(sys.argv[1])
-      data = json.loads(p.read_text())
-      changed = False
-
-      services = data.setdefault("helium", {}).setdefault("services", {})
-      for key, value in {"enabled": True, "ext_proxy": True, "consented": True}.items():
-          if services.get(key) is not value:
-              services[key] = value
-              changed = True
-
-      vt = data.setdefault("vertical_tabs", {})
-      for key, value in {
-          "enabled": True,
-          "collapsed_state": False,
-          "uncollapsed_width": 200,
-      }.items():
-          if vt.get(key) is not value:
-              vt[key] = value
-              changed = True
-
-      if changed:
-          p.write_text(json.dumps(data, separators=(",", ":")))
-          print("Helium: updated profile prefs (ext_proxy, vertical_tabs.enabled)")
-      PY
-            fi
+    home.activation.ensureHeliumProfile = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      ${pkgs.python3}/bin/python3 ${inputs.self}/scripts/helium-profile-guard.py \
+        --data-dir "${config.xdg.configHome}/net.imput.helium" \
+        --profile-directory Default --quiet || true
     '';
   };
 }

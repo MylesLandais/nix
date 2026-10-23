@@ -38,6 +38,15 @@ _: {
         ];
       };
 
+      fileSystems."/srv/data" = {
+        device = "/dev/disk/by-uuid/7e85a5e6-19ed-45a7-93a0-521c19ac764b";
+        fsType = "xfs";
+        options = [
+          "defaults"
+          "nofail"
+        ];
+      };
+
       swapDevices = [ ];
 
       networking.useDHCP = lib.mkDefault true;

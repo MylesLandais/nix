@@ -41,12 +41,6 @@ let
 
   gio = "${pkgs.glib}/bin/gio";
 
-  gioMount =
-    if cfg.authMode == "public" then
-      "${gio} mount smb://guest@${cfg.serverName}/${cfg.share}"
-    else
-      "${gio} mount ${mountUri}";
-
   mountScript = pkgs.writeShellScriptBin "mount-hydra-gvfs" ''
     set -euo pipefail
 

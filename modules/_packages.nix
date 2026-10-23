@@ -102,6 +102,7 @@ with pkgs;
   # To restore: re-add once Hydra publishes a cached build for the current nixpkgs.
   virt-viewer
   sesh
+  seaweedfs
   slack
   statix
   statping-ng

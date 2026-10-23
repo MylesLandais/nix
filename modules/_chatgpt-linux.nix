@@ -46,9 +46,11 @@
   libxtst,
   nspr,
   nss,
+  openssl,
   pango,
   pipewire,
   systemdLibs,
+  tpm2-tss,
   vulkan-loader,
   wayland,
   xdg-utils,
@@ -95,10 +97,12 @@ let
     libxtst
     nspr
     nss
+    openssl
     pango
     pipewire
     stdenv.cc.cc.lib
     systemdLibs
+    tpm2-tss
     vulkan-loader
     wayland
     zlib
@@ -106,13 +110,13 @@ let
 in
 stdenv.mkDerivation (_finalAttrs: {
   pname = "chatgpt-linux";
-  version = "26.901.31953";
+  version = "26.1002.52244";
 
   src = fetchurl {
     # This is OpenAI's official x64 Linux preview package. The stable apt URL is
     # intentionally content-pinned by the hash below; bump version + hash together.
     url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_amd64.deb";
-    hash = "sha256-K7RSK+h33mwX5fTAcbBuxkiCsd0JqPC9IErwI6t1bZw=";
+    hash = "sha256-lJjkFxMaJ4vONb//YnXSUsDTMvF6/AMT4LeCdJ9NNIo=";
   };
 
   nativeBuildInputs = [

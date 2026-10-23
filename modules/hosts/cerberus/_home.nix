@@ -133,9 +133,9 @@ in
 
     -- == Cerberus startup ==
     hl.on("hyprland.start", function()
+      hl.exec_cmd("dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS SSH_AUTH_SOCK && systemctl --user stop hyprland-session.target && systemctl --user start hyprland-session.target")
       hl.exec_cmd("systemctl --user start gnome-keyring.service")
       hl.exec_cmd("systemctl --user start gvfs-daemon.service")
-      hl.exec_cmd("dbus-update-activation-environment --systemd DISPLAY HYPRLAND_INSTANCE_SIGNATURE WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS SSH_AUTH_SOCK && systemctl --user stop hyprland-session.target && systemctl --user start hyprland-session.target")
       hl.exec_cmd("${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1")
       hl.exec_cmd("hyprctl output create headless HEADLESS-1")
       hl.exec_cmd("blueman-applet")
@@ -143,6 +143,35 @@ in
       hl.exec_cmd("systemctl --user start mount-hydra.service")
     end)
   '';
+
+  # FUSE mount of the local seaweedfs filer (modules/database/seaweedfs.nix)
+  # at ~/Weed. Replaces a hand-written, non-declarative unit that raced a
+  # filer that was never actually reachable on :8888 and stalled every login
+  # retrying with a growing backoff.
+  systemd.user.services.mount-weed = {
+    Unit = {
+      Description = "Mount SeaweedFS FUSE at ~/Weed";
+      After = [
+        "graphical-session.target"
+        "network-online.target"
+        "seaweedfs.service"
+      ];
+      Wants = [
+        "network-online.target"
+        "seaweedfs.service"
+      ];
+      StartLimitIntervalSec = 300;
+      StartLimitBurst = 5;
+    };
+    Service = {
+      ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p %h/Weed";
+      ExecStart = "${pkgs.seaweedfs}/bin/weed mount -filer=127.0.0.1:8888 -dir=%h/Weed -filer.path=/buckets -map.uid=1000:0 -map.gid=1000:0";
+      ExecStop = "/run/wrappers/bin/fusermount -u -z %h/Weed";
+      Restart = "on-failure";
+      RestartSec = "15s";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
 
   services.hyprpaper.settings = {
     preload = lib.mkForce [ vars.wallpaper ];

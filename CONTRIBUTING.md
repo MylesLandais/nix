@@ -111,10 +111,57 @@ the problem, stating what is wrong, why it is unresolved, and what would resolve
 Prefer this to a tracker entry for anything code-adjacent; a marker in the file is
 seen by whoever touches it next. Broader issues go to `~/Vault/nix-issues/`.
 
-## 8. Docker on this host is not declarative
+## 8. Docker on this host is declared, but its containers are not
 
-`docker.service` is `linked` on cerberus rather than declared — the repo enables
-`virtualisation.docker` only for the staging hosts (`94tl0m2`, `argus`, `95qmom2`).
-The 42-container dev stack therefore survives reboots by accident rather than by
-configuration. Either declare it or unlink it; do not add to it on the assumption
-that it is managed.
+Cerberus enables `virtualisation.docker` in [`modules/_dev.nix`](modules/_dev.nix)
+with `enableOnBoot = false`: dockerd is socket-activated and starts on the first
+`docker` call. The dev stack itself (compose projects, restart-policy containers)
+is still not declared in Nix. Its containers come back whenever dockerd starts, by
+accident rather than by configuration. Either declare a container or remove it.
+Do not add to the stack on the assumption that it is managed.
+
+## 9. Nothing heavy on the boot path
+
+Cerberus has a fast boot budget, and it has been lost twice. On 2026-09-25 a cold
+boot took 2m05s to reach `graphical.target` and 36s of Home Manager activation
+before the greeter appeared. A warm reboot of the same generation took 24s. One
+line caused the gap: `llama-swap` declared `requires = [ "docker.service" ]`. That
+started dockerd at boot despite socket activation, and dockerd restored about 25
+containers at once (fixed in `d725d2c`).
+
+**Know what the greeter waits on.** `display-manager.service` waits for
+`systemd-user-sessions.service`, which waits for `home-manager-warby.service`. Every
+`home.activation.*` script therefore runs at boot, before the login screen.
+
+**The root disk turns contention into delay.** `/` and `/nix` sit on a Crucial P3
+(QLC, DRAM-less, ~77% full). Anything that starts alongside activation slows
+activation by 5–10×. In the example above, the hermes activation step took 20s at
+boot and takes 0.3s warm.
+
+Rules:
+
+- **Never pull Docker in at boot.** A unit `wantedBy` `multi-user.target` may order
+  `after = [ "docker.service" ]`, but it must not use `requires`, `wants`, `bindsTo`
+  or `partOf` on it. The `docker` CLI reaches `/run/docker.sock`, which starts
+  dockerd on demand.
+- **Ask whether a new boot service needs to run before login.** Most don't. Prefer
+  socket activation, a timer, or a Home Manager user service `wantedBy`
+  `graphical-session.target`, in that order. Reserve `multi-user.target` for things
+  the machine is broken without.
+- **Keep `home.activation` scripts cheap and idempotent.** No network, no package
+  manager, no spawning of CLIs that boot a runtime (Node, Python, Electron). Check
+  state first and do nothing when it is already correct. `blenderMcp` runs
+  `codex mcp add` on every activation, which costs ~4s at boot. It is the example to
+  not copy.
+- **Measure on a cold boot.** A warm reboot hides disk contention and will
+  understate a regression by minutes.
+
+Checks after any change that adds a service, an activation script, or a dependency:
+
+```bash
+systemctl show docker.service -p WantedBy,RequiredBy   # both must be empty
+systemd-analyze critical-chain display-manager.service # what the greeter waited on
+systemd-analyze critical-chain graphical.target
+journalctl -b -u home-manager-warby -o short-monotonic | grep Activating  # per-step time
+cat /proc/pressure/io                                   # sustained "some" > ~10% = contention
+```
