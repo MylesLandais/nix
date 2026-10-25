@@ -1,0 +1,127 @@
+From 524822309479f5fe760fc3ab675c5c15ae4163bd Mon Sep 17 00:00:00 2001
+From: Yue Hao <yuehao@isee.ai>
+Date: Sat, 24 Oct 2026 19:51:13 -0400
+Subject: [PATCH] Wait for GFW before reading the layout on a cold card
+
+The cold path reads the FB size and the other layout registers before it
+waits for GFW, so it relies on GFW having finished long before the module
+loads. A Thunderbolt eGPU is enumerated a few seconds into boot, and when
+gpu_unlock is loaded as soon as the card appears it reaches the card about
+0.3 s later, while GFW is still running. The FB size then reads back a PRI
+error, the WPR layout is computed from it, and the unlock stops at the FRTS
+offset check before starting any firmware:
+
+  layout inputs: fb_mb=0xbadf5108 vga=0x1 mmu_plm=0x45cb8f mmu_lo=0x1000 mmu_hi=0x1ffffff0 ...
+  layout ranges: ... frts=0xbadf510600000 end=0xbadf510700000 ...
+  failure vbios_610.c:261 gpu_unlock_fwsec_patch_frts error=-22
+  gpu_unlock: unlock failed (-22)
+
+Wait for GFW right after the claim, as the resume path already does, and
+log how long it took when it was still running. A new adapter case reads
+0xbadf5108 from the FB size until GFW completes: before this change it
+fails with -22 at vbios_610.c:261, after it the card unlocks.
+
+Tested on an RTX 3080 10 GB (10de:2206, VBIOS 94.02.42.40.98) in a Razer
+Core X on a Mac mini 2018, Ubuntu 24.04, 7.1.8, NVIDIA 595.84: the cold
+boot that failed as above now logs "GFW boot was still running: done after
+34 polls" and unlocks (BF16 GEMM 63 -> 112 TFLOPS). GFW also runs for about
+370 ms after an FLR, and a probe started in that window waits too.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ kernel/gpu_unlock/unlock_610.c | 12 ++++++++++--
+ tests/test_unlock_adapter.c    | 12 ++++++++++--
+ 2 files changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/gpu_unlock/unlock_610.c b/kernel/gpu_unlock/unlock_610.c
+index 2d45133..83cf701 100644
+--- a/kernel/gpu_unlock/unlock_610.c
++++ b/kernel/gpu_unlock/unlock_610.c
+@@ -1029,6 +1029,7 @@ static int unlock_transaction_gfw(struct unlock_transaction_work *work)
+ {
+ 	ktime_t deadline = ktime_add_us(ktime_get(), GU_GFW_TIMEOUT_US);
+ 	int assessed = -EAGAIN;
++	unsigned int polls = 0;
+ 
+ 	for (;;) {
+ 		struct gpu_unlock_gfw_sample sample = { };
+@@ -1045,6 +1046,9 @@ static int unlock_transaction_gfw(struct unlock_transaction_work *work)
+ 		if (!assessed) {
+ 			u32 ss0, ss1, wpr_hi;
+ 
++			if (polls)
++				dev_info(&work->pdev->dev, "GFW boot was still running: done after %u polls of 1-2 ms\n",
++					 polls);
+ 			if (read_bar(work, GU_FEAT_PLM_OFFSET, &work->plm_entry) ||
+ 			    read_bar(work, GU_FEAT_SS0_OFFSET, &ss0) || ss0 == ~0u ||
+ 			    read_bar(work, GU_FEAT_SS1_OFFSET, &ss1) || ss1 == ~0u ||
+@@ -1069,6 +1073,7 @@ static int unlock_transaction_gfw(struct unlock_transaction_work *work)
+ 			return GU_RESULT(assessed);
+ 		if (ktime_compare(ktime_get(), deadline) >= 0)
+ 			return GU_RESULT(-ETIMEDOUT);
++		polls++;
+ 		usleep_range(1000, 2000);
+ 	}
+ }
+@@ -1459,12 +1464,15 @@ int gpu_unlock_610_unlock(struct pci_dev *pdev, const struct gpu_unlock_610_shar
+ 		ret = unlock_transaction_assets(work);
+ 	if (!ret)
+ 		ret = unlock_transaction_claim(work);
++	/* A cold card can still be running GFW too: a Thunderbolt eGPU is
++	 * probed right after it is enumerated. Until GFW finishes, the layout
++	 * registers read back PRI errors (0xbadf....). */
++	if (!ret)
++		ret = unlock_transaction_gfw(work);
+ 	if (!ret)
+ 		ret = unlock_transaction_layout(work);
+ 	if (!ret)
+ 		ret = unlock_transaction_dma(work);
+-	if (!ret)
+-		ret = unlock_transaction_gfw(work);
+ 	if (!ret)
+ 		ret = unlock_transaction_fwsec(work);
+ 	if (!ret)
+diff --git a/tests/test_unlock_adapter.c b/tests/test_unlock_adapter.c
+index 778b251..8491596 100644
+--- a/tests/test_unlock_adapter.c
++++ b/tests/test_unlock_adapter.c
+@@ -554,7 +554,7 @@ int main(int argc, char **argv) {
+             "warm-wpr2","ss1-readback","ss1-lost","power-unknown","power-unknown-no-pm",
+             "firmware-bme","firmware-bme-stuck",
+             "resume-success","resume-gfw-late","resume-kept-power","resume-gsp-running",
+-            "resume-gfw-timeout","resume-oom"};
++            "resume-gfw-timeout","resume-oom","cold-gfw-late"};
+         int total_allocations=0;
+         for(unsigned scenario=0;scenario<ARRAY_SIZE(cases);scenario++) {
+             setup(&w);
+@@ -635,6 +635,11 @@ int main(int argc, char **argv) {
+             }
+             if(!strcmp(cases[scenario],"resume-gfw-timeout"))regs[GU_GFW_BOOT_OFFSET/4]=0;
+             if(!strcmp(cases[scenario],"resume-oom"))fake.fail_alloc=1;
++            /* A Thunderbolt eGPU probed ~0.3 s after power-on: GFW still runs and
++             * the FB size reads back the PRI error captured on such a boot. */
++            if(!strcmp(cases[scenario],"cold-gfw-late")) {
++                fake.gfw_late=5;regs[GU_GFW_BOOT_OFFSET/4]=0;regs[0x1183a4/4]=0xbadf5108;
++            }
+             /* As main.c: the GSP file is loaded once, ahead of every card. */
+             struct gpu_unlock_610_shared shared={0};last_work=NULL;
+             int ret=gpu_unlock_610_load_shared(&dev,&shared);
+@@ -642,7 +647,8 @@ int main(int argc, char **argv) {
+             gpu_unlock_610_release_shared(&shared);
+             bool expected=scenario<2 || (scenario>=33 && scenario<=35) || scenario==39 || scenario==40 || scenario==43 || scenario==46 ||
+                 scenario==58 || scenario==60 ||
+-                !strcmp(cases[scenario],"resume-success") || !strcmp(cases[scenario],"resume-gfw-late");
++                !strcmp(cases[scenario],"resume-success") || !strcmp(cases[scenario],"resume-gfw-late") ||
++                !strcmp(cases[scenario],"cold-gfw-late");
+             bool retained=fake.pins;
+             if((!ret)!=expected)fprintf(stderr,"%s\n%s: error=%d\n",fake.log,cases[scenario],ret);
+             assert((!ret)==expected);
+@@ -687,6 +693,8 @@ int main(int argc, char **argv) {
+             assert(dev.dev.devres_head.count==(scenario==53 || scenario==54 || bound?1u:0u));
+             assert(dev.dev.dma_mask==&mask && mask==0xffffffffffffull && dev.dev.coherent_dma_mask==0xfffffffffull);
+             if(!strcmp(cases[scenario],"resume-gfw-late"))assert(fake.gfw_late_reads>=fake.gfw_late);
++            if(!strcmp(cases[scenario],"cold-gfw-late"))
++                assert(fake.gfw_late_reads>=fake.gfw_late && strstr(fake.log,"GFW boot was still running"));
+             /* A card that kept power or runs GSP-RM is only read. */
+             if(!strcmp(cases[scenario],"resume-kept-power") || !strcmp(cases[scenario],"resume-gsp-running")) {
+                 assert(ret==(cases[scenario][7]=='k'?-EALREADY:-EBUSY));

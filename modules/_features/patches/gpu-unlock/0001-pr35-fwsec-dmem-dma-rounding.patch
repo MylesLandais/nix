@@ -1,0 +1,107 @@
+From fb457b1f266414d23c68c8ca8aef35bed57325d4 Mon Sep 17 00:00:00 2001
+From: Rahul Sharma <19687913+rms523@users.noreply.github.com>
+Date: Sat, 24 Oct 2026 14:50:55 +0530
+Subject: [PATCH] FWSEC: round the DMEM load size up to a DMA block
+
+Some GA106 VBIOSes (RTX 3060 12GB 10de:2544, 94.06.54.00.17) carry a
+FWSEC DMEMLoadSize that is not a whole 256-byte DMA block (0x980).
+falcon_hs() rejected it with -EINVAL, and because firmware_started was
+already set, the card was retained and nvidia could not bind it.
+
+NVIDIA's s_dmaTransfer_GA102 moves whole blocks until it covers the
+requested size, so load the same rounded-up range, after checking that
+it stays inside the 256-aligned image. Also run falcon_hs()'s DMA
+geometry checks before firmware_started, so such a rejection releases
+the card instead of holding it until power-off.
+
+Tested on a ZOTAC RTX 3060 12GB (10de:2544): unlocks on cold boot,
+FP16/BF16 GEMM 26.7/26.5 -> 47.0/48.0 TFLOPS.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ kernel/gpu_unlock/unlock_610.c | 26 ++++++++++++++++++++++++--
+ tests/test_unlock_adapter.c    |  9 +++++++--
+ 2 files changed, 31 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/gpu_unlock/unlock_610.c b/kernel/gpu_unlock/unlock_610.c
+index 2d45133..ce44a82 100644
+--- a/kernel/gpu_unlock/unlock_610.c
++++ b/kernel/gpu_unlock/unlock_610.c
+@@ -926,7 +926,7 @@ static int unlock_transaction_fwsec(struct unlock_transaction_work *work)
+ 	size_t mapped = 0;
+ 	u8 *rom = NULL;
+ 	struct gpu_unlock_fwsec fw;
+-	u32 fuse_raw, version, scratch, wpr_lo, wpr_hi;
++	u32 fuse_raw, version, scratch, wpr_lo, wpr_hi, dmem_size;
+ 	u16 command;
+ 	u64 frts = work->layout.frts_offset;
+ 	void *image = NULL;
+@@ -982,6 +982,28 @@ static int unlock_transaction_fwsec(struct unlock_transaction_work *work)
+ 			goto out;
+ 		memcpy((u8 *)image + fw.data_off + fw.pkc_off, rom + fw.sig_off + sig_at, 384);
+ 	}
++	/* Some GA106 VBIOSes (10de:2544, 94.06.54) store a DMEM load size that is
++	 * not a whole DMA block (0x980). s_dmaTransfer_GA102 moves whole 256-byte
++	 * blocks until it covers the size, so load the same rounded-up range. */
++	dmem_size = (fw.dmem_size + 255) & ~255u;
++	if (dmem_size < fw.dmem_size || (u64)fw.data_off + dmem_size > fw.image_size) {
++		dev_err(&work->pdev->dev, "FWSEC: DMEM %#x at %#x exceeds image %#x\n",
++			dmem_size, fw.data_off, fw.image_size);
++		ret = -ERANGE;
++		goto out;
++	}
++	if (dmem_size != fw.dmem_size)
++		dev_info(&work->pdev->dev, "FWSEC: DMEM load size %#x rounded to %#x\n",
++			 fw.dmem_size, dmem_size);
++	/* falcon_hs rejects these before touching the engine; check them here,
++	 * before firmware_started, so a rejection releases the card to nvidia. */
++	if (image_dma < fw.imem_va ||
++	    !falcon_dma_valid(fw.imem_pa, fw.imem_va, image_dma - fw.imem_va, fw.imem_size) ||
++	    (dmem_size && !falcon_dma_valid(fw.dmem_pa, 0, image_dma + fw.data_off, dmem_size))) {
++		dev_err(&work->pdev->dev, "FWSEC: DMA geometry rejected before launch\n");
++		ret = -EINVAL;
++		goto out;
++	}
+ 	pci_set_master(work->pdev);
+ 	work->master = true;
+ 	if (diag_pci_word(work, false, PCI_COMMAND, &command) ||
+@@ -991,7 +1013,7 @@ static int unlock_transaction_fwsec(struct unlock_transaction_work *work)
+ 	}
+ 	work->firmware_started = true;
+ 	ret = falcon_hs(work, &gsp, 0, fw.imem_size, fw.imem_va, fw.imem_pa,
+-			fw.data_off, fw.dmem_size, fw.dmem_pa, fw.pkc_off,
++			fw.data_off, dmem_size, fw.dmem_pa, fw.pkc_off,
+ 			fw.engine_mask, fw.ucode_id,
+ 			image_dma, 0, 0, false);
+ 	if (ret)
+diff --git a/tests/test_unlock_adapter.c b/tests/test_unlock_adapter.c
+index 778b251..2c7a8da 100644
+--- a/tests/test_unlock_adapter.c
++++ b/tests/test_unlock_adapter.c
+@@ -362,7 +362,7 @@ int main(int argc, char **argv) {
+     }
+     /* Actual PROM -> descriptor -> patch -> GSP DMA/start -> WPR validation.
+      * Faults after firmware access retain DMA, without starting SEC2. */
+-    for(int mode=0;mode<10;mode++) {
++    for(int mode=0;mode<12;mode++) {
+         setup(&w);
+         u8 *rom=(u8 *)regs+0x300000;
+         load_rom(argc>=2?argv[1]:NULL);
+@@ -380,11 +380,16 @@ int main(int argc, char **argv) {
+         if(mode==7)fake.fail_alloc=1;
+         if(mode==8)fake.master_fail=1;
+         if(mode==9)rom[parsed.sig_off-44+37]=1; /* wrong engine mask */
++        /* DMEM load size not a whole DMA block (GA106 10de:2544 has 0x980):
++         * rounded up within the image, or rejected before the GSP starts. */
++        if(mode==10)vbios_w32(rom+parsed.sig_off-44+32,parsed.image_size-parsed.data_off-128);
++        if(mode==11)vbios_w32(rom+parsed.sig_off-44+32,parsed.image_size-parsed.data_off+1);
+         int ret=unlock_transaction_fwsec(&w);
+         assert(!fake.starts && !fake.flrs);
+-        if(mode==0) {
++        if(mode==0 || mode==10) {
+             assert(!ret && fake.gsp_starts==1);
+             assert(strstr(fake.log,"FWSEC WPR2:"));
++            if(mode==10)assert(strstr(fake.log,"rounded to"));
+         } else {
+             assert(ret);
+             if(mode>=6)assert(!fake.gsp_starts && !w.firmware_started);

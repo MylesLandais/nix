@@ -1,0 +1,45 @@
+From 1cb357f62336adb0537ebcc933ec89c3fe636baf Mon Sep 17 00:00:00 2001
+From: RafaTech <rafael.lm2@gmail.com>
+Date: Sat, 24 Oct 2026 21:23:23 -0300
+Subject: [PATCH] gfw_eval: keep polling on PRI-error samples
+
+The initial GFW check accepted 0xbadfxxxx reads that happen to pass the
+bit tests. Treat them as still running, as the post-FLR wait already does.
+
+Fixes #42
+---
+ kernel/gpu_unlock/gfw_eval.c | 5 +++++
+ tests/test_gfw_eval.c        | 4 ++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/kernel/gpu_unlock/gfw_eval.c b/kernel/gpu_unlock/gfw_eval.c
+index d30c860..2c91d97 100644
+--- a/kernel/gpu_unlock/gfw_eval.c
++++ b/kernel/gpu_unlock/gfw_eval.c
+@@ -15,6 +15,11 @@ int gpu_unlock_gfw_assess(const struct gpu_unlock_gfw_sample *sample)
+ 	if (sample->plm == (u32)~0U || sample->boot == (u32)~0U ||
+ 	    sample->cpuctl == (u32)~0U)
+ 		return -ENODEV;
++	/* So can a PRI error. Poll on, as after FLR. */
++	if ((sample->plm & 0xffff0000u) == 0xbadf0000u ||
++	    (sample->boot & 0xffff0000u) == 0xbadf0000u ||
++	    (sample->cpuctl & 0xffff0000u) == 0xbadf0000u)
++		return -EAGAIN;
+ 	if (!(sample->cpuctl & GU_GFW_CPUCTL_HALTED))
+ 		return -EAGAIN;
+ 	if (!(sample->plm & GU_GFW_PLM_LEVEL0))
+diff --git a/tests/test_gfw_eval.c b/tests/test_gfw_eval.c
+index 4596e75..800054f 100644
+--- a/tests/test_gfw_eval.c
++++ b/tests/test_gfw_eval.c
+@@ -27,6 +27,10 @@ int main(void)
+ 	sample.plm = (u32)~0U;
+ 	sample.cpuctl = (u32)~0U;
+ 	assert(gpu_unlock_gfw_assess(&sample) == -ENODEV);
++	sample.boot = 0xbadf00ff;
++	sample.plm = 0xbadf0001;
++	sample.cpuctl = 0xbadf0010;
++	assert(gpu_unlock_gfw_assess(&sample) == -EAGAIN);
+ 	sample.boot = GU_GFW_BOOT_COMPLETED;
+ 	sample.plm = GU_GFW_PLM_LEVEL0;
+ 	sample.cpuctl = GU_GFW_CPUCTL_HALTED;

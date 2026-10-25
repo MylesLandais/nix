@@ -57,6 +57,34 @@ _: {
 
       networking.hostName = config.host.hostName;
 
+      # gpu-unlock A/B: the default entry stays stock; these two boot entries
+      # unlock the 3090 Ti, upstream as shipped and with the open stability
+      # PRs. The module is imported only here so that the default system,
+      # including its option docs, is identical to a build without it.
+      specialisation =
+        let
+          gpuUnlock = "${inputs.self}/modules/_features/gpu-unlock.nix";
+        in
+        {
+          gpu-unlock.configuration = {
+            imports = [ gpuUnlock ];
+            system.nixos.tags = [ "gpu-unlock" ];
+            hardware.gpuUnlock = {
+              enable = true;
+              targets = "0000:2b:00.0";
+            };
+          };
+          gpu-unlock-patched.configuration = {
+            imports = [ gpuUnlock ];
+            system.nixos.tags = [ "gpu-unlock-patched" ];
+            hardware.gpuUnlock = {
+              enable = true;
+              patched = true;
+              targets = "0000:2b:00.0";
+            };
+          };
+        };
+
       nixpkgs.overlays = [
         (import "${inputs.self}/modules/_features/overlays/cursor.nix")
         (_final: prev: {
