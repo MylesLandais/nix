@@ -169,6 +169,10 @@ in
         -- == Base env ==
         hl.env("XCURSOR_SIZE", "22")
         hl.env("EDITOR", "nvim")
+        -- Quickshell (noctalia) gets no icon theme from qt6ct, so name-only
+        -- desktop icons (utilities-terminal, ...) fall back to hicolor and render
+        -- as the missing-texture checkerboard. Point it at the GTK icon theme.
+        hl.env("QS_ICON_THEME", "${osConfig.host.themeData.gtk.iconName}")
         -- == Exec-once ==
         hl.on("hyprland.start", function()
         ${lib.concatMapStrings (cmd: "  hl.exec_cmd(\"${cmd}\")\n") execOnce}end)

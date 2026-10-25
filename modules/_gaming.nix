@@ -45,6 +45,11 @@ in
     protontricks # Winetricks for Proton
     gamemode # CPU/GPU optimization
     runelite
+    # runelite installs share/icons/runelite.png outside any theme, so
+    # launchers resolving Icon=runelite through the icon theme can't find it.
+    (runCommand "runelite-icon" { } ''
+      install -Dm444 ${runelite}/share/icons/runelite.png $out/share/icons/hicolor/128x128/apps/runelite.png
+    '')
     # RetroArch with minimal cores (bsnes and mgba)
     (retroarch.overrideAttrs (old: {
       passthru = old.passthru // {

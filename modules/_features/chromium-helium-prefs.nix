@@ -37,6 +37,12 @@ in
       MimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;x-scheme-handler/unknown;application/xhtml+xml;application/xml;
     '';
 
+    # Icon=helium above (and the window class "helium"): the upstream package
+    # ships the icon, but only the env-packages wrapper is installed.
+    xdg.dataFile."icons/hicolor/256x256/apps/helium.png".source = "${
+      inputs.helium.defaultPackage.${pkgs.stdenv.hostPlatform.system}
+    }/share/icons/hicolor/256x256/apps/helium.png";
+
     # Automation-only launcher: separate profile so an attached debugger can
     # never touch the daily profile, and no MimeType lines so it is never
     # picked as a URL handler.

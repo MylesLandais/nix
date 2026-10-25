@@ -99,6 +99,11 @@ in
       mimeType = [ "x-scheme-handler/cursor" ];
     };
 
+    # Only the wrapper is installed, not code-cursor itself, so its icon never
+    # reaches a profile and Icon=cursor resolved to nothing.
+    xdg.dataFile."icons/hicolor/256x256/apps/cursor.png".source =
+      "${pkgs.code-cursor}/share/pixmaps/cursor.png";
+
     home.file."${config.xdg.configHome}/Cursor/argv.json".text = builtins.toJSON {
       disable-hardware-acceleration = false;
     };

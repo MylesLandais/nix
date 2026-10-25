@@ -101,6 +101,9 @@
             # yields "unk,wayland" — and an `ipc call` keybind only talks to an
             # instance with a matching identity.
             export QT_QPA_PLATFORM='wayland;xcb'
+            # Same for the icon theme (hl.env QS_ICON_THEME in hypr.nix):
+            # without it name-only desktop icons resolve against hicolor only.
+            export QS_ICON_THEME='${osConfig.host.themeData.gtk.iconName}'
             # HYPRLAND_INSTANCE_SIGNATURE is needed for Hyprland IPC features.
             hypr_sig=$(${pkgs.systemd}/bin/systemctl --user show-environment | ${pkgs.gnused}/bin/sed -n 's/^HYPRLAND_INSTANCE_SIGNATURE=//p')
             if [ -n "$hypr_sig" ]; then

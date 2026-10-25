@@ -109,6 +109,11 @@ in
     pkgs.teamspeak6-client
     pkgs.mixxx
     pkgs.termius
+    # termius installs share/icons/termius-app.png (1024px) outside any theme,
+    # so Icon=termius-app never resolves; hicolor tops out at 512x512.
+    (pkgs.runCommand "termius-icon" { } ''
+      install -Dm444 ${pkgs.termius}/share/icons/termius-app.png $out/share/icons/hicolor/512x512/apps/termius-app.png
+    '')
     pkgs.mosh
     pkgs.nicotine-plus
     pkgs.foliate # epub reader; Evince/Document Viewer has no epub support
