@@ -110,13 +110,13 @@ let
 in
 stdenv.mkDerivation (_finalAttrs: {
   pname = "chatgpt-linux";
-  version = "26.1002.52244";
+  version = "26.1021.22027";
 
   src = fetchurl {
     # This is OpenAI's official x64 Linux preview package. The stable apt URL is
     # intentionally content-pinned by the hash below; bump version + hash together.
     url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_amd64.deb";
-    hash = "sha256-lJjkFxMaJ4vONb//YnXSUsDTMvF6/AMT4LeCdJ9NNIo=";
+    hash = "sha256-6wgxxzTxVPk/jrzw4X0RjaDep9wXN9xhoecURDdb8ZA=";
   };
 
   nativeBuildInputs = [
@@ -190,7 +190,11 @@ stdenv.mkDerivation (_finalAttrs: {
       } \
       --prefix LD_LIBRARY_PATH : "$out/lib/chatgpt:${lib.makeLibraryPath runtimeLibs}" \
       --add-flags "--password-store=basic" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true}}"
+    # The bundled Electron (42) has no --ozone-platform-hint switch any more, and
+    # picks Wayland only from XDG_SESSION_TYPE. A launcher without that variable
+    # left the app on XWayland, where right-click menus, clipboard and drag-and-drop
+    # misbehave under Hyprland. Native Wayland verified to map a window (2026-10-25).
 
     substituteInPlace "$out/share/applications/chatgpt.desktop" \
       --replace-fail "Exec=chatgpt" "Exec=$out/bin/chatgpt"

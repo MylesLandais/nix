@@ -118,15 +118,33 @@
             if [ -n "$session_path" ]; then
               export PATH="$session_path"
             fi
-            # `--scope` execs as the target process itself (it doesn't fork a
-            # child and return) — it has to be backgrounded here, or activation
-            # blocks until the shell daemon exits. Registering the scope is
-            # what matters and happens synchronously before that exec, so the
-            # backgrounded job is already outside home-manager-warby.service's
-            # cgroup by the time this shell returns.
-            ${pkgs.systemd}/bin/systemd-run --user --scope --collect \
-              -u noctalia-shell-reload \
-              ${inputs.noctalia.packages.${pkgs.system}.default}/bin/noctalia-shell >/dev/null 2>&1 &
+            # noctalia's clipboard history spawns `wl-paste --type text|image
+            # --watch cliphist store` helpers that outlive it. Each reload left
+            # another pair behind (ppid 1), so every copy was stored, and read
+            # across the XWayland bridge, once per surviving pair.
+            ${pkgs.procps}/bin/pkill -f '^wl-paste --type (text|image) --watch cliphist store$' || true
+            noctalia_bin=${inputs.noctalia.packages.${pkgs.system}.default}/bin/noctalia-shell
+            # On Hyprland, have the compositor spawn it, exactly like the login
+            # exec-once. Apps opened from the launcher (app2unit's default scope
+            # mode) inherit noctalia's environment, and the variables exported
+            # above are only a fraction of the session's: a systemd-run relaunch
+            # left launched apps without XDG_SESSION_TYPE, XDG_CURRENT_DESKTOP,
+            # NIXOS_OZONE_WL, SSH_AUTH_SOCK, the NVIDIA hl.env set, and so on.
+            # Electron 38+ then falls back to XWayland.
+            if [ -n "$hypr_sig" ] && command -v hyprctl > /dev/null \
+              && hyprctl dispatch "hl.dsp.exec_cmd(\"$noctalia_bin\")" > /dev/null 2>&1; then
+              :
+            else
+              # `--scope` execs as the target process itself (it doesn't fork a
+              # child and return) — it has to be backgrounded here, or activation
+              # blocks until the shell daemon exits. Registering the scope is
+              # what matters and happens synchronously before that exec, so the
+              # backgrounded job is already outside home-manager-warby.service's
+              # cgroup by the time this shell returns.
+              ${pkgs.systemd}/bin/systemd-run --user --scope --collect \
+                -u noctalia-shell-reload \
+                "$noctalia_bin" >/dev/null 2>&1 &
+            fi
           fi
         fi
       '';

@@ -32,8 +32,10 @@ let
     "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_ICON_THEME"
     "nm-applet --indicator &"
     "add_record_player"
-    "wl-paste --watch cliphist store &"
   ]
+  # noctalia's clipboard history runs its own text + image cliphist watchers;
+  # a second, untyped watcher stored every copy twice.
+  ++ lib.optionals (osConfig.host.bar != "noctalia") [ "wl-paste --watch cliphist store &" ]
   ++ lib.optionals (osConfig.host.bar == "noctalia") [ "noctalia-shell" ]
   ++ lib.optionals (osConfig.host.bar == "ricelin") [
     "${ricelinScripts}/cliphist-watch.sh"
