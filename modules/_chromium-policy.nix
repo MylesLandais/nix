@@ -25,7 +25,9 @@ let
       "https://*.nixos.org"
     ];
     PasswordManagerEnabled = true;
-    AutoFillEnabled = true;
+    # AutoFillEnabled is deprecated (chrome://policy flags it); these two replace it.
+    AutofillAddressEnabled = true;
+    AutofillCreditCardEnabled = true;
     SearchSuggestEnabled = true;
     SpellcheckEnabled = true;
     PrintingEnabled = true;
@@ -38,21 +40,21 @@ let
     SafeBrowsingProtectionLevel = 1; # standard, not enhanced (less data sent)
     UrlKeyedAnonymizedDataCollectionEnabled = false;
 
-    # Chrome Cleanup / safety
-    ChromeCleanupEnabled = false;
+    # ChromeCleanupEnabled is Windows-only; on Linux chrome://policy shows it as an error.
     ChromeVariations = 1; # 1 = enable critical variations only
 
-    # Extension management
+    # Extension management. No update_url on "*": it only applies to
+    # force/normal-installed entries, and on the wildcard chrome://policy
+    # flags the whole ExtensionSettings policy with a warning.
     ExtensionSettings = {
       "*" = {
         installation_mode = "allowed";
-        update_url = cwsUpdateUrl;
       };
     };
   };
 
   cwsUpdateUrl = "https://clients2.google.com/service/update2/crx";
-  # Helium rewrites CWS fetches through its proxy; policy update_url must match.
+  # Helium rewrites CWS fetches through its proxy; force-installed update_url must match.
 
   # Build ExtensionInstallForcelist from extension IDs.
   mkForceList = updateUrl: extIds: map (id: "${id};${updateUrl}") extIds;
@@ -91,16 +93,7 @@ let
       (removeAttrs commonPolicies [ "ExtensionSettings" ])
       // browserConfig.policies
       // {
-        ExtensionSettings =
-          (
-            commonPolicies.ExtensionSettings
-            // {
-              "*" = commonPolicies.ExtensionSettings."*" // {
-                update_url = updateUrl;
-              };
-            }
-          )
-          // extSettings;
+        ExtensionSettings = commonPolicies.ExtensionSettings // extSettings;
       }
       // (
         if browserConfig.extensions != null then

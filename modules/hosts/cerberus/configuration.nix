@@ -421,6 +421,10 @@ _: {
             enable = true;
             # Helium AppImage sandbox maps /etc/chromium into the bwrap container
             # so policies must go through the chromium path for the sandbox.
+            # Its binary reads only /etc/chromium/policies, which nixpkgs Chromium
+            # also reads, so Chromium inherits this file (no separate chromium
+            # entry is possible). Chromium installs the forced extensions through
+            # Helium's proxy fine; the removed ID is Helium-only and a no-op there.
             policyPath = "chromium";
             extensionUpdateUrl = "https://services.helium.imput.net/ext";
             extensions = chromiumStandardExtensions;
