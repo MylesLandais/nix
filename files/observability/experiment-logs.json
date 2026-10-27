@@ -1,0 +1,112 @@
+{
+  "extensions": {
+    "file_storage": {
+      "directory": "${env:NEBULA_OTEL_STATE}",
+      "create_directory": true,
+      "directory_permissions": "0700",
+      "fsync": true
+    }
+  },
+  "receivers": {
+    "filelog/training": {
+      "include": ["${env:NEBULA_LOG_SOURCE_ROOT}/runs/*/train.log"],
+      "start_at": "beginning",
+      "storage": "file_storage",
+      "include_file_path": true,
+      "include_file_record_number": true,
+      "include_file_record_offset": true,
+      "on_truncate": "read_whole_file",
+      "poll_interval": "1s",
+      "max_concurrent_files": 64,
+      "retry_on_failure": {"enabled": true, "max_elapsed_time": "0s"},
+      "resource": {"service.name": "nebula.training", "deployment.environment.name": "local"},
+      "operators": [
+        {"type": "regex_parser", "parse_from": "attributes[\"log.file.path\"]", "regex": "/runs/(?P<run_id>[^/]+)/train\\.log$"},
+        {"type": "move", "from": "attributes.run_id", "to": "attributes[\"run.id\"]"}
+      ]
+    },
+    "filelog/generation": {
+      "include": ["${env:NEBULA_LOG_SOURCE_ROOT}/logs/*.log", "${env:NEBULA_LOG_SOURCE_ROOT}/logs*.out"],
+      "start_at": "beginning",
+      "storage": "file_storage",
+      "include_file_path": true,
+      "include_file_record_number": true,
+      "include_file_record_offset": true,
+      "on_truncate": "read_whole_file",
+      "poll_interval": "1s",
+      "max_concurrent_files": 64,
+      "retry_on_failure": {"enabled": true, "max_elapsed_time": "0s"},
+      "resource": {"service.name": "nebula.generation", "deployment.environment.name": "local"}
+    },
+    "filelog/canary": {
+      "include": ["${env:NEBULA_LOG_SOURCE_ROOT}/telemetry/canary.jsonl"],
+      "start_at": "beginning",
+      "storage": "file_storage",
+      "include_file_path": true,
+      "include_file_record_offset": true,
+      "fingerprint_size": 16,
+      "retry_on_failure": {"enabled": true, "max_elapsed_time": "0s"},
+      "resource": {"service.name": "nebula.log-canary", "deployment.environment.name": "local"},
+      "operators": [
+        {"type": "json_parser", "timestamp": {"parse_from": "attributes.timestamp", "layout_type": "gotime", "layout": "2006-01-02T15:04:05.999999999Z07:00"}}
+      ]
+    },
+    "journald/comfy": {
+      "start_at": "end",
+      "storage": "file_storage",
+      "priority": "debug",
+      "all": true,
+      "convert_message_bytes": true,
+      "matches": [{"CONTAINER_NAME": "nebula-comfyui"}, {"CONTAINER_NAME": "nebula-comfyui-gpuab"}],
+      "retry_on_failure": {"enabled": true, "max_elapsed_time": "0s"},
+      "operators": [
+        {"type": "add", "field": "resource[\"service.name\"]", "value": "nebula.comfyui"},
+        {"type": "add", "field": "resource[\"deployment.environment.name\"]", "value": "local"}
+      ]
+    }
+  },
+  "processors": {
+    "memory_limiter": {"check_interval": "1s", "limit_mib": 256, "spike_limit_mib": 64},
+    "transform/time_basis": {
+      "error_mode": "propagate",
+      "log_statements": [{"context": "log", "statements": [
+        "set(attributes[\"event.time.kind\"], \"source\") where time_unix_nano != 0",
+        "set(attributes[\"event.time.kind\"], \"observed_only\") where time_unix_nano == 0",
+        "set(time_unix_nano, observed_time_unix_nano) where time_unix_nano == 0"
+      ]}]
+    }
+  },
+  "exporters": {
+    "clickhouse": {
+      "endpoint": "${env:NEBULA_CLICKHOUSE_ENDPOINT}",
+      "database": "nebula_observability",
+      "logs_table_name": "live_logs",
+      "create_schema": true,
+      "ttl": "0s",
+      "async_insert": true,
+      "connection_params": {"wait_for_async_insert": "1", "max_threads": "1", "max_memory_usage": "268435456"},
+      "timeout": "10s",
+      "retry_on_failure": {"enabled": true, "initial_interval": "1s", "max_interval": "30s", "max_elapsed_time": "0s"},
+      "sending_queue": {
+        "enabled": true,
+        "storage": "file_storage",
+        "num_consumers": 1,
+        "sizer": "bytes",
+        "queue_size": 134217728,
+        "block_on_overflow": true,
+        "batch": {"sizer": "bytes", "min_size": 1048576, "max_size": 4194304, "flush_timeout": "2s"}
+      }
+    }
+  },
+  "service": {
+    "extensions": ["file_storage"],
+    "telemetry": {"metrics": {"level": "none"}},
+    "pipelines": {
+      "logs": {
+        "receivers": ["filelog/training", "filelog/generation", "filelog/canary", "journald/comfy"],
+        "processors": ["memory_limiter", "transform/time_basis"],
+        "exporters": ["clickhouse"]
+      }
+    }
+  }
+}

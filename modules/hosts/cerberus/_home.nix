@@ -50,6 +50,7 @@ in
     ../../_features/hydra-smb.nix
     ../../_features/hermes-desktop.nix
     ../../_features/workspace-budget-home.nix
+    ../../_features/nebula-otel-home.nix
   ];
 
   hydra-smb.enable = true;

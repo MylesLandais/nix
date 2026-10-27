@@ -99,6 +99,13 @@ These still run their own Postgres and are unconverted:
   race, and therefore why `infra.demo.enable` is still `false`.
 - `manus-langfuse-postgres-1` — PG16, langfuse-internal, not published.
 
+### Experiment log delivery
+
+See [experiment log delivery](experiment-log-delivery.md) for the prepared
+collector, persistent queue/cursors, ClickHouse destination and end-to-end
+canary. Recovery tests passed; activation remains blocked on a separate
+ChatGPT package hash mismatch in the full Cerberus build.
+
 ### Object storage (consolidated 2026-09-24)
 
 `services.infra.seaweedfs` (`modules/database/seaweedfs.nix`) replaces the Docker
