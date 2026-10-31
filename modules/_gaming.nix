@@ -32,6 +32,10 @@ in
   programs.gamescope.enable = true;
   # Gamemode for performance optimization
   programs.gamemode.enable = true;
+  # Proton 11 requests ntsync (WINENTSYNC=1) but silently falls back to fsync
+  # when /dev/ntsync is absent; the kernel builds it as a module that nothing
+  # loads on its own.
+  boot.kernelModules = [ "ntsync" ];
   # Enable FUSE for AppImages and Steam compatibility
   programs.fuse.userAllowOther = true;
 
