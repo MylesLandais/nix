@@ -160,6 +160,7 @@ in
           else
             ""
         }
+        ${lib.attrByPath [ "host" "warcraft3" "hyprlandExtraConfig" ] "" osConfig}
 
         -- == Binds ==
         ${import ./config/bindings.nix {
