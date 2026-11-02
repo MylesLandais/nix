@@ -1,11 +1,10 @@
-# Penpot MCP (stage-edge) for every local agent harness.
+# Coordinated Penpot MCP for every local agent harness.
 #
-# The server authenticates with a per-user token carried in the URL. It lives
-# only in the keyring:
+# The isolated browser worker holds the remote MCP credential in the keyring:
+# Legacy direct credentials can be provisioned with:
 #   secret-tool store --label="Penpot MCP" service penpot-mcp username warby
-# `penpot-mcp` is a stdio bridge that reads it at launch, so no config file,
-# store path or settings.json ever holds the token. Harnesses register the
-# bridge as a plain stdio command.
+# `penpot-mcp` exposes only coordinated design tools through the local Rust
+# gateway. Agent clients never receive the worker token or raw execute_code.
 #
 # Registration is a script, not a home.activation block: Hermes, Codex and
 # Claude keep their MCP lists in live user files, and activation must not touch
@@ -18,23 +17,19 @@
   ...
 }:
 let
-  url = "https://stage-edge.cerberus-bonito.ts.net/mcp/stream";
   # Stable across rebuilds, unlike the store path, so live configs never go stale.
   bridge = "/etc/profiles/per-user/${config.home.username}/bin/penpot-mcp";
 
   penpot-mcp = pkgs.writeShellApplication {
     name = "penpot-mcp";
-    runtimeInputs = [
-      pkgs.libsecret
-      pkgs.mcp-proxy
-    ];
+    runtimeInputs = [ pkgs.nodejs ];
     text = ''
-      token=$(secret-tool lookup service penpot-mcp username ${config.home.username}) || {
-        echo 'penpot-mcp: no token in keyring (secret-tool store --label="Penpot MCP" service penpot-mcp username ${config.home.username})' >&2
-        exit 1
-      }
-      # WARNING level: INFO logs the request URL, token included.
-      exec mcp-proxy --log-level WARNING --transport streamablehttp "${url}?userToken=$token"
+      if test -r "${config.xdg.configHome}/nebula/penpot-design-session.env"; then
+        # shellcheck source=/dev/null
+        source "${config.xdg.configHome}/nebula/penpot-design-session.env"
+      fi
+      source_root="''${PENPOT_WORKSPACE:-${config.home.homeDirectory}/Workspace}"
+      exec node "$source_root/apps/browser-worker/src/penpot/bridge.mjs"
     '';
   };
 

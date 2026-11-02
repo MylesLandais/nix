@@ -166,3 +166,6 @@ curl -I http://downloads.homelab.lan
 curl -I http://tint.localhost
 systemctl status maya-bot openbao authentik-server pyload
 ```
+
+The [isolated Penpot agent worker](penpot-agent-worker.md) separates Claude/Codex
+design execution from the operator browser and records guarded native exports.
