@@ -67,8 +67,15 @@ services:
       PENPOT_DATABASE_USERNAME: penpot
       PENPOT_DATABASE_PASSWORD: ${DB_PASSWORD:?}
       PENPOT_REDIS_URI: redis://valkey/0
-      PENPOT_ASSETS_STORAGE_BACKEND: assets-fs
-      PENPOT_STORAGE_ASSETS_FS_DIRECTORY: /opt/data/assets
+      # Admin REPL for manage.py (create-profile etc.); binds inside the container.
+      PENPOT_FLAGS: >-
+        disable-registration
+        disable-email-verification
+        enable-login-with-password
+        enable-mcp
+        enable-prepl-server
+      PENPOT_OBJECTS_STORAGE_BACKEND: fs
+      PENPOT_OBJECTS_STORAGE_FS_DIRECTORY: /opt/data/assets
       PENPOT_TELEMETRY_ENABLED: "false"
 
   exporter:
