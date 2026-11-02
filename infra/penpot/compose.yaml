@@ -12,6 +12,7 @@ x-penpot-flags: &penpot-flags
     disable-email-verification
     enable-login-with-password
     enable-mcp
+    enable-access-tokens
 
 x-penpot-public-uri: &penpot-public-uri
   PENPOT_PUBLIC_URI: ${PENPOT_PUBLIC_URI:?}
@@ -73,6 +74,7 @@ services:
         disable-email-verification
         enable-login-with-password
         enable-mcp
+        enable-access-tokens
         enable-prepl-server
       PENPOT_OBJECTS_STORAGE_BACKEND: fs
       PENPOT_OBJECTS_STORAGE_FS_DIRECTORY: /opt/data/assets
