@@ -1,6 +1,6 @@
 _: {
   flake.modules.nixos.stageDb =
-    { inputs, lib, ... }:
+    { inputs, ... }:
     {
       imports = [
         "${inputs.self}/modules/hosts/_oci-common.nix"
@@ -15,8 +15,5 @@ _: {
       ];
 
       services.infra.forgejo.enable = true;
-      # This OCI boot disk is 46 GiB; desktop thresholds would continuously GC.
-      nix.settings.min-free = lib.mkForce (1024 * 1024 * 1024);
-      nix.settings.max-free = lib.mkForce (2 * 1024 * 1024 * 1024);
     };
 }

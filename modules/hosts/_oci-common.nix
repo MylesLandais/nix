@@ -150,6 +150,11 @@
   # These boxes build their own closures (1 OCPU aarch64, so substitution from
   # the binary cache does the heavy lifting rather than local compilation).
   nix.settings.max-jobs = lib.mkDefault 1;
+  # The OCI boot disks are 46 GiB. The desktop thresholds (min-free 50 GiB) sit
+  # above the whole disk, so every nix operation triggered a GC that deleted
+  # the paths a deploy was copying in.
+  nix.settings.min-free = lib.mkForce (1024 * 1024 * 1024);
+  nix.settings.max-free = lib.mkForce (2 * 1024 * 1024 * 1024);
 
   time.timeZone = lib.mkDefault "UTC";
 
