@@ -1,0 +1,114 @@
+# Penpot on stage-edge. Managed by modules/services/penpot.nix; do not run by hand
+# except through /etc/penpot/compose (which supplies the env files).
+#
+# Only the frontend publishes a port, on loopback. `tailscale serve` terminates
+# HTTPS in front of it. The frontend proxies /mcp/stream and the plugin websocket
+# to the mcp container, so one HTTPS origin covers the app and the MCP endpoint.
+name: penpot
+
+x-penpot-flags: &penpot-flags
+  PENPOT_FLAGS: >-
+    disable-registration
+    disable-email-verification
+    enable-login-with-password
+    enable-mcp
+
+x-penpot-public-uri: &penpot-public-uri
+  PENPOT_PUBLIC_URI: ${PENPOT_PUBLIC_URI:?}
+
+x-penpot-secret: &penpot-secret
+  PENPOT_SECRET_KEY: ${PENPOT_SECRET_KEY:?}
+
+networks:
+  penpot:
+    driver_opts:
+      com.docker.network.bridge.name: br-penpot
+
+services:
+  frontend:
+    image: penpotapp/frontend:2.18.5@sha256:9bc0c288985d2d18a2c3e7b849d8edda317e1bfd99ec6dd494e5bfdcfe411f06
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9001:8080"
+    volumes:
+      - /var/lib/penpot/assets:/opt/data/assets
+    networks: [penpot]
+    depends_on:
+      backend:
+        condition: service_started
+      exporter:
+        condition: service_started
+      mcp:
+        condition: service_started
+    environment:
+      <<: [*penpot-flags, *penpot-public-uri]
+      PENPOT_HTTP_SERVER_MAX_BODY_SIZE: 367001600
+      PENPOT_BACKEND_URI: http://backend:6060
+      PENPOT_EXPORTER_URI: http://exporter:6061
+      PENPOT_MCP_URI: http://mcp:4401
+      PENPOT_MCP_URI_WS: http://mcp:4402
+
+  backend:
+    image: penpotapp/backend:2.18.5@sha256:20d2325ec8e00f4be5f65e543d5618b585598facff404cf06446e91b5ead9036
+    restart: unless-stopped
+    volumes:
+      - /var/lib/penpot/assets:/opt/data/assets
+    networks: [penpot]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
+    environment:
+      <<: [*penpot-flags, *penpot-public-uri, *penpot-secret]
+      # Capped: on cerberus the uncapped JVM sat on 1.3 GB of swap.
+      JAVA_OPTIONS: -Xmx1g -Xms256m
+      PENPOT_DATABASE_URI: postgresql://postgres/penpot
+      PENPOT_DATABASE_USERNAME: penpot
+      PENPOT_DATABASE_PASSWORD: ${DB_PASSWORD:?}
+      PENPOT_REDIS_URI: redis://valkey/0
+      PENPOT_ASSETS_STORAGE_BACKEND: assets-fs
+      PENPOT_STORAGE_ASSETS_FS_DIRECTORY: /opt/data/assets
+      PENPOT_TELEMETRY_ENABLED: "false"
+
+  exporter:
+    image: penpotapp/exporter:2.18.5@sha256:8c341d6d40f234d33e4272f87c6f53fdde839546e4c758872cebf175bddb8c71
+    restart: unless-stopped
+    networks: [penpot]
+    environment:
+      <<: *penpot-secret
+      PENPOT_PUBLIC_URI: http://frontend:8080
+      PENPOT_REDIS_URI: redis://valkey/0
+
+  mcp:
+    image: penpotapp/mcp:2.18.5@sha256:61fc7b2b727593670159966998fb197b2d282330ec7dbffc09a3e6374e0ce39d
+    restart: unless-stopped
+    networks: [penpot]
+
+  postgres:
+    image: postgres:16.15-alpine@sha256:0cefaabd882e42bcb2a2f3dc56d3ce4770560ba62fd7f197f1a2e008fd5731ab
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: penpot
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?}
+      POSTGRES_DB: penpot
+    volumes:
+      - /var/lib/penpot/postgres:/var/lib/postgresql/data
+    networks: [penpot]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U penpot -d penpot"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+
+  valkey:
+    image: valkey/valkey:8.1-alpine@sha256:2602ace2be6569bc2bbb06f873776516ab9089821525be34f4305c67eb9db02a
+    restart: unless-stopped
+    # Cache and websocket pub/sub only; nothing here needs to survive a restart.
+    command: valkey-server --save "" --appendonly no --maxmemory 256mb --maxmemory-policy allkeys-lru
+    networks: [penpot]
+    healthcheck:
+      test: [CMD, valkey-cli, ping]
+      interval: 5s
+      timeout: 3s
+      retries: 12

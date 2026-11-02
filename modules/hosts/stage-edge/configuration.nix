@@ -4,9 +4,12 @@ _: {
     {
       imports = [
         "${inputs.self}/modules/hosts/_oci-common.nix"
+        inputs.self.modules.nixos.penpot
       ];
 
       networking.hostName = "stage-edge";
+
+      services.infra.penpot.enable = true;
 
       # -------------------------------------------------------------------------
       # Administration
