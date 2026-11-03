@@ -42,6 +42,22 @@ let
   # even with UseChromeOSDirectVideoDecoder disabled; fall back to software
   # decode (fallback ladder rung 3 in chromium-browsers.nix) for both.
   # Chromium proper has not shown the issue, so it keeps hardware decode.
+  # The nixpkgs Chromium wrapper ignores chromium-flags.conf, so the same flags go in
+  # through commandLineArgs. Our --enable-features comes after the wrapper's and replaces
+  # it (last one wins), so WaylandWindowDecorations is carried over here.
+  chromiumCliArgs = lib.filter (l: l != "") (
+    lib.splitString "\n" (
+      mkChromiumFlags (
+        chromiumStandardBrowserFlags
+        // {
+          inherit vaapiMode webgpu;
+          extraEnableFeatures = [ "WaylandWindowDecorations" ];
+          extra = chromiumStandardBrowserFlags.extra ++ [ "--password-store=basic" ];
+        }
+      )
+    )
+  );
+
   softwareDecodeFlagsFile = mkChromiumFlags (chromiumStandardBrowserFlags // { vaapiMode = false; });
 
   # Codex ships an official portable package containing codex, codex-code-mode-host
@@ -168,19 +184,17 @@ in
     };
 
     # The nixpkgs Chrome and Chromium wrappers read no flags file (chromium-flags.conf is
-    # ignored), so their WebGPU flags go in through commandLineArgs. Chromium's override
+    # ignored), so their flags go in through commandLineArgs. Chromium's override
     # must match programs.chromium.commandLineArgs below so both resolve to one store path.
     packages =
       map (
         p:
-        if
-          webgpu
-          && builtins.elem (lib.getName p) [
-            "google-chrome"
-            "chromium"
-          ]
-        then
-          p.override { commandLineArgs = lib.concatStringsSep " " chromiumWebgpuFlags; }
+        if lib.getName p == "chromium" || (webgpu && lib.getName p == "google-chrome") then
+          p.override {
+            commandLineArgs = lib.concatStringsSep " " (
+              if lib.getName p == "chromium" then chromiumCliArgs else chromiumWebgpuFlags
+            );
+          }
         else
           p
       ) (import ./_packages.nix { inherit pkgs; })
@@ -239,7 +253,7 @@ in
     # on Cerberus (see hosts/cerberus/configuration.nix).
     chromium = {
       enable = true;
-      commandLineArgs = lib.optionals webgpu chromiumWebgpuFlags;
+      commandLineArgs = chromiumCliArgs;
     };
     btop = {
       enable = true;

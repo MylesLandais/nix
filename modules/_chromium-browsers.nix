@@ -83,6 +83,7 @@ let
       vaapiMode ? false,
       darkMode ? false,
       webgpu ? false,
+      extraEnableFeatures ? [ ],
       extra ? [ ],
     }:
     let
@@ -107,6 +108,7 @@ let
         ])
         vaapiFeatures
         (lib.optionals darkMode [ "WebUIDarkMode" ])
+        extraEnableFeatures
       ];
       # Chromium only honors the *last* --disable-features flag on the command
       # line, so every disabled feature must be combined into one list/flag
