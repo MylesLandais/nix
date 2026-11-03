@@ -165,6 +165,21 @@ _: {
       # swap between boots. Moving the ~151 GB HF model cache here takes it off
       # the root disk. Design and runbook:
       # ~/Vault/nix-issues/cerberus-nvme-workspace-and-model-storage-plan.md
+      #
+      # TODO(training-state): LoRA training stages ~16 GB of pinned weights per
+      # run. Staging is a reflink (instant, no extra space) only on the same
+      # btrfs filesystem as the model cache, so TRAINING_ROOT currently lives in
+      # the git checkout at ~/Workspace/data/training-state, hidden through
+      # .git/info/exclude. On the root ext4 disk the same copy took ~21 min and
+      # 16 GB. Fix: add a subvolume (e.g. @training-state) on this device and
+      # mount it outside the checkout, e.g. at
+      # /home/warby/.local/state/nebula/training, mode 0700. It is the same
+      # filesystem, so copy_file_range should still reflink across the two
+      # mounts (FICLONE would not; verify by copying one cached weight and
+      # checking that free space does not move). Then point TRAINING_ROOT there and
+      # drop the exclude entry. A separate model-cache subvolume would take the
+      # cache out of the checkout too. Measurements:
+      # docs/operations/lora-klein-sprite-pilot.md on feat/klein-sprite-pilot.
       fileSystems."/home/warby/Workspace" = {
         device = "/dev/disk/by-uuid/016ecaf4-f6fd-4457-aa2e-3dcebce80832";
         fsType = "btrfs";
