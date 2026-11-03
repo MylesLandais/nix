@@ -89,7 +89,7 @@ in
           "browser.cache.disk.smart_size.first_run" = false;
 
           # UI/UX settings
-          "browser.startup.page" = 1;
+          "browser.startup.page" = 3; # Restore the previous windows and tabs.
           "browser.newtabpage.enabled" = true;
           "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
           "browser.newtabpage.activity-stream.feeds.snippets" = false;
