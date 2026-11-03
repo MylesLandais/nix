@@ -56,6 +56,8 @@ in
   hydra-smb.enable = true;
   hermesDesktop.enable = true;
 
+  hyprland.promptFollowFocus.enable = true;
+
   hyprland.workspaceRecovery = {
     enable = true;
     mappings = workspaceMappings;

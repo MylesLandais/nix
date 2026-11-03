@@ -11,6 +11,7 @@
     ./hyprpaper.nix
     ./wlogout.nix
     ./workspace-recovery.nix
+    ./prompt-follow-focus.nix
   ];
 
   options = {
