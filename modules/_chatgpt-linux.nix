@@ -110,13 +110,16 @@ let
 in
 stdenv.mkDerivation (_finalAttrs: {
   pname = "chatgpt-linux";
-  version = "26.1027.51404";
+  version = "26.1103.31037";
 
   src = fetchurl {
-    # This is OpenAI's official x64 Linux preview package. The stable apt URL is
-    # intentionally content-pinned by the hash below; bump version + hash together.
+    # OpenAI's official x64 Linux preview package. Upstream only publishes a
+    # mutable `latest` URL (no versioned artifact), so the bytes change under us
+    # and the hash below goes stale. When CI reports a hash mismatch, download the
+    # file, read its version (`dpkg-deb -f chatgpt_amd64.deb Version`), and bump
+    # `version` + `hash` together. Never accept a suggested hash unverified.
     url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_amd64.deb";
-    hash = "sha256-RvHiLQKGmP6e2u/VhHrs4HxFCaMNNwnhBCIHGdjBKCI=";
+    hash = "sha256-Mv7YCtP4yvZm5YYAIjYelwnWSqMYz7GfVI6LRY1PZ5M=";
   };
 
   nativeBuildInputs = [
