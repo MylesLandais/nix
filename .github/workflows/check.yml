@@ -2,15 +2,32 @@ name: nix flake check
 
 on:
   push:
-    branches: [stable, dev, dendritic]
+    branches: [dev, stable, dendritic]
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nix-check-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
-      - name: nix flake check
-        run: nix flake check --accept-flake-config --print-build-logs
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+      # Evaluation only. Full host closures are packages.<system>.host-*, built
+      # explicitly (never by flake check) so a free runner doesn't compile CUDA.
+      - name: nix flake check (evaluate all outputs)
+        run: nix flake check --no-build --all-systems --accept-flake-config --show-trace
+      - name: formatting
+        run: nix build .#checks.x86_64-linux.treefmt --accept-flake-config --print-build-logs
+      - name: host evaluation checks (native system only)
+        run: |
+          nix build --accept-flake-config --print-build-logs --no-link \
+            $(nix eval --accept-flake-config --raw .#checks.x86_64-linux \
+              --apply 'c: builtins.concatStringsSep " " (map (n: ".#checks.x86_64-linux.${n}") (builtins.filter (n: builtins.substring 0 5 n == "host-") (builtins.attrNames c)))')
