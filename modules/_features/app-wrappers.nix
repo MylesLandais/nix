@@ -22,6 +22,10 @@ let
     '';
   };
 
+  # TODO(deprecated): Cursor is tagged for removal (2026-11-06). Drop cursorSafe,
+  # the two cursor desktop entries, the icon and argv.json below, but keep the
+  # module (Vesktop uses it). Then remove ~/.config/Cursor (~14 GB, mostly the
+  # 9 GB chat-history state.vscdb).
   cursorSafe = pkgs.writeShellApplication {
     name = "cursor";
     runtimeInputs = [ pkgs.code-cursor ];

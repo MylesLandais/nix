@@ -80,6 +80,10 @@ in
     inputs.zen-browser.packages.x86_64-linux.default
     inputs.agenix.packages.x86_64-linux.default
     inputs.trigo.packages.x86_64-linux.default
+    # TODO(deprecated): opencode is tagged for removal (2026-11-06). Remove it
+    # together with the Zed agent server (devtooling/zed `agent_servers.opencode`),
+    # the `oc` fish alias, `stylix.targets.opencode`, and ~/.local/share/opencode.
+    # Keep the pi agent's OpenCode Go provider; that's an API, not this package.
     inputs.llm.packages.x86_64-linux.opencode
     inputs.llm.packages.x86_64-linux.command-code
     inputs.wallpapers.packages.x86_64-linux.default
