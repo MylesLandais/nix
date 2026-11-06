@@ -40,8 +40,9 @@ local CONFIG = {
     HOME .. "/.cache/go-build",
     HOME .. "/.cargo/registry/cache",
   },
-  -- The Codex app-server copies its ~47 MB bundled marketplace here on every
-  -- start and never removes the copy: ~200/day, 133 GiB by 2026-11-06.
+  -- Codex copies its ~47 MB bundled marketplace out of the read-only Nix store
+  -- here, keeps the 0555/0444 modes, and then can't delete the copy: up to
+  -- ~50/hour while in use, 133 GiB by 2026-11-06.
   codex_staging_dir = HOME .. "/.codex/.tmp/bundled-marketplaces",
   codex_staging_days = 1,
   top_consumers = 15,
@@ -310,7 +311,9 @@ local function execute_reclaim(opts)
     local c = get_codex_staging()
     if c.count > 0 then
       if apply then
-        os.execute(codex_staging_find("-exec rm -rf -- {} +"))
+        -- The copies keep the Nix store's read-only modes, which is also why
+        -- Codex can't clean them up itself; plain rm -rf fails the same way.
+        os.execute(codex_staging_find([[-exec sh -c 'chmod -R u+w "$@" && rm -rf -- "$@"' sh {} +]]))
       end
       record("Codex Staging", c.size_bytes, string.format(
         "%d leaked marketplace copies older than %dd in %s", c.count, CONFIG.codex_staging_days, CONFIG.codex_staging_dir))
