@@ -26,6 +26,14 @@
           };
           commit.gpgsign = true;
           gpg.format = "ssh";
+          # TODO(ssh): this line never reaches ~/.config/git/config. The
+          # signing.* options above emit their own `gpg.ssh.program`, and that
+          # section replaces this one, so local verification fails ("needs
+          # gpg.ssh.allowedSignersFile") and every commit shows %G? = N even
+          # though it's signed. Nest it as `gpg.ssh.allowedSignersFile` so the
+          # two merge. Separately, ~/.ssh/bw.pub isn't a GitHub *signing* key,
+          # so pushed commits show "Unverified": run `gh auth refresh -h github.com
+          # -s admin:ssh_signing_key` and `gh ssh-key add ~/.ssh/bw.pub --type signing`.
           "gpg.ssh".allowedSignersFile = "${config.home.homeDirectory}/.ssh/allowed_signers";
           # Route HTTPS credential prompts to the GNOME keyring via libsecret,
           # so first-time auth uses the seahorse GTK askpass and subsequent

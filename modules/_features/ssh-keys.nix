@@ -17,6 +17,12 @@
       # (and other control hosts) run unattended ssh to cluster/installer nodes
       # without exposing a cleartext private key on disk. Loaded via
       # SSH_AUTH_SOCK=~/.bitwarden-ssh-agent.sock — see ssh-bitwarden.nix.
+      # TODO(ssh): this is the only key the agent serves (it's also the git
+      # signing key, ~/.ssh/bw.pub), but GitHub only has the INQPlT key above.
+      # So `git push` over ssh to github.com fails "Permission denied
+      # (publickey)" (2026-11-06). Register it: `gh auth refresh -h github.com
+      # -s admin:public_key` (the current token lacks that scope), then
+      # `gh ssh-key add ~/.ssh/bw.pub --type authentication --title cerberus-bitwarden`.
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN26TcFkEK22/wuioiuHxCKZw0C1cdkVzgGMA+m7Jeei cerberus-bitwarden-automation"
     ];
   };
