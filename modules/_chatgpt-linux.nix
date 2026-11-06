@@ -15,6 +15,7 @@
   cups,
   dbus,
   expat,
+  findutils,
   fontconfig,
   freetype,
   gdk-pixbuf,
@@ -107,6 +108,20 @@ let
     wayland
     zlib
   ];
+  # Codex copies resources/plugins/openai-bundled into this staging dir and keeps
+  # the store's 0555/0444 modes, so it can never delete the copy afterwards (up to
+  # ~50 copies an hour of 47 MB while in use; 133 GiB by 2026-11-06). Clear copies
+  # older than an hour on launch; they are writable only after chmod. The nightly
+  # disk-playbook covers sessions that stay open for days.
+  cleanupStaging = ''
+    staging="''${CODEX_HOME:-$HOME/.codex}/.tmp/bundled-marketplaces"
+    if [ -d "$staging" ]; then
+      (
+        ${findutils}/bin/find "$staging" -mindepth 1 -maxdepth 1 -name 'openai-bundled.staging-*' -mmin +60 -exec ${coreutils}/bin/chmod -R u+w {} +
+        ${findutils}/bin/find "$staging" -mindepth 1 -maxdepth 1 -name 'openai-bundled.staging-*' -mmin +60 -exec ${coreutils}/bin/rm -rf -- {} +
+      ) >/dev/null 2>&1 &
+    fi
+  '';
 in
 stdenv.mkDerivation (_finalAttrs: {
   pname = "chatgpt-linux";
@@ -192,6 +207,7 @@ stdenv.mkDerivation (_finalAttrs: {
         ]
       } \
       --prefix LD_LIBRARY_PATH : "$out/lib/chatgpt:${lib.makeLibraryPath runtimeLibs}" \
+      --run ${lib.escapeShellArg cleanupStaging} \
       --add-flags "--password-store=basic" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true}}"
     # The bundled Electron (42) has no --ozone-platform-hint switch any more, and
