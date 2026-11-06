@@ -12,28 +12,39 @@ local table = table
 -- ---------------------------------------------------------------------------
 -- Configuration & Policy
 -- ---------------------------------------------------------------------------
+local HOME = os.getenv("HOME") or "/home/warby"
+
 local CONFIG = {
-  mount_point = "/",
+  -- Root NVMe plus the second NVMe (btrfs fast-workspace). Thresholds act on
+  -- whichever is fullest.
+  mounts = { "/", HOME .. "/Workspace" },
   thresholds = {
     warning  = 75, -- Start warning in reports/status
     action   = 80, -- Auto-reclaim triggered in nightly runs
     critical = 90, -- Urgent alerts & aggressive safe reclaim
   },
-  reports_dir = (os.getenv("HOME") or "/home/warby") .. "/.local/state/disk-reports",
+  reports_dir = HOME .. "/.local/state/disk-reports",
   retention_days = 30,
   stale_build_days = 7,  -- Targets unmodified for 7+ days are pruned at action threshold
+  active_build_days = 1, -- Even at critical, a build tree touched within a day is kept
   roots = {
-    (os.getenv("HOME") or "/home/warby") .. "/Workspace*",
-    (os.getenv("HOME") or "/home/warby") .. "/workspace*",
+    HOME .. "/Workspace*",
+    HOME .. "/workspace*",
+    HOME .. "/.cache",
   },
   cache_dirs = {
-    (os.getenv("HOME") or "/home/warby") .. "/.cache/uv",
-    (os.getenv("HOME") or "/home/warby") .. "/.cache/pip",
-    (os.getenv("HOME") or "/home/warby") .. "/.npm/_cacache",
-    (os.getenv("HOME") or "/home/warby") .. "/.cache/yarn",
-    (os.getenv("HOME") or "/home/warby") .. "/.cache/go-build",
-    (os.getenv("HOME") or "/home/warby") .. "/.cargo/registry/cache",
-  }
+    HOME .. "/.cache/uv",
+    HOME .. "/.cache/pip",
+    HOME .. "/.npm/_cacache",
+    HOME .. "/.cache/yarn",
+    HOME .. "/.cache/go-build",
+    HOME .. "/.cargo/registry/cache",
+  },
+  -- The Codex app-server copies its ~47 MB bundled marketplace here on every
+  -- start and never removes the copy: ~200/day, 133 GiB by 2026-11-06.
+  codex_staging_dir = HOME .. "/.codex/.tmp/bundled-marketplaces",
+  codex_staging_days = 1,
+  top_consumers = 15,
 }
 
 -- ---------------------------------------------------------------------------
@@ -45,10 +56,6 @@ local function exec_read(cmd)
   local result = handle:read("*a")
   handle:close()
   return result or ""
-end
-
-local function exec_status(cmd)
-  return os.execute(cmd)
 end
 
 local function trim(s)
@@ -70,23 +77,18 @@ local function human_size(bytes)
   end
 end
 
-local function file_exists(path)
-  local f = io.open(path, "r")
-  if f then
-    f:close()
-    return true
-  end
-  return false
-end
-
 local function dir_size_bytes(path)
   local out = exec_read(string.format("du -xsb %q 2>/dev/null | awk '{print $1}'", path))
   return tonumber(trim(out)) or 0
 end
 
-local function dir_mtime_epoch(path)
-  local out = exec_read(string.format("stat -c '%%Y' %q 2>/dev/null", path))
-  return tonumber(trim(out)) or 0
+-- A tree's own mtime only moves when its top level gains entries. The
+-- per-crate fingerprint and incremental dirs three levels down move on every
+-- build, so take the newest mtime down to that depth.
+local function newest_mtime_epoch(path)
+  local out = exec_read(string.format(
+    "find %q -maxdepth 3 -printf '%%T@\\n' 2>/dev/null | sort -n | tail -n 1", path))
+  return math.floor(tonumber(trim(out)) or 0)
 end
 
 local function notify(summary, body, urgency)
@@ -102,7 +104,7 @@ end
 -- Core Auditing & Inspection
 -- ---------------------------------------------------------------------------
 local function get_disk_capacity(mount)
-  mount = mount or CONFIG.mount_point
+  mount = mount or CONFIG.mounts[1]
   local raw = exec_read(string.format("df -P -k %q 2>/dev/null | awk 'NR==2{print $2, $3, $4, $5}'", mount))
   local total_k, used_k, avail_k, pct_str = raw:match("(%d+)%s+(%d+)%s+(%d+)%s+(%d+)%%")
   total_k = tonumber(total_k) or 0
@@ -119,34 +121,79 @@ local function get_disk_capacity(mount)
   }
 end
 
+local function get_all_capacities()
+  local caps = {}
+  for _, m in ipairs(CONFIG.mounts) do
+    table.insert(caps, get_disk_capacity(m))
+  end
+  return caps
+end
+
+-- The fullest mount drives the alert level and the reclaim decision.
+local function get_worst_capacity()
+  local worst
+  for _, cap in ipairs(get_all_capacities()) do
+    if not worst or cap.percent_used > worst.percent_used then worst = cap end
+  end
+  return worst
+end
+
+local function alert_level(pct)
+  if pct >= CONFIG.thresholds.critical then return "critical" end
+  if pct >= CONFIG.thresholds.action then return "action" end
+  if pct >= CONFIG.thresholds.warning then return "warning" end
+  return "normal"
+end
+
+-- Only directories cargo itself tagged count. That covers in-tree target/ and
+-- out-of-tree CARGO_TARGET_DIRs (fusion-playthrough-target, ~/.cache/nebula-*),
+-- and skips non-cargo output that merely sits in a dir named target/.
+local function is_cargo_target(path)
+  local f = io.open(path .. "/CACHEDIR.TAG", "r")
+  if not f then return false end
+  local tag = f:read("*a") or ""
+  f:close()
+  return tag:find("created by cargo", 1, true) ~= nil
+end
+
 local function find_cargo_target_dirs(min_age_days)
   local targets = {}
+  local seen = {}
   local now = os.time()
   local min_age_sec = (min_age_days or 0) * 86400
 
+  local candidates = {}
   for _, pattern in ipairs(CONFIG.roots) do
-    local cmd = string.format("find %s -maxdepth 4 -type d -name target 2>/dev/null", pattern)
+    local cmd = string.format("find %s -maxdepth 4 -type f -name CACHEDIR.TAG -printf '%%h\\n' 2>/dev/null", pattern)
     local out = exec_read(cmd)
     for line in out:gmatch("[^\r\n]+") do
       local path = trim(line)
-      if #path > 0 then
-        -- Safety check: MUST have a Cargo.toml beside it
-        local parent = path:gsub("/target/?$", "")
-        local cargo_toml = parent .. "/Cargo.toml"
-        if file_exists(cargo_toml) then
-          local mtime = dir_mtime_epoch(path)
-          local age_days = (now - mtime) / 86400
-          if min_age_days == 0 or (now - mtime) >= min_age_sec then
-            local size = dir_size_bytes(path)
-            table.insert(targets, {
-              path = path,
-              parent = parent,
-              size_bytes = size,
-              age_days = math.floor(age_days * 10) / 10,
-              mtime = mtime
-            })
-          end
-        end
+      if #path > 0 and is_cargo_target(path) then
+        table.insert(candidates, path)
+      end
+    end
+  end
+
+  -- Cross-compile targets (<target>/wasm32-unknown-unknown) carry their own
+  -- tag; keep only the outermost tree so sizes aren't counted twice.
+  table.sort(candidates, function(a, b) return #a < #b end)
+  for _, path in ipairs(candidates) do
+    local nested = seen[path]
+    for parent in pairs(seen) do
+      if path:sub(1, #parent + 1) == parent .. "/" then nested = true end
+    end
+    if not nested then
+      seen[path] = true
+      local mtime = newest_mtime_epoch(path)
+      local age_days = (now - mtime) / 86400
+      if min_age_days == 0 or (now - mtime) >= min_age_sec then
+        local size = dir_size_bytes(path)
+        table.insert(targets, {
+          path = path,
+          size_bytes = size,
+          age_days = math.floor(age_days * 10) / 10,
+          mtime = mtime
+        })
       end
     end
   end
@@ -166,18 +213,46 @@ local function get_cache_candidates()
   return items
 end
 
+local function codex_staging_find(action)
+  return string.format(
+    "find %q -mindepth 1 -maxdepth 1 -name 'openai-bundled.staging-*' -mmin +%d %s 2>/dev/null",
+    CONFIG.codex_staging_dir, CONFIG.codex_staging_days * 1440, action
+  )
+end
+
+local function get_codex_staging()
+  local out = exec_read(codex_staging_find("-exec du -sb {} +") .. " | awk '{n++; s+=$1} END{print n+0, s+0}'")
+  local n, s = out:match("(%d+)%s+(%d+)")
+  return { count = tonumber(n) or 0, size_bytes = tonumber(s) or 0 }
+end
+
+local function get_top_consumers(path, limit)
+  local out = exec_read(string.format(
+    "du -xb --max-depth=1 %q 2>/dev/null | sort -rn | head -n %d", path, limit + 1))
+  local items = {}
+  for size, p in out:gmatch("(%d+)\t([^\n]+)") do
+    if p ~= path then
+      table.insert(items, { path = p, size_bytes = tonumber(size) })
+    end
+  end
+  return items
+end
+
 local function get_docker_summary()
-  local out = exec_read("timeout 3s docker system df 2>/dev/null")
+  -- `docker system df` walks every volume; with ~280 of them it needs tens of seconds.
+  local out = exec_read("timeout 90s docker system df 2>/dev/null")
   if #out == 0 then return nil end
 
   local images_reclaim = out:match("Images%s+%d+%s+%d+%s+[%d%.]+%a*B%s+([%d%.]+%a*B)") or "0B"
   local containers_reclaim = out:match("Containers%s+%d+%s+%d+%s+[%d%.]+%a*B%s+([%d%.]+%a*B)") or "0B"
+  local volumes_reclaim = out:match("Local Volumes%s+%d+%s+%d+%s+[%d%.]+%a*B%s+([%d%.]+%a*B)") or "0B"
   local build_reclaim = out:match("Build Cache%s+%d+%s+%d+%s+[%d%.]+%a*B%s+([%d%.]+%a*B)") or "0B"
 
   return {
     raw = out,
     images_reclaim = images_reclaim,
     containers_reclaim = containers_reclaim,
+    volumes_reclaim = volumes_reclaim,
     build_reclaim = build_reclaim,
   }
 end
@@ -189,7 +264,7 @@ local function execute_reclaim(opts)
   opts = opts or {}
   local apply = opts.apply or false
   local min_age_days = opts.min_age_days or 0
-  local tiers = opts.tiers or { build = true, cache = true, docker = true, nix = true, logs = true }
+  local tiers = opts.tiers or { build = true, cache = true, codex = true, docker = true, nix = true, logs = true }
 
   local results = {
     freed_bytes = 0,
@@ -206,7 +281,7 @@ local function execute_reclaim(opts)
     })
   end
 
-  -- Tier: Build Artifacts (target/)
+  -- Tier: Build Artifacts (cargo-tagged target dirs)
   if tiers.build then
     local targets = find_cargo_target_dirs(min_age_days)
     for _, t in ipairs(targets) do
@@ -227,6 +302,18 @@ local function execute_reclaim(opts)
         os.execute(string.format("rm -rf -- %q", c.path))
       end
       record("Package Cache", c.size_bytes, c.path)
+    end
+  end
+
+  -- Tier: Codex marketplace staging copies (leaked temp dirs, never reused)
+  if tiers.codex then
+    local c = get_codex_staging()
+    if c.count > 0 then
+      if apply then
+        os.execute(codex_staging_find("-exec rm -rf -- {} +"))
+      end
+      record("Codex Staging", c.size_bytes, string.format(
+        "%d leaked marketplace copies older than %dd in %s", c.count, CONFIG.codex_staging_days, CONFIG.codex_staging_dir))
     end
   end
 
@@ -261,33 +348,38 @@ local function execute_reclaim(opts)
   return results
 end
 
+local function reclaim_min_age(cap)
+  if cap.percent_used >= CONFIG.thresholds.critical then
+    return CONFIG.active_build_days
+  end
+  return CONFIG.stale_build_days
+end
+
 -- ---------------------------------------------------------------------------
 -- Subcommands
 -- ---------------------------------------------------------------------------
 
 local function cmd_status()
-  local cap = get_disk_capacity()
+  local labels = {
+    critical = "CRITICAL (Action Required)",
+    action = "ACTION (Auto-cleanup active)",
+    warning = "WARNING (Approaching threshold)",
+    normal = "NORMAL",
+  }
   print("=================================================================")
   print(" Disk Playbook - Filesystem Status")
   print("=================================================================")
-  print(string.format("Mount:       %s", cap.mount))
-  print(string.format("Capacity:    %s Total | %s Used (%d%%) | %s Available",
-    human_size(cap.total_bytes),
-    human_size(cap.used_bytes),
-    cap.percent_used,
-    human_size(cap.avail_bytes)
-  ))
-
-  local level = "NORMAL"
-  if cap.percent_used >= CONFIG.thresholds.critical then
-    level = "CRITICAL (Action Required)"
-  elseif cap.percent_used >= CONFIG.thresholds.action then
-    level = "ACTION (Auto-cleanup active)"
-  elseif cap.percent_used >= CONFIG.thresholds.warning then
-    level = "WARNING (Approaching threshold)"
+  for _, cap in ipairs(get_all_capacities()) do
+    print(string.format("Mount:       %s", cap.mount))
+    print(string.format("Capacity:    %s Total | %s Used (%d%%) | %s Available",
+      human_size(cap.total_bytes),
+      human_size(cap.used_bytes),
+      cap.percent_used,
+      human_size(cap.avail_bytes)
+    ))
+    print(string.format("Alert State: %s", labels[alert_level(cap.percent_used)]))
+    print("-----------------------------------------------------------------")
   end
-  print(string.format("Alert State: %s", level))
-  print("-----------------------------------------------------------------")
 
   -- Quick target scan
   local targets = find_cargo_target_dirs(0)
@@ -301,44 +393,47 @@ local function cmd_status()
   for _, c in ipairs(caches) do cache_bytes = cache_bytes + c.size_bytes end
   print(string.format("Package caches (uv/npm): %d found (%s total)", #caches, human_size(cache_bytes)))
 
+  local codex = get_codex_staging()
+  print(string.format("Codex staging leak:     %d copies (%s)", codex.count, human_size(codex.size_bytes)))
+
   -- Docker
   local docker = get_docker_summary()
   if docker then
-    print(string.format("Docker reclaimable:     Images %s | Build Cache %s",
-      docker.images_reclaim, docker.build_reclaim))
+    print(string.format("Docker reclaimable:     Images %s | Volumes %s | Build Cache %s",
+      docker.images_reclaim, docker.volumes_reclaim, docker.build_reclaim))
   end
   print("=================================================================")
 end
 
 local function generate_markdown_report()
-  local cap = get_disk_capacity()
+  local caps = get_all_capacities()
   local now_str = os.date("%Y-%m-%d %H:%M:%S")
   local targets = find_cargo_target_dirs(0)
   local caches = get_cache_candidates()
+  local codex = get_codex_staging()
   local docker = get_docker_summary()
+  local status_tags = {
+    critical = "🔴 Critical",
+    action = "🟡 Action Threshold Triggered",
+    warning = "🟠 Warning",
+    normal = "🟢 Normal",
+  }
 
   local lines = {}
   table.insert(lines, "# Nightly Disk & System Maintenance Report")
   table.insert(lines, string.format("**Generated**: %s | **Host**: %s", now_str, trim(exec_read("hostname"))))
   table.insert(lines, "")
   table.insert(lines, "## 1. Capacity & Threshold Status")
-  table.insert(lines, string.format("- **Mount Point**: `%s`", cap.mount))
-  table.insert(lines, string.format("- **Total**: %s", human_size(cap.total_bytes)))
-  table.insert(lines, string.format("- **Used**: %s (**%d%%**)", human_size(cap.used_bytes), cap.percent_used))
-  table.insert(lines, string.format("- **Available**: %s", human_size(cap.avail_bytes)))
-
-  local status_tag = "🟢 Normal"
-  if cap.percent_used >= CONFIG.thresholds.critical then
-    status_tag = "🔴 Critical"
-  elseif cap.percent_used >= CONFIG.thresholds.action then
-    status_tag = "🟡 Action Threshold Triggered"
-  elseif cap.percent_used >= CONFIG.thresholds.warning then
-    status_tag = "🟠 Warning"
+  table.insert(lines, "| Mount | Total | Used | Available | Status |")
+  table.insert(lines, "| :--- | :--- | :--- | :--- | :--- |")
+  for _, cap in ipairs(caps) do
+    table.insert(lines, string.format("| `%s` | %s | %s (**%d%%**) | %s | %s |",
+      cap.mount, human_size(cap.total_bytes), human_size(cap.used_bytes), cap.percent_used,
+      human_size(cap.avail_bytes), status_tags[alert_level(cap.percent_used)]))
   end
-  table.insert(lines, string.format("- **Status**: %s", status_tag))
   table.insert(lines, "")
 
-  table.insert(lines, "## 2. Reclaimable Build Targets (`target/`)")
+  table.insert(lines, "## 2. Reclaimable Build Targets (cargo-tagged)")
   if #targets == 0 then
     table.insert(lines, "_No Cargo target directories found._")
   else
@@ -362,20 +457,39 @@ local function generate_markdown_report()
       table.insert(lines, string.format("| `%s` | %s |", c.path, human_size(c.size_bytes)))
     end
   end
+  table.insert(lines, string.format("- **Codex staging leak**: %d copies older than %dd (%s) in `%s`",
+    codex.count, CONFIG.codex_staging_days, human_size(codex.size_bytes), CONFIG.codex_staging_dir))
   table.insert(lines, "")
 
+  table.insert(lines, "## 4. Docker Storage")
   if docker then
-    table.insert(lines, "## 4. Docker Storage")
     table.insert(lines, string.format("- **Reclaimable Images**: %s", docker.images_reclaim))
+    table.insert(lines, string.format("- **Unused Volumes**: %s (review by hand; never auto-pruned)", docker.volumes_reclaim))
     table.insert(lines, string.format("- **Build Cache**: %s", docker.build_reclaim))
     table.insert(lines, "_Note: Docker volumes are strictly preserved to safeguard persistent application state._")
+  else
+    table.insert(lines, "_`docker system df` did not answer within 90s._")
+  end
+  table.insert(lines, "")
+
+  -- Cold data is the bulk of every fill-up and no tier can safely delete it,
+  -- so surface the biggest directories for a human to decide on.
+  table.insert(lines, "## 5. Largest Directories")
+  for _, path in ipairs({ HOME, HOME .. "/Workspace" }) do
+    table.insert(lines, string.format("### `%s`", path))
+    table.insert(lines, "| Path | Size |")
+    table.insert(lines, "| :--- | :--- |")
+    for _, item in ipairs(get_top_consumers(path, CONFIG.top_consumers)) do
+      table.insert(lines, string.format("| `%s` | %s |", item.path, human_size(item.size_bytes)))
+    end
     table.insert(lines, "")
   end
 
-  table.insert(lines, "## 5. Storage Invariants & Policy")
+  table.insert(lines, "## 6. Storage Invariants & Policy")
   table.insert(lines, "- [x] Git repositories, untracked code, and dirty worktrees protected.")
   table.insert(lines, "- [x] Persistent database and Docker volumes excluded from automatic deletion.")
-  table.insert(lines, string.format("- [x] Automatic cleanup activates when usage reaches **%d%%**.", CONFIG.thresholds.action))
+  table.insert(lines, string.format("- [x] Automatic cleanup activates when any mount reaches **%d%%**.", CONFIG.thresholds.action))
+  table.insert(lines, string.format("- [x] Build trees touched within **%d day(s)** are kept even at critical.", CONFIG.active_build_days))
 
   return table.concat(lines, "\n")
 end
@@ -383,7 +497,7 @@ end
 local function cmd_report(out_file)
   local report = generate_markdown_report()
   if out_file and #out_file > 0 then
-    os.execute(string.format("mkdir -p %q", out_file:gsub("/[^/]+$", "")))
+    os.execute(string.format("mkdir -p %q", (out_file:gsub("/[^/]+$", ""))))
     local f = io.open(out_file, "w")
     if f then
       f:write(report)
@@ -398,9 +512,9 @@ local function cmd_report(out_file)
 end
 
 local function cmd_check()
-  local cap = get_disk_capacity()
-  print(string.format("Dry run evaluation (Mount %s, %d%% used):", cap.mount, cap.percent_used))
-  local results = execute_reclaim({ apply = false, min_age_days = CONFIG.stale_build_days })
+  local cap = get_worst_capacity()
+  print(string.format("Dry run evaluation (fullest mount %s, %d%% used):", cap.mount, cap.percent_used))
+  local results = execute_reclaim({ apply = false, min_age_days = reclaim_min_age(cap) })
   print(string.format("Total candidate space to reclaim: %s", human_size(results.freed_bytes)))
   for _, a in ipairs(results.actions) do
     if a.size_bytes > 0 then
@@ -412,22 +526,24 @@ local function cmd_check()
 end
 
 local function cmd_clean(force)
-  local cap = get_disk_capacity()
+  local cap = get_worst_capacity()
   if not force and cap.percent_used < CONFIG.thresholds.action then
     print(string.format(
-      "Disk usage is at %d%% (below action threshold of %d%%). No cleanup required.",
-      cap.percent_used, CONFIG.thresholds.action
+      "Fullest mount %s is at %d%% (below action threshold of %d%%). No cleanup required.",
+      cap.mount, cap.percent_used, CONFIG.thresholds.action
     ))
     print("Pass --force to run cleanup regardless of threshold.")
     return
   end
 
-  print(string.format("Executing cleanup on %s (current: %d%% used)...", cap.mount, cap.percent_used))
-  local results = execute_reclaim({ apply = true, min_age_days = (cap.percent_used >= CONFIG.thresholds.critical and 0 or CONFIG.stale_build_days) })
+  print(string.format("Executing cleanup (fullest mount %s at %d%% used)...", cap.mount, cap.percent_used))
+  local results = execute_reclaim({ apply = true, min_age_days = reclaim_min_age(cap) })
   print(string.format("Successfully freed %s.", human_size(results.freed_bytes)))
 
-  local after = get_disk_capacity()
-  print(string.format("New disk status: %d%% used (%s available).", after.percent_used, human_size(after.avail_bytes)))
+  for _, after in ipairs(get_all_capacities()) do
+    print(string.format("New disk status %s: %d%% used (%s available).",
+      after.mount, after.percent_used, human_size(after.avail_bytes)))
+  end
 end
 
 local function cmd_nightly()
@@ -453,30 +569,22 @@ local function cmd_nightly()
   end
 
   -- 3. Evaluate threshold and action
-  local cap = get_disk_capacity()
-  if cap.percent_used >= CONFIG.thresholds.critical then
-    local res = execute_reclaim({ apply = true, min_age_days = 0 })
-    local after = get_disk_capacity()
+  local cap = get_worst_capacity()
+  local level = alert_level(cap.percent_used)
+  if level == "critical" or level == "action" then
+    local res = execute_reclaim({ apply = true, min_age_days = reclaim_min_age(cap) })
+    local after = get_disk_capacity(cap.mount)
     notify(
-      "CRITICAL: Disk Usage Alert",
-      string.format("Root was at %d%%. Reclaimed %s. Current: %d%% (%s free).",
-        cap.percent_used, human_size(res.freed_bytes), after.percent_used, human_size(after.avail_bytes)),
-      "critical"
+      level == "critical" and "CRITICAL: Disk Usage Alert" or "Automated Disk Maintenance",
+      string.format("%s was at %d%%. Reclaimed %s. Current: %d%% (%s free).",
+        cap.mount, cap.percent_used, human_size(res.freed_bytes), after.percent_used, human_size(after.avail_bytes)),
+      level == "critical" and "critical" or "normal"
     )
-  elseif cap.percent_used >= CONFIG.thresholds.action then
-    local res = execute_reclaim({ apply = true, min_age_days = CONFIG.stale_build_days })
-    local after = get_disk_capacity()
-    notify(
-      "Automated Disk Maintenance",
-      string.format("Root reached %d%% threshold. Reclaimed %s. Current: %d%% (%s free).",
-        cap.percent_used, human_size(res.freed_bytes), after.percent_used, human_size(after.avail_bytes)),
-      "normal"
-    )
-  elseif cap.percent_used >= CONFIG.thresholds.warning then
+  elseif level == "warning" then
     notify(
       "Disk Space Warning",
-      string.format("Root usage at %d%% (%s free). Approaching %d%% action threshold.",
-        cap.percent_used, human_size(cap.avail_bytes), CONFIG.thresholds.action),
+      string.format("%s usage at %d%% (%s free). Approaching %d%% action threshold.",
+        cap.mount, cap.percent_used, human_size(cap.avail_bytes), CONFIG.thresholds.action),
       "normal"
     )
   end
