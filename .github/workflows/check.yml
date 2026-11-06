@@ -20,14 +20,14 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
-      # Evaluation only. Full host closures are packages.<system>.host-*, built
-      # explicitly (never by flake check) so a free runner doesn't compile CUDA.
-      - name: nix flake check (evaluate all outputs)
-        run: nix flake check --no-build --all-systems --accept-flake-config --show-trace
-      - name: formatting
-        run: nix build .#checks.x86_64-linux.treefmt --accept-flake-config --print-build-logs
-      - name: host evaluation checks (native system only)
+      # Checks are cheap by design: host-<name> only records the toplevel drvPath
+      # (full evaluation, no closure build). Full closures are packages.<system>.host-*,
+      # built explicitly, never by flake check. Not --no-build: evaluating the
+      # hosts needs import-from-derivation (e.g. tokyonight.nix) to be realised.
+      - name: nix flake check (x86_64-linux checks, incl. treefmt + host eval)
+        run: nix flake check --accept-flake-config --show-trace
+      - name: evaluate aarch64 hosts (eval only, not buildable here)
         run: |
-          nix build --accept-flake-config --print-build-logs --no-link \
-            $(nix eval --accept-flake-config --raw .#checks.x86_64-linux \
-              --apply 'c: builtins.concatStringsSep " " (map (n: ".#checks.x86_64-linux.${n}") (builtins.filter (n: builtins.substring 0 5 n == "host-") (builtins.attrNames c)))')
+          for h in stage-edge stage-db; do
+            nix eval --accept-flake-config --raw ".#nixosConfigurations.$h.config.system.build.toplevel.drvPath"; echo
+          done
