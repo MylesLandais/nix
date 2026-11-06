@@ -41,7 +41,7 @@ let
   # Helium and Vivaldi both still show blocky WebM/GIF artifacts on nvidia
   # even with UseChromeOSDirectVideoDecoder disabled; fall back to software
   # decode (fallback ladder rung 3 in chromium-browsers.nix) for both.
-  # Chromium proper has not shown the issue, so it keeps hardware decode.
+  # Chromium proper keeps hardware decode, with ANGLE on GL (chromium-browsers.nix).
   # The nixpkgs Chromium wrapper ignores chromium-flags.conf, so the same flags go in
   # through commandLineArgs. Our --enable-features comes after the wrapper's and replaces
   # it (last one wins), so WaylandWindowDecorations is carried over here.

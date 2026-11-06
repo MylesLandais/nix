@@ -65,6 +65,16 @@ let
     "--use-angle=vulkan"
   ];
 
+  # ANGLE on Vulkan presents NVIDIA VA-API frames at 1080p and above as solid
+  # green (H.264, VP9 and AV1 alike; 720p is fine). ANGLE on GL presents them
+  # correctly and, on Chromium 155, Dawn still reaches the RTX 3090 Ti, so
+  # hardware decode and WebGPU coexist. --disable-gpu-memory-buffer-video-frames
+  # does not help. Measured 2026-11-05 with grim captures of the real window.
+  chromiumWebgpuVaapiFlags = [
+    "--ignore-gpu-blocklist"
+    "--use-angle=gl"
+  ];
+
   # vaapiMode: false | "generic" | "nvidia"
   # - nvidia: upstream-recommended bundle for nvidia-vaapi-driver on Wayland
   # - generic: Intel/AMD VA-API (VaapiVideoDecoder only; no encoder for playback)
@@ -75,7 +85,8 @@ let
   # 3. [applied for Helium + Vivaldi] Set vaapiMode = false (software decode;
   #    higher CPU). See softwareDecodeFlagsFile in modules/home.nix — both
   #    still artifacted after rungs 1-2, so they get vaapiMode forced to
-  #    false. Chromium proper has not shown the issue and keeps hw decode.
+  #    false. Chromium proper keeps hw decode on ANGLE GL (see
+  #    chromiumWebgpuVaapiFlags), which fixed its green 1080p video.
   mkChromiumFlags =
     {
       wayland ? true,
@@ -134,7 +145,9 @@ let
           "--disable-features=${lib.concatStringsSep "," disableFeatures}"
         ]
         ++ lib.optionals darkMode [ "--force-dark-mode" ]
-        ++ lib.optionals webgpu chromiumWebgpuFlags
+        ++ lib.optionals webgpu (
+          if vaapiMode == "nvidia" then chromiumWebgpuVaapiFlags else chromiumWebgpuFlags
+        )
         ++ extra;
     in
     lib.concatStringsSep "\n" lines;
