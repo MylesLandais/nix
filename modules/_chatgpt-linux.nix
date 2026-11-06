@@ -113,6 +113,8 @@ let
   # ~50 copies an hour of 47 MB while in use; 133 GiB by 2026-11-06). Clear copies
   # older than an hour on launch; they are writable only after chmod. The nightly
   # disk-playbook covers sessions that stay open for days.
+  # TODO(disk): drop once upstream fixes it. Check after a bump by disabling this
+  # and watching `ls ~/.codex/.tmp/bundled-marketplaces | wc -l` stay flat.
   cleanupStaging = ''
     staging="''${CODEX_HOME:-$HOME/.codex}/.tmp/bundled-marketplaces"
     if [ -d "$staging" ]; then

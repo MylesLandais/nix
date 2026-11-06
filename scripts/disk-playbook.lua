@@ -283,6 +283,11 @@ local function execute_reclaim(opts)
   end
 
   -- Tier: Build Artifacts (cargo-tagged target dirs)
+  -- TODO(disk): also prune debug/incremental/<crate>-<hash> dirs untouched for
+  -- stale_build_days inside trees that are still active. Incremental stays on
+  -- (it saves long rebuilds); dead test/bin/feature variants were 24 of 40 GiB
+  -- in nebula-channel-reactions-build on 2026-11-06. Worst case is one
+  -- non-incremental compile of that crate.
   if tiers.build then
     local targets = find_cargo_target_dirs(min_age_days)
     for _, t in ipairs(targets) do
