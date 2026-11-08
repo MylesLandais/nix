@@ -1,5 +1,6 @@
 # Shared Chromium / Helium extension IDs and launch flags.
-# Imported by chromium-policy.nix (NixOS) and modules/home.nix (Home Manager).
+# Exposed as flake.lib.chromiumBrowsers (modules/flake/lib.nix); used by the
+# home-manager base module and the cerberus Chromium policy.
 { lib }:
 let
   # Force-installed extension pack for all Chromium-based browsers on Cerberus.

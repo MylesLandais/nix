@@ -8,7 +8,7 @@ _: {
       ...
     }:
     let
-      chromiumBrowsers = import "${inputs.self}/modules/_chromium-browsers.nix" { inherit lib; };
+      chromiumBrowsers = inputs.self.lib.chromiumBrowsers;
       inherit (chromiumBrowsers)
         chromiumStandardExtensions
         heliumBundledExtensionsToRemove

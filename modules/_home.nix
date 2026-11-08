@@ -9,7 +9,7 @@
 let
   gpuType = osConfig.host.gpuType or "none";
 
-  chromiumBrowsers = import ./_chromium-browsers.nix { inherit lib; };
+  chromiumBrowsers = inputs.self.lib.chromiumBrowsers;
   inherit (chromiumBrowsers)
     mkChromiumFlags
     chromiumStandardBrowserFlags
