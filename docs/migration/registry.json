@@ -4,22 +4,28 @@
     "devtooling",
     "firefox",
     "gtk",
+    "hyprland",
     "mpv",
+    "niri",
     "prompt",
     "shelltools",
     "stylix",
-    "terminals"
+    "terminals",
+    "xfce"
   ],
   "homeManagerModules": [
     "base",
     "devtooling",
     "firefox",
     "gtk",
+    "hyprland",
     "mpv",
+    "niri",
     "prompt",
     "shelltools",
     "stylix",
-    "terminals"
+    "terminals",
+    "xfce"
   ],
   "nixos": [
     "7PZSZY2",

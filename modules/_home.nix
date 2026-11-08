@@ -136,9 +136,9 @@ in
   imports = [
     ./_features/app-wrappers.nix
     ./_features/chromium-helium-prefs.nix
-    ./_features/desktops/hyprland
-    ./_features/desktops/niri
-    ./_features/desktops/xfce
+    inputs.self.modules.homeManager.hyprland
+    inputs.self.modules.homeManager.niri
+    inputs.self.modules.homeManager.xfce
     ./_features/bars
     inputs.self.modules.homeManager.prompt
     inputs.self.modules.homeManager.shelltools

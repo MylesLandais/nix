@@ -163,7 +163,7 @@ in
         ${lib.attrByPath [ "host" "warcraft3" "hyprlandExtraConfig" ] "" osConfig}
 
         -- == Binds ==
-        ${import ./config/bindings.nix {
+        ${import ./_config/bindings.nix {
           inherit lib mod;
           bar = osConfig.host.bar;
           app2unit = lib.getExe pkgs.app2unit;
