@@ -1,0 +1,163 @@
+{
+  "A": {
+    "outputs": [],
+    "registry": []
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/0wf364a4chpi4kgvf8dn37pvcz44mmwq-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/p617qc8py7k634bxz1c1ragjgv7pzrb5-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    }
+  ],
+  "base": "034caa616b7116aaf046e6c59bf2fb443c183629",
+  "harness": "m2vbjyxdfm6j",
+  "hosts": {
+    "7PZSZY2": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "94tl0m2": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "95qmom2": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "argus": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "cerberus": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "installerIso": {
+      "B": [
+        {
+          "after": "\"/nix/store/0f6ysa1cjq252wmdjazq26086lxaiajz-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv\"",
+          "before": "\"/nix/store/rfn0dxk8w6pf3k6csff4960p2pkyxpm1-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv\"",
+          "path": "toplevel"
+        }
+      ],
+      "C": [
+        {
+          "after": "\"8df92a1093736898189d9d5248abbc0ef626ce8a21abd78aa3c5c70cfadde8cb\"",
+          "before": "\"92b38099fc158464266b94d43a47565c83d578395353667aa554e4254753b8e7\"",
+          "path": "activationScripts/etc"
+        },
+        {
+          "after": "\"3590526f5c3cfaba95e91456993e9494e60fb008a132572c85957f5881b0ec2b\"",
+          "before": "\"3340b8a844a301c436e653f6abdfb7503c6f88910f52052d4a432ee40bd4a878\"",
+          "path": "activationScripts/script"
+        },
+        {
+          "after": "\"/nix/store/vsip4kvf6ikpf8p02nc1vr60gp6i01gj-iso-build-info\"",
+          "before": "\"/nix/store/1jrpkksfqnclk4y1kzqc9af98smi2kx6-iso-build-info\"",
+          "path": "etc/iso-build-info/source"
+        },
+        {
+          "after": "\"/nix/store/zcqdsgmnnfpry1yhiyb2rd1h6p0kzylz-issue\"",
+          "before": "\"/nix/store/13p0papvdjj26i0a3ib9n18ijnfj1l1x-issue\"",
+          "path": "etc/issue/source"
+        }
+      ],
+      "drv_changed": true,
+      "nix_diff_summary": [
+        "- /nix/store/rfn0dxk8w6pf3k6csff4960p2pkyxpm1-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv:{out}",
+        "+ /nix/store/0f6ysa1cjq252wmdjazq26086lxaiajz-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv:{out}",
+        "• The input derivation named `activate` differs",
+        "  - /nix/store/gl0zirwrdfw5wgl0rc33wp4qayjj72pq-activate.drv:{out}",
+        "  + /nix/store/9izxcsjba3r7n34ay6bi8lnx73f4ryfi-activate.drv:{out}",
+        "  • The input derivation named `etc` differs",
+        "    - /nix/store/498b9h6375334rrx3iwv2l7dxxgjrkzm-etc.drv:{out}",
+        "    + /nix/store/86vy9vrqznr3snaka89mdkgw1jqq6yg3-etc.drv:{out}",
+        "    • The input derivation named `iso-build-info` differs",
+        "      - /nix/store/18hsdq7j5nkp7yclrw7bmz1np4bwk5zg-iso-build-info.drv:{out}",
+        "      + /nix/store/pk4ppfjc7h0xahzi2qzzmvx4m656hfs2-iso-build-info.drv:{out}",
+        "      • The environments do not match:",
+        "          buildCommand=''",
+        "            {",
+        "              echo \"home-office-installer build info (shim)\"",
+        "              echo \"========================================\"",
+        "          -   echo \"flake-rev:       034caa616b7116aaf046e6c59bf2fb443c183629\"",
+        "          -   echo \"flake-shortRev:  034caa6\"",
+        "          +   echo \"flake-rev:       ba9614c68a86d89c19c1ba69e154086db70bcc5e\"",
+        "          +   echo \"flake-shortRev:  ba9614c\"",
+        "              echo \"nixpkgs-rev:     e7439b6b14ad3cc35d05608ebca9bce01a25f5f8\"",
+        "              echo \"system:          x86_64-linux\"",
+        "              echo \"edition:         minimal-shim\"",
+        "              echo",
+        "              echo \"authorized_keys fingerprints (warby == root):\"",
+        "              ssh-keygen -lf \"$keysPath\" || true",
+        "              echo",
+        "              echo \"verify from cerberus:\"",
+        "              echo \"  ssh warby@<ip> cat /etc/iso-build-info\"",
+        "            } > $out",
+        "      ''",
+        "    • The input derivation named `issue` differs",
+        "      - /nix/store/3c14l4zfhdhn5hdhk2fnj3d3w69k173w-issue.drv:{out}",
+        "      + /nix/store/vgv17xvgd1j2fib78wcwdcmqhhqr3ns0-issue.drv:{out}",
+        "      • The environments do not match:",
+        "          __json=''",
+        "          - {\"allowSubstitutes\":false,\"buildCommand\":\"target=$out$destination\\nmkdir -p \\\"$(dirname \\\"$target\\\")\\\"\\n\\nif [ -e \\\"$textPath\\\" ]; then\\n  mv \\\"$textPath\\\" \\\"$target\\\"\\nelse\\n  printf \\\"%s\\\" \\\"$text\\\" > \\\"$target\\\"\\nfi\\n\\nif [ -n \\\"$executable\\\" ]; then\\n  chmod +x \\\"$target\\\"\\nfi\\n\\neval \\\"$checkPhase\\\"\\n\",\"buildInputs\":[],\"builder\":\"/nix/store/10dxp0qxqxxsyiljrh2kp0xqhz6arhcx-bash-5.3p15/bin/bash\",\"checkPhase\":\"\",\"cmakeFlags\":[],\"configureFlags\":[],\"depsBuildBuild\":[],\"depsBuildBuildPropagated\":[],\"depsBuildTarget\":[],\"depsBuildTargetPropagated\":[],\"depsHostHost\":[],\"depsHostHostPropagated\":[],\"depsTargetTarget\":[],\"depsTargetTargetPropagated\":[],\"destination\":\"\",\"doCheck\":false,\"doInstallCheck\":false,\"env\":{},\"executable\":false,\"mesonFlags\":[],\"name\":\"issue\",\"nativeBuildInputs\":[],\"outputChecks\":{\"out\":{}},\"outputs\":[\"out\"],\"patches\":[],\"preferLocalBuild\":true,\"propagatedBuildInputs\":[],\"propagatedNativeBuildInputs\":[],\"stdenv\":\"/nix/store/xai718x2gpf0kf73zwhhv50likh5c18l-stdenv-linux-no-cc\",\"strictDeps\":true,\"system\":\"x86_64-linux\",\"text\":\"\\n\\u001b[1;32m<<< Welcome to NixOS 26.11.20261008.e7439b6 (\\\\m) - \\\\l >>>\\u001b[0m\\n\\nHome Office NixOS installer (shim rev 034caa6).\\nRun `nix-install` to bootstrap LaCie onto an attached drive.\\nBuild provenance: `cat /etc/iso-build-info`\\nRemote access: sshd is up; warby user trusts cluster keys.\\n\\n\\n\\n\"}+ {\"allowSubstitutes\":false,\"buildCommand\":\"target=$out$destination\\nmkdir -p \\\"$(dirname \\\"$target\\\")\\\"\\n\\nif [ -e \\\"$textPath\\\" ]; then\\n  mv \\\"$textPath\\\" \\\"$target\\\"\\nelse\\n  printf \\\"%s\\\" \\\"$text\\\" > \\\"$target\\\"\\nfi\\n\\nif [ -n \\\"$executable\\\" ]; then\\n  chmod +x \\\"$target\\\"\\nfi\\n\\neval \\\"$checkPhase\\\"\\n\",\"buildInputs\":[],\"builder\":\"/nix/store/10dxp0qxqxxsyiljrh2kp0xqhz6arhcx-bash-5.3p15/bin/bash\",\"checkPhase\":\"\",\"cmakeFlags\":[],\"configureFlags\":[],\"depsBuildBuild\":[],\"depsBuildBuildPropagated\":[],\"depsBuildTarget\":[],\"depsBuildTargetPropagated\":[],\"depsHostHost\":[],\"depsHostHostPropagated\":[],\"depsTargetTarget\":[],\"depsTargetTargetPropagated\":[],\"destination\":\"\",\"doCheck\":false,\"doInstallCheck\":false,\"env\":{},\"executable\":false,\"mesonFlags\":[],\"name\":\"issue\",\"nativeBuildInputs\":[],\"outputChecks\":{\"out\":{}},\"outputs\":[\"out\"],\"patches\":[],\"preferLocalBuild\":true,\"propagatedBuildInputs\":[],\"propagatedNativeBuildInputs\":[],\"stdenv\":\"/nix/store/xai718x2gpf0kf73zwhhv50likh5c18l-stdenv-linux-no-cc\",\"strictDeps\":true,\"system\":\"x86_64-linux\",\"text\":\"\\n\\u001b[1;32m<<< Welcome to NixOS 26.11.20261008.e7439b6 (\\\\m) - \\\\l >>>\\u001b[0m\\n\\nHome Office NixOS installer (shim rev ba9614c).\\nRun `nix-install` to bootstrap LaCie onto an attached drive.\\nBuild provenance: `cat /etc/iso-build-info`\\nRemote access: sshd is up; warby user trusts cluster keys.\\n\\n\\n\\n\"}",
+        "      ''",
+        "    • Skipping environment comparison",
+        "  • Skipping environment comparison",
+        "• Input derivations differ but have already been compared",
+        "    etc",
+        "• Skipping environment comparison"
+      ],
+      "unexpected": []
+    },
+    "kali-vm": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "lacie": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "stage-db": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "stage-edge": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "pure_refactor",
+  "problems": [],
+  "rev": "ba9614c68a86d89c19c1ba69e154086db70bcc5e",
+  "task": "M-003",
+  "within_allowed": true
+}
