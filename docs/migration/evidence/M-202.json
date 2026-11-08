@@ -1,0 +1,334 @@
+{
+  "A": {
+    "outputs": [],
+    "registry": []
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/fm28pv1rnl9pgdzznh6q7fjmbnva9fgs-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/hf5ia1ijwmwi1ijl7f4ahd8bhniq46r3-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    }
+  ],
+  "base": "9f1fbbf0d9cda2333c1d4f12674a8d942409ee26",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "cerberus": {
+      "B": [
+        {
+          "after": "\"/nix/store/x7bchd9daqnld2fp3hqvh2ag2imvxasw-home-manager-generation.drv\"",
+          "before": "\"/nix/store/y0mzfvqgnr4k2bpjd0bw29b75sa59s00-home-manager-generation.drv\"",
+          "path": "homeManager/warby"
+        },
+        {
+          "after": "\"/nix/store/bvfbxd02jhj2qjzwfys4zmv9acj4jif5-nixos-system-cerberus-nix-26.11.20261008.e7439b6.drv\"",
+          "before": "\"/nix/store/pa67zxnzxjdxa1s4m65gcyb8i1mywlzy-nixos-system-cerberus-nix-26.11.20261008.e7439b6.drv\"",
+          "path": "toplevel"
+        }
+      ],
+      "C": [],
+      "content_equivalence": {
+        "equivalent": true,
+        "roots": [
+          {
+            "a": "/nix/store/y0mzfvqgnr4k2bpjd0bw29b75sa59s00-home-manager-generation.drv",
+            "b": "/nix/store/x7bchd9daqnld2fp3hqvh2ag2imvxasw-home-manager-generation.drv",
+            "equal": true
+          },
+          {
+            "a": "/nix/store/3ggjkhd9a9i4fcaa2apnhyfq9kh9j8my-home-manager-path.drv",
+            "b": "/nix/store/af1msvqb13d4sxvyldkh46qvs2bgnvlj-home-manager-path.drv",
+            "equal": true
+          },
+          {
+            "a": "/nix/store/7rabbls5srybps56wnwclihjgmaxxjq1-man-paths.drv",
+            "b": "/nix/store/bqksiddspzlsf6c3wgi113hz790s5ss9-man-paths.drv",
+            "equal": true
+          },
+          {
+            "a": "/nix/store/rrxw5x8zv1kfnrm5myk8x6zm9v99c95n-warby-fish-completions.drv",
+            "b": "/nix/store/97r7775ldb47831q7aq061a0dv19b5xm-warby-fish-completions.drv",
+            "equal": true
+          }
+        ]
+      },
+      "drv_changed": true,
+      "nix_diff_summary": [
+        "- /nix/store/pa67zxnzxjdxa1s4m65gcyb8i1mywlzy-nixos-system-cerberus-nix-26.11.20261008.e7439b6.drv:{out}",
+        "+ /nix/store/bvfbxd02jhj2qjzwfys4zmv9acj4jif5-nixos-system-cerberus-nix-26.11.20261008.e7439b6.drv:{out}",
+        "• The input derivation named `activate` differs",
+        "  - /nix/store/mszdz20xfllql4068hya2qkv3ph54c0v-activate.drv:{out}",
+        "  + /nix/store/f24n5b4zkv7sf7ryvxb5j7dxnifjx39b-activate.drv:{out}",
+        "  • The input derivation named `etc` differs",
+        "    - /nix/store/l8ks5fn8jx85rmhn3np37fx5ci0cdsra-etc.drv:{out}",
+        "    + /nix/store/4ghf8ny1mg9sky6mjznkfixahj4dp0qg-etc.drv:{out}",
+        "    • The input derivation named `system-units` differs",
+        "      - /nix/store/sq3g9ll7d9dhkv6d2j5w3xxjaqfh655w-system-units.drv:{out}",
+        "      + /nix/store/2dqia8fzhq0y68yhl5brf8n7k8bna8al-system-units.drv:{out}",
+        "      • The input derivation named `unit-home-manager-warby.service` differs",
+        "        - /nix/store/ynsaapy8247kwqj5hbxvdzwfi10wlgkr-unit-home-manager-warby.service.drv:{out}",
+        "        + /nix/store/s52gydsn3sc2jgvr9z781azjwmfmyski-unit-home-manager-warby.service.drv:{out}",
+        "        • The input derivation named `home-manager-generation` differs",
+        "          - /nix/store/y0mzfvqgnr4k2bpjd0bw29b75sa59s00-home-manager-generation.drv:{out}",
+        "          + /nix/store/x7bchd9daqnld2fp3hqvh2ag2imvxasw-home-manager-generation.drv:{out}",
+        "          • The input derivation named `activation-script` differs",
+        "            - /nix/store/bya30xmsh561vvlfrq5z8zhxz9lb0w24-activation-script.drv:{out}",
+        "            + /nix/store/ry82zpfw2axkbm5nz7nnn6k3d2gvb3n8-activation-script.drv:{out}",
+        "            • The input derivation named `home-manager-path` differs",
+        "              - /nix/store/3ggjkhd9a9i4fcaa2apnhyfq9kh9j8my-home-manager-path.drv:{out}",
+        "              + /nix/store/af1msvqb13d4sxvyldkh46qvs2bgnvlj-home-manager-path.drv:{out}",
+        "              • The environments do not match:",
+        "                  __json=''",
+        "                  - {\"allowSubstitutes\":false,\"buildCommand\":\"/nix/store/8g4dmf7l8q1mf9w4wfmlcl8gvdgmhb8v-perl-5.42.3/bin/perl -w /nix/store/3qg12z8zvwl3q9k8551bgs8hrwfvnnmw-builder.pl\\neval \\\"$postBuild\\\"\\n\",\"buildInputs\":[],\"builder\":\"/nix/store/10dxp0qxqxxsyiljrh2kp0xqhz6arhcx-bash-5.3p15/bin/bas",
+        "              ''",
+        "            • Skipping environment comparison",
+        "          • The input derivation named `hm-putter.json` differs",
+        "            - /nix/store/f71iriz1kfg1vip9drhc1arxd1z7svj7-hm-putter.json.drv:{out}",
+        "            + /nix/store/3jl0yzm2nwd9lfdw72s4r2nk6cs79ish-hm-putter.json.drv:{out}",
+        "            • The input derivation named `home-manager-files` differs",
+        "              - /nix/store/p90wlm9rzfmlzyrp6182wymldr60j3di-home-manager-files.drv:{out}",
+        "              + /nix/store/haynrcl9nv1cniyp5dr8g8z64xc04gsl-home-manager-files.drv:{out}",
+        "              • The input derivation named `hm_.manpath` differs",
+        "                - /nix/store/h4qm14qcn1mjyakjqmfszjk6202krdlc-hm_.manpath.drv:{out}",
+        "                + /nix/store/72m6gx8z7cj5x0r8iy9zhbxmqi8l1lym-hm_.manpath.drv:{out}",
+        "                • The input derivation named `man-cache` differs",
+        "                  - /nix/store/z8kchwvgy6xn6w9651hrwiadc9xd3wan-man-cache.drv:{out}",
+        "                  + /nix/store/qwvf2dkwmcdzff1fmkhwlfq6da08sbcz-man-cache.drv:{out}",
+        "                  • The input derivation named `man-paths` differs",
+        "                    - /nix/store/7rabbls5srybps56wnwclihjgmaxxjq1-man-paths.drv:{out}",
+        "                    + /nix/store/bqksiddspzlsf6c3wgi113hz790s5ss9-man-paths.drv:{out}",
+        "                    • The environments do not match:",
+        "                        __json=''",
+        "                        - {\"allowSubstitutes\":false,\"buildCommand\":\"/nix/store/8g4dmf7l8q1mf9w4wfmlcl8gvdgmhb8v-perl-5.42.3/bin/perl -w /nix/store/3qg12z8zvwl3q9k8551bgs8hrwfvnnmw-builder.pl\\neval \\\"$postBuild\\\"\\n\",\"buildInputs\":[],\"builder\":\"/nix/store/10dxp0qxqxxsyiljrh2kp0xqhz6arhcx-bash-5.3p15/b",
+        "                    ''",
+        "                  • Skipping environment comparison",
+        "                • Skipping environment comparison",
+        "              • The input derivation named `hm_hmfontconfigfonts.xml` differs",
+        "                - /nix/store/3c32qizxd156ck7561d1z439c3gi51xl-hm_hmfontconfigfonts.xml.drv:{out}",
+        "                + /nix/store/jw9hw9f8hkbyxn63mjsp45f9f6xh9zlh-hm_hmfontconfigfonts.xml.drv:{out}",
+        "                • Input derivations differ but have already been compared",
+        "                    home-manager-path",
+        "                • Skipping environment comparison",
+        "              • The input derivation named `warby-fish-completions` differs",
+        "                - /nix/store/rrxw5x8zv1kfnrm5myk8x6zm9v99c95n-warby-fish-completions.drv:{out}",
+        "                + /nix/store/97r7775ldb47831q7aq061a0dv19b5xm-warby-fish-completions.drv:{out}",
+        "                • The environments do not match:",
+        "                    paths=''"
+      ],
+      "unexpected": []
+    },
+    "kali-vm": {
+      "B": [
+        {
+          "after": "\"/nix/store/n41cckl9qc2zld226ychhvv6l9z25sfk-home-manager-generation.drv\"",
+          "before": "\"/nix/store/gias2pn5gc86by37cbsrjapb1pkga4kr-home-manager-generation.drv\"",
+          "path": "homeManager/kali"
+        },
+        {
+          "after": "\"/nix/store/kc25hx0k75b75z28sp8wjknlsp58cmnv-nixos-system-kali-vm-26.11.20261008.e7439b6.drv\"",
+          "before": "\"/nix/store/zricgrxh7jf93pbamplwmsiqw7zqk8r9-nixos-system-kali-vm-26.11.20261008.e7439b6.drv\"",
+          "path": "toplevel"
+        }
+      ],
+      "C": [],
+      "content_equivalence": {
+        "equivalent": true,
+        "roots": [
+          {
+            "a": "/nix/store/gias2pn5gc86by37cbsrjapb1pkga4kr-home-manager-generation.drv",
+            "b": "/nix/store/n41cckl9qc2zld226ychhvv6l9z25sfk-home-manager-generation.drv",
+            "equal": true
+          },
+          {
+            "a": "/nix/store/bymx5w47zhp3zlaivi34w6vwnsh79vf9-man-paths.drv",
+            "b": "/nix/store/1bmxki821zv3pr6h67gpy26115kpycsz-man-paths.drv",
+            "equal": true
+          },
+          {
+            "a": "/nix/store/j8lg04yiqpdzpaj1f4jxcsm0i87dslim-home-manager-path.drv",
+            "b": "/nix/store/b1nc62mhracn5qjkvf66m9hrlal5zzsa-home-manager-path.drv",
+            "equal": true
+          },
+          {
+            "a": "/nix/store/4h6k17q81y8g985g3k70d03x0z5nfzcm-kali-fish-completions.drv",
+            "b": "/nix/store/h44wzb0d9xdl655x93289fs0342k6xfv-kali-fish-completions.drv",
+            "equal": true
+          }
+        ]
+      },
+      "drv_changed": true,
+      "nix_diff_summary": [
+        "- /nix/store/zricgrxh7jf93pbamplwmsiqw7zqk8r9-nixos-system-kali-vm-26.11.20261008.e7439b6.drv:{out}",
+        "+ /nix/store/kc25hx0k75b75z28sp8wjknlsp58cmnv-nixos-system-kali-vm-26.11.20261008.e7439b6.drv:{out}",
+        "• The input derivation named `activate` differs",
+        "  - /nix/store/c7fhqgwxp0pn5xxqhp9zq50lgqk1qz4d-activate.drv:{out}",
+        "  + /nix/store/0bbrc9l815a6v6f7m2g58rfq5iphy76b-activate.drv:{out}",
+        "  • The input derivation named `etc` differs",
+        "    - /nix/store/xfkkrb8z501lgfr7rq8pnha8qmdd5s10-etc.drv:{out}",
+        "    + /nix/store/qww0780dnj04crhcnbgcgy00hrpnwfzw-etc.drv:{out}",
+        "    • The input derivation named `system-units` differs",
+        "      - /nix/store/8ml6681zhc9yfg1j2q2b6fg80saahjzn-system-units.drv:{out}",
+        "      + /nix/store/cprc5bpayhjxh5z76bycd45vami66dfv-system-units.drv:{out}",
+        "      • The input derivation named `unit-home-manager-kali.service` differs",
+        "        - /nix/store/qw8ybic5bycispjwcxwdd93h271hwd0v-unit-home-manager-kali.service.drv:{out}",
+        "        + /nix/store/f86fl61plizp35ys65slyamj2nfhnvm4-unit-home-manager-kali.service.drv:{out}",
+        "        • The input derivation named `home-manager-generation` differs",
+        "          - /nix/store/gias2pn5gc86by37cbsrjapb1pkga4kr-home-manager-generation.drv:{out}",
+        "          + /nix/store/n41cckl9qc2zld226ychhvv6l9z25sfk-home-manager-generation.drv:{out}",
+        "          • The input derivation named `hm-putter.json` differs",
+        "            - /nix/store/ygizd6aa1d3zlqcs3nnavd96khdc5smn-hm-putter.json.drv:{out}",
+        "            + /nix/store/wajachlk016pr3nblngkwrby4hif51zq-hm-putter.json.drv:{out}",
+        "            • The input derivation named `home-manager-files` differs",
+        "              - /nix/store/f8890kiip12a4ddxlz53gwraijgby3x0-home-manager-files.drv:{out}",
+        "              + /nix/store/x37c3rqhqsvr32hyb5xz1k4d59v017s6-home-manager-files.drv:{out}",
+        "              • The input derivation named `hm_.manpath` differs",
+        "                - /nix/store/v42kk0pffm52mzl3ixvc10fk2dnnj05i-hm_.manpath.drv:{out}",
+        "                + /nix/store/i5vvd51q4lhm7phwf76kckhriavfcq37-hm_.manpath.drv:{out}",
+        "                • The input derivation named `man-cache` differs",
+        "                  - /nix/store/2im4lr90pa5x61hwm0jshafz4ka6bmj0-man-cache.drv:{out}",
+        "                  + /nix/store/lxzpirpx45dmw6iaa7aj482mwzkppk6s-man-cache.drv:{out}",
+        "                  • The input derivation named `man-paths` differs",
+        "                    - /nix/store/bymx5w47zhp3zlaivi34w6vwnsh79vf9-man-paths.drv:{out}",
+        "                    + /nix/store/1bmxki821zv3pr6h67gpy26115kpycsz-man-paths.drv:{out}",
+        "                    • The environments do not match:",
+        "                        __json=''",
+        "                        - {\"allowSubstitutes\":false,\"buildCommand\":\"/nix/store/8g4dmf7l8q1mf9w4wfmlcl8gvdgmhb8v-perl-5.42.3/bin/perl -w /nix/store/3qg12z8zvwl3q9k8551bgs8hrwfvnnmw-builder.pl\\neval \\\"$postBuild\\\"\\n\",\"buildInputs\":[],\"builder\":\"/nix/store/10dxp0qxqxxsyiljrh2kp0xqhz6arhcx-bash-5.3p15/b",
+        "                    ''",
+        "                  • Skipping environment comparison",
+        "                • Skipping environment comparison",
+        "              • The input derivation named `hm_hmfontconfigfonts.xml` differs",
+        "                - /nix/store/kd7fiah4crjgjdnhvknny8p6ik0lczz8-hm_hmfontconfigfonts.xml.drv:{out}",
+        "                + /nix/store/8zy6aa4dk2pnm0k2whn7p4i2am9c528h-hm_hmfontconfigfonts.xml.drv:{out}",
+        "                • The input derivation named `home-manager-path` differs",
+        "                  - /nix/store/j8lg04yiqpdzpaj1f4jxcsm0i87dslim-home-manager-path.drv:{out}",
+        "                  + /nix/store/b1nc62mhracn5qjkvf66m9hrlal5zzsa-home-manager-path.drv:{out}",
+        "                  • The environments do not match:",
+        "                      __json=''",
+        "                      - {\"allowSubstitutes\":false,\"buildCommand\":\"/nix/store/8g4dmf7l8q1mf9w4wfmlcl8gvdgmhb8v-perl-5.42.3/bin/perl -w /nix/store/3qg12z8zvwl3q9k8551bgs8hrwfvnnmw-builder.pl\\neval \\\"$postBuild\\\"\\n\",\"buildInputs\":[],\"builder\":\"/nix/store/10dxp0qxqxxsyiljrh2kp0xqhz6arhcx-bash-5.3p15/bin",
+        "                  ''",
+        "                • Skipping environment comparison",
+        "              • The input derivation named `kali-fish-completions` differs",
+        "                - /nix/store/4h6k17q81y8g985g3k70d03x0z5nfzcm-kali-fish-completions.drv:{out}",
+        "                + /nix/store/h44wzb0d9xdl655x93289fs0342k6xfv-kali-fish-completions.drv:{out}",
+        "                • The environments do not match:",
+        "                    paths=''",
+        "                    - /nix/store/37x02nkw93w8zqyr2vwpp5av31dh5f3w-rustc-wrapper-1.98.1-fish-completions /nix/store/vcngc4in1sf2f8ha0jigrka0jwhr57lp-coreutils-9.11-fish-completions /nix/store/109261drlvpsvw1n8nsk1mxdyhi90wak-gcc-wrapper-16.2.0-fish-completions /nix/store/2gx107ii4pn2yb8vqmqb1gfppq6c8",
+        "                ''",
+        "              • Skipping environment comparison",
+        "            • Skipping environment comparison",
+        "          • Input derivations differ but have already been compared",
+        "              home-manager-files"
+      ],
+      "unexpected": []
+    },
+    "lacie": {
+      "B": [
+        {
+          "after": "\"/nix/store/hvwjm1binb5x4d88a2ynzn0f2h5ci78n-home-manager-generation.drv\"",
+          "before": "\"/nix/store/bay6l3grfpvdd2w4rcgv4wxaqpq530wp-home-manager-generation.drv\"",
+          "path": "homeManager/warby"
+        },
+        {
+          "after": "\"/nix/store/1ldlmr6l7yrfj2zqp7w627w0nbbbii3g-nixos-system-lacie-26.11.20261008.e7439b6.drv\"",
+          "before": "\"/nix/store/bdgvdig6va99xf15q6xzhgw34af4wnam-nixos-system-lacie-26.11.20261008.e7439b6.drv\"",
+          "path": "toplevel"
+        }
+      ],
+      "C": [],
+      "content_equivalence": {
+        "equivalent": true,
+        "roots": [
+          {
+            "a": "/nix/store/bay6l3grfpvdd2w4rcgv4wxaqpq530wp-home-manager-generation.drv",
+            "b": "/nix/store/hvwjm1binb5x4d88a2ynzn0f2h5ci78n-home-manager-generation.drv",
+            "equal": true
+          },
+          {
+            "a": "/nix/store/pfin8falbs3bc2xpdpxsh2pph3v3f4nc-man-paths.drv",
+            "b": "/nix/store/k6cnvjyb8zj427p43xykbqzd5mkdwvv0-man-paths.drv",
+            "equal": true
+          },
+          {
+            "a": "/nix/store/yggv8n7v1z5jd50zc1klga49jyhxszim-home-manager-path.drv",
+            "b": "/nix/store/sf51g5siw8jv0adr71c6vm6zbk6gscjp-home-manager-path.drv",
+            "equal": true
+          },
+          {
+            "a": "/nix/store/98yq99vr2f7v979br5awvmhzvbaiq1pa-warby-fish-completions.drv",
+            "b": "/nix/store/nwxyfb9qz2xzimc9ha81pw11zqspdn2d-warby-fish-completions.drv",
+            "equal": true
+          }
+        ]
+      },
+      "drv_changed": true,
+      "nix_diff_summary": [
+        "- /nix/store/bdgvdig6va99xf15q6xzhgw34af4wnam-nixos-system-lacie-26.11.20261008.e7439b6.drv:{out}",
+        "+ /nix/store/1ldlmr6l7yrfj2zqp7w627w0nbbbii3g-nixos-system-lacie-26.11.20261008.e7439b6.drv:{out}",
+        "• The input derivation named `activate` differs",
+        "  - /nix/store/1gy6ynmifncivwfw2mkwmjn31ch9n7v2-activate.drv:{out}",
+        "  + /nix/store/b8r7i4hkdxqg525075b3wyjzbmagaari-activate.drv:{out}",
+        "  • The input derivation named `etc` differs",
+        "    - /nix/store/9rhxfkigph8hjkvl0y5s6ksgbkqi7dsk-etc.drv:{out}",
+        "    + /nix/store/n6ynygp00bayra7j8axgm30wnyzyr44y-etc.drv:{out}",
+        "    • The input derivation named `system-units` differs",
+        "      - /nix/store/lqc01r30ggbvx5adm9qgdwblxxrvrh2i-system-units.drv:{out}",
+        "      + /nix/store/nw2cnc345a31lf3p54jp8hl18ryzc0kv-system-units.drv:{out}",
+        "      • The input derivation named `unit-home-manager-warby.service` differs",
+        "        - /nix/store/mnq7dgxccfvl16fq60wg2g6a8k5s3kpq-unit-home-manager-warby.service.drv:{out}",
+        "        + /nix/store/1svq3my1hcwdrnqiinmgs6qs7wffjv4r-unit-home-manager-warby.service.drv:{out}",
+        "        • The input derivation named `home-manager-generation` differs",
+        "          - /nix/store/bay6l3grfpvdd2w4rcgv4wxaqpq530wp-home-manager-generation.drv:{out}",
+        "          + /nix/store/hvwjm1binb5x4d88a2ynzn0f2h5ci78n-home-manager-generation.drv:{out}",
+        "          • The input derivation named `hm-putter.json` differs",
+        "            - /nix/store/xvsz324mxfqcn80bb4ii5kji2yk4kf0z-hm-putter.json.drv:{out}",
+        "            + /nix/store/pmg7qspwmxh5yrrznjg556agjwal89hj-hm-putter.json.drv:{out}",
+        "            • The input derivation named `home-manager-files` differs",
+        "              - /nix/store/zxi51897pb9cang0b9g3cjiirh2w08m6-home-manager-files.drv:{out}",
+        "              + /nix/store/sqix6kv8h887plwg1cxl77fhbbw6bjry-home-manager-files.drv:{out}",
+        "              • The input derivation named `hm_.manpath` differs",
+        "                - /nix/store/4f9l252l1xd39bjhacd2n0aillfa2i3n-hm_.manpath.drv:{out}",
+        "                + /nix/store/m4j0720ns888wm8ayygs0s1xfsybb7qs-hm_.manpath.drv:{out}",
+        "                • The input derivation named `man-cache` differs",
+        "                  - /nix/store/4i9kasr1jhqy3sjlz2mmyzwn9lhg14as-man-cache.drv:{out}",
+        "                  + /nix/store/vic9y3hi5z4lj65kjhand9adk38r39sa-man-cache.drv:{out}",
+        "                  • The input derivation named `man-paths` differs",
+        "                    - /nix/store/pfin8falbs3bc2xpdpxsh2pph3v3f4nc-man-paths.drv:{out}",
+        "                    + /nix/store/k6cnvjyb8zj427p43xykbqzd5mkdwvv0-man-paths.drv:{out}",
+        "                    • The environments do not match:",
+        "                        __json=''",
+        "                        - {\"allowSubstitutes\":false,\"buildCommand\":\"/nix/store/8g4dmf7l8q1mf9w4wfmlcl8gvdgmhb8v-perl-5.42.3/bin/perl -w /nix/store/3qg12z8zvwl3q9k8551bgs8hrwfvnnmw-builder.pl\\neval \\\"$postBuild\\\"\\n\",\"buildInputs\":[],\"builder\":\"/nix/store/10dxp0qxqxxsyiljrh2kp0xqhz6arhcx-bash-5.3p15/b",
+        "                    ''",
+        "                  • Skipping environment comparison",
+        "                • Skipping environment comparison",
+        "              • The input derivation named `hm_hmfontconfigfonts.xml` differs",
+        "                - /nix/store/j46a32i0hncysnh2h9pv1rcvi8s5c290-hm_hmfontconfigfonts.xml.drv:{out}",
+        "                + /nix/store/6x3qwhkinvqhbbkdbrglwmavd541snda-hm_hmfontconfigfonts.xml.drv:{out}",
+        "                • The input derivation named `home-manager-path` differs",
+        "                  - /nix/store/yggv8n7v1z5jd50zc1klga49jyhxszim-home-manager-path.drv:{out}",
+        "                  + /nix/store/sf51g5siw8jv0adr71c6vm6zbk6gscjp-home-manager-path.drv:{out}",
+        "                  • The environments do not match:",
+        "                      __json=''",
+        "                      - {\"allowSubstitutes\":false,\"buildCommand\":\"/nix/store/8g4dmf7l8q1mf9w4wfmlcl8gvdgmhb8v-perl-5.42.3/bin/perl -w /nix/store/3qg12z8zvwl3q9k8551bgs8hrwfvnnmw-builder.pl\\neval \\\"$postBuild\\\"\\n\",\"buildInputs\":[],\"builder\":\"/nix/store/10dxp0qxqxxsyiljrh2kp0xqhz6arhcx-bash-5.3p15/bin",
+        "                  ''",
+        "                • Skipping environment comparison",
+        "              • The input derivation named `warby-fish-completions` differs",
+        "                - /nix/store/98yq99vr2f7v979br5awvmhzvbaiq1pa-warby-fish-completions.drv:{out}",
+        "                + /nix/store/nwxyfb9qz2xzimc9ha81pw11zqspdn2d-warby-fish-completions.drv:{out}",
+        "                • The environments do not match:",
+        "                    paths=''",
+        "                    - /nix/store/37x02nkw93w8zqyr2vwpp5av31dh5f3w-rustc-wrapper-1.98.1-fish-completions /nix/store/vcngc4in1sf2f8ha0jigrka0jwhr57lp-coreutils-9.11-fish-completions /nix/store/109261drlvpsvw1n8nsk1mxdyhi90wak-gcc-wrapper-16.2.0-fish-completions /nix/store/2gx107ii4pn2yb8vqmqb1gfppq6c8",
+        "                ''",
+        "              • Skipping environment comparison",
+        "            • Skipping environment comparison",
+        "          • Input derivations differ but have already been compared",
+        "              home-manager-files"
+      ],
+      "unexpected": []
+    }
+  },
+  "policy": "pure_refactor",
+  "problems": [],
+  "rev": "440491f5b7f89671c2534cea7ccb35db23fe9392",
+  "task": "M-202",
+  "within_allowed": true
+}
