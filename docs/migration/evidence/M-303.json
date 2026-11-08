@@ -1,0 +1,54 @@
+{
+  "A": {
+    "outputs": [
+      {
+        "after": "\"fn\"",
+        "before": null,
+        "path": "lib/dell7050/configuration"
+      },
+      {
+        "after": "\"fn\"",
+        "before": null,
+        "path": "lib/dell7050/postgres"
+      },
+      {
+        "after": "\"fn\"",
+        "before": null,
+        "path": "lib/dell7050/seaweedfs"
+      }
+    ],
+    "registry": []
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/8h42cwd4fzsa0kfshknmvdslil06ihr1-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/x8a6a2q47jrzckkvyp3l88w0860ivh4a-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    }
+  ],
+  "base": "b9e4539be901edf82e1452ca6252cd9cc204ba36",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "94tl0m2": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "95qmom2": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "contract_change",
+  "problems": [],
+  "rev": "e6b65a47bb8cf60b281f06c1dc82c17b9da597b5",
+  "task": "M-303",
+  "within_allowed": true
+}
