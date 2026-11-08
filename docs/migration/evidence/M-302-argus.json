@@ -1,0 +1,30 @@
+{
+  "A": {
+    "outputs": [],
+    "registry": []
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/wz2q48n7vl9ligczblk99pbaazcc9q6r-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/ic9m6qlzaa2lydiny7w70gikhdmy1r93-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    }
+  ],
+  "base": "19faf177079d4aeaacf2d0317bd4fe0004e5975b",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "argus": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "pure_refactor",
+  "problems": [],
+  "rev": "af777c71649ac4984a6022f106b6672ff469bce4",
+  "task": "M-302",
+  "within_allowed": true
+}
