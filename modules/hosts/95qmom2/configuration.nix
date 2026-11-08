@@ -1,108 +1,39 @@
-_: {
-  flake.modules.nixos.qmom2 =
-    { pkgs, inputs, ... }:
-    {
-      imports = [ inputs.self.modules.nixos.sshKeys ];
-
-      nixpkgs.config.allowUnfree = true;
-
-      networking.hostName = "95qmom2";
-
-      boot = {
-        loader = {
-          systemd-boot.enable = true;
-          efi.canTouchEfiVariables = true;
-        };
-        kernelParams = [
-          "quiet"
-          "loglevel=3"
+# 95qmom2: Dell 7050 cluster node. The shared base lives in hosts/_dell7050;
+# only this node's values are here.
+{ config, ... }:
+let
+  dell = config.flake.lib.dell7050;
+in
+{
+  flake.modules.nixos = {
+    qmom2 = dell.configuration {
+      hostName = "95qmom2";
+      extraPackages =
+        pkgs: with pkgs; [
+          # forensics scan window (95qmom2 14 TB games-drive catalog)
+          cifs-utils
+          ntfs3g
+          fclones
+          sqlite
+          jq
+          file
         ];
-      };
-
-      networking = {
-        useDHCP = true;
-        firewall = {
-          enable = true;
-          allowedTCPPorts = [
-            22 # SSH
-          ];
-        };
-      };
-
-      services.openssh = {
-        enable = true;
-        settings = {
-          PasswordAuthentication = false;
-          KbdInteractiveAuthentication = false;
-          UseDns = false;
-        };
-      };
-
-      services.tailscale.enable = true;
-
-      time.timeZone = "America/New_York";
-      i18n.defaultLocale = "en_US.UTF-8";
-
-      virtualisation.docker = {
-        enable = true;
-        enableOnBoot = true;
-      };
-
-      services.journald.settings.Journal = {
-        SystemMaxUse = "500M";
-        MaxFileSec = "7day";
-      };
-
-      users = {
-        defaultUserShell = pkgs.fish;
-        users.warby = {
-          isNormalUser = true;
-          description = "warby";
-          extraGroups = [
-            "wheel"
-            "docker"
-            "video"
-            "render"
-            "disk"
-          ];
-          hashedPassword = "";
-        };
-      };
-
-      security.sudo.wheelNeedsPassword = false;
-
-      environment.systemPackages = with pkgs; [
-        git
-        vim
-        wget
-        curl
-        htop
-        btop
-        tmux
-        ripgrep
-        fd
-        pciutils
-        usbutils
-        smartmontools
-        docker-compose
-        tailscale
-        # forensics scan window (95qmom2 14 TB games-drive catalog)
-        cifs-utils
-        ntfs3g
-        fclones
-        sqlite
-        jq
-        file
-      ];
-
-      programs.fish.enable = true;
-
-      nix.settings.trusted-users = [
-        "root"
-        "warby"
-        "@wheel"
-      ];
-
-      system.stateVersion = "25.11";
     };
+
+    qmom2Postgres = dell.postgres {
+      tuning = {
+        shared_buffers = "2GB";
+        effective_cache_size = "6GB";
+        work_mem = "16MB";
+        maintenance_work_mem = "256MB";
+        max_wal_size = "2GB";
+        min_wal_size = "256MB";
+      };
+    };
+
+    qmom2Seaweedfs = dell.seaweedfs {
+      tailscaleIp = "100.107.224.21";
+      rack = "95qmom2";
+    };
+  };
 }

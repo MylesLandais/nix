@@ -3,5 +3,9 @@
 # than flake-parts' own lib.
 { inputs, ... }:
 {
-  flake.lib.chromiumBrowsers = import ./_chromium-browsers.nix { inherit (inputs.nixpkgs) lib; };
+  flake.lib = {
+    chromiumBrowsers = import ./_chromium-browsers.nix { inherit (inputs.nixpkgs) lib; };
+    # Shared module bodies of the Dell 7050 cluster nodes (hosts/_dell7050).
+    dell7050 = import ../hosts/_dell7050;
+  };
 }

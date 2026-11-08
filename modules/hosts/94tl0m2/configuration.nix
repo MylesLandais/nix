@@ -1,101 +1,31 @@
-_: {
-  flake.modules.nixos.tl0m2 =
-    { pkgs, inputs, ... }:
-    {
-      imports = [ inputs.self.modules.nixos.sshKeys ];
+# 94tl0m2: Dell 7050 cluster node. The shared base lives in hosts/_dell7050;
+# only this node's values are here.
+{ config, ... }:
+let
+  dell = config.flake.lib.dell7050;
+in
+{
+  flake.modules.nixos = {
+    tl0m2 = dell.configuration { hostName = "94tl0m2"; };
 
-      nixpkgs.config.allowUnfree = true;
-
-      networking.hostName = "94tl0m2";
-
-      boot = {
-        loader = {
-          systemd-boot.enable = true;
-          efi.canTouchEfiVariables = true;
-        };
-        kernelParams = [
-          "quiet"
-          "loglevel=3"
-        ];
+    tl0m2Postgres = dell.postgres {
+      tuning = {
+        shared_buffers = "4GB";
+        effective_cache_size = "12GB";
+        work_mem = "32MB";
+        maintenance_work_mem = "512MB";
+        max_wal_size = "4GB";
+        min_wal_size = "512MB";
+        max_wal_senders = 10;
+        wal_keep_size = "1GB";
       };
-
-      networking = {
-        useDHCP = true;
-        firewall = {
-          enable = true;
-          allowedTCPPorts = [
-            22
-          ];
-        };
-      };
-
-      services.openssh = {
-        enable = true;
-        settings = {
-          PasswordAuthentication = false;
-          KbdInteractiveAuthentication = false;
-          UseDns = false;
-        };
-      };
-
-      services.tailscale.enable = true;
-
-      time.timeZone = "America/New_York";
-      i18n.defaultLocale = "en_US.UTF-8";
-
-      virtualisation.docker = {
-        enable = true;
-        enableOnBoot = true;
-      };
-
-      services.journald.settings.Journal = {
-        SystemMaxUse = "500M";
-        MaxFileSec = "7day";
-      };
-
-      users = {
-        defaultUserShell = pkgs.fish;
-        users.warby = {
-          isNormalUser = true;
-          description = "warby";
-          extraGroups = [
-            "wheel"
-            "docker"
-            "video"
-            "render"
-            "disk"
-          ];
-          hashedPassword = "";
-        };
-      };
-
-      security.sudo.wheelNeedsPassword = false;
-
-      environment.systemPackages = with pkgs; [
-        git
-        vim
-        wget
-        curl
-        htop
-        btop
-        tmux
-        ripgrep
-        fd
-        pciutils
-        usbutils
-        smartmontools
-        docker-compose
-        tailscale
-      ];
-
-      programs.fish.enable = true;
-
-      nix.settings.trusted-users = [
-        "root"
-        "warby"
-        "@wheel"
-      ];
-
-      system.stateVersion = "25.11";
     };
+
+    tl0m2Seaweedfs = dell.seaweedfs {
+      # TODO: set to this node's tailnet IP after first `tailscale up` post-install.
+      # Placeholder uses 0.0.0.0 so the services start; redeploy once IP is known.
+      tailscaleIp = "0.0.0.0";
+      rack = "94tl0m2";
+    };
+  };
 }

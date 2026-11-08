@@ -11,6 +11,8 @@ let
     "kali-vm"
     "lacie"
     "argus"
+    "94tl0m2"
+    "95qmom2"
   ];
 in
 {

@@ -247,12 +247,15 @@ tasks:
     policy: pure_refactor
     hosts: [lacie, argus]
   - id: M-303
-    title: Migrate 94tl0m2/95qmom2; extract nixos.dell7050Node (shared behavior only)
+    title: Migrate 94tl0m2/95qmom2; shared Dell 7050 bodies as flake.lib.dell7050 (shared behavior only)
     phase: 3
     depends_on: [M-302]
-    policy: pure_refactor
+    # flake.lib.dell7050 is a new output; module names (tl0m2, qmom2, …Postgres,
+    # …Seaweedfs) are unchanged. A function library instead of an option-driven
+    # nixos.dell7050Node keeps every per-host value explicit at the call site.
+    policy: contract_change
+    contract: ["lib/*"]
     hosts: [94tl0m2, 95qmom2]
-    registry: {add: [nixos.dell7050Node]}
   - id: M-304
     title: Move 7PZSZY2 onto mkHost (nixos-wsl nixpkgs); drop the hand-rolled HM config
     phase: 3
