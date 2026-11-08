@@ -1,0 +1,4946 @@
+{
+  "B": {
+    "homeManager": {},
+    "toplevel": "/nix/store/rfn0dxk8w6pf3k6csff4960p2pkyxpm1-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv"
+  },
+  "C": {
+    "activationScripts": {
+      "binsh": "b7dc5bdc4bd8f48160f478e04669175b7f28de13954c33ae9f2c81dbe1d0e840",
+      "etc": "92b38099fc158464266b94d43a47565c83d578395353667aa554e4254753b8e7",
+      "groups": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "hashes": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "modprobe": "1163a6b2c763368d2ff7b3f0feb55dd0d5a4261c53b1cb6a3c704ab9f031c733",
+      "script": "3340b8a844a301c436e653f6abdfb7503c6f88910f52052d4a432ee40bd4a878",
+      "specialfs": "25404f52e621cb1ba58ec2f087cedb95af862766f6ca25b75ca1092145f8f22c",
+      "stdio": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "udevd": "8b0cf6ecde3a2be0486d77f7d665cccae064944b738bae142e613777aeedbf70",
+      "users": "adacc08727268dcef34bc64bd33dde6076acc0d2d905098a32558c78ae71acc4",
+      "usrbinenv": "a6d1de74b528b03ee5cba95d5158b181ae93fe3d6e5d665291829d2ebac3edfe",
+      "var": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "etc": {
+      "NetworkManager/NetworkManager.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/mbf1crhxsw5bz4ifs5ncvfcr342jwsr1-NetworkManager.conf",
+        "target": "NetworkManager/NetworkManager.conf"
+      },
+      "bash_logout": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/6hf9wr8a384rd36pdy1n2nnzihybdb99-etc-bash_logout",
+        "target": "bash_logout"
+      },
+      "bashrc": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/srzdi4zsvb2s28438dg7b1ipq93836fl-etc-bashrc",
+        "target": "bashrc"
+      },
+      "binfmt.d/nixos.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/g28l15mbdbig59n102zd0ardsfisiw32-binfmt_nixos.conf",
+        "target": "binfmt.d/nixos.conf"
+      },
+      "dbus-1": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/286cwxn2k0b3z9wg3qy2yfd4zc7d39ni-dbus-1",
+        "target": "dbus-1"
+      },
+      "default/useradd": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/68zazph4l2rp6jh7igcln1xhf5m9dikw-useradd",
+        "target": "default/useradd"
+      },
+      "environment.d/50-systemd-path.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/pihcwxhqyc2k3wy2k1fs252l9xklbm78-etc-environment.d-50-systemd-path.conf",
+        "target": "environment.d/50-systemd-path.conf"
+      },
+      "fstab": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/k12fn9rhn240ycqnndvy942d33gdrwjx-etc-fstab",
+        "target": "fstab"
+      },
+      "gai.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/fnrd0q69ld9gyr386rvvfq7x3a1507yl-etc-gai.conf",
+        "target": "gai.conf"
+      },
+      "gitconfig": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/wpr4xgalcmlcmgjn2hx6wdw3dgp0q91y-etc-gitconfig",
+        "target": "gitconfig"
+      },
+      "host.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/b3fn6is4r5v717i7dlrfa36ib4zbf6j3-etc-host.conf",
+        "target": "host.conf"
+      },
+      "hostid": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/zkw978r7lqmbj244044ryb6vjqiknhfh-gen-hostid",
+        "target": "hostid"
+      },
+      "hostname": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/gx7fmqyg0yd2s0hdd26yiimp06p974gj-etc-hostname",
+        "target": "hostname"
+      },
+      "hosts": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/nr72gwzafapr595nfjbjnvjdbdrlcxl1-hosts",
+        "target": "hosts"
+      },
+      "inputrc": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/dwv0wf3szv3ipgyyyrf1zxh4iqlckiip-inputrc",
+        "target": "inputrc"
+      },
+      "ipsec.secrets": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/pqw0bcaplwjkk5ydb4yqxlw9kn9zfbpc-etc-ipsec.secrets",
+        "target": "ipsec.secrets"
+      },
+      "iso-build-info": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/1jrpkksfqnclk4y1kzqc9af98smi2kx6-iso-build-info",
+        "target": "iso-build-info"
+      },
+      "issue": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/13p0papvdjj26i0a3ib9n18ijnfj1l1x-issue",
+        "target": "issue"
+      },
+      "kbd": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/dggbl1m76nrh73zd00avbrsgr7wymjb8-console-env/share",
+        "target": "kbd"
+      },
+      "locale.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/g1hwdjwasd1q7667297xdh3wzfc8vcnq-locale.conf",
+        "target": "locale.conf"
+      },
+      "login.defs": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/gqrsqxy97y36h06kh7ni49army5xsk4z-login.defs",
+        "target": "login.defs"
+      },
+      "lsb-release": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/99f5nsm7sjdmlzsk2hs21fmvg8y7rki8-etc-lsb-release",
+        "target": "lsb-release"
+      },
+      "lvm/lvm.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/cak9j8qd1v3icwclwis0a4i2zsk9pkx5-etc-lvm-lvm.conf",
+        "target": "lvm/lvm.conf"
+      },
+      "man_db.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/j2v2myj5h0cirdbf28krsmhahqy570v5-etc-man_db.conf",
+        "target": "man_db.conf"
+      },
+      "mdadm.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/5sgksbwwbldy1m58fkq0faf9fiwq7j4g-etc-mdadm.conf",
+        "target": "mdadm.conf"
+      },
+      "modprobe.d/debian.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/q81m4zrk03vi5cc7q9q95zdmzmayvdd8-kmod-debian-aliases.conf-30+20230601-2",
+        "target": "modprobe.d/debian.conf"
+      },
+      "modprobe.d/firmware.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/jjssj2c1p32vjd0qkn3xwly2aqpw4bza-etc-modprobe.d-firmware.conf",
+        "target": "modprobe.d/firmware.conf"
+      },
+      "modprobe.d/nixos.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/q1928qyvh14j6jgnb6vfmrxyy9gxdlwz-etc-modprobe.d-nixos.conf",
+        "target": "modprobe.d/nixos.conf"
+      },
+      "modprobe.d/systemd.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/l5hiab3932k2n4d6nirh09mk6xgxp61w-systemd-261.3/lib/modprobe.d/systemd.conf",
+        "target": "modprobe.d/systemd.conf"
+      },
+      "modprobe.d/ubuntu.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/skrx7ww8cyigr762k1axqxzk5bywvjjg-kmod-blacklist-31+20240202-2ubuntu8/modprobe.conf",
+        "target": "modprobe.d/ubuntu.conf"
+      },
+      "modules-load.d/nixos.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/vwrwnzxpsr51yhbdqg42adykdyavcghn-nixos.conf",
+        "target": "modules-load.d/nixos.conf"
+      },
+      "mtab": {
+        "enable": true,
+        "mode": "direct-symlink",
+        "source": "/proc/mounts",
+        "target": "mtab"
+      },
+      "nanorc": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/s7d28xdd7ppbzi33mp6j24n3j2kf3bk1-etc-nanorc",
+        "target": "nanorc"
+      },
+      "netgroup": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/7wd2h24b7cpyswjd9mdcxzl6y9i8zrw1-etc-netgroup",
+        "target": "netgroup"
+      },
+      "nix/nix.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/x5bw5nmrmz236zapck7mbfih20gh7ps2-nix.conf",
+        "target": "nix/nix.conf"
+      },
+      "nix/registry.json": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/g7164z25i5fakx4nnk598izvy3p01p3g-etc-nix-registry.json",
+        "target": "nix/registry.json"
+      },
+      "nscd.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/ps55awi26nyjhzsdig37wzvl84djjn98-etc-nscd.conf",
+        "target": "nscd.conf"
+      },
+      "nsswitch.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/v5x5v3ls658zg9fc5f2pjljq4kqhnvhm-etc-nsswitch.conf",
+        "target": "nsswitch.conf"
+      },
+      "os-release": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/zkng6hipfz0plr0vkc3lz4irzp9jdn0s-etc-os-release",
+        "target": "os-release"
+      },
+      "pam.d/chfn": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/chfn",
+        "target": "pam.d/chfn"
+      },
+      "pam.d/chpasswd": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/chpasswd",
+        "target": "pam.d/chpasswd"
+      },
+      "pam.d/chsh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/chsh",
+        "target": "pam.d/chsh"
+      },
+      "pam.d/groupadd": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/groupadd",
+        "target": "pam.d/groupadd"
+      },
+      "pam.d/groupdel": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/groupdel",
+        "target": "pam.d/groupdel"
+      },
+      "pam.d/groupmems": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/groupmems",
+        "target": "pam.d/groupmems"
+      },
+      "pam.d/groupmod": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/groupmod",
+        "target": "pam.d/groupmod"
+      },
+      "pam.d/login": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/login",
+        "target": "pam.d/login"
+      },
+      "pam.d/other": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/other",
+        "target": "pam.d/other"
+      },
+      "pam.d/passwd": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/passwd",
+        "target": "pam.d/passwd"
+      },
+      "pam.d/polkit-1": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/polkit-1",
+        "target": "pam.d/polkit-1"
+      },
+      "pam.d/runuser": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/runuser",
+        "target": "pam.d/runuser"
+      },
+      "pam.d/runuser-l": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/runuser-l",
+        "target": "pam.d/runuser-l"
+      },
+      "pam.d/sshd": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/sshd",
+        "target": "pam.d/sshd"
+      },
+      "pam.d/su": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/su",
+        "target": "pam.d/su"
+      },
+      "pam.d/sudo": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/sudo",
+        "target": "pam.d/sudo"
+      },
+      "pam.d/systemd-run0": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/systemd-run0",
+        "target": "pam.d/systemd-run0"
+      },
+      "pam.d/systemd-user": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/systemd-user",
+        "target": "pam.d/systemd-user"
+      },
+      "pam.d/useradd": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/useradd",
+        "target": "pam.d/useradd"
+      },
+      "pam.d/userdel": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/userdel",
+        "target": "pam.d/userdel"
+      },
+      "pam.d/usermod": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/usermod",
+        "target": "pam.d/usermod"
+      },
+      "pam.d/vlock": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/348g5l23p87n2xyc79zhqssph1gjmzhb-pam.d/vlock",
+        "target": "pam.d/vlock"
+      },
+      "pam/environment": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/pax5a2368k7yla8iiagbywl1ycfgfzll-etc-pam-environment",
+        "target": "pam/environment"
+      },
+      "pki/tls/certs/ca-bundle.crt": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/15x4d7i4p60sjqvls7riw7sd42551s19-nss-cacert-3.126/etc/ssl/certs/ca-bundle.crt",
+        "target": "pki/tls/certs/ca-bundle.crt"
+      },
+      "polkit-1/polkitd.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/6dcc4x2qjfvy9md35jnaignamnj98r0k-polkitd.conf",
+        "target": "polkit-1/polkitd.conf"
+      },
+      "polkit-1/rules.d/10-nixos.rules": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/d76j665h4ag3hdbg14is2zajc5fcnipg-etc-polkit-1-rules.d-10-nixos.rules",
+        "target": "polkit-1/rules.d/10-nixos.rules"
+      },
+      "profile": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/ib20f0x7nnxqv1qm0x14jj48iwwgfybd-etc-profile",
+        "target": "profile"
+      },
+      "protocols": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/3ppjkfrmkr0s0c74hs4ddmld3c9cqkzr-iana-etc-20251215/etc/protocols",
+        "target": "protocols"
+      },
+      "resolv.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/run/systemd/resolve/stub-resolv.conf",
+        "target": "resolv.conf"
+      },
+      "resolvconf.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/x156xp0ljj0sfpsqqskrig3gljd8jc21-etc-resolvconf.conf",
+        "target": "resolvconf.conf"
+      },
+      "rpc": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/h4wfwic161kxrr74jlzla5lsm28hgary-glibc-2.44-25/etc/rpc",
+        "target": "rpc"
+      },
+      "services": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/3ppjkfrmkr0s0c74hs4ddmld3c9cqkzr-iana-etc-20251215/etc/services",
+        "target": "services"
+      },
+      "set-environment": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/4xsh9wkzjj30p95nb93jxpkfaw8wf2mc-set-environment",
+        "target": "set-environment"
+      },
+      "shells": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/39ffxf2q5bwnyjai1cxbm3kyrdnjca8w-etc-shells",
+        "target": "shells"
+      },
+      "ssh/authorized_keys.d/root": {
+        "enable": true,
+        "mode": "0444",
+        "source": "/nix/store/1a3dk6pyh3brzvvpgaq11l9pxjrljvpf-root-authorized_keys",
+        "target": "ssh/authorized_keys.d/root"
+      },
+      "ssh/authorized_keys.d/warby": {
+        "enable": true,
+        "mode": "0444",
+        "source": "/nix/store/m02ds5js2pq2sn8gwph80qa62lg8ik2l-warby-authorized_keys",
+        "target": "ssh/authorized_keys.d/warby"
+      },
+      "ssh/ssh_config": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/r1iyzdgy1c7mm8a3aqliqr2397k9il2j-etc-ssh-ssh_config",
+        "target": "ssh/ssh_config"
+      },
+      "ssh/ssh_known_hosts": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/idv5wpvj7b0kcz707jl6x33gyikz2d8x-etc-ssh-ssh_known_hosts",
+        "target": "ssh/ssh_known_hosts"
+      },
+      "ssh/sshd_config": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/ccj41vlbv1cxb4k88zb9s1shssl8f7qw-sshd.conf-final",
+        "target": "ssh/sshd_config"
+      },
+      "ssl/certs/ca-bundle.crt": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/15x4d7i4p60sjqvls7riw7sd42551s19-nss-cacert-3.126/etc/ssl/certs/ca-bundle.crt",
+        "target": "ssl/certs/ca-bundle.crt"
+      },
+      "ssl/certs/ca-certificates.crt": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/15x4d7i4p60sjqvls7riw7sd42551s19-nss-cacert-3.126/etc/ssl/certs/ca-bundle.crt",
+        "target": "ssl/certs/ca-certificates.crt"
+      },
+      "ssl/trust-source": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/ywqiff1a9r5dvby83mmvg5wg63h636bh-nss-cacert-3.126-p11kit/etc/ssl/trust-source",
+        "target": "ssl/trust-source"
+      },
+      "sudoers": {
+        "enable": true,
+        "mode": "0440",
+        "source": "/nix/store/mh9r0vxd4gwl7fdn6lbmi064n1qdn2h8-sudoers",
+        "target": "sudoers"
+      },
+      "sysctl.d/50-coredump.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/mks3x9w6pxd9p6p66bfsxqvza22dhrgw-50-coredump.conf",
+        "target": "sysctl.d/50-coredump.conf"
+      },
+      "sysctl.d/50-default.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/l5hiab3932k2n4d6nirh09mk6xgxp61w-systemd-261.3/example/sysctl.d/50-default.conf",
+        "target": "sysctl.d/50-default.conf"
+      },
+      "sysctl.d/55-nixos-aslr-entropy.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/i2b6ics15z664ydax2716jgbg776rn6x-55-nixos-aslr-entropy.conf",
+        "target": "sysctl.d/55-nixos-aslr-entropy.conf"
+      },
+      "sysctl.d/60-nixos.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/xbqbi7rj0cri6n5fxdh57ljh6305h09s-etc-sysctl.d-60-nixos.conf",
+        "target": "sysctl.d/60-nixos.conf"
+      },
+      "systemd/coredump.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/cq6ijqj0ykdyhfiyzd4hfsc46n2w3pf6-etc-systemd-coredump.conf",
+        "target": "systemd/coredump.conf"
+      },
+      "systemd/generator-environment.json": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/r0sqj19904izyr75n40gpp9ldyrbzhn2-systemd-generator-environment.json",
+        "target": "systemd/generator-environment.json"
+      },
+      "systemd/journald.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/7jscmvwl509n6w41bf44c5jp207qsyj8-etc-systemd-journald.conf",
+        "target": "systemd/journald.conf"
+      },
+      "systemd/logind.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/r8q9nc3aa762nbljn329s8mfxhpw8y57-etc-systemd-logind.conf",
+        "target": "systemd/logind.conf"
+      },
+      "systemd/network/10-wired.network": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/bl5gv9ygphdma45abjsq1xvna2sk5l7g-unit-10-wired.network/10-wired.network",
+        "target": "systemd/network/10-wired.network"
+      },
+      "systemd/network/50-tailscale.network": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/yl6a9wj41v72fqzkk97iwjs4xawj88z9-unit-50-tailscale.network/50-tailscale.network",
+        "target": "systemd/network/50-tailscale.network"
+      },
+      "systemd/networkd.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/ycw1fvgz71f27h2jcxrhrw0vmsj30hfh-etc-systemd-networkd.conf",
+        "target": "systemd/networkd.conf"
+      },
+      "systemd/oomd.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/akb9hfry9wf8abisx012gi9j1qaimnvl-etc-systemd-oomd.conf",
+        "target": "systemd/oomd.conf"
+      },
+      "systemd/pstore.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/ngyadb9kdigar5v89nsqc0dxzbcdrjf1-etc-systemd-pstore.conf",
+        "target": "systemd/pstore.conf"
+      },
+      "systemd/resolved.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/0f50qiccfpirjslcrcxhy83mq3cj4pm4-etc-systemd-resolved.conf",
+        "target": "systemd/resolved.conf"
+      },
+      "systemd/sleep.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/mlaaridzymz2wizlaxbva8srkkvfdpij-etc-systemd-sleep.conf",
+        "target": "systemd/sleep.conf"
+      },
+      "systemd/system": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/qcipnrd6wp5fnvv10xi5mi50gwzinfa0-system-units",
+        "target": "systemd/system"
+      },
+      "systemd/system-environment-generators/env-generator": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/vn1jgsj62yrlkap951djcj8npjlirjml-nixos-init-0.1.0/bin/env-generator",
+        "target": "systemd/system-environment-generators/env-generator"
+      },
+      "systemd/system-generators": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/j30jvfkbs0c7qbqak5gzlwqpvp7sq9yh-system-generators",
+        "target": "systemd/system-generators"
+      },
+      "systemd/system-preset/00-nixos.preset": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/2ja49r9pca0nh99fm5zmd7kg53z905gy-etc-systemd-system-preset-00-nixos.preset",
+        "target": "systemd/system-preset/00-nixos.preset"
+      },
+      "systemd/system-shutdown": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/7lrxsb38xxry8fp8ir6jr1w7ijhsnwg1-system-shutdown",
+        "target": "systemd/system-shutdown"
+      },
+      "systemd/system.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/a489g8m6pjavfn7kpaj8650babcs2clb-etc-systemd-system.conf",
+        "target": "systemd/system.conf"
+      },
+      "systemd/timesyncd.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/5vk35x0rflfmv1zp2m6iimh4ig1g979k-etc-systemd-timesyncd.conf",
+        "target": "systemd/timesyncd.conf"
+      },
+      "systemd/user": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/y117wmdpi482n2qgnkhqdxmy4cz3msrl-user-units",
+        "target": "systemd/user"
+      },
+      "systemd/user-generators": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/pqwp5dd72cj4vbg9gw1d0dpz5ri2b7aq-user-generators",
+        "target": "systemd/user-generators"
+      },
+      "systemd/user-preset/00-nixos.preset": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/njji7faq16i7s08ss2lgw85ngc6587xk-etc-systemd-user-preset-00-nixos.preset",
+        "target": "systemd/user-preset/00-nixos.preset"
+      },
+      "systemd/user.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/bagsdi61p9vx6kay9h5x8y8dmmki0cdf-etc-systemd-user.conf",
+        "target": "systemd/user.conf"
+      },
+      "terminfo": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/zylgzs49zppfj9and1gl98ndp93hl54l-system-path/share/terminfo",
+        "target": "terminfo"
+      },
+      "tmpfiles.d": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/ml6il8b0iv7m6ydxyyyp4z9ld15hx8aa-tmpfiles.d/*",
+        "target": "tmpfiles.d"
+      },
+      "udev/hwdb.bin": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/sa67w2lwlh7z94675l55aq0j1w6799hg-hwdb.bin",
+        "target": "udev/hwdb.bin"
+      },
+      "udev/rules.d": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/szn0qbmwidxjkc5qw7r7ciclcwbd5h3y-udev-rules",
+        "target": "udev/rules.d"
+      },
+      "vconsole.conf": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/3glnz18pab5yzf4zmmrzikfziwv2h25s-vconsole.conf",
+        "target": "vconsole.conf"
+      },
+      "zfs/zed.d/all-syslog.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/all-syslog.sh",
+        "target": "zfs/zed.d/all-syslog.sh"
+      },
+      "zfs/zed.d/data-notify.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/data-notify.sh",
+        "target": "zfs/zed.d/data-notify.sh"
+      },
+      "zfs/zed.d/deadman-sync-slot_off.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/deadman-sync-slot_off.sh",
+        "target": "zfs/zed.d/deadman-sync-slot_off.sh"
+      },
+      "zfs/zed.d/history_event-zfs-list-cacher.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/history_event-zfs-list-cacher.sh",
+        "target": "zfs/zed.d/history_event-zfs-list-cacher.sh"
+      },
+      "zfs/zed.d/pool_import-sync-led.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/pool_import-sync-led.sh",
+        "target": "zfs/zed.d/pool_import-sync-led.sh"
+      },
+      "zfs/zed.d/resilver_finish-notify.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/resilver_finish-notify.sh",
+        "target": "zfs/zed.d/resilver_finish-notify.sh"
+      },
+      "zfs/zed.d/resilver_finish-start-scrub.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/resilver_finish-start-scrub.sh",
+        "target": "zfs/zed.d/resilver_finish-start-scrub.sh"
+      },
+      "zfs/zed.d/scrub_finish-notify.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/scrub_finish-notify.sh",
+        "target": "zfs/zed.d/scrub_finish-notify.sh"
+      },
+      "zfs/zed.d/statechange-notify.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/statechange-notify.sh",
+        "target": "zfs/zed.d/statechange-notify.sh"
+      },
+      "zfs/zed.d/statechange-sync-led.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/statechange-sync-led.sh",
+        "target": "zfs/zed.d/statechange-sync-led.sh"
+      },
+      "zfs/zed.d/statechange-sync-slot_off.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/statechange-sync-slot_off.sh",
+        "target": "zfs/zed.d/statechange-sync-slot_off.sh"
+      },
+      "zfs/zed.d/vdev_attach-sync-led.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/vdev_attach-sync-led.sh",
+        "target": "zfs/zed.d/vdev_attach-sync-led.sh"
+      },
+      "zfs/zed.d/vdev_clear-sync-led.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/vdev_clear-sync-led.sh",
+        "target": "zfs/zed.d/vdev_clear-sync-led.sh"
+      },
+      "zfs/zed.d/zed-functions.sh": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zed.d/zed-functions.sh",
+        "target": "zfs/zed.d/zed-functions.sh"
+      },
+      "zfs/zed.d/zed.rc": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/d3pivw5nc7v2wxg5fk9a12a347ixw6sz-etc-zfs-zed.d-zed.rc",
+        "target": "zfs/zed.d/zed.rc"
+      },
+      "zfs/zpool.d": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4/etc/zfs/zpool.d/",
+        "target": "zfs/zpool.d"
+      },
+      "zoneinfo": {
+        "enable": true,
+        "mode": "symlink",
+        "source": "/nix/store/n8fqcpnr5ni28l3i9svqa70wz46798v9-tzdata-2026d/share/zoneinfo",
+        "target": "zoneinfo"
+      }
+    },
+    "fileSystems": {
+      "/": {
+        "device": "tmpfs",
+        "fsType": "tmpfs",
+        "options": [
+          "x-initrd.mount",
+          "mode=0755"
+        ]
+      },
+      "/iso": {
+        "device": "/dev/root",
+        "fsType": "iso9660",
+        "options": [
+          "x-initrd.mount"
+        ]
+      },
+      "/nix/.ro-store": {
+        "device": "/iso/nix-store.squashfs",
+        "fsType": "squashfs",
+        "options": [
+          "x-initrd.mount",
+          "loop",
+          "threads=multi"
+        ]
+      },
+      "/nix/.rw-store": {
+        "device": "tmpfs",
+        "fsType": "tmpfs",
+        "options": [
+          "x-initrd.mount",
+          "mode=0755"
+        ]
+      },
+      "/nix/store": {
+        "device": "overlay",
+        "fsType": "overlay",
+        "options": [
+          "lowerdir=/nix/.ro-store",
+          "upperdir=/nix/.rw-store/store",
+          "workdir=/nix/.rw-store/work",
+          "x-initrd.mount"
+        ]
+      }
+    },
+    "firewall": {
+      "allowPing": true,
+      "allowedTCPPortRanges": [],
+      "allowedTCPPorts": [
+        22
+      ],
+      "allowedUDPPortRanges": [],
+      "allowedUDPPorts": [],
+      "checkReversePath": "loose",
+      "enable": true,
+      "extraCommands": "23afb80df4517636599a1d39b28f02958cb18c1df9c00fc3c39a0c7f6f3b61cd",
+      "interfaces": {},
+      "trustedInterfaces": [
+        "lo"
+      ]
+    },
+    "groups": {
+      "adm": {
+        "gid": 55,
+        "members": []
+      },
+      "audio": {
+        "gid": 17,
+        "members": []
+      },
+      "cdrom": {
+        "gid": 24,
+        "members": []
+      },
+      "clock": {
+        "gid": 327,
+        "members": []
+      },
+      "dialout": {
+        "gid": 27,
+        "members": []
+      },
+      "disk": {
+        "gid": 6,
+        "members": []
+      },
+      "floppy": {
+        "gid": 18,
+        "members": []
+      },
+      "input": {
+        "gid": 174,
+        "members": []
+      },
+      "keys": {
+        "gid": 96,
+        "members": []
+      },
+      "kmem": {
+        "gid": 2,
+        "members": []
+      },
+      "kvm": {
+        "gid": 302,
+        "members": []
+      },
+      "lp": {
+        "gid": 20,
+        "members": []
+      },
+      "messagebus": {
+        "gid": 4,
+        "members": []
+      },
+      "networkmanager": {
+        "gid": 57,
+        "members": [
+          "nixos",
+          "nm-openvpn",
+          "warby"
+        ]
+      },
+      "nixbld": {
+        "gid": 30000,
+        "members": [
+          "nixbld1",
+          "nixbld10",
+          "nixbld11",
+          "nixbld12",
+          "nixbld13",
+          "nixbld14",
+          "nixbld15",
+          "nixbld16",
+          "nixbld17",
+          "nixbld18",
+          "nixbld19",
+          "nixbld2",
+          "nixbld20",
+          "nixbld21",
+          "nixbld22",
+          "nixbld23",
+          "nixbld24",
+          "nixbld25",
+          "nixbld26",
+          "nixbld27",
+          "nixbld28",
+          "nixbld29",
+          "nixbld3",
+          "nixbld30",
+          "nixbld31",
+          "nixbld32",
+          "nixbld4",
+          "nixbld5",
+          "nixbld6",
+          "nixbld7",
+          "nixbld8",
+          "nixbld9"
+        ]
+      },
+      "nm-openvpn": {
+        "gid": 217,
+        "members": []
+      },
+      "nogroup": {
+        "gid": 65534,
+        "members": []
+      },
+      "nscd": {
+        "gid": null,
+        "members": []
+      },
+      "polkituser": {
+        "gid": null,
+        "members": []
+      },
+      "render": {
+        "gid": 303,
+        "members": []
+      },
+      "root": {
+        "gid": 0,
+        "members": []
+      },
+      "sgx": {
+        "gid": 304,
+        "members": []
+      },
+      "shadow": {
+        "gid": 318,
+        "members": []
+      },
+      "sshd": {
+        "gid": null,
+        "members": []
+      },
+      "systemd-coredump": {
+        "gid": null,
+        "members": []
+      },
+      "systemd-journal": {
+        "gid": 62,
+        "members": []
+      },
+      "systemd-network": {
+        "gid": 152,
+        "members": []
+      },
+      "systemd-oom": {
+        "gid": null,
+        "members": []
+      },
+      "systemd-resolve": {
+        "gid": 153,
+        "members": []
+      },
+      "systemd-timesync": {
+        "gid": 154,
+        "members": []
+      },
+      "tape": {
+        "gid": 25,
+        "members": []
+      },
+      "tty": {
+        "gid": 3,
+        "members": []
+      },
+      "users": {
+        "gid": 100,
+        "members": []
+      },
+      "utmp": {
+        "gid": 29,
+        "members": []
+      },
+      "uucp": {
+        "gid": 19,
+        "members": []
+      },
+      "video": {
+        "gid": 26,
+        "members": [
+          "nixos"
+        ]
+      },
+      "wheel": {
+        "gid": 1,
+        "members": [
+          "nixos",
+          "warby"
+        ]
+      }
+    },
+    "homeManager": {},
+    "homeManagerSettings": {
+      "backupFileExtension": null,
+      "useGlobalPkgs": null,
+      "useUserPackages": null
+    },
+    "host": null,
+    "networking": {
+      "domain": null,
+      "hostName": "home-office-installer",
+      "interfaces": [],
+      "nameservers": [],
+      "networkmanager": true,
+      "useDHCP": false
+    },
+    "nixSettings": {
+      "allowed-users": [
+        "*"
+      ],
+      "auto-optimise-store": false,
+      "builders": null,
+      "cores": 0,
+      "experimental-features": [],
+      "extra-sandbox-paths": [],
+      "max-jobs": "auto",
+      "require-sigs": true,
+      "sandbox": true,
+      "sandbox-fallback": false,
+      "substituters": [
+        "https://cache.nixos.org/"
+      ],
+      "system-features": [
+        "nixos-test",
+        "benchmark",
+        "big-parallel",
+        "kvm"
+      ],
+      "trusted-public-keys": [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      ],
+      "trusted-substituters": [],
+      "trusted-users": [
+        "root",
+        "nixos"
+      ]
+    },
+    "nixpkgsConfig": {
+      "allowUnfree": null,
+      "overlays": 1,
+      "permittedInsecurePackages": null
+    },
+    "programs": {
+      "_1password": false,
+      "_1password-gui": false,
+      "alvr": false,
+      "amnezia-vpn": false,
+      "appgate-sdp": false,
+      "appimage": false,
+      "arp-scan": false,
+      "atop": false,
+      "atuin": false,
+      "ausweisapp": false,
+      "autoenv": false,
+      "autojump": false,
+      "bandwhich": false,
+      "bash": true,
+      "bash-my-aws": false,
+      "bat": false,
+      "bazecor": false,
+      "bcc": false,
+      "benchexec": false,
+      "browserpass": false,
+      "btrfs-heatmap": false,
+      "calls": false,
+      "captive-browser": false,
+      "ccache": false,
+      "cdemu": false,
+      "cfs-zen-tweaks": false,
+      "chromium": false,
+      "chrysalis": false,
+      "clash-verge": false,
+      "cnping": false,
+      "comma": false,
+      "command-not-found": false,
+      "compsize": false,
+      "coolercontrol": false,
+      "corectrl": false,
+      "corefreq": false,
+      "cpu-energy-meter": false,
+      "criu": false,
+      "dconf": false,
+      "digitalbitbox": false,
+      "direnv": false,
+      "dmrconfig": false,
+      "dms-shell": false,
+      "droidcam": false,
+      "dsearch": false,
+      "dublin-traceroute": false,
+      "dwl": false,
+      "ente-auth": false,
+      "entropy": false,
+      "envision": false,
+      "evince": false,
+      "evolution": false,
+      "extra-container": false,
+      "fcast-receiver": false,
+      "feedbackd": false,
+      "firefox": false,
+      "firejail": false,
+      "fish": false,
+      "flashprog": false,
+      "flashrom": false,
+      "flexoptix-app": false,
+      "foot": false,
+      "fuse": false,
+      "gamemode": false,
+      "gamescope": false,
+      "geary": false,
+      "ghidra": false,
+      "git": true,
+      "git-worktree-switcher": false,
+      "gnome-disks": false,
+      "gnome-terminal": false,
+      "google-chrome": false,
+      "gpaste": false,
+      "gphoto2": false,
+      "gpu-screen-recorder": false,
+      "gtklock": false,
+      "haguichi": false,
+      "hamster": false,
+      "htop": false,
+      "hyprland": false,
+      "hyprlock": false,
+      "i3lock": false,
+      "iay": false,
+      "idescriptor": false,
+      "iftop": false,
+      "iio-hyprland": false,
+      "immersed": false,
+      "ioquake3": false,
+      "iotop": false,
+      "jai-jail": false,
+      "java": false,
+      "joycond-cemuhook": false,
+      "k3b": false,
+      "k40-whisperer": false,
+      "kbdlight": false,
+      "kclock": false,
+      "kde-pim": false,
+      "kdeconnect": false,
+      "kubeswitch": false,
+      "labwc": false,
+      "ladybird": false,
+      "lazygit": false,
+      "less": true,
+      "liboping": false,
+      "librepods": false,
+      "localsend": false,
+      "mango": false,
+      "mdevctl": false,
+      "mepo": false,
+      "mininet": false,
+      "minipro": false,
+      "miriway": false,
+      "moonlight-qt": false,
+      "mosh": false,
+      "mouse-actions": false,
+      "msmtp": false,
+      "mtr": false,
+      "nano": true,
+      "nautilus-open-any-terminal": false,
+      "nbd": false,
+      "neovim": false,
+      "nethoscope": false,
+      "nexttrace": false,
+      "nh": false,
+      "niri": false,
+      "nix-index": false,
+      "nix-ld": false,
+      "nix-required-mounts": false,
+      "nixbit": false,
+      "nm-applet": false,
+      "nncp": false,
+      "noctalia": false,
+      "noisetorch": false,
+      "npm": false,
+      "ns-usbloader": false,
+      "nushell": false,
+      "nvrs": false,
+      "nxdumpclient": false,
+      "obs-studio": false,
+      "oddjobd": false,
+      "opengamepadui": false,
+      "openvpn3": false,
+      "partition-manager": false,
+      "passless": false,
+      "pay-respects": false,
+      "pinnacle": false,
+      "plotinus": false,
+      "pmount": false,
+      "projecteur": false,
+      "proxychains": false,
+      "pulseview": false,
+      "qdmr": false,
+      "qgroundcontrol": false,
+      "quark-goldleaf": false,
+      "renderdoc": false,
+      "river-classic": false,
+      "rog-control-center": false,
+      "rush": false,
+      "rust-motd": false,
+      "ryzen-monitor-ng": false,
+      "schroot": false,
+      "screen": false,
+      "seahorse": false,
+      "sedutil": false,
+      "sharing": false,
+      "singularity": false,
+      "skim": false,
+      "slock": false,
+      "sniffnet": false,
+      "solaar": false,
+      "soundmodem": false,
+      "starship": false,
+      "steam": false,
+      "streamcontroller": false,
+      "streamdeck-ui": false,
+      "sway": false,
+      "sysdig": false,
+      "system-config-printer": false,
+      "systemtap": false,
+      "tack": false,
+      "tcpdump": false,
+      "television": false,
+      "throne": false,
+      "thunar": false,
+      "thunderbird": false,
+      "tmux": false,
+      "traceroute": false,
+      "trippy": false,
+      "tsmClient": false,
+      "tuxclocker": false,
+      "udevil": false,
+      "umbriel": false,
+      "usbtop": false,
+      "uwsm": false,
+      "vellum": false,
+      "vim": false,
+      "virt-manager": false,
+      "vivid": false,
+      "vscode": false,
+      "wavemon": false,
+      "waybar": false,
+      "wayfire": false,
+      "wayvnc": false,
+      "weylus": false,
+      "whois": false,
+      "winbox": false,
+      "wireshark": false,
+      "wshowkeys": false,
+      "xastir": false,
+      "xfconf": false,
+      "xonsh": false,
+      "xppen": false,
+      "xscreensaver": false,
+      "xss-lock": false,
+      "xwayland": false,
+      "yazi": false,
+      "ydotool": false,
+      "yubikey-manager": false,
+      "yubikey-touch-detector": false,
+      "zmap": false,
+      "zoom-us": false,
+      "zoxide": false,
+      "zsh": false
+    },
+    "services": {
+      "SystemdJournal2Gelf": false,
+      "_3proxy": false,
+      "a2boot": false,
+      "accounts-daemon": false,
+      "acme-dns": false,
+      "acpid": false,
+      "activemq": false,
+      "actkbd": false,
+      "actual": false,
+      "adguardhome": false,
+      "adw-bluetooth": false,
+      "aerospike": false,
+      "aesmd": false,
+      "agate": false,
+      "agorakit": false,
+      "airsonic": false,
+      "akkoma": false,
+      "alerta": false,
+      "alice-lg": false,
+      "alloy": false,
+      "alps": false,
+      "amazon-cloudwatch-agent": false,
+      "amazon-ssm-agent": false,
+      "amule": false,
+      "ananicy": false,
+      "angrr": false,
+      "anki-sync-server": false,
+      "anuko-time-tracker": false,
+      "apache-kafka": false,
+      "apcupsd": false,
+      "arbtt": false,
+      "archisteamfarm": false,
+      "aria2": false,
+      "arsenik": false,
+      "artalk": false,
+      "asterisk": false,
+      "asusd": false,
+      "atalkd": false,
+      "atd": false,
+      "atftpd": false,
+      "athens": false,
+      "atticd": false,
+      "atuin": false,
+      "audiobookshelf": false,
+      "aurral": false,
+      "auto-cpufreq": false,
+      "auto-epp": false,
+      "autobrr": false,
+      "autofs": false,
+      "automatic-timezoned": false,
+      "automx2": false,
+      "automysqlbackup": false,
+      "autorandr": false,
+      "autosuspend": false,
+      "autotierfs": false,
+      "avahi": false,
+      "awstats": false,
+      "ayatana-indicators": false,
+      "babeld": false,
+      "bacula-dir": false,
+      "bacula-fd": false,
+      "bacula-sd": false,
+      "baikal": false,
+      "bamf": false,
+      "bazarr": false,
+      "bcg": false,
+      "beanstalkd": false,
+      "bee": false,
+      "below": false,
+      "bentopdf": false,
+      "bepasty": false,
+      "biboumi": false,
+      "bind": false,
+      "bird": false,
+      "birdwatcher": false,
+      "bitbox-bridge": false,
+      "bitlbee": false,
+      "bitmagnet": false,
+      "bitwarden-directory-connector-cli": false,
+      "blackfire-agent": false,
+      "blendfarm": false,
+      "blocky": false,
+      "blueman": false,
+      "bluemap": false,
+      "bluesky-pds": false,
+      "boinc": false,
+      "bonsaid": false,
+      "bookorbit": false,
+      "bookstack": false,
+      "borgmatic": false,
+      "bpftune": false,
+      "brltty": false,
+      "broadcast-box": false,
+      "buffyboard": false,
+      "buildbot-master": false,
+      "buildbot-worker": false,
+      "bulwark": false,
+      "byedpi": false,
+      "c2fmzq-server": false,
+      "cachefilesd": false,
+      "cachix-agent": false,
+      "cachix-watch-store": false,
+      "caddy": false,
+      "cadvisor": false,
+      "cage": false,
+      "calibre-server": false,
+      "calibre-web": false,
+      "canaille": false,
+      "canto-daemon": false,
+      "cardwired": false,
+      "cassandra": false,
+      "castopod": false,
+      "castsponsorskip": false,
+      "cato-client": false,
+      "centrifugo": false,
+      "ceph": false,
+      "certmgr": false,
+      "certspotter": false,
+      "cfdyndns": false,
+      "cfssl": false,
+      "cgminer": false,
+      "changedetection-io": false,
+      "chhoto-url": false,
+      "chisel-server": false,
+      "chromadb": false,
+      "chrony": false,
+      "cjdns": false,
+      "clatd": false,
+      "clickhouse": false,
+      "clight": false,
+      "clipcat": false,
+      "clipmenu": false,
+      "cliproxyapi": false,
+      "cloud-init": false,
+      "cloudflare-ddns": false,
+      "cloudflare-dyndns": false,
+      "cloudflare-warp": false,
+      "cloudflared": false,
+      "cloudlog": false,
+      "cntlm": false,
+      "cockpit": false,
+      "cockroachdb": false,
+      "cocoon": false,
+      "code-server": false,
+      "coder": false,
+      "collabora-online": false,
+      "collectd": false,
+      "colord": false,
+      "comfyui": false,
+      "commafeed": false,
+      "confd": false,
+      "conman": false,
+      "connman": false,
+      "consul": false,
+      "convos": false,
+      "cook-cli": false,
+      "coredns": false,
+      "corerad": false,
+      "corosync": false,
+      "corteza": false,
+      "coturn": false,
+      "couchdb": false,
+      "cpuminer-cryptonight": false,
+      "cpupower-gui": false,
+      "crab-hole": false,
+      "create_ap": false,
+      "croc": false,
+      "cron": false,
+      "cross-seed": false,
+      "crossfire-server": false,
+      "crossmacro": false,
+      "crowdsec": false,
+      "crowdsec-firewall-bouncer": false,
+      "cryptpad": false,
+      "cyrus-imap": false,
+      "dae": false,
+      "dante": false,
+      "darkhttpd": false,
+      "das_watchdog": false,
+      "dashy": false,
+      "datadog-agent": false,
+      "davfs2": false,
+      "davis": false,
+      "davmail": false,
+      "dawarich": false,
+      "db-rest": false,
+      "dbus": true,
+      "ddccontrol": false,
+      "ddclient": false,
+      "ddns-updater": false,
+      "deconz": false,
+      "deluge": false,
+      "dendrite": false,
+      "dependency-track": false,
+      "devmon": false,
+      "devpi-server": false,
+      "dex": false,
+      "deye-dummycloud": false,
+      "dgraph": false,
+      "dictd": false,
+      "diod": false,
+      "discourse": false,
+      "disnix": false,
+      "displayManager": false,
+      "distccd": false,
+      "dkimproxy-out": false,
+      "dleyna": false,
+      "dnscache": false,
+      "dnscrypt-proxy": false,
+      "dnsdist": false,
+      "dnsmasq": false,
+      "dnsproxy": false,
+      "do-agent": false,
+      "dockerRegistry": false,
+      "docling-serve": false,
+      "documize": false,
+      "docuseal": false,
+      "docuum": false,
+      "doh-proxy-rust": false,
+      "doh-server": false,
+      "dolibarr": false,
+      "domoticz": false,
+      "dovecot2": false,
+      "dragonflydb": false,
+      "drasl": false,
+      "draupnir": false,
+      "drbd": false,
+      "drupal": false,
+      "dsnet": false,
+      "dspam": false,
+      "duckdns": false,
+      "duckling": false,
+      "dump1090-fa": false,
+      "dunst": false,
+      "duplicati": false,
+      "duplicity": false,
+      "dwm-status": false,
+      "dysnomia": false,
+      "e-imzo": false,
+      "earlyoom": false,
+      "easytier": false,
+      "ebusd": false,
+      "echoip": false,
+      "ecs-agent": false,
+      "eg25-manager": false,
+      "ejabberd": false,
+      "elasticsearch": false,
+      "elasticsearch-curator": false,
+      "elephant": false,
+      "elk": false,
+      "emacs": false,
+      "endlessh": false,
+      "endlessh-go": false,
+      "engelsystem": false,
+      "envfs": false,
+      "envoy": false,
+      "epgstation": false,
+      "epmd": false,
+      "ergo": false,
+      "ergochat": false,
+      "erigon": false,
+      "ersatztv": false,
+      "esdm": false,
+      "espanso": false,
+      "esphome": false,
+      "etcd": false,
+      "etebase-server": false,
+      "eternal-terminal": false,
+      "etesync-dav": false,
+      "evcc": false,
+      "evdevremapkeys": false,
+      "evremap": false,
+      "exim": false,
+      "expressvpn": false,
+      "factorio": false,
+      "fail2ban": false,
+      "fakeroute": false,
+      "fanout": false,
+      "fastnetmon-advanced": false,
+      "fcron": false,
+      "fediwall": false,
+      "feishin": false,
+      "felix": false,
+      "ferm": false,
+      "ferretdb": false,
+      "fider": false,
+      "filebeat": false,
+      "filebrowser": false,
+      "firebird": false,
+      "firefly-iii": false,
+      "firefly-iii-data-importer": false,
+      "firefox-syncserver": false,
+      "fireqos": false,
+      "firewalld": false,
+      "flame": false,
+      "flannel": false,
+      "flap-alerted": false,
+      "flaresolverr": false,
+      "flarum": false,
+      "flatpak": false,
+      "flexget": false,
+      "flood": false,
+      "fluent-bit": false,
+      "fluentd": false,
+      "fluidd": false,
+      "foldingathome": false,
+      "forgejo": false,
+      "foundationdb": false,
+      "fprintd": false,
+      "fractalart": false,
+      "framework-control": false,
+      "freeciv": false,
+      "freefall": false,
+      "freeradius": false,
+      "freescout": false,
+      "freeswitch": false,
+      "freshrss": false,
+      "frigate": false,
+      "froide-govplan": false,
+      "fstrim": true,
+      "fusionInventory": false,
+      "fwupd": false,
+      "g3proxy": false,
+      "g810-led": false,
+      "galene": false,
+      "gammu-smsd": false,
+      "gancio": false,
+      "garage": false,
+      "garm": false,
+      "gatus": false,
+      "gdomap": false,
+      "gemstash": false,
+      "geoclue2": false,
+      "geoipupdate": false,
+      "geoserver": false,
+      "geph": false,
+      "gerrit": false,
+      "getty": true,
+      "ghostunnel": false,
+      "gitDaemon": false,
+      "gitea": false,
+      "gitlab": false,
+      "gitlab-runner": false,
+      "gitolite": false,
+      "glance": false,
+      "glances": false,
+      "glitchtip": false,
+      "glpiAgent": false,
+      "glusterfs": false,
+      "gmediarender": false,
+      "gns3-server": false,
+      "gnunet": false,
+      "go-autoconfig": false,
+      "go-camo": false,
+      "go-csp-collector": false,
+      "go-httpbin": false,
+      "go2rtc": false,
+      "goatcounter": false,
+      "gobgpd": false,
+      "gocd-agent": false,
+      "gocd-server": false,
+      "gocron": false,
+      "godns": false,
+      "goeland": false,
+      "gokapi": false,
+      "gollum": false,
+      "gonic": false,
+      "gophernicus": false,
+      "goss": false,
+      "gotenberg": false,
+      "gotify": false,
+      "gotosocial": false,
+      "goupile": false,
+      "govee2mqtt": false,
+      "goxlr-utility": false,
+      "gpm": false,
+      "gpsd": false,
+      "grafana": false,
+      "grafana-image-renderer": false,
+      "grafana-to-ntfy": false,
+      "grafana_reporter": false,
+      "graphical-desktop": false,
+      "grav": false,
+      "graylog": false,
+      "greenclip": false,
+      "greenlight": false,
+      "greetd": false,
+      "grist": false,
+      "grocy": false,
+      "gs1200-exporter": false,
+      "guacamole-client": false,
+      "guacamole-server": false,
+      "guix": false,
+      "gvfs": false,
+      "gvpe": false,
+      "h2o": false,
+      "handheld-daemon": false,
+      "haproxy": false,
+      "haste-server": false,
+      "hatsu": false,
+      "haveged": false,
+      "haven": false,
+      "hbase-standalone": false,
+      "hdapsd": false,
+      "hddfancontrol": false,
+      "headphones": false,
+      "headplane": false,
+      "headscale": false,
+      "healthchecks": false,
+      "heapster": false,
+      "heartbeat": false,
+      "hebbot": false,
+      "hedgedoc": false,
+      "heisenbridge": false,
+      "hercules-ci-agent": false,
+      "hickory-dns": false,
+      "hister": false,
+      "hitch": false,
+      "hledger-web": false,
+      "hockeypuck": false,
+      "hologram-agent": false,
+      "hologram-server": false,
+      "home-assistant": false,
+      "home-assistant-matter-hub": false,
+      "homebox": false,
+      "homebridge": false,
+      "homed": false,
+      "homepage-dashboard": false,
+      "homer": false,
+      "hoogle": false,
+      "hostapd": false,
+      "hound": false,
+      "howdy": false,
+      "hqplayerd": false,
+      "htpdate": false,
+      "httpd": false,
+      "https-dns-proxy": false,
+      "hydra": false,
+      "hydra-builder": false,
+      "hylafax": false,
+      "hyphanet": false,
+      "hypridle": false,
+      "hyprwhspr-rs": false,
+      "i2p": false,
+      "i2pd": false,
+      "icecast": false,
+      "icingaweb2": false,
+      "ifm": false,
+      "ihaskell": false,
+      "iio-niri": false,
+      "illum": false,
+      "imaginary": false,
+      "immich": false,
+      "immich-kiosk": false,
+      "immich-public-proxy": false,
+      "immichframe": false,
+      "inadyn": false,
+      "incron": false,
+      "infinoted": false,
+      "influxdb": false,
+      "influxdb2": false,
+      "infnoise": false,
+      "input-remapper": false,
+      "inputplumber": false,
+      "inspircd": false,
+      "interception-tools": false,
+      "intune": false,
+      "inventree": false,
+      "invidious": false,
+      "invidious-router": false,
+      "iocaine": false,
+      "iperf3": false,
+      "ipfs-cluster": false,
+      "ipp-usb": false,
+      "iptsd": false,
+      "ircdHybrid": false,
+      "irkerd": false,
+      "irqbalance": false,
+      "isso": false,
+      "ivpn": false,
+      "jackett": false,
+      "jboss": false,
+      "jellyfin": false,
+      "jenkins": false,
+      "jenkinsSlave": false,
+      "jibri": false,
+      "jicofo": false,
+      "jigasi": false,
+      "jirafeau": false,
+      "jitsi-meet": false,
+      "jitsi-videobridge": false,
+      "jitterentropy-rngd": false,
+      "jmusicbot": false,
+      "jotta-cli": false,
+      "journalbeat": false,
+      "journaldriver": false,
+      "journalwatch": false,
+      "joycond": false,
+      "jupyter": false,
+      "jupyterhub": false,
+      "k3s": false,
+      "kanata": false,
+      "kanboard": false,
+      "kanshi": false,
+      "kapacitor": false,
+      "kapla": false,
+      "karakeep": false,
+      "karma": false,
+      "kasmweb": false,
+      "kavita": false,
+      "kbfs": false,
+      "keepalived": false,
+      "kener": false,
+      "kerberos_server": false,
+      "keter": false,
+      "keybase": false,
+      "keycloak": false,
+      "keyd": false,
+      "kismet": false,
+      "kiwix-serve": false,
+      "klipper": false,
+      "kmonad": false,
+      "kmscon": false,
+      "knot": false,
+      "knot-resolver": false,
+      "koito": false,
+      "komga": false,
+      "komodo-periphery": false,
+      "kresd": false,
+      "krill": false,
+      "kthxbye": false,
+      "kubo": false,
+      "kvrocks": false,
+      "lact": false,
+      "lambdabot": false,
+      "languagetool": false,
+      "lanraragi": false,
+      "lasuite-docs": false,
+      "lasuite-drive": false,
+      "lasuite-meet": false,
+      "lauti": false,
+      "lavalink": false,
+      "leaps": false,
+      "legit": false,
+      "lemmy": false,
+      "libinput": false,
+      "librechat": false,
+      "librenms": false,
+      "librespeed": false,
+      "libreswan": false,
+      "libretranslate": false,
+      "lidarr": false,
+      "lifecycled": false,
+      "lighttpd": false,
+      "limesurvey": false,
+      "linkding": false,
+      "linkwarden": false,
+      "linux-enable-ir-emitter": false,
+      "linyaps": false,
+      "lirc": false,
+      "listmonk": false,
+      "litellm": false,
+      "litestream": false,
+      "livekit": false,
+      "lk-jwt-service": false,
+      "llama-cpp": false,
+      "llama-swap": false,
+      "lldap": false,
+      "lldpd": false,
+      "local-content-share": false,
+      "localtimed": false,
+      "locate": false,
+      "logcheck": false,
+      "logind": true,
+      "logiops": false,
+      "logkeys": false,
+      "logmein-hamachi": false,
+      "logrotate": false,
+      "logstash": false,
+      "loki": false,
+      "lokinet": false,
+      "longview": false,
+      "lorri": false,
+      "lubelogger": false,
+      "lvm": true,
+      "lxd-image-server": false,
+      "lxmd": false,
+      "mackerel-agent": false,
+      "maddy": false,
+      "magic-wormhole-mailbox-server": false,
+      "magnetico": false,
+      "mailcatcher": false,
+      "mailhog": false,
+      "mailman": false,
+      "mainsail": false,
+      "malcontent": false,
+      "mame": false,
+      "manticore": false,
+      "marytts": false,
+      "mastodon": false,
+      "matomo": false,
+      "matrix-alertmanager": false,
+      "matrix-appservice-irc": false,
+      "matrix-authentication-service": false,
+      "matrix-conduit": false,
+      "matrix-continuwuity": false,
+      "matrix-hookshot": false,
+      "matrix-synapse": false,
+      "matrix-tuwunel": false,
+      "matter-server": false,
+      "matterbridge": false,
+      "matterjs-server": false,
+      "mattermost": false,
+      "maubot": false,
+      "mautrix-discord": false,
+      "mautrix-signal": false,
+      "mautrix-telegram": false,
+      "mautrix-whatsapp": false,
+      "mbpfan": false,
+      "mchprs": false,
+      "mealie": false,
+      "mediagoblin": false,
+      "mediamtx": false,
+      "mediatomb": false,
+      "mediawiki": false,
+      "meilisearch": false,
+      "memcached": false,
+      "meme-bingo-web": false,
+      "memos": false,
+      "merecat": false,
+      "meshcentral": false,
+      "meshtasticd": false,
+      "metabase": false,
+      "metricbeat": false,
+      "microbin": false,
+      "microsocks": false,
+      "mighttpd2": false,
+      "mihomo": false,
+      "mimir": false,
+      "minecraft-server": false,
+      "minetest-server": false,
+      "minidlna": false,
+      "miniflux": false,
+      "minio": false,
+      "miniupnpd": false,
+      "mirakurun": false,
+      "miredo": false,
+      "misskey": false,
+      "mjolnir": false,
+      "mjpg-streamer": false,
+      "mlmmj": false,
+      "mmsd": false,
+      "mobilizon": false,
+      "molly-brown": false,
+      "mollysocket": false,
+      "monado": false,
+      "monero": false,
+      "monetdb": false,
+      "mongodb": false,
+      "monica": false,
+      "monit": false,
+      "moodle": false,
+      "moonraker": false,
+      "moonshine": false,
+      "mopidy": false,
+      "mosquitto": false,
+      "motioneye": false,
+      "movim": false,
+      "mozillavpn": false,
+      "mpd": false,
+      "mpdscribble": false,
+      "mptcpd": false,
+      "mqtt2influxdb": false,
+      "mstpd": false,
+      "mtprotoproxy": false,
+      "mtr-exporter": false,
+      "mullvad-vpn": false,
+      "multipath": false,
+      "munge": false,
+      "munin-cron": false,
+      "munin-node": false,
+      "murmur": false,
+      "music-assistant": false,
+      "mycelium": false,
+      "mympd": false,
+      "mysql": false,
+      "mysqlBackup": false,
+      "n8n": false,
+      "nagios": false,
+      "namecoind": false,
+      "nar-serve": false,
+      "nats": false,
+      "navidrome": false,
+      "ncdns": false,
+      "ncps": false,
+      "ndppd": false,
+      "neard": false,
+      "nebula-lighthouse-service": false,
+      "neo4j": false,
+      "netatalk": false,
+      "netbird": false,
+      "netbox": false,
+      "netclient": false,
+      "netdata": false,
+      "netfoil": false,
+      "networkaudiod": false,
+      "networkd-dispatcher": false,
+      "newt": false,
+      "nextcloud": false,
+      "nextcloud-spreed-signaling": false,
+      "nextcloud-whiteboard-server": false,
+      "nextdns": false,
+      "nextjs-ollama-llm-ui": false,
+      "nexus": false,
+      "nezha": false,
+      "nezha-agent": false,
+      "nghttpx": false,
+      "nginx": false,
+      "ngircd": false,
+      "nifi": false,
+      "nipap": false,
+      "nitter": false,
+      "nix-serve": false,
+      "nixops-dns": false,
+      "nixseparatedebuginfod2": false,
+      "nmtrust": false,
+      "nntp-proxy": false,
+      "node-red": false,
+      "nohang": false,
+      "nomad": false,
+      "nominatim": false,
+      "nordvpn": false,
+      "nostr-rs-relay": false,
+      "novacomd": false,
+      "nscd": true,
+      "nsd": false,
+      "ntfy-sh": false,
+      "ntopng": false,
+      "ntp": false,
+      "ntpd-rs": false,
+      "nullidentdmod": false,
+      "nullmailer": false,
+      "nvme-rs": false,
+      "nzbget": false,
+      "nzbhydra2": false,
+      "oauth2-proxy": false,
+      "ocis": false,
+      "ocserv": false,
+      "ocsinventory-agent": false,
+      "octoprint": false,
+      "odoo": false,
+      "offlineimap": false,
+      "ofono": false,
+      "oidentd": false,
+      "oink": false,
+      "olivetin": false,
+      "ollama": false,
+      "ollaya": false,
+      "omada": false,
+      "ombi": false,
+      "omnom": false,
+      "oncall": false,
+      "onedrive": false,
+      "onlyoffice": false,
+      "oo7": false,
+      "open-web-calendar": false,
+      "open-webui": false,
+      "openafsClient": false,
+      "openafsServer": false,
+      "openarena": false,
+      "openbao": false,
+      "opencloud": false,
+      "opendkim": false,
+      "openiscsi": false,
+      "openldap": false,
+      "openntpd": false,
+      "opensearch": false,
+      "opensearch-dashboards": false,
+      "opensmtpd": false,
+      "opensnitch": false,
+      "openssh": true,
+      "opentelemetry-collector": false,
+      "openthread-border-router": false,
+      "opentracker": false,
+      "opentsdb": false,
+      "openvscode-server": false,
+      "openwebrx": false,
+      "opkssh": false,
+      "orbit": false,
+      "orca": false,
+      "orthanc": false,
+      "osquery": false,
+      "osrm": false,
+      "ostinato": false,
+      "outline": false,
+      "owamp": false,
+      "owncast": false,
+      "oxidized": false,
+      "p2pool": false,
+      "pacemaker": false,
+      "packagekit": false,
+      "pairdrop": false,
+      "paisa": false,
+      "pangolin": false,
+      "paperless": false,
+      "papra": false,
+      "paretosecurity": false,
+      "parsedmarc": false,
+      "part-db": false,
+      "passSecretService": false,
+      "patroni": false,
+      "pcscd": false,
+      "pdfding": false,
+      "pdns-recursor": false,
+      "pdnsd": false,
+      "pdudaemon": false,
+      "peerflix": false,
+      "peering-manager": false,
+      "peertube": false,
+      "peertube-runner": false,
+      "perses": false,
+      "persistent-evdev": false,
+      "pgadmin": false,
+      "pgbackrest": false,
+      "pgbouncer": false,
+      "pgmanage": false,
+      "pgpkeyserver-lite": false,
+      "pgscv": false,
+      "photonvision": false,
+      "photoprism": false,
+      "photoview": false,
+      "phylactery": false,
+      "physlock": false,
+      "picom": false,
+      "picosnitch": false,
+      "pict-rs": false,
+      "pid-fan-controller": false,
+      "pihole-ftl": false,
+      "pihole-web": false,
+      "pinchflat": false,
+      "pinnwand": false,
+      "pipewire": false,
+      "pixelfed": false,
+      "pixiecore": false,
+      "plantuml-server": false,
+      "plausible": false,
+      "playerctld": false,
+      "pleroma": false,
+      "plex": false,
+      "plikd": false,
+      "pocket-id": false,
+      "podgrab": false,
+      "polaris": false,
+      "pomerium": false,
+      "porn-vault": false,
+      "portmaster": false,
+      "portunus": false,
+      "porxie": false,
+      "postfix": false,
+      "postfix-tlspol": false,
+      "postgres-websockets": false,
+      "postgresql": false,
+      "postgresqlBackup": false,
+      "postgrest": false,
+      "postgrey": false,
+      "postsrsd": false,
+      "power-profiles-daemon": false,
+      "powerdns": false,
+      "powerdns-admin": false,
+      "powerstation": false,
+      "pppd": false,
+      "pptpd": false,
+      "prefect": false,
+      "pretalx": false,
+      "pretix": false,
+      "printing": false,
+      "privatebin": false,
+      "privoxy": false,
+      "prometheus": false,
+      "prosody": false,
+      "protonmail-bridge": false,
+      "prowlarr": false,
+      "psd": false,
+      "public-inbox": false,
+      "pufferpanel": false,
+      "pulseaudio": false,
+      "pumpkin": false,
+      "pykms": false,
+      "pyroscope": false,
+      "qbit-manage": false,
+      "qbittorrent": false,
+      "qdrant": false,
+      "qemuGuest": false,
+      "quake3-server": false,
+      "quassel": false,
+      "qui": false,
+      "quickwit": false,
+      "r53-ddns": false,
+      "rabbitmq": false,
+      "radarr": false,
+      "radicale": false,
+      "radicle": false,
+      "radvd": false,
+      "ratbagd": false,
+      "rathole": false,
+      "rauc": false,
+      "rdnssd": false,
+      "reaction": false,
+      "readarr": false,
+      "readeck": false,
+      "realm": false,
+      "realmd": false,
+      "rebuilderd": false,
+      "recyclarr": false,
+      "redlib": false,
+      "redmine": false,
+      "redshift": false,
+      "redsocks": false,
+      "reframe": false,
+      "remark42": false,
+      "renovate": false,
+      "reposilite": false,
+      "resilio": false,
+      "resolved": true,
+      "rethinkdb": false,
+      "riemann": false,
+      "riemann-dash": false,
+      "rimgo": false,
+      "rke2": false,
+      "rkvm": false,
+      "rmfakecloud": false,
+      "rnsd": false,
+      "robustirc-bridge": false,
+      "romm": false,
+      "roon-bridge": false,
+      "roon-server": false,
+      "rosec": false,
+      "rosenpass": false,
+      "roundcube": false,
+      "routedns": false,
+      "routinator": false,
+      "rpcbind": false,
+      "rqbit": false,
+      "rshim": false,
+      "rsnapshot": false,
+      "rspamd": false,
+      "rspamd-trainer": false,
+      "rss-bridge": false,
+      "rss2email": false,
+      "rsshub": false,
+      "rstudio-server": false,
+      "rsync": false,
+      "rsyncd": false,
+      "rsyslogd": false,
+      "rtorrent": false,
+      "rumno": false,
+      "rundeck": false,
+      "rust-federation-tester": false,
+      "rustdesk-server": false,
+      "rustfs": false,
+      "rustical": false,
+      "rustus": false,
+      "rutorrent": false,
+      "sabnzbd": false,
+      "safeeyes": false,
+      "samba": false,
+      "samba-wsdd": false,
+      "saned": false,
+      "sanoid": false,
+      "saslauthd": false,
+      "scanservjs": false,
+      "schleuder": false,
+      "scion": false,
+      "scollector": false,
+      "screego": false,
+      "scrutiny": false,
+      "scx": false,
+      "scx-loader": false,
+      "sdrplayApi": false,
+      "searx": false,
+      "seatd": false,
+      "seerr": false,
+      "self-deploy": false,
+      "selfoss": false,
+      "send": false,
+      "serviio": false,
+      "sftpgo": false,
+      "shadowsocks": false,
+      "shairport-sync": false,
+      "sharkey": false,
+      "shelfmark": false,
+      "shellhub-agent": false,
+      "shibboleth-sp": false,
+      "shiori": false,
+      "shoko": false,
+      "shorewall": false,
+      "shorewall6": false,
+      "sillytavern": false,
+      "silverbullet": false,
+      "sing-box": false,
+      "sitespeed-io": false,
+      "sks": false,
+      "skydns": false,
+      "slimserver": false,
+      "slskd": false,
+      "smartd": false,
+      "smartdns": false,
+      "smokeping": false,
+      "snapraid": false,
+      "snapserver": false,
+      "snipe-it": false,
+      "sniproxy": false,
+      "snips-sh": false,
+      "snmpd": false,
+      "snowflake-proxy": false,
+      "soft-serve": false,
+      "softether": false,
+      "sogo": false,
+      "soju": false,
+      "solanum": false,
+      "sonarr": false,
+      "sonic-server": false,
+      "spacecookie": false,
+      "spamassassin": false,
+      "speechd": false,
+      "speedify": false,
+      "speedtest-tracker": false,
+      "spice-autorandr": false,
+      "spice-vdagentd": false,
+      "spice-webdavd": false,
+      "spiped": false,
+      "spoolman": false,
+      "spotifyd": false,
+      "squeezelite": false,
+      "squid": false,
+      "ssh-agent-switcher": false,
+      "sshd": true,
+      "sshguard": false,
+      "sshwifty": false,
+      "sslh": false,
+      "sslmate-agent": false,
+      "sssd": false,
+      "sstorytime": false,
+      "stalwart": false,
+      "stargazer": false,
+      "stash": false,
+      "stash-clipboard": false,
+      "static-web-server": false,
+      "step-ca": false,
+      "stirling-pdf": false,
+      "stratis": false,
+      "strfry": false,
+      "strichliste": false,
+      "strongswan": false,
+      "strongswan-swanctl": false,
+      "stubby": false,
+      "stump": false,
+      "stunnel": false,
+      "subsonic": false,
+      "sundtek": false,
+      "sunshine": false,
+      "supergfxd": false,
+      "supybot": false,
+      "suricata": false,
+      "surrealdb": false,
+      "suwayomi-server": false,
+      "svnserve": false,
+      "swapspace": false,
+      "switcherooControl": false,
+      "sympa": false,
+      "synapse-auto-compressor": false,
+      "syncoid": false,
+      "syncplay": false,
+      "syncthing": false,
+      "syslog-ng": false,
+      "syslogd": false,
+      "sysprof": false,
+      "sysstat": false,
+      "system-config-printer": false,
+      "system76-scheduler": false,
+      "systembus-notify": false,
+      "systemd-lock-handler": false,
+      "szurubooru": false,
+      "tabby": false,
+      "tabbyapi": false,
+      "tailscale": true,
+      "tailscaleAuth": false,
+      "taler": false,
+      "tandoor-recipes": false,
+      "tang": false,
+      "tap": false,
+      "target": false,
+      "tarsnap": false,
+      "taskchampion-sync-server": false,
+      "taskserver": false,
+      "tautulli": false,
+      "tayga": false,
+      "tcsd": false,
+      "tdarr": false,
+      "teamspeak3": false,
+      "teamviewer": false,
+      "technitium-dns-server": false,
+      "tee-supplicant": false,
+      "teeworlds": false,
+      "telegraf": false,
+      "telepathy": false,
+      "teleport": false,
+      "tempo": false,
+      "temporal": false,
+      "terraria": false,
+      "tetrd": false,
+      "tftpd": false,
+      "thelounge": false,
+      "thermald": false,
+      "thinkfan": false,
+      "throttled": false,
+      "tiddlywiki": false,
+      "tigerbeetle": false,
+      "tika": false,
+      "timekpr": false,
+      "timesyncd": true,
+      "tinyauth": false,
+      "tinydns": false,
+      "tinyproxy": false,
+      "tlp": false,
+      "tlsrpt": false,
+      "tmate-ssh-server": false,
+      "todesk": false,
+      "tomcat": false,
+      "tor": false,
+      "torrentstream": false,
+      "touchegg": false,
+      "tox-node": false,
+      "toxBootstrapd": false,
+      "toxvpn": false,
+      "tp-auto-kbbl": false,
+      "traccar": false,
+      "traefik": false,
+      "trafficserver": false,
+      "tranquil-pds": false,
+      "transfer-sh": false,
+      "transmission": false,
+      "tremor-rs": false,
+      "trezord": false,
+      "trickster": false,
+      "triggerhappy": false,
+      "trilium-server": false,
+      "tsidp": false,
+      "tsmBackup": false,
+      "tt-rss": false,
+      "ttyd": false,
+      "tuliprox": false,
+      "tumbler": false,
+      "tuned": false,
+      "tuptime": false,
+      "turborepo-remote-cache": false,
+      "turn-rs": false,
+      "tusd": false,
+      "twingate": false,
+      "typesense": false,
+      "tzupdate": false,
+      "u9fs": false,
+      "udev": true,
+      "udisks2": false,
+      "udp514-journal": false,
+      "ulogd": false,
+      "umami": false,
+      "umurmur": false,
+      "unbound": false,
+      "unclutter": false,
+      "unclutter-xfixes": false,
+      "undervolt": false,
+      "unifi": false,
+      "unit": false,
+      "unpackerr": false,
+      "unpoller": false,
+      "upki": false,
+      "upower": false,
+      "uptermd": false,
+      "uptime-kuma": false,
+      "uptimed": false,
+      "urserver": false,
+      "urxvtd": false,
+      "usbguard": false,
+      "usbmuxd": false,
+      "usbrelayd": false,
+      "userborn": false,
+      "userdbd": false,
+      "ustreamer": false,
+      "uwsgi": false,
+      "v2ray": false,
+      "v2raya": false,
+      "varnish": false,
+      "vault": false,
+      "vaultwarden": false,
+      "vdirsyncer": false,
+      "vdr": false,
+      "vector": false,
+      "veilid": false,
+      "victorialogs": false,
+      "victoriametrics": false,
+      "victoriatraces": false,
+      "vikunja": false,
+      "vinyl-cache": false,
+      "vlagent": false,
+      "vmagent": false,
+      "vnstat": false,
+      "vsftpd": false,
+      "vsmartcard-vpcd": false,
+      "waagent": false,
+      "wakapi": false,
+      "warpgate": false,
+      "wasabibackend": false,
+      "wastebin": false,
+      "watchdogd": false,
+      "watt": false,
+      "wealthfolio": false,
+      "webdav": false,
+      "webdav-server-rs": false,
+      "webhook": false,
+      "weblate": false,
+      "websurfx": false,
+      "weechat": false,
+      "wg-access-server": false,
+      "wg-netmanager": false,
+      "wgautomesh": false,
+      "whisparr": false,
+      "whitebophir": false,
+      "whoami": false,
+      "whoogle-search": false,
+      "wiki-js": false,
+      "windmill": false,
+      "wivrn": false,
+      "wlock": false,
+      "woodpecker-server": false,
+      "workout-tracker": false,
+      "writefreely": false,
+      "wstunnel": false,
+      "x2goserver": false,
+      "xandikos": false,
+      "xbanish": false,
+      "xe-guest-utilities": false,
+      "xfs": false,
+      "xinetd": false,
+      "xl2tpd": false,
+      "xmrig": false,
+      "xonotic": false,
+      "xray": false,
+      "xrdp": false,
+      "xscreensaver": false,
+      "xserver": false,
+      "yandex-disk": false,
+      "yarr": false,
+      "yggdrasil": false,
+      "yggdrasil-jumper": false,
+      "ympd": false,
+      "your_spotify": false,
+      "youtrack": false,
+      "yubikey-agent": false,
+      "zabbixAgent": false,
+      "zabbixProxy": false,
+      "zabbixServer": false,
+      "zabbixWeb": false,
+      "zammad": false,
+      "zapret": false,
+      "zapret2": false,
+      "zeitgeist": false,
+      "zenohd": false,
+      "zerobin": false,
+      "zerobyte": false,
+      "zeronet": false,
+      "zerotierone": false,
+      "zeyple": false,
+      "zigbee2mqtt": false,
+      "zipline": false,
+      "zitadel": false,
+      "znapzend": false,
+      "znc": false,
+      "zoneminder": false,
+      "zookeeper": false,
+      "zram-generator": false,
+      "zrepl": false,
+      "zwave-js": false,
+      "zwave-js-ui": false
+    },
+    "session": {
+      "displayManager": {
+        "autoLogin": {
+          "enable": false,
+          "user": null
+        },
+        "defaultSession": null,
+        "gdm": false,
+        "sddm": false
+      },
+      "greetd": false,
+      "xserver": false
+    },
+    "swapDevices": [],
+    "systemPackages": [
+      {
+        "name": "grub",
+        "out": "/nix/store/044axr8aas0v5cwfkg8rp4y70xa1wx8w-grub-2.14",
+        "version": "2.14"
+      },
+      {
+        "name": "gnused",
+        "out": "/nix/store/1ggxndc1gd5061j5hqprhnhx9p30yilv-gnused-4.10",
+        "version": "4.10"
+      },
+      {
+        "name": "diffutils",
+        "out": "/nix/store/1jhkxfbnx35m08gv5fyamp6ai5qhbjdh-diffutils-3.12",
+        "version": "3.12"
+      },
+      {
+        "name": "nixos-enter",
+        "out": "/nix/store/1jyvm35m7ssb8nb2yrrg80mn3q2x3s89-nixos-enter",
+        "version": ""
+      },
+      {
+        "name": "glibc-locales",
+        "out": "/nix/store/1m9dlscbzj1ma5xjsbfw2kk0gwfq3qb7-glibc-locales-2.44-25",
+        "version": "2.44"
+      },
+      {
+        "name": "bash-interactive",
+        "out": "/nix/store/1mv3qz005gkbalxfghk4y3s8ayv4d2dl-bash-interactive-5.3p15",
+        "version": "5.3p15"
+      },
+      {
+        "name": "bash-interactive",
+        "out": "/nix/store/1mv3qz005gkbalxfghk4y3s8ayv4d2dl-bash-interactive-5.3p15",
+        "version": "5.3p15"
+      },
+      {
+        "name": "bash-interactive",
+        "out": "/nix/store/1mv3qz005gkbalxfghk4y3s8ayv4d2dl-bash-interactive-5.3p15",
+        "version": "5.3p15"
+      },
+      {
+        "name": "bash-interactive",
+        "out": "/nix/store/1mv3qz005gkbalxfghk4y3s8ayv4d2dl-bash-interactive-5.3p15",
+        "version": "5.3p15"
+      },
+      {
+        "name": "bash-interactive",
+        "out": "/nix/store/1mv3qz005gkbalxfghk4y3s8ayv4d2dl-bash-interactive-5.3p15",
+        "version": "5.3p15"
+      },
+      {
+        "name": "fuse",
+        "out": "/nix/store/1ny2i0wwsh2a9i66r4l32mb21baxmpdd-fuse-2.9.9-bin",
+        "version": "2.9.9"
+      },
+      {
+        "name": "nixos-configuration-reference-manpage",
+        "out": "/nix/store/1r7jjl6krng8j6kny78w4bcw4jk9zsf3-nixos-configuration-reference-manpage",
+        "version": ""
+      },
+      {
+        "name": "procps",
+        "out": "/nix/store/1x1p9srrm7a4fa6nqaw2b4jlfsqv9chq-procps-4.0.7",
+        "version": "4.0.7"
+      },
+      {
+        "name": "rsync",
+        "out": "/nix/store/2494dbarlygwmjia0sar4nf83lmb0cdz-rsync-3.5.0",
+        "version": "3.5.0"
+      },
+      {
+        "name": "bootstrap-lacie",
+        "out": "/nix/store/2bksr54bqyibp67bm8zymjfr5s86r1vs-bootstrap-lacie",
+        "version": ""
+      },
+      {
+        "name": "man-db",
+        "out": "/nix/store/2i156r4cbi500d28xhw1l59ydcy13n2f-man-db-2.13.1",
+        "version": "2.13.1"
+      },
+      {
+        "name": "dbus-broker",
+        "out": "/nix/store/2lg1d4zbpykbvma2s7wgsb4wnwyz8x6q-dbus-broker-37",
+        "version": "37"
+      },
+      {
+        "name": "fuse",
+        "out": "/nix/store/343d9n22ayca19i8xs894gjkpn2cigfl-fuse-3.18.2-bin",
+        "version": "3.18.2"
+      },
+      {
+        "name": "gnugrep",
+        "out": "/nix/store/3668q0d9zhc5n9l2pnyvpd44kz9bjsjm-gnugrep-3.12",
+        "version": "3.12"
+      },
+      {
+        "name": "nixos-option",
+        "out": "/nix/store/377qs7zq9bppcyyq74skpc4k9qiv035c-nixos-option-26.11",
+        "version": "26.11"
+      },
+      {
+        "name": "ntfs3g",
+        "out": "/nix/store/3ankmn51mpka2xrhnyma5kfn16y59br8-ntfs3g-2026.9.18",
+        "version": "2026.9.18"
+      },
+      {
+        "name": "ntfs3g",
+        "out": "/nix/store/3ankmn51mpka2xrhnyma5kfn16y59br8-ntfs3g-2026.9.18",
+        "version": "2026.9.18"
+      },
+      {
+        "name": "nixos-rebuild-ng",
+        "out": "/nix/store/415nny76xbh9ck27cfk48hhzx0q1hvla-nixos-rebuild-ng-26.11",
+        "version": "26.11"
+      },
+      {
+        "name": "modemmanager",
+        "out": "/nix/store/4vj8rc4mpy3mjsnp8aajf0gycr1hfmlh-modemmanager-1.24.2",
+        "version": "1.24.2"
+      },
+      {
+        "name": "iputils",
+        "out": "/nix/store/4x33h3gs03gkx1fh04k0ylmkapy1cc59-iputils-20250605",
+        "version": "20250605"
+      },
+      {
+        "name": "fd",
+        "out": "/nix/store/4xblm8snjdb609iygrqyrx9l07mqfp2c-fd-10.5.0",
+        "version": "10.5.0"
+      },
+      {
+        "name": "acl",
+        "out": "/nix/store/518vmjzl46zd8c3g5fp52f3g98v8kl8n-acl-2.4.0-bin",
+        "version": "2.4.0"
+      },
+      {
+        "name": "mtools",
+        "out": "/nix/store/569pgbbykxqzpzxvdkfj9sz9dr1ga6vk-mtools-4.0.49",
+        "version": "4.0.49"
+      },
+      {
+        "name": "bind",
+        "out": "/nix/store/5bg987ip6hvdviv82wrkk1qqzdrrmhq3-bind-9.20.29-host",
+        "version": "9.20.29"
+      },
+      {
+        "name": "curl",
+        "out": "/nix/store/5g20bqhw379iw2vp2jxwzzsf5n1gmh4h-curl-8.22.0-bin",
+        "version": "8.22.0"
+      },
+      {
+        "name": "curl",
+        "out": "/nix/store/5g20bqhw379iw2vp2jxwzzsf5n1gmh4h-curl-8.22.0-bin",
+        "version": "8.22.0"
+      },
+      {
+        "name": "zip",
+        "out": "/nix/store/5ypvkry3qra47dylc9kfk36r1q9vha80-zip-3.0",
+        "version": "3.0"
+      },
+      {
+        "name": "cryptsetup",
+        "out": "/nix/store/60y3vfnwa3mimab52wkcxs7k7ilxag1d-cryptsetup-2.8.8-bin",
+        "version": "2.8.8"
+      },
+      {
+        "name": "gawk",
+        "out": "/nix/store/63g104xwbzfpcq0h7c99w19m6j9ly3p1-gawk-5.4.1",
+        "version": "5.4.1"
+      },
+      {
+        "name": "hdparm",
+        "out": "/nix/store/63lr8h2rwdcxjph7r2mbld5yh9bq2njy-hdparm-9.65",
+        "version": "9.65"
+      },
+      {
+        "name": "parted",
+        "out": "/nix/store/6mn86wxq0bzikn6nnpdbdsrg0aiv0lsl-parted-3.8",
+        "version": "3.8"
+      },
+      {
+        "name": "parted",
+        "out": "/nix/store/6mn86wxq0bzikn6nnpdbdsrg0aiv0lsl-parted-3.8",
+        "version": "3.8"
+      },
+      {
+        "name": "kbd",
+        "out": "/nix/store/6sff0zi6fiwghgnvlpq61rwb8zqwacsm-kbd-2.9.0",
+        "version": "2.9.0"
+      },
+      {
+        "name": "time",
+        "out": "/nix/store/6vrl8gs1971k9p913mq5y041mpscvbss-time-1.10",
+        "version": "1.10"
+      },
+      {
+        "name": "nixos-generate-config",
+        "out": "/nix/store/79ah4bwp3hvsqwxg2nm9c2li5d8hk0df-nixos-generate-config",
+        "version": ""
+      },
+      {
+        "name": "gptfdisk",
+        "out": "/nix/store/7h7yn9rxp0vvxzvzayqarlas09wrp1b2-gptfdisk-1.0.10",
+        "version": "1.0.10"
+      },
+      {
+        "name": "gptfdisk",
+        "out": "/nix/store/7h7yn9rxp0vvxzvzayqarlas09wrp1b2-gptfdisk-1.0.10",
+        "version": "1.0.10"
+      },
+      {
+        "name": "tailscale",
+        "out": "/nix/store/8isnvnbq4q8qh2303rq8mvxsphx4akzn-tailscale-1.102.5",
+        "version": "1.102.5"
+      },
+      {
+        "name": "tailscale",
+        "out": "/nix/store/8isnvnbq4q8qh2303rq8mvxsphx4akzn-tailscale-1.102.5",
+        "version": "1.102.5"
+      },
+      {
+        "name": "sdparm",
+        "out": "/nix/store/8mk05gnb9ig2c2swg2njix80b2vxglhq-sdparm-1.12",
+        "version": "1.12"
+      },
+      {
+        "name": "zfs",
+        "out": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4",
+        "version": "2.4.4"
+      },
+      {
+        "name": "zfs",
+        "out": "/nix/store/8n1zfz44wb3yyqzg7b2fszkzpl50y8d5-zfs-user-2.4.4",
+        "version": "2.4.4"
+      },
+      {
+        "name": "dbus",
+        "out": "/nix/store/8snmq54bp5d5vp5dihgn7xr53hayx629-dbus-1.16.2",
+        "version": "1.16.2"
+      },
+      {
+        "name": "ms-sys",
+        "out": "/nix/store/8vpz51j8pymvnp7d37dif970ggaslah9-ms-sys-2.8.0",
+        "version": "2.8.0"
+      },
+      {
+        "name": "efibootmgr",
+        "out": "/nix/store/9hblwqv9v3ij6h3w0pj855zhv9rswz0s-efibootmgr-18",
+        "version": "18"
+      },
+      {
+        "name": "vim",
+        "out": "/nix/store/9swnd5pf8p8w1gwcbhdpm2yx705kbp38-vim-9.2.1001",
+        "version": "9.2.1001"
+      },
+      {
+        "name": "vim",
+        "out": "/nix/store/9swnd5pf8p8w1gwcbhdpm2yx705kbp38-vim-9.2.1001",
+        "version": "9.2.1001"
+      },
+      {
+        "name": "sshfs-fuse",
+        "out": "/nix/store/9vbpk1hm0h614cy083r54vm10y40m7gf-sshfs-fuse-3.7.6",
+        "version": "3.7.6"
+      },
+      {
+        "name": "nix-info",
+        "out": "/nix/store/a1hrsyj2lcq3a04w5vmrsylc6y955ja7-nix-info",
+        "version": ""
+      },
+      {
+        "name": "nvme-cli",
+        "out": "/nix/store/a21j52pxm456dg9aa8xjv47ld9f7q193-nvme-cli-2.16",
+        "version": "2.16"
+      },
+      {
+        "name": "mkpasswd",
+        "out": "/nix/store/aqyzn7mhybny55f5m1h7jm8k2srmy53c-mkpasswd-5.6.6",
+        "version": "5.6.6"
+      },
+      {
+        "name": "cifs-utils",
+        "out": "/nix/store/bg4jcsmryr3hiqjxj5wjmgikp0pnjmb8-cifs-utils-7.5",
+        "version": "7.5"
+      },
+      {
+        "name": "cifs-utils",
+        "out": "/nix/store/bg4jcsmryr3hiqjxj5wjmgikp0pnjmb8-cifs-utils-7.5",
+        "version": "7.5"
+      },
+      {
+        "name": "e2fsprogs",
+        "out": "/nix/store/bnvcyvmv40lf07dz5xjrb4gcd069s5hz-e2fsprogs-1.47.4-bin",
+        "version": "1.47.4"
+      },
+      {
+        "name": "e2fsprogs",
+        "out": "/nix/store/bnvcyvmv40lf07dz5xjrb4gcd069s5hz-e2fsprogs-1.47.4-bin",
+        "version": "1.47.4"
+      },
+      {
+        "name": "ccrypt",
+        "out": "/nix/store/cbp5k30hx71a4ylg22lwj6igx35fifx3-ccrypt-1.11",
+        "version": "1.11"
+      },
+      {
+        "name": "socat",
+        "out": "/nix/store/cnyc9qjyirbgw9mdbmzq87m19xr8wpg9-socat-1.8.1.3",
+        "version": "1.8.1.3"
+      },
+      {
+        "name": "nix",
+        "out": "/nix/store/cv7vd1i121mj84jb694gjc3xvr0da4xw-nix-2.34.8",
+        "version": "2.34.8"
+      },
+      {
+        "name": "wireguard-tools",
+        "out": "/nix/store/cz5nl50c9jbbxpnlqdjip5nj68hy0bx8-wireguard-tools-1.0.20260223",
+        "version": "1.0.20260223"
+      },
+      {
+        "name": "polkit",
+        "out": "/nix/store/d527hwwggm2wz18p4v8cr39amcpx3g4c-polkit-127",
+        "version": "127"
+      },
+      {
+        "name": "polkit",
+        "out": "/nix/store/d91pyr9r3d6aj9d46b7axkw44byxnizz-polkit-127-bin",
+        "version": "127"
+      },
+      {
+        "name": "linux-pam",
+        "out": "/nix/store/d99sv05pi20zzyind2gw72r7j02g8zaq-linux-pam-1.7.2",
+        "version": "1.7.2"
+      },
+      {
+        "name": "lvm2",
+        "out": "/nix/store/dc7k9548nrfcr8cmkdk7nqr2bzwhf3mn-lvm2-2.03.41",
+        "version": "2.03.41"
+      },
+      {
+        "name": "patch",
+        "out": "/nix/store/dsfqcffzgwhrnkq1v9g9s3p55czrxk8l-patch-2.8",
+        "version": "2.8"
+      },
+      {
+        "name": "xz",
+        "out": "/nix/store/f10qh0sgpx38n3azj08dgbbnlxspv26n-xz-5.8.4-bin",
+        "version": "5.8.4"
+      },
+      {
+        "name": "gnutar",
+        "out": "/nix/store/f4id9s3nydjrzxvgqfvhphsbql6ll26k-gnutar-1.35",
+        "version": "1.35"
+      },
+      {
+        "name": "openssh",
+        "out": "/nix/store/f6zqjss3b3r20hgvqqkzihjjn7fz214n-openssh-10.5p1",
+        "version": "10.5p1"
+      },
+      {
+        "name": "nixos-install",
+        "out": "/nix/store/f79g64q31dl0ifridqvryhbia5j70abi-nixos-install",
+        "version": ""
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/f90sb6szmklia50s0h249z89c30kdbgk-shadow-4.20.2-su",
+        "version": "4.20.2"
+      },
+      {
+        "name": "sudo",
+        "out": "/nix/store/fdsygnh4wvr7g860ba3cwlcksn8v1pc5-sudo-1.9.17p2",
+        "version": "1.9.17p2"
+      },
+      {
+        "name": "mosh",
+        "out": "/nix/store/gr9bk6m0iy391vv3hb7x4s1ri899cvz0-mosh-1.4.0",
+        "version": "1.4.0"
+      },
+      {
+        "name": "libcap",
+        "out": "/nix/store/gyca017s7ylavnvdxpd67929vnn8b7cg-libcap-2.78",
+        "version": "2.78"
+      },
+      {
+        "name": "bzip2",
+        "out": "/nix/store/gz6baw96bf48pxs93kc7rxmnr1ra7g4m-bzip2-1.0.8-bin",
+        "version": "1.0.8"
+      },
+      {
+        "name": "unzip",
+        "out": "/nix/store/h2jrsr48ss7i2lq9bscyqjmj2y8pmk4a-unzip-6.0",
+        "version": "6.0"
+      },
+      {
+        "name": "glibc",
+        "out": "/nix/store/h4wfwic161kxrr74jlzla5lsm28hgary-glibc-2.44-25",
+        "version": "2.44"
+      },
+      {
+        "name": "nixos-manual-html",
+        "out": "/nix/store/hbqgd9vgk74wnrx1jy0k7pngryshcdr4-nixos-manual-html",
+        "version": ""
+      },
+      {
+        "name": "ncurses",
+        "out": "/nix/store/hzqwc6pv8sb9qrwivc4h42cr811gs1mk-ncurses-6.6",
+        "version": "6.6"
+      },
+      {
+        "name": "glibc",
+        "out": "/nix/store/i1sdvxhkih79wys7bis9f4ybkk9g60b3-getent-glibc-2.44-25",
+        "version": "2.44"
+      },
+      {
+        "name": "btrfs-progs",
+        "out": "/nix/store/iddwhr1gfslzzp881rq9154amxzyjs2q-btrfs-progs-7.1",
+        "version": "7.1"
+      },
+      {
+        "name": "hostname-debian",
+        "out": "/nix/store/ik047piv5073d8iyc9bmk3l9l5iq5nwl-hostname-hostname-debian-3.25",
+        "version": "3.25"
+      },
+      {
+        "name": "nix-bash-completions",
+        "out": "/nix/store/iw1z949aqv95f46ivdir8w14hq3vddj7-nix-bash-completions-0.6.8",
+        "version": "0.6.8"
+      },
+      {
+        "name": "exfatprogs",
+        "out": "/nix/store/ixjngsgh65nai87ll91rhdjlf93cmwji-exfatprogs-1.4.3",
+        "version": "1.4.3"
+      },
+      {
+        "name": "nano",
+        "out": "/nix/store/jdry85y9rk788c7ppm0imwgfy1fxapyv-nano-9.2",
+        "version": "9.2"
+      },
+      {
+        "name": "bcache-tools",
+        "out": "/nix/store/jxbr3adwr4a0cchqp97rq0a2d92dpdhr-bcache-tools-1.1",
+        "version": "1.1"
+      },
+      {
+        "name": "iptables",
+        "out": "/nix/store/k3f33s3ncw55i0qnmbcnakiq4wi7422v-iptables-1.8.13",
+        "version": "1.8.13"
+      },
+      {
+        "name": "smartmontools",
+        "out": "/nix/store/kcfafzklg4sxglmms1axdky54r107br2-smartmontools-7.5",
+        "version": "7.5"
+      },
+      {
+        "name": "smartmontools",
+        "out": "/nix/store/kcfafzklg4sxglmms1axdky54r107br2-smartmontools-7.5",
+        "version": "7.5"
+      },
+      {
+        "name": "tmux",
+        "out": "/nix/store/kycygkx3pwxq004y26svfhw2p12yj4rb-tmux-3.7c",
+        "version": "3.7c"
+      },
+      {
+        "name": "systemd",
+        "out": "/nix/store/l5hiab3932k2n4d6nirh09mk6xgxp61w-systemd-261.3",
+        "version": "261.3"
+      },
+      {
+        "name": "wget",
+        "out": "/nix/store/l60xx259knfbgfr7wzwsw7zg9ajmv3sn-wget-1.25.0",
+        "version": "1.25.0"
+      },
+      {
+        "name": "screen",
+        "out": "/nix/store/l9hm71lcj20wksnra2fv3j16254n4k7p-screen-5.0.2",
+        "version": "5.0.2"
+      },
+      {
+        "name": "git",
+        "out": "/nix/store/lg46w7hrjx7kylsh6645c9l975i8h43b-git-2.55.0",
+        "version": "2.55.0"
+      },
+      {
+        "name": "git",
+        "out": "/nix/store/lg46w7hrjx7kylsh6645c9l975i8h43b-git-2.55.0",
+        "version": "2.55.0"
+      },
+      {
+        "name": "coreutils-full",
+        "out": "/nix/store/lnirw7a51gnlhnrakivzg11vh4h5kszy-coreutils-full-9.11",
+        "version": "9.11"
+      },
+      {
+        "name": "testdisk",
+        "out": "/nix/store/m2145v97wm3n1a58bcx1grvf6vkwkvki-testdisk-7.2",
+        "version": "7.2"
+      },
+      {
+        "name": "jq",
+        "out": "/nix/store/m3y7hqmy20nd1ps6qy8410a326255bf0-jq-1.8.2-bin",
+        "version": "1.8.2"
+      },
+      {
+        "name": "pciutils",
+        "out": "/nix/store/m7r1n1w94bfrc5h9171mlszvix1yvcis-pciutils-3.15.0",
+        "version": "3.15.0"
+      },
+      {
+        "name": "efivar",
+        "out": "/nix/store/mbi3af8qxkhbpl1gb8ijnipkywjkqa5m-efivar-39-bin",
+        "version": "39"
+      },
+      {
+        "name": "which",
+        "out": "/nix/store/mdwxdimw26b72k7wign651n8clh4jzii-which-2.25",
+        "version": "2.25"
+      },
+      {
+        "name": "syslinux",
+        "out": "/nix/store/n5ia4xjv38cb5mlssc4r0gk491gri9h4-syslinux-6.04-pre2-unstable-2019-02-07",
+        "version": "6.04-pre2-unstable-2019-02-07"
+      },
+      {
+        "name": "xfsprogs",
+        "out": "/nix/store/n7n7hivffxzjfbpnkd2djg7n6mpdjlmn-xfsprogs-7.1.1-bin",
+        "version": "7.1.1"
+      },
+      {
+        "name": "w3m",
+        "out": "/nix/store/nxvjxwl543jfask9jkgjcp2mjsd5hy47-w3m-0.5.6",
+        "version": "0.5.6"
+      },
+      {
+        "name": "attr",
+        "out": "/nix/store/pkai1509733kk3g1mp3786f16wijm3f7-attr-2.6.0-bin",
+        "version": "2.6.0"
+      },
+      {
+        "name": "nixos-version",
+        "out": "/nix/store/pvam9m8vrbgc9vmr7sz90adpcldkz5lg-nixos-version",
+        "version": ""
+      },
+      {
+        "name": "nixos-help",
+        "out": "/nix/store/rqkf7b0ch91xhj6wlcinly4zs2n0id6w-nixos-help",
+        "version": ""
+      },
+      {
+        "name": "dosfstools",
+        "out": "/nix/store/rv39yvs9hlgn510dwdl92zdqq6bg06ax-dosfstools-4.2",
+        "version": "4.2"
+      },
+      {
+        "name": "dosfstools",
+        "out": "/nix/store/rv39yvs9hlgn510dwdl92zdqq6bg06ax-dosfstools-4.2",
+        "version": "4.2"
+      },
+      {
+        "name": "dosfstools",
+        "out": "/nix/store/rv39yvs9hlgn510dwdl92zdqq6bg06ax-dosfstools-4.2",
+        "version": "4.2"
+      },
+      {
+        "name": "usbutils",
+        "out": "/nix/store/sc9pap3limafysagqqnlamnvsx978np6-usbutils-019",
+        "version": "019"
+      },
+      {
+        "name": "ddrescue",
+        "out": "/nix/store/sm770fs20bvnxzx52ybp1s95bfz5gd9h-ddrescue-1.30",
+        "version": "1.30"
+      },
+      {
+        "name": "f2fs-tools",
+        "out": "/nix/store/sqjhv0bfsl0vl7s0rsrx907j3cv8qcf2-f2fs-tools-1.16.0",
+        "version": "1.16.0"
+      },
+      {
+        "name": "glibc",
+        "out": "/nix/store/v9w4gj4rdwljz961allizcg6xzqvniri-getconf-glibc-2.44-25",
+        "version": "2.44"
+      },
+      {
+        "name": "kmod",
+        "out": "/nix/store/vd8b7jqgpcjy092rvbjnarwzbhlfylr6-kmod-31",
+        "version": "31"
+      },
+      {
+        "name": "util-linux",
+        "out": "/nix/store/vhz3kzcdznprs2wflg44szkbrfji9z3v-util-linux-2.42.3-bin",
+        "version": "2.42.3"
+      },
+      {
+        "name": "util-linux",
+        "out": "/nix/store/vhz3kzcdznprs2wflg44szkbrfji9z3v-util-linux-2.42.3-bin",
+        "version": "2.42.3"
+      },
+      {
+        "name": "ripgrep",
+        "out": "/nix/store/vli6118fdbngwy46j1w741ansmrzfszr-ripgrep-15.2.0",
+        "version": "15.2.0"
+      },
+      {
+        "name": "networkmanager",
+        "out": "/nix/store/vxlcffmhw7wsis0ib871ppnb88l437is-networkmanager-1.58.1",
+        "version": "1.58.1"
+      },
+      {
+        "name": "htop",
+        "out": "/nix/store/w31kqb23ydg3fli2b8dsy0gl0ily15bm-htop-3.5.3",
+        "version": "3.5.3"
+      },
+      {
+        "name": "tcpdump",
+        "out": "/nix/store/wfpw2ap75ybh00as68ak481xwxrqvs4y-tcpdump-4.99.7",
+        "version": "4.99.7"
+      },
+      {
+        "name": "kexec-tools",
+        "out": "/nix/store/x5hyc0wsiq560p7ipaf2vbicjy5w2i2r-kexec-tools-2.0.32",
+        "version": "2.0.32"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "shadow",
+        "out": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "version": "4.20.2"
+      },
+      {
+        "name": "cpio",
+        "out": "/nix/store/xysq428sy6dxr3zvpml8lsnqn318sdi6-cpio-2.15",
+        "version": "2.15"
+      },
+      {
+        "name": "iproute2",
+        "out": "/nix/store/y9qysn0swmsr7mcknww5f40vch93i4cv-iproute2-7.1.0",
+        "version": "7.1.0"
+      },
+      {
+        "name": "findutils",
+        "out": "/nix/store/ycrbcy9sg4knpnik6a01dk70l0m673x7-findutils-4.11.0",
+        "version": "4.11.0"
+      },
+      {
+        "name": "zstd",
+        "out": "/nix/store/yfqdq38iw1k9n0a0w1ncsxpl2fs5gy94-zstd-1.5.7-bin",
+        "version": "1.5.7"
+      },
+      {
+        "name": "nixos-firewall-tool",
+        "out": "/nix/store/yjzl6krc6cy9bf92p3wdp090j5nl5xpd-nixos-firewall-tool-26.11",
+        "version": "26.11"
+      },
+      {
+        "name": "gzip",
+        "out": "/nix/store/yr6ar7lsk3yfas4d464z1ysaxwcq2gc5-gzip-1.14",
+        "version": "1.14"
+      },
+      {
+        "name": "libressl",
+        "out": "/nix/store/z3kz5w81zc0jnc7vpnfq6p5rgai0j291-libressl-4.3.2-nc",
+        "version": "4.3.2"
+      },
+      {
+        "name": "less",
+        "out": "/nix/store/zi4d0awnc6crz18s177bv9y2yz9al3lq-less-710",
+        "version": "710"
+      },
+      {
+        "name": "less",
+        "out": "/nix/store/zi4d0awnc6crz18s177bv9y2yz9al3lq-less-710",
+        "version": "710"
+      },
+      {
+        "name": "nixos-build-vms",
+        "out": "/nix/store/zlp8kk9yflgmqlmlm0wssjk69rvw6niw-nixos-build-vms",
+        "version": ""
+      },
+      {
+        "name": "mdadm",
+        "out": "/nix/store/zlw1d3ydlbdl57sdns0q5pf1ansa5s36-mdadm-4.6",
+        "version": "4.6"
+      }
+    ],
+    "units": {
+      "-.slice": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "eebf665d346b4f1444f9713928ea5ee767de8dc046d515c4a55be0fab5b53a24",
+        "wantedBy": []
+      },
+      "ModemManager.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "1282e99ac4fd96e035909f0982c63243208ce7f04326782eeb3f34409d1bcc23",
+        "wantedBy": []
+      },
+      "NetworkManager-dispatcher.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "d8076615fbe0540bf04da0f21e5e94149ac54771bac42ac42b887f7a37e7cdb0",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "NetworkManager-wait-online.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "a2608d737468abff4a23171a2d8a06f99614f75a76dee198f9e26fdceac461be",
+        "wantedBy": [
+          "network-online.target"
+        ]
+      },
+      "NetworkManager.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "78077b0d83c5b42910f37d1ccaebadbd70b86064ccfdfc05448f552c90b6c7af",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "console-getty.service": {
+        "enable": false,
+        "requiredBy": [],
+        "text": "fef7d6b4177c949e0e8ca00012d87ffc9305774c6dc2683a63d2fc16c661cafc",
+        "wantedBy": []
+      },
+      "container-getty@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "4385ce0e09ee3533baaf80200e32c5df71a8cf44ed3d7a4607f9edc9b7f8b657",
+        "wantedBy": []
+      },
+      "dbus-broker.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "cfd1e9dce81721c5370556ded9973df367912b4dc97066b31874e69b14e47ad7",
+        "wantedBy": []
+      },
+      "dbus.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "0cd506f1f097bdec692eccfad4768b86eaa37ffe84b757fb4716d123c87c68a0",
+        "wantedBy": []
+      },
+      "firewall.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "15f234af24f1f3cc37dfbf975e6a3c9770e574db1979cb3ce5cc564476bb6144",
+        "wantedBy": [
+          "sysinit.target"
+        ]
+      },
+      "fs.target": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "90bcf9f1c94f0d43492f29412b5d9c6f0672be296d429b4f16befb245c974527",
+        "wantedBy": []
+      },
+      "fstrim.timer": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "f922b1442b6587d2ed8a618c904dd3d7b9a57ad1cf8fe79002f8bceb2e19bb58",
+        "wantedBy": [
+          "timers.target"
+        ]
+      },
+      "generate-shutdown-ramfs.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "f2b390feb7b1f58a59871c49e7d06123f204233d7e287287fdee59d44d88390f",
+        "wantedBy": [
+          "shutdown.target"
+        ]
+      },
+      "getty.target": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "9ef83f5d997d4ec55856d23df2388b91de978e606bf42447a0ec1013cd48a338",
+        "wantedBy": []
+      },
+      "getty@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "80ab7b9c7c5b3507df16d5b3c62a497caa93f6513885ba21f86c8095235a8cf4",
+        "wantedBy": []
+      },
+      "keys.target": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "b88940180dcdc7bc629e5adf1835acf83e2bf1eae4ad18cac084a37b1d1c81e5",
+        "wantedBy": []
+      },
+      "kmod-static-nodes.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "6ce65641e89ae8f6767e2a17b85012b7fdc971ec2e3a5066538f75219e467d60",
+        "wantedBy": []
+      },
+      "lastlog2-import.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "7590182193630f6355eae7ee8d794c7492d64b79cf3b2a0f30b7c7ca80cb6c00",
+        "wantedBy": [
+          "default.target"
+        ]
+      },
+      "linger-users.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "574ce0fca75601b41df3e9910146fd440cab396cb29e83e48f6872593ed4c43a",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "local-fs.target": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "18a62f707bd157119d7bb6822054f18c1ab0b546b88b624411aecd02460b4ae7",
+        "wantedBy": []
+      },
+      "modprobe@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "0535ccbe02e53377e5a78c79d0cd7c6dd162f96e14c10cada21952e19eb91816",
+        "wantedBy": []
+      },
+      "multi-user.target": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "376c5ccee4659f28952def5441c05c728266d2cdaf51b1e34eb6e19ef5b06bae",
+        "wantedBy": []
+      },
+      "network-local-commands.service": {
+        "enable": false,
+        "requiredBy": [],
+        "text": "312dfc9499ed94129545962a73b99112511f79517dfe86eb11b9a11e467c20cd",
+        "wantedBy": [
+          "network.target"
+        ]
+      },
+      "nix-channel-init.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "e5a30e0c5eb39e674e7d41cb4dff083372b4391d8320e51394caa6b6edb5b05b",
+        "wantedBy": [
+          "sysinit.target"
+        ]
+      },
+      "nix-daemon.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "d86ae3ee27362457f2825c90bf493f9249a56e9598c950b9c7d7a1512924e8e6",
+        "wantedBy": []
+      },
+      "nix-daemon.socket": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "6b801098630dd1b28dca83f5255bd20f006463af6dc6355d6d2b6f656739e7d1",
+        "wantedBy": [
+          "sockets.target"
+        ]
+      },
+      "nix-gc.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "0da2ebd71d34a011465ec8474a612e88e11f71f87718123f0884a046d7428911",
+        "wantedBy": []
+      },
+      "nix-optimise.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "129ee33a169f74987ea5b9847126a108cac9ee0f542009f521e88d7132c6ff47",
+        "wantedBy": []
+      },
+      "nscd.service": {
+        "enable": true,
+        "requiredBy": [
+          "nss-lookup.target",
+          "nss-user-lookup.target"
+        ],
+        "text": "e7fdc36a3d62b26696ca3dbb3b6cd769e7d83a58c7c17d298f28cadd4ec7867d",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "polkit-agent-helper.socket": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "6b801098630dd1b28dca83f5255bd20f006463af6dc6355d6d2b6f656739e7d1",
+        "wantedBy": [
+          "sockets.target"
+        ]
+      },
+      "polkit-agent-helper@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "88086d04b08d9de63633db2ba995ce240e8977fa974422752761755b466212b7",
+        "wantedBy": []
+      },
+      "polkit.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "6d4494768de8bb4380a921dd595f332ef5140f879ad206f2d09f1ea68784408b",
+        "wantedBy": []
+      },
+      "post-boot.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "c144d0cc6cc81b1fbc4825483788741f83be43b019704fb971a2c28f7fc74211",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "prepare-kexec.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "6c64793e720b7378b2fcbce3a3ee9397f4219f3804af47967922de25e23f9a6c",
+        "wantedBy": [
+          "kexec.target"
+        ]
+      },
+      "register-nix-paths.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "6e39cc72c7eb20c1ce3a7bab1cc0d22be3510272d7075a8ab83fcfe7228ecbbb",
+        "wantedBy": [
+          "sysinit.target"
+        ]
+      },
+      "reload-systemd-vconsole-setup.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "9ca79f62f4735264ac4535cb252e4c867e122775cf33dc301d6cdd88b54ec85a",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "remote-fs.target": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "18a62f707bd157119d7bb6822054f18c1ab0b546b88b624411aecd02460b4ae7",
+        "wantedBy": []
+      },
+      "run-initramfs.mount": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "d664e62c9151e646897bb8b01edfdf75486c3aed72e0a355c79e14bc9420d6a8",
+        "wantedBy": []
+      },
+      "run-wrappers.mount": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "76f387a5468397a82ec871914295f49816a48116d7680a7060ccc78b862bf0ac",
+        "wantedBy": []
+      },
+      "serial-getty@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "667fcf95491a37bc75b1413e6776df59fc633f73d24ad30a9a39e7a3eafdc9ba",
+        "wantedBy": []
+      },
+      "sleep-actions.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "3f9fb199930f73859010a249fbba2ffe362bc21116f3c5a2b3baf4f250f7d782",
+        "wantedBy": [
+          "sleep.target"
+        ]
+      },
+      "sshd-keygen.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "867335355a5b362cc41505c789b05d69fe1db024936a68dbbf737f33444367f8",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "sshd-vsock.socket": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "3e92e52f4fbc87498727074033bac7be9c223cef77644d204e735f9080135453",
+        "wantedBy": []
+      },
+      "sshd-vsock@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "442c8b4b731edecf4f062cf845dae7e70386c29714084156e9923fac090b2afe",
+        "wantedBy": []
+      },
+      "sshd.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "8da29bffc82dcfbf703e0e8448642b07b27ed821122b0bc907685353fbcfa82d",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "sshd@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "0a2f997545f11ac7e13b555634549653561323309fd46c40913e331945a17c40",
+        "wantedBy": []
+      },
+      "suid-sgid-wrappers.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "ff1250e2939484485f0d6c97c32cd9401abebb6361bbdf1378075714583469d5",
+        "wantedBy": [
+          "sysinit.target"
+        ]
+      },
+      "sysinit-reactivation.target": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "a4fadb262d54419a48bc9ef2db873f133e7fe789c80a1751a34fe83af7d3ed50",
+        "wantedBy": []
+      },
+      "system.slice": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "eebf665d346b4f1444f9713928ea5ee767de8dc046d515c4a55be0fab5b53a24",
+        "wantedBy": []
+      },
+      "systemd-backlight@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "bb83cb1372ae27674436c12fcac651c3212533606a8a4e680c7066ab9f2d5eea",
+        "wantedBy": []
+      },
+      "systemd-bless-boot.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "bb83cb1372ae27674436c12fcac651c3212533606a8a4e680c7066ab9f2d5eea",
+        "wantedBy": []
+      },
+      "systemd-boot-random-seed.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "9f2160663b00ffc2519b7ae4c6d68ea9749608e078f614e491f7e265b08da075",
+        "wantedBy": []
+      },
+      "systemd-fsck@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "7e8f2d53dcf1f2df977d4adc48663f63942e0f1e38b7dd5d758200676338c4ae",
+        "wantedBy": []
+      },
+      "systemd-hostnamed.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "dd260122bb61cf984711b013b77ece78d8d1783003fc1066c4f2186eea4a9cda",
+        "wantedBy": []
+      },
+      "systemd-importd.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "1bde64b6718eb17462f474efef73096e5d881397b57a0589461847ce291e0b47",
+        "wantedBy": []
+      },
+      "systemd-journal-flush.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "bb83cb1372ae27674436c12fcac651c3212533606a8a4e680c7066ab9f2d5eea",
+        "wantedBy": []
+      },
+      "systemd-journald-audit.socket": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "1bf24cd8a77ee033b2230e6864aa7e3a78966f6cf4c6787625173cadcaa849d2",
+        "wantedBy": [
+          "sockets.target",
+          "systemd-journald.service"
+        ]
+      },
+      "systemd-journald.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "07b4837e28694ddedb17318abfa4b7dee6ff54f00cc06b9ef6162bdf347e572a",
+        "wantedBy": []
+      },
+      "systemd-journald@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "114b4347feb343a2afbc06ed42c370933759d32f211c6d8f4ec90d797b976fb9",
+        "wantedBy": []
+      },
+      "systemd-localed.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "91864204bc9c70475470a38259328101ba1175015742d4e218590c67358ad572",
+        "wantedBy": []
+      },
+      "systemd-logind.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "0cd506f1f097bdec692eccfad4768b86eaa37ffe84b757fb4716d123c87c68a0",
+        "wantedBy": []
+      },
+      "systemd-makefs@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "7e8f2d53dcf1f2df977d4adc48663f63942e0f1e38b7dd5d758200676338c4ae",
+        "wantedBy": []
+      },
+      "systemd-mkswap@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "3246b53d7b64a85d99a3f293ed9f24b47b8400984b5115c28f2754b47fc5575f",
+        "wantedBy": []
+      },
+      "systemd-modules-load.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "0f85e21394e59c758bc2934c6f91165177388a5e5401f118f749687177d2a30f",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "systemd-networkd-varlink-metrics.socket": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "6b801098630dd1b28dca83f5255bd20f006463af6dc6355d6d2b6f656739e7d1",
+        "wantedBy": [
+          "sockets.target"
+        ]
+      },
+      "systemd-networkd-wait-online.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "d7da2a84079b85638f0794a469cbfd8451258dbbd027ab0aa58504af72489d43",
+        "wantedBy": [
+          "network-online.target"
+        ]
+      },
+      "systemd-networkd-wait-online@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "781aef8b4f7f34eb85be36eef4b8ada845f701f9f20bc9e02d16dbc3ba22aed7",
+        "wantedBy": []
+      },
+      "systemd-networkd.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "08eb3236a5ac464513ff0d05a14d0dc00bf6a017fd024d4b4bf7c59dba3c9f10",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "systemd-networkd.socket": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "6b801098630dd1b28dca83f5255bd20f006463af6dc6355d6d2b6f656739e7d1",
+        "wantedBy": [
+          "sockets.target"
+        ]
+      },
+      "systemd-nspawn@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "98365ce5a9faa19b3cc84a53112bf0663c6b5560c9d2d6845d05b73e5413ab23",
+        "wantedBy": []
+      },
+      "systemd-oomd.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "7877780923e10fcce1eaa838b22f59031507cd5332a9e94f718d53ac907598bb",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "systemd-pstore.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "2659be3b131f2f548b15c723fc3995df1a207999852389fb4ea220c0350f4a6f",
+        "wantedBy": [
+          "sysinit.target"
+        ]
+      },
+      "systemd-random-seed.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "bb83cb1372ae27674436c12fcac651c3212533606a8a4e680c7066ab9f2d5eea",
+        "wantedBy": []
+      },
+      "systemd-remount-fs.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "a258a1bd3c8174ce11b21d110ab073ef6e6d512e3655211ca1edbd2516d6109a",
+        "wantedBy": []
+      },
+      "systemd-resolved.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "add53ca6289b2fc94015ff837844bf957dc2d80ea68a580582094040ba815232",
+        "wantedBy": [
+          "sysinit.target"
+        ]
+      },
+      "systemd-sysctl.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "50a55f0597d34865a5b3e77bed11f5866a31dcbfe996e4d5ad5be70fa506760a",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "systemd-timedated.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "1282e99ac4fd96e035909f0982c63243208ce7f04326782eeb3f34409d1bcc23",
+        "wantedBy": []
+      },
+      "systemd-timesyncd.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "779055ff55c59384b3298a5ce79666dfd5ea6558bb4ff3dc7a4b3baa419e4539",
+        "wantedBy": [
+          "sysinit.target"
+        ]
+      },
+      "systemd-tmpfiles-resetup.service": {
+        "enable": true,
+        "requiredBy": [
+          "sysinit-reactivation.target"
+        ],
+        "text": "4f38e433f3be6b2ebd0e08def293c94e590d6d4c3cc4c3991f5608de6cf13966",
+        "wantedBy": []
+      },
+      "systemd-udevd.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "d01fea885fe1e4335d80093c654b207d18e9172b53fd9eb2e367f0cf9048db47",
+        "wantedBy": []
+      },
+      "systemd-update-utmp.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "bb83cb1372ae27674436c12fcac651c3212533606a8a4e680c7066ab9f2d5eea",
+        "wantedBy": []
+      },
+      "systemd-user-sessions.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "bb83cb1372ae27674436c12fcac651c3212533606a8a4e680c7066ab9f2d5eea",
+        "wantedBy": []
+      },
+      "tailscaled.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "2a322f1555c0fce50c4ff770a7b37d02c74da356ae91044542adbabb6cc4cc18",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "user-runtime-dir@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "196949455184e7b64d42948f6054301bb3a02245ebd4336640e15be8b7610417",
+        "wantedBy": []
+      },
+      "user.slice": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "eebf665d346b4f1444f9713928ea5ee767de8dc046d515c4a55be0fab5b53a24",
+        "wantedBy": []
+      },
+      "user@.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "bb83cb1372ae27674436c12fcac651c3212533606a8a4e680c7066ab9f2d5eea",
+        "wantedBy": []
+      },
+      "xfs_scrub_all.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "20ce23e2579175db4d05862223cb96a14a68ec7809cdf0d22c2ce2348de6b6f9",
+        "wantedBy": []
+      },
+      "zfs-import.target": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "6c432b74d730b186fd8118bcd702b2ac04c0b77e712b8e6afa24feec865d3387",
+        "wantedBy": [
+          "zfs.target"
+        ]
+      },
+      "zfs-mount.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "9ce3fe529c0930822f7877619ae39d359f63c118f89e5515108a421b36212f9c",
+        "wantedBy": [
+          "zfs.target"
+        ]
+      },
+      "zfs-share.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "9ce3fe529c0930822f7877619ae39d359f63c118f89e5515108a421b36212f9c",
+        "wantedBy": [
+          "zfs.target"
+        ]
+      },
+      "zfs-zed.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "9ce3fe529c0930822f7877619ae39d359f63c118f89e5515108a421b36212f9c",
+        "wantedBy": [
+          "zfs.target"
+        ]
+      },
+      "zfs.target": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "6c432b74d730b186fd8118bcd702b2ac04c0b77e712b8e6afa24feec865d3387",
+        "wantedBy": [
+          "multi-user.target"
+        ]
+      },
+      "zpool-trim.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "e252b536b87f8850f3c12b691bc7984f56f3498a948f2475e3fc78d5f058660a",
+        "wantedBy": []
+      },
+      "zpool-trim.timer": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "9bb509d965698bc62fc6e3e09932d1a646141f6da3239b48579817062cdb52e7",
+        "wantedBy": [
+          "timers.target"
+        ]
+      }
+    },
+    "userUnits": {
+      "dbus-broker.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "89cab5fee69336e8b2c3cdb9ae7052cec803311561ad17b706a959d814abbbbe",
+        "wantedBy": []
+      },
+      "dbus.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "0cd506f1f097bdec692eccfad4768b86eaa37ffe84b757fb4716d123c87c68a0",
+        "wantedBy": []
+      },
+      "dbus.socket": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "6b801098630dd1b28dca83f5255bd20f006463af6dc6355d6d2b6f656739e7d1",
+        "wantedBy": [
+          "sockets.target"
+        ]
+      },
+      "nixos-activation.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "5147bf7720f27b49b47218d61c71aae834cf0ddb85e6523970b2e82c7fd0d2ec",
+        "wantedBy": [
+          "default.target"
+        ]
+      },
+      "nixos-fake-graphical-session.target": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "a00a4b7f8b26297e8a468d98f5d236c3075676c44e3fe389e1aaee2332500c5c",
+        "wantedBy": []
+      },
+      "systemd-tmpfiles-clean.timer": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "05ffd819a40fd0722bcb38f8026f9f930ef1931bbd4428e440089169c2a22445",
+        "wantedBy": [
+          "timers.target"
+        ]
+      },
+      "systemd-tmpfiles-setup.service": {
+        "enable": true,
+        "requiredBy": [],
+        "text": "22aff31e5ac9c16579369ba7e2e6efefc87d36fbbee49e1f75b0b3cf220683c5",
+        "wantedBy": [
+          "basic.target"
+        ]
+      }
+    },
+    "users": {
+      "messagebus": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "messagebus",
+        "hashedPassword": null,
+        "home": "/run/dbus",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": false,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 4
+      },
+      "nixbld1": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30001
+      },
+      "nixbld10": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30010
+      },
+      "nixbld11": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30011
+      },
+      "nixbld12": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30012
+      },
+      "nixbld13": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30013
+      },
+      "nixbld14": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30014
+      },
+      "nixbld15": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30015
+      },
+      "nixbld16": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30016
+      },
+      "nixbld17": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30017
+      },
+      "nixbld18": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30018
+      },
+      "nixbld19": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30019
+      },
+      "nixbld2": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30002
+      },
+      "nixbld20": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30020
+      },
+      "nixbld21": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30021
+      },
+      "nixbld22": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30022
+      },
+      "nixbld23": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30023
+      },
+      "nixbld24": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30024
+      },
+      "nixbld25": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30025
+      },
+      "nixbld26": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30026
+      },
+      "nixbld27": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30027
+      },
+      "nixbld28": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30028
+      },
+      "nixbld29": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30029
+      },
+      "nixbld3": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30003
+      },
+      "nixbld30": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30030
+      },
+      "nixbld31": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30031
+      },
+      "nixbld32": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30032
+      },
+      "nixbld4": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30004
+      },
+      "nixbld5": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30005
+      },
+      "nixbld6": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30006
+      },
+      "nixbld7": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30007
+      },
+      "nixbld8": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30008
+      },
+      "nixbld9": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "nixbld"
+        ],
+        "group": "nixbld",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 30009
+      },
+      "nixos": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": true,
+        "extraGroups": [
+          "networkmanager",
+          "video",
+          "wheel"
+        ],
+        "group": "users",
+        "hashedPassword": null,
+        "home": "/home/nixos",
+        "initialPassword": null,
+        "isNormalUser": true,
+        "isSystemUser": false,
+        "shell": "/nix/store/1mv3qz005gkbalxfghk4y3s8ayv4d2dl-bash-interactive-5.3p15",
+        "uid": null
+      },
+      "nm-iodine": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "networkmanager",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": null
+      },
+      "nm-openvpn": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [
+          "networkmanager"
+        ],
+        "group": "nm-openvpn",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": false,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 217
+      },
+      "nobody": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "nogroup",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 65534
+      },
+      "nscd": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "nscd",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": null
+      },
+      "polkituser": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "polkituser",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": false,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 28
+      },
+      "root": {
+        "authorizedKeys": "6652442c36d781d9c8bac352e34738efbab8d78481b0618061d6a71a5005664b",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "root",
+        "hashedPassword": null,
+        "home": "/root",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": false,
+        "shell": "/nix/store/1mv3qz005gkbalxfghk4y3s8ayv4d2dl-bash-interactive-5.3p15",
+        "uid": 0
+      },
+      "rpc": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "nogroup",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": false,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 271
+      },
+      "sshd": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "sshd",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": null
+      },
+      "systemd-coredump": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "systemd-coredump",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": false,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 151
+      },
+      "systemd-network": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "systemd-network",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": false,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 152
+      },
+      "systemd-oom": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "systemd-oom",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": true,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": null
+      },
+      "systemd-resolve": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "systemd-resolve",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": false,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 153
+      },
+      "systemd-timesync": {
+        "authorizedKeys": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "createHome": false,
+        "extraGroups": [],
+        "group": "systemd-timesync",
+        "hashedPassword": null,
+        "home": "/var/empty",
+        "initialPassword": null,
+        "isNormalUser": false,
+        "isSystemUser": false,
+        "shell": "/nix/store/x890di8agmyh7h7cbnrpj5rajlfs7ghk-shadow-4.20.2",
+        "uid": 154
+      },
+      "warby": {
+        "authorizedKeys": "339c324c8d9ec3d772be01091572e4c4cb28d71476b0e36a4aa48adedde3859f",
+        "createHome": true,
+        "extraGroups": [
+          "networkmanager",
+          "wheel"
+        ],
+        "group": "users",
+        "hashedPassword": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "home": "/home/warby",
+        "initialPassword": null,
+        "isNormalUser": true,
+        "isSystemUser": false,
+        "shell": "/nix/store/1mv3qz005gkbalxfghk4y3s8ayv4d2dl-bash-interactive-5.3p15",
+        "uid": null
+      }
+    },
+    "wsl": null
+  }
+}

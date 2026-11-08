@@ -1,0 +1,399 @@
+{
+  "A": {
+    "outputs": {
+      "apps": {
+        "x86_64-linux": {
+          "boot-windows-golden": "attrs",
+          "bootstrap-lacie": "attrs",
+          "extract-installer-boot": "attrs",
+          "iso-deploy": "attrs",
+          "migration": "attrs",
+          "recovery-preflight": "attrs",
+          "recovery-verify": "attrs",
+          "rustdesk-windows-qemu": "attrs",
+          "seal-windows-golden": "attrs",
+          "test-usb-qemu": "attrs",
+          "test-windows-qemu": "attrs"
+        }
+      },
+      "checks": {
+        "aarch64-linux": {
+          "host-stage-db": "drv",
+          "host-stage-edge": "drv"
+        },
+        "x86_64-linux": {
+          "host-7PZSZY2": "drv",
+          "host-94tl0m2": "drv",
+          "host-95qmom2": "drv",
+          "host-argus": "drv",
+          "host-cerberus": "drv",
+          "host-installerIso": "drv",
+          "host-kali-vm": "drv",
+          "host-lacie": "drv",
+          "treefmt": "drv"
+        }
+      },
+      "colmena": {
+        "94tl0m2": [
+          "deployment",
+          "imports"
+        ],
+        "95qmom2": [
+          "deployment",
+          "imports"
+        ],
+        "argus": [
+          "deployment",
+          "imports"
+        ],
+        "defaults": "leaf",
+        "kali-vm": [
+          "deployment",
+          "imports"
+        ],
+        "lacie": [
+          "deployment",
+          "imports"
+        ],
+        "meta": [
+          "nixpkgs",
+          "specialArgs"
+        ]
+      },
+      "devShells": {
+        "aarch64-linux": {
+          "forgejo": "drv"
+        },
+        "x86_64-linux": {
+          "forgejo": "drv"
+        }
+      },
+      "formatter": {
+        "x86_64-linux": "drv"
+      },
+      "homeManagerModules": {
+        "base": "leaf",
+        "firefox": "leaf"
+      },
+      "legacyPackages": {
+        "x86_64-linux": {}
+      },
+      "modules": {
+        "homeManager": [
+          "base",
+          "firefox"
+        ],
+        "nixos": [
+          "7PZSZY2",
+          "agenixHost",
+          "agenixInfra",
+          "argus",
+          "argusHardware",
+          "authentikInfra",
+          "cerberus",
+          "cerberusHardware",
+          "chromiumPolicy",
+          "deepseekHarnessInfra",
+          "desktops",
+          "dev",
+          "emulators",
+          "forgejo",
+          "gamehacking",
+          "gaming",
+          "gitMirrors",
+          "gnomeKeyring",
+          "greeter",
+          "imaging",
+          "infraContract",
+          "infraIngress",
+          "infraSecrets",
+          "iw4x",
+          "kaliVm",
+          "kaliVmHardware",
+          "lacie",
+          "lacieHardware",
+          "llmRouter",
+          "mayaWorkerInfra",
+          "nvidia",
+          "openbaoInfra",
+          "penpot",
+          "pentest",
+          "postgresInfra",
+          "profileDemoCerberus",
+          "profileInfraSpine",
+          "pyloadInfra",
+          "qmom2",
+          "qmom2Hardware",
+          "qmom2Postgres",
+          "qmom2Seaweedfs",
+          "scbw",
+          "seaweedfsInfra",
+          "stageDb",
+          "stageEdge",
+          "tailscaleNode",
+          "themeData",
+          "tl0m2",
+          "tl0m2Hardware",
+          "tl0m2Postgres",
+          "tl0m2Seaweedfs",
+          "traefikInfra",
+          "valkeyInfra",
+          "warcraft3",
+          "wifiProfiles"
+        ]
+      },
+      "nixosConfigurations": {
+        "7PZSZY2": "leaf",
+        "94tl0m2": "leaf",
+        "95qmom2": "leaf",
+        "argus": "leaf",
+        "cerberus": "leaf",
+        "installerIso": "leaf",
+        "kali-vm": "leaf",
+        "lacie": "leaf",
+        "stage-db": "leaf",
+        "stage-edge": "leaf"
+      },
+      "nixosModules": {
+        "7PZSZY2": "leaf",
+        "agenixHost": "leaf",
+        "agenixInfra": "leaf",
+        "argus": "leaf",
+        "argusHardware": "leaf",
+        "authentikInfra": "leaf",
+        "cerberus": "leaf",
+        "cerberusHardware": "leaf",
+        "chromiumPolicy": "leaf",
+        "deepseekHarnessInfra": "leaf",
+        "desktops": "leaf",
+        "dev": "leaf",
+        "emulators": "leaf",
+        "forgejo": "leaf",
+        "gamehacking": "leaf",
+        "gaming": "leaf",
+        "gitMirrors": "leaf",
+        "gnomeKeyring": "leaf",
+        "greeter": "leaf",
+        "imaging": "leaf",
+        "infraContract": "leaf",
+        "infraIngress": "leaf",
+        "infraSecrets": "leaf",
+        "iw4x": "leaf",
+        "kaliVm": "leaf",
+        "kaliVmHardware": "leaf",
+        "lacie": "leaf",
+        "lacieHardware": "leaf",
+        "llmRouter": "leaf",
+        "mayaWorkerInfra": "leaf",
+        "nvidia": "leaf",
+        "openbaoInfra": "leaf",
+        "penpot": "leaf",
+        "pentest": "leaf",
+        "postgresInfra": "leaf",
+        "profileDemoCerberus": "leaf",
+        "profileInfraSpine": "leaf",
+        "pyloadInfra": "leaf",
+        "qmom2": "leaf",
+        "qmom2Hardware": "leaf",
+        "qmom2Postgres": "leaf",
+        "qmom2Seaweedfs": "leaf",
+        "scbw": "leaf",
+        "seaweedfsInfra": "leaf",
+        "stageDb": "leaf",
+        "stageEdge": "leaf",
+        "tailscaleNode": "leaf",
+        "themeData": "leaf",
+        "tl0m2": "leaf",
+        "tl0m2Hardware": "leaf",
+        "tl0m2Postgres": "leaf",
+        "tl0m2Seaweedfs": "leaf",
+        "traefikInfra": "leaf",
+        "valkeyInfra": "leaf",
+        "warcraft3": "leaf",
+        "wifiProfiles": "leaf"
+      },
+      "overlays": {},
+      "packages": {
+        "aarch64-linux": {
+          "host-stage-db": "drv",
+          "host-stage-edge": "drv"
+        },
+        "x86_64-linux": {
+          "boot-windows-golden": "drv",
+          "bootstrap-lacie": "drv",
+          "extract-installer-boot": "drv",
+          "host-7PZSZY2": "drv",
+          "host-94tl0m2": "drv",
+          "host-95qmom2": "drv",
+          "host-argus": "drv",
+          "host-cerberus": "drv",
+          "host-installerIso": "drv",
+          "host-kali-vm": "drv",
+          "host-lacie": "drv",
+          "installer-iso": "drv",
+          "iso-deploy": "drv",
+          "migration": "drv",
+          "recovery-preflight": "drv",
+          "recovery-verify": "drv",
+          "rustdesk-windows-qemu": "drv",
+          "seal-windows-golden": "drv",
+          "test-usb-qemu": "drv",
+          "test-windows-qemu": "drv"
+        }
+      }
+    },
+    "registry": {
+      "homeManager": [
+        "base",
+        "firefox"
+      ],
+      "homeManagerModules": [
+        "base",
+        "firefox"
+      ],
+      "nixos": [
+        "7PZSZY2",
+        "agenixHost",
+        "agenixInfra",
+        "argus",
+        "argusHardware",
+        "authentikInfra",
+        "cerberus",
+        "cerberusHardware",
+        "chromiumPolicy",
+        "deepseekHarnessInfra",
+        "desktops",
+        "dev",
+        "emulators",
+        "forgejo",
+        "gamehacking",
+        "gaming",
+        "gitMirrors",
+        "gnomeKeyring",
+        "greeter",
+        "imaging",
+        "infraContract",
+        "infraIngress",
+        "infraSecrets",
+        "iw4x",
+        "kaliVm",
+        "kaliVmHardware",
+        "lacie",
+        "lacieHardware",
+        "llmRouter",
+        "mayaWorkerInfra",
+        "nvidia",
+        "openbaoInfra",
+        "penpot",
+        "pentest",
+        "postgresInfra",
+        "profileDemoCerberus",
+        "profileInfraSpine",
+        "pyloadInfra",
+        "qmom2",
+        "qmom2Hardware",
+        "qmom2Postgres",
+        "qmom2Seaweedfs",
+        "scbw",
+        "seaweedfsInfra",
+        "stageDb",
+        "stageEdge",
+        "tailscaleNode",
+        "themeData",
+        "tl0m2",
+        "tl0m2Hardware",
+        "tl0m2Postgres",
+        "tl0m2Seaweedfs",
+        "traefikInfra",
+        "valkeyInfra",
+        "warcraft3",
+        "wifiProfiles"
+      ],
+      "nixosModules": [
+        "7PZSZY2",
+        "agenixHost",
+        "agenixInfra",
+        "argus",
+        "argusHardware",
+        "authentikInfra",
+        "cerberus",
+        "cerberusHardware",
+        "chromiumPolicy",
+        "deepseekHarnessInfra",
+        "desktops",
+        "dev",
+        "emulators",
+        "forgejo",
+        "gamehacking",
+        "gaming",
+        "gitMirrors",
+        "gnomeKeyring",
+        "greeter",
+        "imaging",
+        "infraContract",
+        "infraIngress",
+        "infraSecrets",
+        "iw4x",
+        "kaliVm",
+        "kaliVmHardware",
+        "lacie",
+        "lacieHardware",
+        "llmRouter",
+        "mayaWorkerInfra",
+        "nvidia",
+        "openbaoInfra",
+        "penpot",
+        "pentest",
+        "postgresInfra",
+        "profileDemoCerberus",
+        "profileInfraSpine",
+        "pyloadInfra",
+        "qmom2",
+        "qmom2Hardware",
+        "qmom2Postgres",
+        "qmom2Seaweedfs",
+        "scbw",
+        "seaweedfsInfra",
+        "stageDb",
+        "stageEdge",
+        "tailscaleNode",
+        "themeData",
+        "tl0m2",
+        "tl0m2Hardware",
+        "tl0m2Postgres",
+        "tl0m2Seaweedfs",
+        "traefikInfra",
+        "valkeyInfra",
+        "warcraft3",
+        "wifiProfiles"
+      ]
+    }
+  },
+  "B": {
+    "devShells": {
+      "aarch64-linux": {
+        "forgejo": "/nix/store/b2iabidrgl6raas6ab3bv40npfc62yvv-nix-shell.drv"
+      },
+      "x86_64-linux": {
+        "forgejo": "/nix/store/k6ngxqrp4zgw1rx27n0v0l18v4yfyc4r-nix-shell.drv"
+      }
+    },
+    "packages": {
+      "aarch64-linux": {},
+      "x86_64-linux": {
+        "boot-windows-golden": "/nix/store/rlw0hx8w9wwkwqcvkq10dfa88slqsnn6-boot-windows-golden.drv",
+        "bootstrap-lacie": "/nix/store/kcqzd9k6p1gzi6xs80w3hqr8hl51z23p-bootstrap-lacie.drv",
+        "extract-installer-boot": "/nix/store/gkhskdda5q82lj2sp3gbjxzsi0dzs1ws-extract-installer-boot.drv",
+        "installer-iso": "/nix/store/p617qc8py7k634bxz1c1ragjgv7pzrb5-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv",
+        "iso-deploy": "/nix/store/dzz0b6jjfl8p2vvvgsb9p8hskz9jcvkv-iso-deploy.drv",
+        "migration": "/nix/store/rv4il1gr4fgg25wzf51wi77mrwh2nm7l-migration.drv",
+        "recovery-preflight": "/nix/store/c47gcvkbarpmwrmacdvlmj3x087bm48p-recovery-preflight.drv",
+        "recovery-verify": "/nix/store/pivc4lkyyh4icvkjwybkkd0ps1359q1f-recovery-verify.drv",
+        "rustdesk-windows-qemu": "/nix/store/lngps60d398sjamirl5z5g9fnv3wn8ak-rustdesk-windows-qemu.drv",
+        "seal-windows-golden": "/nix/store/rl50djqpj4c4i67cxjmyxpp39b6dqaii-seal-windows-golden.drv",
+        "test-usb-qemu": "/nix/store/n8vykjdjpdx6lcx2zrwn487j17arghbn-test-usb-qemu.drv",
+        "test-windows-qemu": "/nix/store/pnsiikcx1m9gbjpp070f5w81jhnxmwbr-test-windows-qemu.drv"
+      }
+    }
+  }
+}
