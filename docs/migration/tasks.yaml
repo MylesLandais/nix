@@ -75,6 +75,9 @@ tasks:
   # inside the feature's own directory, and switch every import site to the
   # registry. Import order is preserved (it fixes list-merge order).
   # Dead modules are deleted, not converted (M-501 runs before M-209).
+  # Order: leaf HM features first (M-203..M-212, each switching _home.nix's
+  # import to the registry), then the HM base itself (M-202), so no
+  # temporary ../ path imports appear.
   - id: M-201
     title: "Collapse NixOS wrapper pairs (agenix, chromium-policy, dev, gaming, nvidia) into single-file flake modules"
     phase: 2
@@ -86,7 +89,7 @@ tasks:
   - id: M-202
     title: "homeManager.base: move _home.nix (+ _packages, _chatgpt-linux, eurostile) to modules/home/base/; hosts import the registry module"
     phase: 2
-    depends_on: [M-201]
+    depends_on: [M-212]
     policy: pure_refactor
     hosts: [cerberus, lacie, kali-vm]
     registry: {add: [homeManager.base]}
@@ -94,7 +97,7 @@ tasks:
   - id: M-203
     title: "Expose the chromium flag helpers as flake.lib.chromiumBrowsers (used by HM base and cerberus)"
     phase: 2
-    depends_on: [M-202]
+    depends_on: [M-201]
     policy: contract_change
     hosts: [cerberus, lacie, kali-vm]
     contract: ["lib/*"]
@@ -174,7 +177,7 @@ tasks:
   - id: M-213
     title: "Baseline NixOS modules: hostOptions, nixConfig, fishConfig, overlays, envPackages; mkHost baseline uses the registry"
     phase: 2
-    depends_on: [M-212]
+    depends_on: [M-202]
     policy: pure_refactor
     hosts: [all]
     registry: {add: [nixos.hostOptions, nixos.nixConfig, nixos.fishConfig, nixos.overlays, nixos.envPackages]}
