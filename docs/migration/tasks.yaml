@@ -456,3 +456,7 @@ tasks:
     policy: contract_change
     hosts: [all]
     contract: [checks/x86_64-linux/module-registry, packages/x86_64-linux/migration]
+    # Carried from the phase's tasks: M-101's frozen-path import fix and
+    # M-102's colmena import (+1).
+    allow_frozen: true
+    path_imports_allow: 1
