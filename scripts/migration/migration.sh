@@ -207,7 +207,10 @@ verify() { # base sha hosts-spec -> writes $REPORT, returns 0 if within policy
   reg_diff=$(flat_diff "$fa" "$fb" '.A.registry | map_values(map({(.): true}) | add // {})')
   while read -r name; do
     [[ -z $name ]] && continue
-    local short=${name#*/} change
+    local short=${name#*/} ns=${name%%/*} change
+    # The public aliases mirror their registry namespace.
+    case $ns in nixosModules) ns=nixos ;; homeManagerModules) ns=homeManager ;; esac
+    name="$ns/$short"
     change=$(jq -r --arg p "$name" '.[] | select(.path == $p) | if .after == "null" then "remove" else "add" end' <<<"$reg_diff")
     if [[ $change == add ]] && ! grep -qxF "$short" <<<"$registry_add" && ! grep -qxF "${name%%/*}.$short" <<<"$registry_add"; then
       problems+=("A: registry gained undeclared $name"); fail=1

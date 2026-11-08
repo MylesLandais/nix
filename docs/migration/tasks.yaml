@@ -479,3 +479,11 @@ tasks:
     hosts: [kali-vm]
     contract: [packages/x86_64-linux/migration]
     touches: [scripts/migration/*, modules/flake/migration.nix, docs/migration/order-insensitive.txt, docs/migration/README.md]
+  - id: M-111
+    title: "Harness: nixosModules/homeManagerModules aliases follow their registry namespace"
+    phase: 2
+    depends_on: [M-110]
+    policy: contract_change
+    hosts: [kali-vm]
+    contract: [packages/x86_64-linux/migration]
+    touches: [scripts/migration/migration.sh]
