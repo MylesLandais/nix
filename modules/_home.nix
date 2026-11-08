@@ -134,8 +134,8 @@ in
   # manage.
 
   imports = [
-    ./_features/app-wrappers.nix
-    ./_features/chromium-helium-prefs.nix
+    inputs.self.modules.homeManager.appWrappers
+    inputs.self.modules.homeManager.chromiumHeliumPrefs
     inputs.self.modules.homeManager.hyprland
     inputs.self.modules.homeManager.niri
     inputs.self.modules.homeManager.xfce
@@ -147,17 +147,17 @@ in
     inputs.self.modules.homeManager.terminals
     inputs.self.modules.homeManager.mpv
     inputs.self.modules.homeManager.stylix
-    ./_features/flameshot.nix
-    ./_features/ssh-bitwarden.nix
-    ./_features/nix-user-gc.nix
-    ./_features/cargo-target-sweep.nix
-    ./_features/disk-playbook.nix
+    inputs.self.modules.homeManager.flameshot
+    inputs.self.modules.homeManager.sshBitwarden
+    inputs.self.modules.homeManager.nixUserGc
+    inputs.self.modules.homeManager.cargoTargetSweep
+    inputs.self.modules.homeManager.diskPlaybook
     inputs.self.modules.homeManager.firefox
     inputs.stylix.homeModules.stylix
     inputs.noctalia.homeModules.default
     inputs.tokyonight.homeManagerModules.default
     inputs.hermes-agent.homeManagerModules.default
-    ./_hermes.nix
+    inputs.self.modules.homeManager.hermes
   ];
   fonts.fontconfig.enable = true;
 
