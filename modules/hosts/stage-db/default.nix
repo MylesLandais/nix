@@ -1,6 +1,6 @@
 { inputs, lib, ... }:
 let
-  mkHostLib = import ../../flake-parts/_mk-host.nix { inherit inputs lib; };
+  mkHostLib = import ../../flake/_mk-host.nix { inherit inputs lib; };
 in
 {
   # See modules/hosts/stage-edge/default.nix for why these hosts sit outside

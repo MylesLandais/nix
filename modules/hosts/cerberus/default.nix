@@ -5,7 +5,7 @@ let
     config.allowUnfree = true;
   };
   vars = import "${inputs.self}/vars.nix" { pkgs = pkgsForVars; };
-  mkHostLib = import ../../flake-parts/_mk-host.nix { inherit inputs lib; };
+  mkHostLib = import ../../flake/_mk-host.nix { inherit inputs lib; };
   inherit (inputs) self;
 in
 {

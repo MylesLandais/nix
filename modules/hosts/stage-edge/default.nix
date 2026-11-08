@@ -1,6 +1,6 @@
 { inputs, lib, ... }:
 let
-  mkHostLib = import ../../flake-parts/_mk-host.nix { inherit inputs lib; };
+  mkHostLib = import ../../flake/_mk-host.nix { inherit inputs lib; };
 in
 {
   # First aarch64 host in the repo. `system` has always been a mkHost argument

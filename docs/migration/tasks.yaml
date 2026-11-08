@@ -18,7 +18,7 @@ tasks:
     contract:
       - packages/x86_64-linux/migration
       - apps/x86_64-linux/migration
-    touches: [modules/flake-parts/migration.nix, scripts/migration/*, docs/migration/*, .gitignore]
+    touches: [modules/flake/migration.nix, scripts/migration/*, docs/migration/*, .gitignore]
     resources: {reads: [], writes: [flake.outputs]}
   - id: M-003
     title: Capture the baseline, write registry.json, tag migration/baseline
@@ -35,8 +35,11 @@ tasks:
     depends_on: [M-003]
     policy: pure_refactor
     hosts: [all]
-    touches: [modules/flake-parts/*, modules/flake/*]
+    touches: [modules/flake-parts/*, modules/flake/*, modules/hosts/*/default.nix, colmena.nix]
     resources: {reads: [flake.outputs], writes: [flake.outputs]}
+    # stage-edge/stage-db default.nix import the mkHost helper by path; the
+    # one-line path update is the only edit allowed under frozen paths.
+    allow_frozen: true
   - id: M-102
     title: Fold the flake.nix `base // {…}` shim into flake-parts modules
     phase: 1

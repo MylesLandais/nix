@@ -96,7 +96,7 @@ with pkgs;
   # not published (404 in cache.nixos.org, chaotic and nix-community). Cargo fans out
   # inside each Nix job slot, so it drove load to 35 on a 12-core box even under
   # --max-jobs 4 --cores 3, and blew the 20-minute build budget.
-  # This breaks `rustdesk-windows-qemu` (modules/flake-parts/bootstrap-apps.nix),
+  # This breaks `rustdesk-windows-qemu` (modules/flake/bootstrap-apps.nix),
   # which shells out to the system rustdesk. windows-kit/install_rustdesk.ps1 is
   # unaffected — that installs on the Windows guest.
   # To restore: re-add once Hydra publishes a cached build for the current nixpkgs.
