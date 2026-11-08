@@ -235,8 +235,10 @@ verify() { # base sha hosts-spec -> writes $REPORT, returns 0 if within policy
   local pi_a pi_b
   pi_a=$(jq length "$CACHE/$base/path-imports.json")
   pi_b=$(jq length "$CACHE/$sha/path-imports.json")
-  if ((pi_b > pi_a)); then
-    problems+=("A: path-based imports increased $pi_a -> $pi_b")
+  local pi_allow
+  pi_allow=$(task_field '.path_imports_allow // 0' | jq -r .)
+  if ((pi_b > pi_a + pi_allow)); then
+    problems+=("A: path-based imports increased $pi_a -> $pi_b (task allows +$pi_allow)")
     fail=1
   fi
 

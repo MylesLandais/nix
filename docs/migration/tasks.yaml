@@ -47,6 +47,9 @@ tasks:
     policy: pure_refactor
     hosts: [cerberus]
     touches: [flake.nix, modules/flake/*]
+    # colmena.nix's import moves from flake.nix (outside the scan) into
+    # modules/flake/outputs.nix: the same import, newly counted.
+    path_imports_allow: 1
     resources: {reads: [flake.outputs], writes: [flake.outputs]}
   - id: M-103
     title: Generate the Phase 2 conversion tasks from `migration inventory`
@@ -256,3 +259,11 @@ tasks:
     hosts: [kali-vm]
     contract: [packages/x86_64-linux/migration]
     touches: [scripts/migration/migration.sh]
+  - id: M-106
+    title: "Harness: declared path_imports_allow per task"
+    phase: 1
+    depends_on: [M-105]
+    policy: contract_change
+    hosts: [kali-vm]
+    contract: [packages/x86_64-linux/migration]
+    touches: [scripts/migration/migration.sh, docs/migration/README.md]

@@ -69,6 +69,7 @@ Use `flake:<path>` for flake-level layer B.
   contract: []          # contract_change only: output path globs allowed to change
   allowed_changes: []   # behavior_change only
   allow_frozen: false
+  path_imports_allow: 0 # declared, justified increase in path-based imports
   done_when: no path import of atuin remains; layer B identical; layer C no diff
 ```
 
