@@ -16,7 +16,7 @@
     modules = [
       "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
 
-      "${inputs.self}/modules/_features/ssh-keys.nix"
+      inputs.self.modules.nixos.sshKeys
 
       (
         { config, pkgs, ... }:

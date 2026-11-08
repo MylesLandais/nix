@@ -22,7 +22,7 @@
     # with "infinite recursion". disko already declares the filesystems, so the
     # qemu-guest profile plus the initrd modules below is all that was missing.
     (modulesPath + "/profiles/qemu-guest.nix")
-    "${inputs.self}/modules/_features/ssh-keys.nix"
+    inputs.self.modules.nixos.sshKeys
     inputs.self.modules.nixos.tailscaleNode
     inputs.disko.nixosModules.disko
   ];
@@ -165,7 +165,7 @@
   ];
 
   # Deploys land as root over Tailscale (`nixos-rebuild --target-host`), using
-  # the keys mirrored to root by _features/ssh-keys.nix.
+  # the keys mirrored to root by nixos.sshKeys (modules/nixos/ssh-keys.nix).
   users.users.warby.extraGroups = [ "wheel" ];
   security.sudo.wheelNeedsPassword = false;
 

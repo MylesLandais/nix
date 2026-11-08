@@ -7,7 +7,7 @@ _: {
       ...
     }:
     {
-      imports = [ "${inputs.self}/modules/_features/ssh-keys.nix" ];
+      imports = [ inputs.self.modules.nixos.sshKeys ];
 
       nixpkgs.config.allowUnfree = true;
 

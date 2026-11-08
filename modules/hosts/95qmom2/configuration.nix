@@ -2,7 +2,7 @@ _: {
   flake.modules.nixos.qmom2 =
     { pkgs, inputs, ... }:
     {
-      imports = [ "${inputs.self}/modules/_features/ssh-keys.nix" ];
+      imports = [ inputs.self.modules.nixos.sshKeys ];
 
       nixpkgs.config.allowUnfree = true;
 

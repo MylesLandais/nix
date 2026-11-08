@@ -17,7 +17,7 @@ _: {
     {
       imports = [
         inputs.self.modules.nixos.cerberusHardware
-        "${inputs.self}/modules/_features/ssh-keys.nix"
+        inputs.self.modules.nixos.sshKeys
         inputs.self.modules.nixos.nvidia
         inputs.self.modules.nixos.gaming
         inputs.self.modules.nixos.gitMirrors
