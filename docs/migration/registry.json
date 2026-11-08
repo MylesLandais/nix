@@ -3,6 +3,7 @@
     "appWrappers",
     "bars",
     "base",
+    "blenderMcp",
     "cargoTargetSweep",
     "chromiumHeliumPrefs",
     "devtooling",
@@ -11,6 +12,8 @@
     "flameshot",
     "gtk",
     "hermes",
+    "hermesDesktop",
+    "hydraSmb",
     "hyprland",
     "mpv",
     "niri",
@@ -20,12 +23,14 @@
     "sshBitwarden",
     "stylix",
     "terminals",
+    "workspaceBudget",
     "xfce"
   ],
   "homeManagerModules": [
     "appWrappers",
     "bars",
     "base",
+    "blenderMcp",
     "cargoTargetSweep",
     "chromiumHeliumPrefs",
     "devtooling",
@@ -34,6 +39,8 @@
     "flameshot",
     "gtk",
     "hermes",
+    "hermesDesktop",
+    "hydraSmb",
     "hyprland",
     "mpv",
     "niri",
@@ -43,6 +50,7 @@
     "sshBitwarden",
     "stylix",
     "terminals",
+    "workspaceBudget",
     "xfce"
   ],
   "nixos": [

@@ -46,11 +46,11 @@ let
 in
 {
   imports = [
-    ../../_features/blender-mcp.nix
+    inputs.self.modules.homeManager.blenderMcp
     ../../_features/penpot-mcp.nix
-    ../../_features/hydra-smb.nix
-    ../../_features/hermes-desktop.nix
-    ../../_features/workspace-budget-home.nix
+    inputs.self.modules.homeManager.hydraSmb
+    inputs.self.modules.homeManager.hermesDesktop
+    inputs.self.modules.homeManager.workspaceBudget
   ];
 
   hydra-smb.enable = true;
