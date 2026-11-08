@@ -46,6 +46,9 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+TMPD=$(mktemp -d)
+trap 'rm -rf "$TMPD"' EXIT
+
 REPO=${REPO:-$(git rev-parse --show-toplevel)}
 REPO=$(cd "$REPO" && pwd)
 MIG="$REPO/docs/migration"
@@ -302,18 +305,27 @@ verify() { # base sha hosts-spec -> writes $REPORT, returns 0 if within policy
       problems+=("C: $h has $(jq length <<<"$unexpected") change(s) outside policy: $(jq -r '.[:8] | join(", ")' <<<"$unexpected")")
       fail=1
     fi
-    hosts_json=$(jq --arg h "$h" --argjson c "$cdiff" --argjson b "$bdiff" --argjson u "$unexpected" \
+    # Large diffs go through files: --argjson would exceed ARG_MAX.
+    echo "$cdiff" >"$TMPD/c.json"
+    echo "$bdiff" >"$TMPD/b.json"
+    echo "$unexpected" >"$TMPD/u.json"
+    echo "$hosts_json" >"$TMPD/hosts.json"
+    hosts_json=$(jq --arg h "$h" --slurpfile c "$TMPD/c.json" --slurpfile b "$TMPD/b.json" --slurpfile u "$TMPD/u.json" \
       --arg nd "$nd" --argjson dc "$drv_changed" \
-      '. + {($h): {drv_changed: $dc, B: $b, C: $c, unexpected: $u, nix_diff_summary: ($nd | split("\n"))}}' <<<"$hosts_json")
+      '. + {($h): {drv_changed: $dc, B: $b[0], C: $c[0], unexpected: $u[0], nix_diff_summary: ($nd | split("\n"))}}' "$TMPD/hosts.json")
   done <<<"$hosts"
 
+  echo "$reg_diff" >"$TMPD/reg.json"
+  echo "$out_diff" >"$TMPD/out.json"
+  echo "$fb_diff" >"$TMPD/fbd.json"
+  echo "$hosts_json" >"$TMPD/hosts.json"
   REPORT=$(jq -n --arg task "$TASK" --arg policy "$POLICY" --arg base "$base" --arg rev "$sha" \
-    --argjson reg "$reg_diff" --argjson out "$out_diff" --argjson fbd "$fb_diff" \
-    --argjson hosts "$hosts_json" --argjson ok "$([[ $fail == 0 ]] && echo true || echo false)" \
+    --slurpfile reg "$TMPD/reg.json" --slurpfile out "$TMPD/out.json" --slurpfile fbd "$TMPD/fbd.json" \
+    --slurpfile hosts "$TMPD/hosts.json" --argjson ok "$([[ $fail == 0 ]] && echo true || echo false)" \
     --arg problems "$(printf '%s\n' "${problems[@]+"${problems[@]}"}")" \
     --arg harness "$HARNESS_ID" \
     '{task: $task, policy: $policy, harness: $harness, base: $base, rev: $rev,
-      A: {registry: $reg, outputs: $out}, B_flake: $fbd, hosts: $hosts,
+      A: {registry: $reg[0], outputs: $out[0]}, B_flake: $fbd[0], hosts: $hosts[0],
       problems: ($problems | split("\n") | map(select(. != ""))), within_allowed: $ok}')
   return $fail
 }

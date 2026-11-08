@@ -463,3 +463,11 @@ tasks:
     # M-102's colmena import (+1).
     allow_frozen: true
     path_imports_allow: 1
+  - id: M-109
+    title: "Harness: pass large diffs to jq through files (ARG_MAX)"
+    phase: 2
+    depends_on: [M-108]
+    policy: contract_change
+    hosts: [kali-vm]
+    contract: [packages/x86_64-linux/migration]
+    touches: [scripts/migration/migration.sh]
