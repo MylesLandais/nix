@@ -1,0 +1,52 @@
+{
+  "A": {
+    "outputs": [
+      {
+        "after": "[\"7PZSZY2\",\"agenixHost\",\"agenixInfra\",\"argus\",\"argusHardware\",\"audio\",\"authentikInfra\",\"cerberus\",\"cerberusHardware\",\"chaotic\",\"chromiumPolicy\",\"deepseekHarnessInfra\",\"desktops\",\"dev\",\"emulators\",\"envPackages\",\"fhsCompat\",\"fileSharing\",\"firefoxPolicy\",\"fishConfig\",\"forgejo\",\"gamehacking\",\"gaming\",\"gitMirrors\",\"gnomeKeyring\",\"gpuUnlock\",\"greeter\",\"hardwareTuning\",\"hostOptions\",\"hyprland\",\"imaging\",\"infraContract\",\"infraIngress\",\"infraSecrets\",\"iw4x\",\"kali\",\"kaliVm\",\"kaliVmHardware\",\"lacie\",\"lacieHardware\",\"llmRouter\",\"mayaWorkerInfra\",\"niri\",\"nixConfig\",\"nvidia\",\"openbaoInfra\",\"overlays\",\"penpot\",\"pentest\",\"pokeforce\",\"postgresInfra\",\"profileDemoCerberus\",\"profileInfraSpine\",\"pyloadInfra\",\"qmom2\",\"qmom2Hardware\",\"qmom2Postgres\",\"qmom2Seaweedfs\",\"scbw\",\"seaweedfsInfra\",\"security\",\"sshKeys\",\"stageDb\",\"stageEdge\",\"sunshine\",\"syncthing\",\"tailscaleNode\",\"themeData\",\"tl0m2\",\"tl0m2Hardware\",\"tl0m2Postgres\",\"tl0m2Seaweedfs\",\"traefikInfra\",\"users\",\"valkeyInfra\",\"warcraft3\",\"waydroidFeh\",\"wifiProfiles\",\"workspaceBudget\",\"wslAgent\",\"xfce\"]",
+        "before": "[\"7PZSZY2\",\"agenixHost\",\"agenixInfra\",\"argus\",\"argusHardware\",\"audio\",\"authentikInfra\",\"cerberus\",\"cerberusHardware\",\"chaotic\",\"chromiumPolicy\",\"deepseekHarnessInfra\",\"desktops\",\"dev\",\"emulators\",\"envPackages\",\"fhsCompat\",\"fileSharing\",\"firefoxPolicy\",\"fishConfig\",\"forgejo\",\"gamehacking\",\"gaming\",\"gitMirrors\",\"gnomeKeyring\",\"gpuUnlock\",\"greeter\",\"hardwareTuning\",\"hostOptions\",\"hyprland\",\"imaging\",\"infraContract\",\"infraIngress\",\"infraSecrets\",\"iw4x\",\"kali\",\"kaliVm\",\"kaliVmHardware\",\"lacie\",\"lacieHardware\",\"llmRouter\",\"mayaWorkerInfra\",\"niri\",\"nixConfig\",\"nvidia\",\"openbaoInfra\",\"overlays\",\"penpot\",\"pentest\",\"pokeforce\",\"postgresInfra\",\"profileDemoCerberus\",\"profileInfraSpine\",\"pyloadInfra\",\"qmom2\",\"qmom2Hardware\",\"qmom2Postgres\",\"qmom2Seaweedfs\",\"scbw\",\"seaweedfsInfra\",\"security\",\"sshKeys\",\"stageDb\",\"stageEdge\",\"sunshine\",\"syncthing\",\"tailscaleNode\",\"themeData\",\"tl0m2\",\"tl0m2Hardware\",\"tl0m2Postgres\",\"tl0m2Seaweedfs\",\"traefikInfra\",\"users\",\"valkeyInfra\",\"warcraft3\",\"waydroidFeh\",\"wifiProfiles\",\"workspaceBudget\",\"xfce\"]",
+        "path": "modules/nixos"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": null,
+        "path": "nixosModules/wslAgent"
+      }
+    ],
+    "registry": [
+      {
+        "after": "true",
+        "before": null,
+        "path": "nixos/wslAgent"
+      },
+      {
+        "after": "true",
+        "before": null,
+        "path": "nixosModules/wslAgent"
+      }
+    ]
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/adifd0yjz3knsp8rv05m42wmfp1p50rd-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/9ymm4c9yzbxmyz9bhjqyb3v5knql60wc-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    }
+  ],
+  "base": "3bced1886b734eee16b61024c991c01ce4bbe581",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "7PZSZY2": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "pure_refactor",
+  "problems": [],
+  "rev": "4bfc1db013d27d94977093499b6ee6d0f53b1314",
+  "task": "M-218",
+  "within_allowed": true
+}
