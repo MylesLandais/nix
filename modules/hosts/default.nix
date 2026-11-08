@@ -6,25 +6,14 @@
 let
   mkHostLib = import ../flake/_mk-host.nix { inherit inputs lib; };
   deployNodes = import ./_deploy-nodes.nix { inherit inputs lib; };
-  # Migrated to the table so far (M-301..M-303).
-  tableHosts = [
-    "kali-vm"
-    "lacie"
-    "argus"
-    "94tl0m2"
-    "95qmom2"
-  ];
 in
 {
-  flake.nixosConfigurations = lib.genAttrs tableHosts (
-    name:
-    let
-      node = deployNodes.${name};
-    in
+  flake.nixosConfigurations = lib.mapAttrs (
+    name: node:
     mkHostLib.mkHost {
       inherit name;
       inherit (node) modules users desktop;
       extraSpecialArgs = node.extraSpecialArgs or { };
     }
-  );
+  ) deployNodes;
 }

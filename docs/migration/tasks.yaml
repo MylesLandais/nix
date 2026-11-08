@@ -519,3 +519,9 @@ tasks:
     #   modules/_features/penpot-mcp.nix  another session is retiring it (uncommitted);
     #                                     converting it here would conflict with that work
     #   modules/_features/grub-theme/     dead (never imported); deleted by M-502
+  - id: M-303b
+    title: Host table builds every deploy node (mapAttrs over the table)
+    phase: 3
+    depends_on: [M-303]
+    policy: pure_refactor
+    hosts: [kali-vm, lacie, argus, 94tl0m2, 95qmom2]
