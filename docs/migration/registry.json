@@ -3,13 +3,23 @@
     "base",
     "devtooling",
     "firefox",
-    "shelltools"
+    "gtk",
+    "mpv",
+    "prompt",
+    "shelltools",
+    "stylix",
+    "terminals"
   ],
   "homeManagerModules": [
     "base",
     "devtooling",
     "firefox",
-    "shelltools"
+    "gtk",
+    "mpv",
+    "prompt",
+    "shelltools",
+    "stylix",
+    "terminals"
   ],
   "nixos": [
     "7PZSZY2",

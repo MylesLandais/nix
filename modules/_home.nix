@@ -140,13 +140,13 @@ in
     ./_features/desktops/niri
     ./_features/desktops/xfce
     ./_features/bars
-    ./_features/prompt
+    inputs.self.modules.homeManager.prompt
     inputs.self.modules.homeManager.shelltools
     inputs.self.modules.homeManager.devtooling
-    ./_features/gtk
-    ./_features/terminals
-    ./_features/mpv
-    ./_features/stylix
+    inputs.self.modules.homeManager.gtk
+    inputs.self.modules.homeManager.terminals
+    inputs.self.modules.homeManager.mpv
+    inputs.self.modules.homeManager.stylix
     ./_features/flameshot.nix
     ./_features/ssh-bitwarden.nix
     ./_features/nix-user-gc.nix
