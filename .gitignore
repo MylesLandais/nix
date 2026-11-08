@@ -64,3 +64,6 @@ Microsoft-Activation-Scripts*
 
 # Diagnostics
 .nix-usb-logs/
+
+# Migration harness snapshot cache and local reports
+.migration/

@@ -1,0 +1,9 @@
+# Known per-commit noise, as "<host>:<path>" bash globs over snapshot paths.
+# Each entry needs a reason. Differences matching these are recorded but never
+# count as a policy violation.
+
+# The installer ISO stamps the flake revision into /etc/iso-build-info, so its
+# toplevel (and the ISO package) changes on every commit.
+installerIso:etc/iso-build-info/*
+installerIso:B/toplevel
+flake:packages/x86_64-linux/installer-iso

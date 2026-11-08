@@ -1,0 +1,243 @@
+# Task contracts for the dendritic migration. Format: docs/migration/README.md.
+# Phase 2's per-module tasks (M-2xx) are generated from `migration inventory`
+# by M-103 and appended below.
+tasks:
+  # ---------------------------------------------------------------- Phase 0
+  - id: M-001
+    title: Create the migration branch and the Vault journal
+    phase: 0
+    depends_on: []
+    policy: pure_refactor
+    hosts: []
+  - id: M-002
+    title: Add the migration harness and docs/migration
+    phase: 0
+    depends_on: [M-001]
+    policy: contract_change
+    hosts: [kali-vm]
+    contract:
+      - packages/x86_64-linux/migration
+      - apps/x86_64-linux/migration
+    touches: [modules/flake-parts/migration.nix, scripts/migration/*, docs/migration/*, .gitignore]
+    resources: {reads: [], writes: [flake.outputs]}
+  - id: M-003
+    title: Capture the baseline, write registry.json, tag migration/baseline
+    phase: 0
+    depends_on: [M-002]
+    policy: pure_refactor
+    hosts: [all]
+    touches: [docs/migration/baseline/*, docs/migration/registry.json]
+
+  # ---------------------------------------------------------------- Phase 1
+  - id: M-101
+    title: Move modules/flake-parts/* to modules/flake/
+    phase: 1
+    depends_on: [M-003]
+    policy: pure_refactor
+    hosts: [all]
+    touches: [modules/flake-parts/*, modules/flake/*]
+    resources: {reads: [flake.outputs], writes: [flake.outputs]}
+  - id: M-102
+    title: Fold the flake.nix `base // {…}` shim into flake-parts modules
+    phase: 1
+    depends_on: [M-101]
+    policy: pure_refactor
+    hosts: [cerberus]
+    touches: [flake.nix, modules/flake/*]
+    resources: {reads: [flake.outputs], writes: [flake.outputs]}
+  - id: M-103
+    title: Generate the Phase 2 conversion tasks from `migration inventory`
+    phase: 1
+    depends_on: [M-102]
+    policy: pure_refactor
+    hosts: []
+    touches: [docs/migration/tasks.yaml]
+  - id: M-104
+    title: Add checks.module-registry and document the naming convention
+    phase: 1
+    depends_on: [M-103]
+    policy: contract_change
+    hosts: []
+    contract: [checks/x86_64-linux/module-registry]
+    touches: [modules/flake/module-registry.nix, docs/migration/README.md]
+    resources: {reads: [registry.nixos, registry.homeManager], writes: [flake.outputs]}
+
+  # ---------------------------------------------------------------- Phase 3
+  - id: M-301
+    title: Table-driven modules/hosts/default.nix; migrate kali-vm
+    phase: 3
+    depends_on: [CHECKPOINT-2]
+    policy: pure_refactor
+    hosts: [kali-vm]
+    resources: {reads: [host.kali-vm], writes: [host.kali-vm]}
+  - id: M-302
+    title: Migrate lacie, then argus, to the host table
+    phase: 3
+    depends_on: [M-301]
+    policy: pure_refactor
+    hosts: [lacie, argus]
+  - id: M-303
+    title: Migrate 94tl0m2/95qmom2; extract nixos.dell7050Node (shared behavior only)
+    phase: 3
+    depends_on: [M-302]
+    policy: pure_refactor
+    hosts: [94tl0m2, 95qmom2]
+    registry: {add: [nixos.dell7050Node]}
+  - id: M-304
+    title: Move 7PZSZY2 onto mkHost (nixos-wsl nixpkgs); drop the hand-rolled HM config
+    phase: 3
+    depends_on: [M-301]
+    policy: pure_refactor
+    hosts: [7PZSZY2]
+  - id: M-305
+    title: Split cerberus configuration.nix (llm-models, adguard, chromium policy, oci-cli overlay)
+    phase: 3
+    depends_on: [M-301]
+    policy: pure_refactor
+    hosts: [cerberus]
+    registry: {add: [nixos.adguard]}
+  - id: M-306
+    title: host.username option; replace /home/warby literals; drop repeated allowUnfree
+    phase: 3
+    depends_on: [M-305, M-303, M-304]
+    policy: pure_refactor
+    hosts: [all]
+  - id: M-307
+    title: Remove vars.nix and the extra nixpkgs instances, keeping the current wallpaper
+    phase: 3
+    depends_on: [M-305, M-304]
+    policy: pure_refactor
+    hosts: [cerberus, 7PZSZY2]
+
+  # ---------------------------------------------------------------- Phase 4
+  - id: M-401
+    title: pkgs/ + packagesFromDirectoryRecursive overlay; move derivations (one commit each)
+    phase: 4
+    depends_on: [CHECKPOINT-3]
+    policy: pure_refactor
+    hosts: [all]
+  - id: M-402
+    title: Expose perSystem.packages; curated CI build list
+    phase: 4
+    depends_on: [M-401]
+    policy: contract_change
+    hosts: []
+    contract: ["packages/x86_64-linux/*", "checks/x86_64-linux/*"]
+  - id: M-410
+    title: Extract inline scripts with the original builders (replaceStrings placeholders)
+    phase: 4
+    depends_on: [CHECKPOINT-3]
+    policy: pure_refactor
+    hosts: [cerberus, lacie, kali-vm]
+  - id: M-430
+    title: Merge the helium/vivaldi flag-file wrappers
+    phase: 4
+    depends_on: [M-410]
+    policy: pure_refactor
+    hosts: [cerberus, lacie, kali-vm]
+
+  # ---------------------------------------------------------------- Phase 5
+  - id: M-501
+    title: Delete the dead bars (ricelin, hyprpanel, caelestia)
+    phase: 5
+    depends_on: [CHECKPOINT-4]
+    policy: pure_refactor
+    hosts: [all]
+  - id: M-502
+    title: Delete orphans (.config/, backup.ab, .codex, unused themes, stubs, gnomeKeyring)
+    phase: 5
+    depends_on: [CHECKPOINT-4]
+    policy: contract_change
+    hosts: [all]
+    registry: {remove: [nixos.gnomeKeyring]}
+  - id: M-503
+    title: Remove the unused thorium input
+    phase: 5
+    depends_on: [CHECKPOINT-4]
+    policy: contract_change
+    hosts: [all]
+  - id: M-504
+    title: Drop `franky` from trusted-users and the stale garnix key
+    phase: 5
+    depends_on: [CHECKPOINT-4]
+    policy: behavior_change
+    hosts: [all]
+    allowed_changes: ["*:nixSettings/*", "*:etc/nix/nix.conf/*", "*:B/*"]
+  - id: M-505
+    title: Choose the wallpaper (user decision)
+    phase: 5
+    depends_on: [M-307]
+    policy: behavior_change
+    hosts: [cerberus]
+    human_approval: wallpaper choice
+  - id: M-506
+    title: Trim noctalia settings to non-defaults (effective settings unchanged)
+    phase: 5
+    depends_on: [CHECKPOINT-4]
+    policy: behavior_change
+    hosts: [cerberus, lacie, kali-vm]
+  - id: M-507
+    title: Deduplicate package lists (identity-per-profile evidence)
+    phase: 5
+    depends_on: [CHECKPOINT-4]
+    policy: behavior_change
+    hosts: [cerberus, lacie, kali-vm]
+  - id: M-508
+    title: nix.settings merge, statix W20, pkgs.system, helium.defaultPackage, narrow `with`
+    phase: 5
+    depends_on: [CHECKPOINT-4]
+    policy: pure_refactor
+    hosts: [all]
+  - id: M-509
+    title: Kali assets via fetchFromGitLab
+    phase: 5
+    depends_on: [CHECKPOINT-4]
+    policy: behavior_change
+    hosts: [lacie, kali-vm]
+  - id: M-510
+    title: "Tooling: statix gating, default devShell, git-hooks, gitleaks, beads cleanup, gitignore"
+    phase: 5
+    depends_on: [CHECKPOINT-4]
+    policy: contract_change
+    hosts: []
+  - id: M-511
+    title: Remove tombstone/changelog comments; fix stale path comments
+    phase: 5
+    depends_on: [M-501, M-502]
+    policy: pure_refactor
+    hosts: [all]
+  - id: M-512
+    title: Docs (README, CLAUDE.md, CONTRIBUTING, docs/cluster, .claude/commands)
+    phase: 5
+    depends_on: [M-511]
+    policy: pure_refactor
+    hosts: []
+  - id: M-513
+    title: Delete what remains of modules/_features/ and forbid it
+    phase: 5
+    depends_on: [M-501, M-502, M-511]
+    policy: pure_refactor
+    hosts: [all]
+
+  # ---------------------------------------------------------------- Phase 6
+  - id: M-601
+    title: Split windows-kit (security gate S-1 before first push)
+    phase: 6
+    depends_on: [CHECKPOINT-5]
+    policy: repo_move
+    allow_frozen: true
+    human_approval: create/push remote
+  - id: M-602a
+    title: Ownership pass for frozen infra modules (docs/migration/ownership.json)
+    phase: 6
+    depends_on: [CHECKPOINT-5]
+    policy: pure_refactor
+    hosts: []
+  - id: M-602b
+    title: Split nebula-infra; cerberus consumes its nixosModules
+    phase: 6
+    depends_on: [M-602a]
+    policy: repo_move
+    allow_frozen: true
+    hosts: [all]
+    human_approval: create/push remote, CI access to private inputs

@@ -1,0 +1,19 @@
+# Paths leaving for nebula-infra / windows-kit (Phase 6). Tasks may not edit
+# them unless they set `allow_frozen: true`. Bash glob patterns, repo-relative.
+modules/infra/*
+modules/security/*
+modules/database/*
+modules/services/forgejo.nix
+modules/services/penpot.nix
+modules/services/git-mirrors.nix
+modules/services/maya-worker.nix
+modules/services/pyload.nix
+modules/profiles/infra-spine.nix
+modules/profiles/demo-cerberus.nix
+modules/networking/traefik.nix
+modules/hosts/stage-edge/*
+modules/hosts/stage-db/*
+modules/hosts/_oci-common.nix
+infra/*
+docs/infra/*
+windows-kit/*
