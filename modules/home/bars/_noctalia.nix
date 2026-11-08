@@ -150,7 +150,7 @@
       '';
 
       programs.noctalia-shell = {
-        enable = lib.mkIf (osConfig.host.bar == "noctalia") true;
+        enable = osConfig.host.bar == "noctalia";
         # Upstream deprecated the systemd unit; the compositor's execOnce
         # (see modules/features/desktops/hyprland/hypr.nix) launches the
         # shell instead. See https://docs.noctalia.dev/getting-started/nixos/

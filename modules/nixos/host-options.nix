@@ -1,6 +1,28 @@
 _: {
   flake.modules.nixos.hostOptions =
     { lib, ... }:
+    let
+      monitor = lib.types.submodule {
+        options = {
+          name = lib.mkOption {
+            type = lib.types.str;
+            description = "Output name or description, as the compositor reports it.";
+          };
+          width = lib.mkOption {
+            type = lib.types.str;
+            description = "Horizontal resolution in pixels.";
+          };
+          height = lib.mkOption {
+            type = lib.types.str;
+            description = "Vertical resolution in pixels.";
+          };
+          refresh = lib.mkOption {
+            type = lib.types.str;
+            description = "Refresh rate in Hz.";
+          };
+        };
+      };
+    in
     {
       options.host = {
         hostName = lib.mkOption {
@@ -70,25 +92,11 @@ _: {
           description = "Path to the wallpaper image.";
         };
         mainMonitor = lib.mkOption {
-          type = lib.types.submodule {
-            options = {
-              name = lib.mkOption { type = lib.types.str; };
-              width = lib.mkOption { type = lib.types.str; };
-              height = lib.mkOption { type = lib.types.str; };
-              refresh = lib.mkOption { type = lib.types.str; };
-            };
-          };
+          type = monitor;
           description = "Primary monitor configuration.";
         };
         secondaryMonitor = lib.mkOption {
-          type = lib.types.submodule {
-            options = {
-              name = lib.mkOption { type = lib.types.str; };
-              width = lib.mkOption { type = lib.types.str; };
-              height = lib.mkOption { type = lib.types.str; };
-              refresh = lib.mkOption { type = lib.types.str; };
-            };
-          };
+          type = monitor;
           description = "Secondary monitor configuration.";
         };
         workload = lib.mkOption {

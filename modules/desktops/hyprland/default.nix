@@ -23,7 +23,7 @@ _: {
         my.hypr.enable = lib.mkDefault true;
         # Bar selection based on host.bar option
         my.bars = {
-          noctalia.enable = lib.mkIf (osConfig.host.bar == "noctalia") true;
+          noctalia.enable = osConfig.host.bar == "noctalia";
         };
         my.hyprlock.enable = lib.mkDefault true;
         my.hyprpaper.enable = lib.mkDefault true;
