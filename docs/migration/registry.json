@@ -1,11 +1,13 @@
 {
   "homeManager": [
     "base",
-    "firefox"
+    "firefox",
+    "shelltools"
   ],
   "homeManagerModules": [
     "base",
-    "firefox"
+    "firefox",
+    "shelltools"
   ],
   "nixos": [
     "7PZSZY2",

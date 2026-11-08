@@ -141,7 +141,7 @@ in
     ./_features/desktops/xfce
     ./_features/bars
     ./_features/prompt
-    ./_features/shelltools
+    inputs.self.modules.homeManager.shelltools
     ./_features/devtooling
     ./_features/gtk
     ./_features/terminals
