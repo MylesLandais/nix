@@ -12,6 +12,6 @@ _: {
         ./_niri.nix
       ];
 
-      options.niri.enable = lib.mkEnableOption "Enable niri module";
+      options.my.niri.enable = lib.mkEnableOption "Enable niri module";
     };
 }

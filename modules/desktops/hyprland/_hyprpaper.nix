@@ -7,9 +7,9 @@
 }:
 {
   options = {
-    hyprpaper.enable = lib.mkEnableOption "Enable hyprpaper module";
+    my.hyprpaper.enable = lib.mkEnableOption "Enable hyprpaper module";
   };
-  config = lib.mkIf config.hyprpaper.enable {
+  config = lib.mkIf config.my.hyprpaper.enable {
     services.hyprpaper = {
       enable = true;
       package = pkgs.hyprpaper;

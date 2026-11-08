@@ -5,10 +5,10 @@
 }:
 {
   options = {
-    yazi.enable = lib.mkEnableOption "Enable yazi module";
+    my.yazi.enable = lib.mkEnableOption "Enable yazi module";
   };
 
-  config = lib.mkIf config.yazi.enable {
+  config = lib.mkIf config.my.yazi.enable {
     programs.yazi = {
       enable = true;
       enableZshIntegration = true;

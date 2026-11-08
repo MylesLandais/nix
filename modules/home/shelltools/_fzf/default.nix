@@ -5,10 +5,10 @@
 }:
 {
   options = {
-    fzf.enable = lib.mkEnableOption "Enable fzf module";
+    my.fzf.enable = lib.mkEnableOption "Enable fzf module";
   };
 
-  config = lib.mkIf config.fzf.enable {
+  config = lib.mkIf config.my.fzf.enable {
     programs.fzf = {
       enable = true;
       tmux.enableShellIntegration = true;

@@ -5,10 +5,10 @@
 }:
 {
   options = {
-    atuin.enable = lib.mkEnableOption "Enable atuin module";
+    my.atuin.enable = lib.mkEnableOption "Enable atuin module";
   };
 
-  config = lib.mkIf config.atuin.enable {
+  config = lib.mkIf config.my.atuin.enable {
     programs.atuin = {
       enable = false;
       enableZshIntegration = false;

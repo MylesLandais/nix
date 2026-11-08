@@ -38,9 +38,9 @@ let
 in
 {
   options = {
-    hypr.enable = lib.mkEnableOption "Enable hypr module";
+    my.hypr.enable = lib.mkEnableOption "Enable hypr module";
   };
-  config = lib.mkIf config.hypr.enable {
+  config = lib.mkIf config.my.hypr.enable {
     home.packages = [
       add_record_player
       pkgs.app2unit

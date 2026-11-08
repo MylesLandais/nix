@@ -17,17 +17,17 @@ _: {
       ];
 
       options = {
-        hyprland.enable = lib.mkEnableOption "Enable hyprland module";
+        my.hyprland.enable = lib.mkEnableOption "Enable hyprland module";
       };
-      config = lib.mkIf config.hyprland.enable {
-        hypr.enable = lib.mkDefault true;
+      config = lib.mkIf config.my.hyprland.enable {
+        my.hypr.enable = lib.mkDefault true;
         # Bar selection based on host.bar option
-        bars = {
+        my.bars = {
           noctalia.enable = lib.mkIf (osConfig.host.bar == "noctalia") true;
         };
-        hyprlock.enable = lib.mkDefault true;
-        hyprpaper.enable = lib.mkDefault true;
-        wlogout.enable = lib.mkDefault true;
+        my.hyprlock.enable = lib.mkDefault true;
+        my.hyprpaper.enable = lib.mkDefault true;
+        my.wlogout.enable = lib.mkDefault true;
       };
     };
 }

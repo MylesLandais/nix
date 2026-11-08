@@ -6,9 +6,9 @@
 }:
 {
   options = {
-    hyprlock.enable = lib.mkEnableOption "Enable hyprlock module";
+    my.hyprlock.enable = lib.mkEnableOption "Enable hyprlock module";
   };
-  config = lib.mkIf config.hyprlock.enable {
+  config = lib.mkIf config.my.hyprlock.enable {
     programs.hyprlock = {
       enable = true;
       settings = {

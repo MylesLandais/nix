@@ -6,7 +6,7 @@
   ...
 }:
 let
-  cfg = config.hyprland.workspaceRecovery;
+  cfg = config.my.hyprland.workspaceRecovery;
 
   managedWorkspaces = lib.filter (w: builtins.hasAttr w cfg.mappings) [
     "1"
@@ -345,7 +345,7 @@ let
   };
 in
 {
-  options.hyprland.workspaceRecovery = {
+  options.my.hyprland.workspaceRecovery = {
     enable = lib.mkEnableOption "Hyprland workspace-to-monitor recovery on topology changes";
 
     mappings = lib.mkOption {

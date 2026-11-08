@@ -6,10 +6,10 @@
 }:
 {
   options = {
-    git.enable = lib.mkEnableOption "Enable git module";
+    my.git.enable = lib.mkEnableOption "Enable git module";
   };
 
-  config = lib.mkIf config.git.enable {
+  config = lib.mkIf config.my.git.enable {
     programs = {
 
       git = {

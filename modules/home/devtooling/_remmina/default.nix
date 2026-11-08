@@ -6,10 +6,10 @@
 }:
 {
   options = {
-    remmina.enable = lib.mkEnableOption "Remmina remote desktop client (VNC, RDP, SSH)";
+    my.remmina.enable = lib.mkEnableOption "Remmina remote desktop client (VNC, RDP, SSH)";
   };
 
-  config = lib.mkIf config.remmina.enable {
+  config = lib.mkIf config.my.remmina.enable {
     home.packages = with pkgs; [
       remmina
     ];

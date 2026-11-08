@@ -20,19 +20,19 @@ _: {
       ];
 
       options = {
-        devtooling.enable = lib.mkEnableOption "Enable devtooling module";
+        my.devtooling.enable = lib.mkEnableOption "Enable devtooling module";
       };
-      config = lib.mkIf config.devtooling.enable {
-        git.enable = lib.mkDefault true;
-        gleam.enable = lib.mkDefault true;
-        go.enable = lib.mkDefault true;
-        kubernetes.enable = lib.mkDefault true;
-        lua.enable = lib.mkDefault true;
-        pi-agent.enable = lib.mkDefault true;
-        remmina.enable = lib.mkDefault true;
-        rust.enable = lib.mkDefault true;
-        tmux.enable = lib.mkDefault true;
-        zed.enable = lib.mkDefault true;
+      config = lib.mkIf config.my.devtooling.enable {
+        my.git.enable = lib.mkDefault true;
+        my.gleam.enable = lib.mkDefault true;
+        my.go.enable = lib.mkDefault true;
+        my.kubernetes.enable = lib.mkDefault true;
+        my.lua.enable = lib.mkDefault true;
+        my.pi-agent.enable = lib.mkDefault true;
+        my.remmina.enable = lib.mkDefault true;
+        my.rust.enable = lib.mkDefault true;
+        my.tmux.enable = lib.mkDefault true;
+        my.zed.enable = lib.mkDefault true;
       };
     };
 }

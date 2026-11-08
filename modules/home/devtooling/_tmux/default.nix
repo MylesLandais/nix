@@ -7,9 +7,9 @@
 }:
 {
   options = {
-    tmux.enable = lib.mkEnableOption "Enable tmux module";
+    my.tmux.enable = lib.mkEnableOption "Enable tmux module";
   };
-  config = lib.mkIf config.tmux.enable {
+  config = lib.mkIf config.my.tmux.enable {
     programs.tmux = {
       enable = true;
       keyMode = "vi";

@@ -210,16 +210,16 @@ _: {
       };
 
       # Custom modules
-      prompt.enable = true;
-      devtooling.enable = true;
-      shelltools.enable = true;
-      stylix-mod.enable = true;
-      gtk-mod.enable = true;
-      hyprland.enable = true;
-      terminals.enable = true;
-      mpv-mod.enable = true;
-      appWrappers.enable = lib.mkDefault true;
-      chromiumHeliumPrefs.enable = lib.mkDefault true;
+      my.prompt.enable = true;
+      my.devtooling.enable = true;
+      my.shelltools.enable = true;
+      my.stylix-mod.enable = true;
+      my.gtk-mod.enable = true;
+      my.hyprland.enable = true;
+      my.terminals.enable = true;
+      my.mpv-mod.enable = true;
+      my.appWrappers.enable = lib.mkDefault true;
+      my.chromiumHeliumPrefs.enable = lib.mkDefault true;
 
       programs.firefox.preferences = lib.mkIf (gpuType == "nvidia") {
         "media.ffmpeg.vaapi.enabled" = true;

@@ -6,9 +6,9 @@
 }:
 {
   options = {
-    rust.enable = lib.mkEnableOption "Enable rust module";
+    my.rust.enable = lib.mkEnableOption "Enable rust module";
   };
-  config = lib.mkIf config.rust.enable {
+  config = lib.mkIf config.my.rust.enable {
     home.packages = with pkgs; [
       cargo
       rustc

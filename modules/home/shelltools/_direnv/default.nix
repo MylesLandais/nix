@@ -6,10 +6,10 @@
 }:
 {
   options = {
-    direnv.enable = lib.mkEnableOption "Enable direnv module";
+    my.direnv.enable = lib.mkEnableOption "Enable direnv module";
   };
 
-  config = lib.mkIf config.direnv.enable {
+  config = lib.mkIf config.my.direnv.enable {
     programs.direnv = {
       enable = true;
       package = pkgs.direnv;

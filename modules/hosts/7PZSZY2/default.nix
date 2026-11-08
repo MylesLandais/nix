@@ -35,11 +35,11 @@ in
 
               # Keep the WSL profile headless. Windows supplies Chrome and GUI
               # editors; WSL supplies the coding agents and persistent shells.
-              devtooling.enable = true;
-              remmina.enable = false;
-              zed.enable = false;
+              my.devtooling.enable = true;
+              my.remmina.enable = false;
+              my.zed.enable = false;
               # The shared themed tmux profile requires desktop host options.
-              tmux.enable = false;
+              my.tmux.enable = false;
               programs.tmux = {
                 enable = true;
                 keyMode = "vi";

@@ -12,11 +12,11 @@ _: {
       ];
 
       options = {
-        terminals.enable = lib.mkEnableOption "Enable terminals module";
+        my.terminals.enable = lib.mkEnableOption "Enable terminals module";
       };
-      config = lib.mkIf config.terminals.enable {
-        kitty.enable = lib.mkDefault true;
-        ghostty.enable = lib.mkDefault true;
+      config = lib.mkIf config.my.terminals.enable {
+        my.kitty.enable = lib.mkDefault true;
+        my.ghostty.enable = lib.mkDefault true;
       };
     };
 }

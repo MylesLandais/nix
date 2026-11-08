@@ -5,10 +5,10 @@
 }:
 {
   options = {
-    fish.enable = lib.mkEnableOption "Enable fish module";
+    my.fish.enable = lib.mkEnableOption "Enable fish module";
   };
 
-  config = lib.mkIf config.fish.enable {
+  config = lib.mkIf config.my.fish.enable {
     programs.fish = {
       enable = true;
       shellInit = ''

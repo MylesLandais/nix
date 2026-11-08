@@ -66,7 +66,7 @@ in
   ];
 
   # Zed's settings are merged from Nix, so it gets the bridge declaratively.
-  programs.zed-editor.userSettings.context_servers.penpot = lib.mkIf config.zed.enable {
+  programs.zed-editor.userSettings.context_servers.penpot = lib.mkIf config.my.zed.enable {
     source = "custom";
     command = bridge;
     args = [ ];

@@ -8,9 +8,9 @@
 }:
 {
   options = {
-    bars.noctalia.enable = lib.mkEnableOption "Enable noctalia bar";
+    my.bars.noctalia.enable = lib.mkEnableOption "Enable noctalia bar";
   };
-  config = lib.mkIf config.bars.noctalia.enable (
+  config = lib.mkIf config.my.bars.noctalia.enable (
     let
       homeDir = config.home.homeDirectory;
     in

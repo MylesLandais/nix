@@ -8,9 +8,9 @@ _: {
     }:
     {
       options = {
-        stylix-mod.enable = lib.mkEnableOption "Enable stylix module";
+        my.stylix-mod.enable = lib.mkEnableOption "Enable stylix module";
       };
-      config = lib.mkIf config.stylix-mod.enable {
+      config = lib.mkIf config.my.stylix-mod.enable {
         stylix = {
           autoEnable = false;
           enable = true;

@@ -6,9 +6,9 @@
 }:
 {
   options = {
-    gleam.enable = lib.mkEnableOption "Enable gleam module";
+    my.gleam.enable = lib.mkEnableOption "Enable gleam module";
   };
-  config = lib.mkIf config.gleam.enable {
+  config = lib.mkIf config.my.gleam.enable {
     home.packages = with pkgs; [
       gleam
       rebar3

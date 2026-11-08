@@ -9,10 +9,10 @@ _: {
       ...
     }:
     let
-      cfg = config.hermesDesktop;
+      cfg = config.my.hermesDesktop;
     in
     {
-      options.hermesDesktop = {
+      options.my.hermesDesktop = {
         enable = lib.mkEnableOption "Hermes terminal/desktop launchers and dashboard theme";
       };
 

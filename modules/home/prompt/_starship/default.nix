@@ -5,9 +5,9 @@
 }:
 {
   options = {
-    starship.enable = lib.mkEnableOption "Enable starship module";
+    my.starship.enable = lib.mkEnableOption "Enable starship module";
   };
-  config = lib.mkIf config.starship.enable {
+  config = lib.mkIf config.my.starship.enable {
     programs.starship =
       let
         kanagawa = import ./kanagawa.nix;

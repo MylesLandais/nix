@@ -9,10 +9,10 @@ _: {
       ...
     }:
     let
-      cfg = config.chromiumHeliumPrefs;
+      cfg = config.my.chromiumHeliumPrefs;
     in
     {
-      options.chromiumHeliumPrefs = {
+      options.my.chromiumHeliumPrefs = {
         enable = lib.mkEnableOption "Helium profile activation tweaks and CDP desktop entry";
       };
 

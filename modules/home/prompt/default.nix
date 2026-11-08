@@ -11,10 +11,10 @@ _: {
       ];
 
       options = {
-        prompt.enable = lib.mkEnableOption "Enable prompt module";
+        my.prompt.enable = lib.mkEnableOption "Enable prompt module";
       };
-      config = lib.mkIf config.prompt.enable {
-        starship.enable = lib.mkDefault true;
+      config = lib.mkIf config.my.prompt.enable {
+        my.starship.enable = lib.mkDefault true;
       };
     };
 }

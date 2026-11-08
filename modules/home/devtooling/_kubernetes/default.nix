@@ -6,9 +6,9 @@
 }:
 {
   options = {
-    kubernetes.enable = lib.mkEnableOption "Enable kubernetes option";
+    my.kubernetes.enable = lib.mkEnableOption "Enable kubernetes option";
   };
-  config = lib.mkIf config.kubernetes.enable {
+  config = lib.mkIf config.my.kubernetes.enable {
     home.packages = with pkgs; [
       kubectl
     ];

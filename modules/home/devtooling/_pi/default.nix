@@ -96,10 +96,10 @@ let
 in
 {
   options = {
-    pi-agent.enable = lib.mkEnableOption "Enable pi coding agent module";
+    my.pi-agent.enable = lib.mkEnableOption "Enable pi coding agent module";
   };
 
-  config = lib.mkIf config.pi-agent.enable {
+  config = lib.mkIf config.my.pi-agent.enable {
     # Declarations only — no values. `secretspec set` writes those to the keyring.
     home.file.".config/pi/secretspec.toml".text = ''
       # Managed by modules/_features/devtooling/pi/default.nix.

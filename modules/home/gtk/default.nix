@@ -11,10 +11,10 @@ _: {
       ];
 
       options = {
-        gtk-mod.enable = lib.mkEnableOption "Enable gtk module";
+        my.gtk-mod.enable = lib.mkEnableOption "Enable gtk module";
       };
-      config = lib.mkIf config.gtk-mod.enable {
-        gtk-conf.enable = lib.mkDefault true;
+      config = lib.mkIf config.my.gtk-mod.enable {
+        my.gtk-conf.enable = lib.mkDefault true;
       };
     };
 }

@@ -7,7 +7,7 @@ _: {
       ...
     }:
     let
-      cfg = config.mpv-mod;
+      cfg = config.my.mpv-mod;
       plexShimPackage = pkgs.plex-mpv-shim.override {
         python3Packages = pkgs.python3Packages.overrideScope (
           _: pyPrev: {
@@ -92,7 +92,7 @@ _: {
       useReplacementOsc = cfg.modernx.enable || cfg.uosc.enable;
     in
     {
-      options.mpv-mod = {
+      options.my.mpv-mod = {
         enable = lib.mkEnableOption "shared MPV configuration";
 
         modernx.enable = lib.mkOption {

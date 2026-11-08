@@ -11,7 +11,7 @@ _: {
     let
       gpuType = osConfig.host.gpuType or "none";
 
-      cfg = config.appWrappers;
+      cfg = config.my.appWrappers;
 
       vesktopSafe = pkgs.writeShellApplication {
         name = "vesktop";
@@ -57,7 +57,7 @@ _: {
       };
     in
     {
-      options.appWrappers = {
+      options.my.appWrappers = {
         enable = lib.mkEnableOption "Vesktop and Cursor safe launch wrappers with desktop entries";
       };
 

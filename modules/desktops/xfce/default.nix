@@ -13,10 +13,10 @@ _: {
     # below with the real Kali artifacts.
     {
       options = {
-        xfce.enable = lib.mkEnableOption "Enable xfce module (legacy X11 fallback)";
+        my.xfce.enable = lib.mkEnableOption "Enable xfce module (legacy X11 fallback)";
       };
 
-      config = lib.mkIf (config.xfce.enable && osConfig.host.desktop == "xfce") {
+      config = lib.mkIf (config.my.xfce.enable && osConfig.host.desktop == "xfce") {
         home.packages = with pkgs; [
           # arc-theme removed from nixpkgs (GTK2 gtk-engine-murrine); see system.nix.
           papirus-icon-theme

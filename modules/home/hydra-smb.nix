@@ -20,7 +20,7 @@ _: {
       ...
     }:
     let
-      cfg = config.hydra-smb;
+      cfg = config.my.hydra-smb;
 
       uid =
         if config.home.uid != null then
@@ -105,7 +105,7 @@ _: {
       '';
     in
     {
-      options.hydra-smb = {
+      options.my.hydra-smb = {
         enable = lib.mkEnableOption "GVfs SMB mount and ~/Hydra shortcut for the Hydra (Unraid) share";
 
         address = lib.mkOption {

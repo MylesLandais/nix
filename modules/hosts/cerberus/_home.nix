@@ -53,12 +53,12 @@ in
     inputs.self.modules.homeManager.workspaceBudget
   ];
 
-  hydra-smb.enable = true;
-  hermesDesktop.enable = true;
+  my.hydra-smb.enable = true;
+  my.hermesDesktop.enable = true;
 
-  hyprland.promptFollowFocus.enable = true;
+  my.hyprland.promptFollowFocus.enable = true;
 
-  hyprland.workspaceRecovery = {
+  my.hyprland.workspaceRecovery = {
     enable = true;
     mappings = workspaceMappings;
   };
@@ -68,7 +68,7 @@ in
     tvMode
   ];
 
-  mpv-mod.plexShim.enable = true;
+  my.mpv-mod.plexShim.enable = true;
 
   xdg.configFile."hypr/hyprland.conf" = {
     force = true;

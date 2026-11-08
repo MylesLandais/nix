@@ -6,9 +6,9 @@
 }:
 {
   options = {
-    kitty.enable = lib.mkEnableOption "Enable kitty module";
+    my.kitty.enable = lib.mkEnableOption "Enable kitty module";
   };
-  config = lib.mkIf config.kitty.enable {
+  config = lib.mkIf config.my.kitty.enable {
     programs.kitty = {
       enable = true;
       settings = {

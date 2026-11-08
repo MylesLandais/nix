@@ -7,10 +7,10 @@
 }:
 {
   options = {
-    gtk-conf.enable = lib.mkEnableOption "Enable gtk module";
+    my.gtk-conf.enable = lib.mkEnableOption "Enable gtk module";
   };
 
-  config = lib.mkIf config.gtk-conf.enable {
+  config = lib.mkIf config.my.gtk-conf.enable {
     gtk = {
       enable = true;
       iconTheme = {

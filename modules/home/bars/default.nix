@@ -10,7 +10,7 @@ _: {
       ];
 
       config = {
-        bars = {
+        my.bars = {
           noctalia.enable = lib.mkDefault false;
         };
       };

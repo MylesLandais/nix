@@ -6,9 +6,9 @@
 }:
 {
   options = {
-    go.enable = lib.mkEnableOption "Enable go module";
+    my.go.enable = lib.mkEnableOption "Enable go module";
   };
-  config = lib.mkIf config.go.enable {
+  config = lib.mkIf config.my.go.enable {
     home.packages = with pkgs; [
       go
       gotestsum

@@ -5,10 +5,10 @@
 }:
 {
   options = {
-    eza.enable = lib.mkEnableOption "Enable eza module";
+    my.eza.enable = lib.mkEnableOption "Enable eza module";
   };
 
-  config = lib.mkIf config.eza.enable {
+  config = lib.mkIf config.my.eza.enable {
     programs.eza.enable = true;
   };
 }

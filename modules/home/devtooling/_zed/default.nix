@@ -51,10 +51,10 @@ let
 in
 {
   options = {
-    zed.enable = lib.mkEnableOption "Enable zed module";
+    my.zed.enable = lib.mkEnableOption "Enable zed module";
   };
 
-  config = lib.mkIf config.zed.enable {
+  config = lib.mkIf config.my.zed.enable {
     # Declarations only — no values. `secretspec set` writes those to the keyring.
     home.file.".config/zed/secretspec.toml".text = ''
       # Managed by modules/_features/devtooling/zed/default.nix.

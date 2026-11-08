@@ -6,7 +6,7 @@
 }:
 {
   config = {
-    bars = {
+    my.bars = {
       noctalia.enable = lib.mkIf (osConfig.host.bar == "noctalia") true;
     };
 

@@ -19,18 +19,18 @@ _: {
       ];
 
       options = {
-        shelltools.enable = lib.mkEnableOption "Enable shell tools module";
+        my.shelltools.enable = lib.mkEnableOption "Enable shell tools module";
       };
-      config = lib.mkIf config.shelltools.enable {
-        atuin.enable = lib.mkDefault true;
-        bat.enable = lib.mkDefault true;
-        direnv.enable = lib.mkDefault true;
-        eza.enable = lib.mkDefault true;
-        fzf.enable = lib.mkDefault true;
-        zoxide.enable = lib.mkDefault true;
-        zsh.enable = lib.mkDefault true;
-        fish.enable = lib.mkDefault true;
-        yazi.enable = lib.mkDefault true;
+      config = lib.mkIf config.my.shelltools.enable {
+        my.atuin.enable = lib.mkDefault true;
+        my.bat.enable = lib.mkDefault true;
+        my.direnv.enable = lib.mkDefault true;
+        my.eza.enable = lib.mkDefault true;
+        my.fzf.enable = lib.mkDefault true;
+        my.zoxide.enable = lib.mkDefault true;
+        my.zsh.enable = lib.mkDefault true;
+        my.fish.enable = lib.mkDefault true;
+        my.yazi.enable = lib.mkDefault true;
       };
     };
 }

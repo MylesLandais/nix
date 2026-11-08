@@ -6,10 +6,10 @@
 }:
 {
   options = {
-    zsh.enable = lib.mkEnableOption "Enable zsh module";
+    my.zsh.enable = lib.mkEnableOption "Enable zsh module";
   };
 
-  config = lib.mkIf config.zsh.enable {
+  config = lib.mkIf config.my.zsh.enable {
     programs.zsh = {
       enable = true;
       autocd = true;

@@ -12,7 +12,7 @@
   ...
 }:
 let
-  cfg = config.hyprland.promptFollowFocus;
+  cfg = config.my.hyprland.promptFollowFocus;
 
   watcher = pkgs.writeShellApplication {
     name = "hyprland-prompt-follow-focus";
@@ -48,7 +48,7 @@ let
   };
 in
 {
-  options.hyprland.promptFollowFocus = {
+  options.my.hyprland.promptFollowFocus = {
     enable = lib.mkEnableOption "moving prompt windows to the focused workspace";
     classRegex = lib.mkOption {
       type = lib.types.str;

@@ -6,9 +6,9 @@
 }:
 {
   options = {
-    lua.enable = lib.mkEnableOption "Enable lua module";
+    my.lua.enable = lib.mkEnableOption "Enable lua module";
   };
-  config = lib.mkIf config.lua.enable {
+  config = lib.mkIf config.my.lua.enable {
     home.packages = with pkgs; [
       lua-language-server
     ];

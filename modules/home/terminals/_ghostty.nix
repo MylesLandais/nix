@@ -5,9 +5,9 @@
   ...
 }:
 {
-  options.ghostty.enable = lib.mkEnableOption "Enable ghostty terminal";
+  options.my.ghostty.enable = lib.mkEnableOption "Enable ghostty terminal";
 
-  config = lib.mkIf config.ghostty.enable {
+  config = lib.mkIf config.my.ghostty.enable {
     programs.ghostty = {
       enable = true;
       settings = {
