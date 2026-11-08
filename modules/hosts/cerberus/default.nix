@@ -27,7 +27,7 @@ in
     ];
     users.warby = {
       homeModules = [
-        "${self}/modules/_home.nix"
+        inputs.self.modules.homeManager.base
         "${self}/modules/hosts/cerberus/_home.nix"
       ];
       uid = 1000;

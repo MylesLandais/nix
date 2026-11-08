@@ -1,7 +1,7 @@
 { pkgs }:
 
 let
-  eurostile-bold-extended = pkgs.callPackage ./fonts/_eurostile-bold-extended.nix { };
+  eurostile-bold-extended = pkgs.callPackage ./_eurostile-bold-extended.nix { };
   chatgpt-linux = pkgs.callPackage ./_chatgpt-linux.nix { };
 in
 with pkgs;

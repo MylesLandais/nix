@@ -2,7 +2,7 @@
 let
   inherit (inputs) self;
   serverHome = self.modules.homeManager.server;
-  homeNix = "${self}/modules/_home.nix";
+  homeNix = self.modules.homeManager.base;
 in
 {
   argus = {
