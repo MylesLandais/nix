@@ -8,13 +8,13 @@ let
   cfg = config.host.citraAgent;
 
   bridgeSource = pkgs.writeText "citra-agent-bridge.py" (
-    builtins.readFile ../../scripts/citra_agent_bridge.py
+    builtins.readFile ../../../scripts/citra_agent_bridge.py
   );
   saveSyncSource = pkgs.writeText "three-ds-save-sync.py" (
-    builtins.readFile ../../scripts/three_ds_save_sync.py
+    builtins.readFile ../../../scripts/three_ds_save_sync.py
   );
   indexSource = pkgs.writeText "fe-echoes-index.py" (
-    builtins.readFile ../../scripts/fe_echoes_index.py
+    builtins.readFile ../../../scripts/fe_echoes_index.py
   );
 
   checkpointChlink = pkgs.buildGoModule rec {

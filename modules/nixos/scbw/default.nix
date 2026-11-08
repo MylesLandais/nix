@@ -8,9 +8,9 @@ _: {
     }:
     let
       cfg = config.host.scbw;
-      packageGroups = import ../_features/scbw/packages.nix { inherit pkgs; };
+      packageGroups = import ./_packages.nix { inherit pkgs; };
 
-      starcraftRemastered = import ../_features/battlenet-game.nix { inherit pkgs lib; } {
+      starcraftRemastered = import ./_battlenet-game.nix { inherit pkgs lib; } {
         name = "StarCraft: Remastered";
         gameSlug = "starcraft-remastered";
         launchCode = "S1";

@@ -7,14 +7,14 @@ _: {
       ...
     }:
     {
-      imports = [ ../_features/citra-agent.nix ];
+      imports = [ ./_citra-agent.nix ];
 
       options.host.gamehacking.enable = lib.mkEnableOption "game reverse engineering and ROM hacking tools";
 
       config = lib.mkIf config.host.gamehacking.enable {
         nixpkgs.config.allowUnfree = true;
 
-        environment.systemPackages = import ../_features/gamehacking/packages.nix { inherit pkgs; };
+        environment.systemPackages = import ./_packages.nix { inherit pkgs; };
       };
     };
 }
