@@ -262,6 +262,16 @@ tasks:
     depends_on: [M-301]
     policy: pure_refactor
     hosts: [7PZSZY2]
+    # 7PZSZY2 now imports the mkHost helper like every other host; M-304b
+    # removes all of those imports by exposing mkHost through flake.lib.
+    path_imports_allow: 1
+  - id: M-304b
+    title: mkHost/mkModules exposed as flake.lib; hosts and colmena stop importing _mk-host.nix by path
+    phase: 3
+    depends_on: [M-304]
+    policy: contract_change
+    contract: ["lib/*"]
+    hosts: [all]
   - id: M-305
     title: Split cerberus configuration.nix (llm-models, adguard, chromium policy, oci-cli overlay)
     phase: 3
