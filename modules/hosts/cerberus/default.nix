@@ -1,15 +1,19 @@
-{ inputs, lib, ... }:
+{
+  config,
+  inputs,
+  lib,
+  ...
+}:
 let
   pkgsForVars = import inputs.nixpkgs {
     system = "x86_64-linux";
     config.allowUnfree = true;
   };
   vars = import "${inputs.self}/vars.nix" { pkgs = pkgsForVars; };
-  mkHostLib = import ../../flake/_mk-host.nix { inherit inputs lib; };
   inherit (inputs) self;
 in
 {
-  flake.nixosConfigurations.cerberus = mkHostLib.mkHost {
+  flake.nixosConfigurations.cerberus = config.flake.lib.mkHost {
     name = "cerberus";
     desktop = true;
     backupFileExtension = "hm-backup";

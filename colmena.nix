@@ -1,7 +1,7 @@
 { inputs }:
 let
   lib = inputs.nixpkgs.lib;
-  mkHostLib = import ./modules/flake/_mk-host.nix { inherit inputs lib; };
+  mkHostLib = inputs.self.lib;
   deployNodes = import ./modules/hosts/_deploy-nodes.nix { inherit inputs lib; };
 
   mkColmenaNode = name: node: {

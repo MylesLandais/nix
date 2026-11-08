@@ -1,11 +1,8 @@
-{ inputs, lib, ... }:
-let
-  mkHostLib = import ../../flake/_mk-host.nix { inherit inputs lib; };
-in
+{ config, inputs, ... }:
 {
   # WSL host: built against nixos-wsl's nixpkgs and home-manager pins, and
   # without the desktop baseline (only fish config and SSH keys).
-  flake.nixosConfigurations."7PZSZY2" = mkHostLib.mkHost {
+  flake.nixosConfigurations."7PZSZY2" = config.flake.lib.mkHost {
     name = "7PZSZY2";
     nixpkgs = inputs.nixos-wsl.inputs.nixpkgs;
     homeManagerModule = inputs.home-manager-wsl.nixosModules.home-manager;
