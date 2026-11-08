@@ -1,0 +1,848 @@
+[
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/flake/outputs.nix:31"
+    ],
+    "module": "colmena.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/agenix.nix:2"
+    ],
+    "module": "modules/_agenix.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_packages.nix:5"
+    ],
+    "module": "modules/_chatgpt-linux.nix"
+  },
+  {
+    "class": "both",
+    "imported_by": [
+      "modules/_home.nix:12",
+      "modules/hosts/cerberus/configuration.nix:11"
+    ],
+    "module": "modules/_chromium-browsers.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/chromium-policy.nix:2"
+    ],
+    "module": "modules/_chromium-policy.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/dev.nix:2"
+    ],
+    "module": "modules/_dev.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:137"
+    ],
+    "module": "modules/_features/app-wrappers.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:27"
+    ],
+    "module": "modules/_features/audio.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:142"
+    ],
+    "module": "modules/_features/bars/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/bars/default.nix:8"
+    ],
+    "module": "modules/_features/bars/hyprpanel.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/bars/default.nix:7"
+    ],
+    "module": "modules/_features/bars/noctalia.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/bars/default.nix:9"
+    ],
+    "module": "modules/_features/bars/ricelin.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/services/scbw.nix:13"
+    ],
+    "module": "modules/_features/battlenet-game.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/hosts/cerberus/_home.nix:49"
+    ],
+    "module": "modules/_features/blender-mcp.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:153"
+    ],
+    "module": "modules/_features/cargo-target-sweep.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:138"
+    ],
+    "module": "modules/_features/chromium-helium-prefs.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/services/gamehacking.nix:10"
+    ],
+    "module": "modules/_features/citra-agent.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/desktops/hyprland/hypr.nix:166"
+    ],
+    "module": "modules/_features/desktops/hyprland/config/bindings.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:139"
+    ],
+    "module": "modules/_features/desktops/hyprland/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/desktops/hyprland/default.nix:9"
+    ],
+    "module": "modules/_features/desktops/hyprland/hypr.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/desktops/hyprland/default.nix:10"
+    ],
+    "module": "modules/_features/desktops/hyprland/hyprlock.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/desktops/hyprland/default.nix:11"
+    ],
+    "module": "modules/_features/desktops/hyprland/hyprpaper.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/desktops/hyprland/default.nix:14"
+    ],
+    "module": "modules/_features/desktops/hyprland/prompt-follow-focus.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/services/desktops.nix:5"
+    ],
+    "module": "modules/_features/desktops/hyprland/system.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/desktops/hyprland/default.nix:12"
+    ],
+    "module": "modules/_features/desktops/hyprland/wlogout.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/desktops/hyprland/default.nix:13"
+    ],
+    "module": "modules/_features/desktops/hyprland/workspace-recovery.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:140"
+    ],
+    "module": "modules/_features/desktops/niri/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/desktops/niri/default.nix:10"
+    ],
+    "module": "modules/_features/desktops/niri/niri.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/services/desktops.nix:6"
+    ],
+    "module": "modules/_features/desktops/niri/system.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:141"
+    ],
+    "module": "modules/_features/desktops/xfce/default.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/services/desktops.nix:7"
+    ],
+    "module": "modules/_features/desktops/xfce/system.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:145",
+      "modules/hosts/7PZSZY2/default.nix:26"
+    ],
+    "module": "modules/_features/devtooling/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/devtooling/default.nix:8"
+    ],
+    "module": "modules/_features/devtooling/git/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/devtooling/default.nix:9"
+    ],
+    "module": "modules/_features/devtooling/gleam/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/devtooling/default.nix:10"
+    ],
+    "module": "modules/_features/devtooling/go/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/devtooling/default.nix:11"
+    ],
+    "module": "modules/_features/devtooling/kubernetes/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/devtooling/default.nix:12"
+    ],
+    "module": "modules/_features/devtooling/lua/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/devtooling/default.nix:13"
+    ],
+    "module": "modules/_features/devtooling/pi/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/devtooling/default.nix:14"
+    ],
+    "module": "modules/_features/devtooling/remmina/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/devtooling/default.nix:15"
+    ],
+    "module": "modules/_features/devtooling/rust/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/devtooling/default.nix:16"
+    ],
+    "module": "modules/_features/devtooling/tmux/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/devtooling/default.nix:17"
+    ],
+    "module": "modules/_features/devtooling/zed/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:154"
+    ],
+    "module": "modules/_features/disk-playbook.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/flake/_mk-host.nix:14"
+    ],
+    "module": "modules/_features/env-packages.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:35"
+    ],
+    "module": "modules/_features/fhs-compat.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:29"
+    ],
+    "module": "modules/_features/file-sharing.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:38"
+    ],
+    "module": "modules/_features/firefox-policy.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/flake/_mk-host.nix:10",
+      "modules/hosts/7PZSZY2/default.nix:16"
+    ],
+    "module": "modules/_features/fish-config.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:150"
+    ],
+    "module": "modules/_features/flameshot.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/services/gamehacking.nix:17"
+    ],
+    "module": "modules/_features/gamehacking/packages.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:66"
+    ],
+    "module": "modules/_features/gpu-unlock.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/gtk/default.nix:8"
+    ],
+    "module": "modules/_features/gtk/conf/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:146"
+    ],
+    "module": "modules/_features/gtk/default.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:31"
+    ],
+    "module": "modules/_features/hardware-tuning.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/hosts/cerberus/_home.nix:52"
+    ],
+    "module": "modules/_features/hermes-desktop.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/flake/_mk-host.nix:8"
+    ],
+    "module": "modules/_features/host-options.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/hosts/cerberus/_home.nix:51"
+    ],
+    "module": "modules/_features/hydra-smb.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/_features/kali/system.nix:10"
+    ],
+    "module": "modules/_features/kali/greeter.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/_features/kali/system.nix:22"
+    ],
+    "module": "modules/_features/kali/packages.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/_features/kali/system.nix:11"
+    ],
+    "module": "modules/_features/kali/skel.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/services/desktops.nix:8"
+    ],
+    "module": "modules/_features/kali/system.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/_features/kali/system.nix:9"
+    ],
+    "module": "modules/_features/kali/theme.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:148"
+    ],
+    "module": "modules/_features/mpv/default.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/flake/_mk-host.nix:9"
+    ],
+    "module": "modules/_features/nix-config.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:152"
+    ],
+    "module": "modules/_features/nix-user-gc.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/flake/_mk-host.nix:11"
+    ],
+    "module": "modules/_features/overlays.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/_features/overlays.nix:16"
+    ],
+    "module": "modules/_features/overlays/buzz-desktop.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/_features/overlays.nix:8"
+    ],
+    "module": "modules/_features/overlays/claude-code.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:89"
+    ],
+    "module": "modules/_features/overlays/cursor.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/_features/overlays.nix:22"
+    ],
+    "module": "modules/_features/overlays/deepseek-harness.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/_features/overlays.nix:18"
+    ],
+    "module": "modules/_features/overlays/kimi-code.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/_features/overlays.nix:12"
+    ],
+    "module": "modules/_features/overlays/pcsx2.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/hosts/cerberus/_home.nix:50"
+    ],
+    "module": "modules/_features/penpot-mcp.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:34"
+    ],
+    "module": "modules/_features/pokeforce.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:143"
+    ],
+    "module": "modules/_features/prompt/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/prompt/default.nix:8"
+    ],
+    "module": "modules/_features/prompt/starship/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/prompt/starship/default.nix:13"
+    ],
+    "module": "modules/_features/prompt/starship/kanagawa.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/services/scbw.nix:11"
+    ],
+    "module": "modules/_features/scbw/packages.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:36"
+    ],
+    "module": "modules/_features/security.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/shelltools/default.nix:8"
+    ],
+    "module": "modules/_features/shelltools/atuin/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/shelltools/default.nix:9"
+    ],
+    "module": "modules/_features/shelltools/bat/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:144"
+    ],
+    "module": "modules/_features/shelltools/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/shelltools/default.nix:10"
+    ],
+    "module": "modules/_features/shelltools/direnv/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/shelltools/default.nix:11"
+    ],
+    "module": "modules/_features/shelltools/eza/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/shelltools/default.nix:12"
+    ],
+    "module": "modules/_features/shelltools/fish/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/shelltools/default.nix:13"
+    ],
+    "module": "modules/_features/shelltools/fzf/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/shelltools/default.nix:16"
+    ],
+    "module": "modules/_features/shelltools/yazi/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/shelltools/default.nix:14"
+    ],
+    "module": "modules/_features/shelltools/zoxide/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/shelltools/default.nix:15"
+    ],
+    "module": "modules/_features/shelltools/zsh/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:151"
+    ],
+    "module": "modules/_features/ssh-bitwarden.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/7PZSZY2/default.nix:17",
+      "modules/hosts/94tl0m2/configuration.nix:5",
+      "modules/hosts/95qmom2/configuration.nix:5",
+      "modules/hosts/argus/configuration.nix:11",
+      "modules/hosts/cerberus/configuration.nix:20",
+      "modules/hosts/installer-iso/default.nix:19",
+      "modules/hosts/kali-vm/configuration.nix:11",
+      "modules/hosts/lacie/configuration.nix:10",
+      "modules/hosts/_oci-common.nix:25"
+    ],
+    "module": "modules/_features/ssh-keys.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:149"
+    ],
+    "module": "modules/_features/stylix/default.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:28"
+    ],
+    "module": "modules/_features/sunshine.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:30"
+    ],
+    "module": "modules/_features/syncthing.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:147"
+    ],
+    "module": "modules/_features/terminals/default.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/terminals/default.nix:9"
+    ],
+    "module": "modules/_features/terminals/ghostty.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_features/terminals/default.nix:8"
+    ],
+    "module": "modules/_features/terminals/kitty.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:37"
+    ],
+    "module": "modules/_features/users.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:33"
+    ],
+    "module": "modules/_features/waydroid-feh.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/hosts/cerberus/_home.nix:53"
+    ],
+    "module": "modules/_features/workspace-budget-home.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/cerberus/configuration.nix:32"
+    ],
+    "module": "modules/_features/workspace-budget.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/7PZSZY2/default.nix:15"
+    ],
+    "module": "modules/_features/wsl-agent.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/firefox.nix:2",
+      "modules/_home.nix:155"
+    ],
+    "module": "modules/_firefox.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/gaming.nix:2"
+    ],
+    "module": "modules/_gaming.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/gnome-keyring.nix:2"
+    ],
+    "module": "modules/_gnome-keyring.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:160"
+    ],
+    "module": "modules/_hermes.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/home-export.nix:2",
+      "modules/hosts/cerberus/default.nix:30",
+      "modules/hosts/_deploy-nodes.nix:5"
+    ],
+    "module": "modules/_home.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/nvidia.nix:2"
+    ],
+    "module": "modules/_nvidia.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_home.nix:200"
+    ],
+    "module": "modules/_packages.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/94tl0m2/default.nix:3",
+      "modules/hosts/95qmom2/default.nix:3",
+      "modules/hosts/argus/default.nix:3",
+      "modules/hosts/cerberus/default.nix:8",
+      "modules/hosts/kali-vm/default.nix:3",
+      "modules/hosts/lacie/default.nix:3",
+      "modules/hosts/stage-db/default.nix:3",
+      "modules/hosts/stage-edge/default.nix:3"
+    ],
+    "module": "modules/flake/_mk-host.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/_packages.nix:4"
+    ],
+    "module": "modules/fonts/_eurostile-bold-extended.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/94tl0m2/default.nix:4",
+      "modules/hosts/95qmom2/default.nix:4",
+      "modules/hosts/argus/default.nix:4",
+      "modules/hosts/kali-vm/default.nix:4",
+      "modules/hosts/lacie/default.nix:4"
+    ],
+    "module": "modules/hosts/_deploy-nodes.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/hosts/stage-db/configuration.nix:6",
+      "modules/hosts/stage-edge/configuration.nix:6"
+    ],
+    "module": "modules/hosts/_oci-common.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/hosts/cerberus/default.nix:31"
+    ],
+    "module": "modules/hosts/cerberus/_home.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/services/maya-worker.nix:10",
+      "modules/services/pyload.nix:10"
+    ],
+    "module": "modules/infra/_lib.nix"
+  },
+  {
+    "class": "homeManager",
+    "imported_by": [
+      "modules/hosts/_deploy-nodes.nix:4"
+    ],
+    "module": "modules/profiles/_server-home.nix"
+  },
+  {
+    "class": "nixos",
+    "imported_by": [
+      "modules/flake/migration.nix:10"
+    ],
+    "module": "scripts/migration/snapshot.nix"
+  }
+]
