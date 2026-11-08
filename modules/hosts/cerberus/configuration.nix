@@ -24,18 +24,18 @@ _: {
         inputs.self.modules.nixos.dev
         inputs.self.modules.nixos.agenixHost
         inputs.self.modules.nixos.chromiumPolicy
-        "${inputs.self}/modules/_features/audio.nix"
-        "${inputs.self}/modules/_features/sunshine.nix"
-        "${inputs.self}/modules/_features/file-sharing.nix"
-        "${inputs.self}/modules/_features/syncthing.nix"
-        "${inputs.self}/modules/_features/hardware-tuning.nix"
-        "${inputs.self}/modules/_features/workspace-budget.nix"
-        "${inputs.self}/modules/_features/waydroid-feh.nix"
-        "${inputs.self}/modules/_features/pokeforce.nix"
-        "${inputs.self}/modules/_features/fhs-compat.nix"
-        "${inputs.self}/modules/_features/security.nix"
-        "${inputs.self}/modules/_features/users.nix"
-        "${inputs.self}/modules/_features/firefox-policy.nix"
+        inputs.self.modules.nixos.audio
+        inputs.self.modules.nixos.sunshine
+        inputs.self.modules.nixos.fileSharing
+        inputs.self.modules.nixos.syncthing
+        inputs.self.modules.nixos.hardwareTuning
+        inputs.self.modules.nixos.workspaceBudget
+        inputs.self.modules.nixos.waydroidFeh
+        inputs.self.modules.nixos.pokeforce
+        inputs.self.modules.nixos.fhsCompat
+        inputs.self.modules.nixos.security
+        inputs.self.modules.nixos.users
+        inputs.self.modules.nixos.firefoxPolicy
         inputs.agenix.nixosModules.default
         inputs.self.modules.nixos.infraContract
         inputs.self.modules.nixos.infraSecrets
@@ -63,7 +63,7 @@ _: {
       # including its option docs, is identical to a build without it.
       specialisation =
         let
-          gpuUnlock = "${inputs.self}/modules/_features/gpu-unlock.nix";
+          gpuUnlock = inputs.self.modules.nixos.gpuUnlock;
         in
         {
           gpu-unlock.configuration = {
