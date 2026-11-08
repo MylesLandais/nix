@@ -111,3 +111,5 @@ Resource kinds: `module.<class>.<name>`, `registry.<class>`, `option.<path>`,
 - Hosts are named `nixos.host<Name>`. Hardware modules are `<host>Hardware`.
 - A rename is declared in the task's `registry:` (remove the old name, add the
   new one) and recorded in `registry.json` in the same commit.
+- `checks.<system>.module-registry` (`modules/flake/module-registry.nix`) fails
+  `nix flake check` when the registry and `registry.json` disagree.
