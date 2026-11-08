@@ -244,3 +244,15 @@ tasks:
     allow_frozen: true
     hosts: [all]
     human_approval: create/push remote, CI access to private inputs
+
+  # ------------------------------------------------- harness maintenance
+  # Edits to the harness change its own package. They are judged as contract
+  # changes on that output; their correctness comes from re-running selftest.sh.
+  - id: M-105
+    title: Harness comment path after the modules/flake move
+    phase: 1
+    depends_on: [M-101]
+    policy: contract_change
+    hosts: [kali-vm]
+    contract: [packages/x86_64-linux/migration]
+    touches: [scripts/migration/migration.sh]

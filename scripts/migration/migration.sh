@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# Migration harness CLI. Packaged by modules/flake-parts/migration.nix, which
+# Migration harness CLI. Packaged by modules/flake/migration.nix, which
 # sets HARNESS_FLAKE (a store copy of snapshot.nix wrapped as a flake).
 # Policies and the task contract are documented in docs/migration/README.md.
 set -euo pipefail
