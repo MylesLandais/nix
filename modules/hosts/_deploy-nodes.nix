@@ -1,7 +1,7 @@
 { inputs, ... }:
 let
   inherit (inputs) self;
-  serverHome = "${self}/modules/profiles/_server-home.nix";
+  serverHome = self.modules.homeManager.server;
   homeNix = "${self}/modules/_home.nix";
 in
 {
