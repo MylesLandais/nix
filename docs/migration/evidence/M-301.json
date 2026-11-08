@@ -1,0 +1,30 @@
+{
+  "A": {
+    "outputs": [],
+    "registry": []
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/4mc4x3kzhbli338d6k7mal5b0ay0m9qq-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/xnj8igp4171d9k1bn8v56fz9g45y7kl0-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    }
+  ],
+  "base": "81d1bfec68347120c1eecc03c1552923a1d23724",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "kali-vm": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "pure_refactor",
+  "problems": [],
+  "rev": "58f9065fde03be7334e552a037cc27218b42ce9a",
+  "task": "M-301",
+  "within_allowed": true
+}
