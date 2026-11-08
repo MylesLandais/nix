@@ -369,10 +369,23 @@ audit() { # sha hosts-spec
 
 # --- inventory --------------------------------------------------------------
 
-# Every module file wired in by path, with its import sites and a class guess
-# (homeManager if any importer is a home-manager import list, else nixos).
+# Every module file wired in by path, with its import sites and class.
+# The class is propagated through the import graph from the home-manager
+# roots: a file imported (transitively) only from HM roots is homeManager,
+# only from elsewhere is nixos, from both is "both".
+HM_ROOTS='modules/_home.nix modules/hosts/cerberus/_home.nix modules/profiles/_server-home.nix'
 inventory() { # sha
-  git -C "$REPO" grep -nE '"\$\{(inputs\.)?self\}/modules/[^"]+"|\./[A-Za-z0-9_./-]+\.nix|\.\./[A-Za-z0-9_./-]+' "$1" -- 'modules/*.nix' 'modules/**/*.nix' |
+  local edges
+  edges=$(inventory_edges "$1")
+  if [[ -n ${INVENTORY_EDGES:-} ]]; then
+    echo "$edges"
+    return
+  fi
+  jq --arg roots "$HM_ROOTS" "$INVENTORY_CLASSIFY" <<<"$edges"
+}
+
+inventory_edges() { # sha -> JSON array of {target, file, line, hmsite}
+  git -C "$REPO" grep -nE '"\$\{(inputs\.)?self\}/modules/[^"]+"|\.\.?/[A-Za-z0-9_./-]+' "$1" -- 'modules/*.nix' 'modules/**/*.nix' |
     sed -E "s/^$1://" | while IFS=: read -r file line text; do
     grep -oE '"\$\{(inputs\.)?self\}/modules/[^"]+"|\.\.?/[A-Za-z0-9_./-]+' <<<"$text" | while read -r ref; do
       local target
@@ -381,17 +394,40 @@ inventory() { # sha
       else
         target=$(realpath -m --relative-to="$REPO" "$REPO/$(dirname "$file")/$ref")
       fi
-      [[ -d $REPO/$target ]] && target="$target/default.nix"
+      if git -C "$REPO" cat-file -e "$1:$target/default.nix" 2>/dev/null; then target="$target/default.nix"; fi
       [[ $target == *.nix ]] || continue
-      printf '%s\t%s:%s\n' "$target" "$file" "$line"
+      git -C "$REPO" cat-file -e "$1:$target" 2>/dev/null || continue
+      # Sites inside homeModules = [ … ] lists (host default.nix) are HM roots.
+      local hm=0
+      # HM references on the line itself: `flake.modules.homeManager.x = import …`,
+      # let-bound home module paths (homeNix, serverHome, …).
+      if grep -qE 'homeManager|homeNix|serverHome|homeModules|sharedModules' <<<"$text"; then hm=1; fi
+      if [[ $hm == 0 ]] && git -C "$REPO" show "$1:$file" | sed -n "1,$((line - 1))p" | tac | awk '/\]/{exit} /homeModules|sharedModules|home-manager( =|\.users)/{f=1; exit} END{exit !f}'; then hm=1; fi
+      printf '%s\t%s\t%s\t%s\n' "$target" "$file" "$line" "$hm"
     done
-  done | sort -u | jq -R 'split("\t") | {target: .[0], site: .[1]}' | jq -s '
-    group_by(.target) | map({
-      module: .[0].target,
-      imported_by: map(.site),
-      class: (if any(.site | test("_home\\.nix|home\\.nix|/default\\.nix:.*homeModules|hm|home-export|_hermes|_firefox|profiles/_server-home")) then "homeManager?" else "nixos?" end)
-    })'
+  done | sort -u | jq -R 'split("\t") | {target: .[0], file: .[1], line: .[2], hmsite: (.[3] == "1")}' | jq -s .
 }
+
+# shellcheck disable=SC2016 # jq program
+INVENTORY_CLASSIFY='
+      . as $edges
+      | ($roots | split(" ")) as $roots
+      # class of each file: seed HM roots + HM sites, then propagate to a fixpoint
+      | ($edges | map(select(.hmsite) | .target) + $roots | unique) as $hmseed
+      | def step($hm): ($hm + [$edges[] | select(.file as $f | $hm | index($f)) | .target]) | unique;
+        def fix($hm): step($hm) as $n | if ($n | length) == ($hm | length) then $hm else fix($n) end;
+      fix($hmseed) as $hm
+      | ($edges | map(select((.hmsite | not) and (.file as $f | ($hm | index($f)) | not)) | .target) | unique) as $nixdirect
+      | def nstep($n): ($n + [$edges[] | select((.hmsite | not) and (.file as $f | $n | index($f))) | .target]) | unique;
+        def nfix($n): nstep($n) as $m | if ($m | length) == ($n | length) then $n else nfix($m) end;
+      nfix($nixdirect) as $nix
+      | $edges | group_by(.target) | map({
+          module: .[0].target,
+          imported_by: map("\(.file):\(.line)"),
+          class: (.[0].target as $t | if ($hm | index($t)) and ($nix | index($t)) then "both"
+                  elif ($hm | index($t)) then "homeManager" else "nixos" end)
+        })'
+
 
 # --- main -------------------------------------------------------------------
 

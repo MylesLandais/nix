@@ -267,3 +267,11 @@ tasks:
     hosts: [kali-vm]
     contract: [packages/x86_64-linux/migration]
     touches: [scripts/migration/migration.sh, docs/migration/README.md]
+  - id: M-107
+    title: "Harness: inventory follows directory imports and propagates NixOS/HM class"
+    phase: 1
+    depends_on: [M-106]
+    policy: contract_change
+    hosts: [kali-vm]
+    contract: [packages/x86_64-linux/migration]
+    touches: [scripts/migration/migration.sh]
