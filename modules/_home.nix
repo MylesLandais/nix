@@ -142,7 +142,7 @@ in
     ./_features/bars
     ./_features/prompt
     inputs.self.modules.homeManager.shelltools
-    ./_features/devtooling
+    inputs.self.modules.homeManager.devtooling
     ./_features/gtk
     ./_features/terminals
     ./_features/mpv

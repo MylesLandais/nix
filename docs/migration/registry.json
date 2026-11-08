@@ -1,11 +1,13 @@
 {
   "homeManager": [
     "base",
+    "devtooling",
     "firefox",
     "shelltools"
   ],
   "homeManagerModules": [
     "base",
+    "devtooling",
     "firefox",
     "shelltools"
   ],

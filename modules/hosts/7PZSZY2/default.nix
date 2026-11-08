@@ -23,7 +23,7 @@ in
           users.warby =
             { pkgs, ... }:
             {
-              imports = [ "${inputs.self}/modules/_features/devtooling/default.nix" ];
+              imports = [ inputs.self.modules.homeManager.devtooling ];
               home.username = lib.mkForce "warby";
               home.homeDirectory = lib.mkForce "/home/warby";
               home.stateVersion = "26.05";
