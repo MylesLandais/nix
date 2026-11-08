@@ -152,7 +152,7 @@ in
     ./_features/nix-user-gc.nix
     ./_features/cargo-target-sweep.nix
     ./_features/disk-playbook.nix
-    ./_firefox.nix
+    inputs.self.modules.homeManager.firefox
     inputs.stylix.homeModules.stylix
     inputs.noctalia.homeModules.default
     inputs.tokyonight.homeManagerModules.default
