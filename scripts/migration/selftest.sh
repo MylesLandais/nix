@@ -126,6 +126,21 @@ else
 fi
 git checkout -q "$cfg"
 
+# 7. A real content change that layer C cannot see (same package name and
+#    version, different script text) must fail the content-equivalence proof.
+git checkout -q "$C2" -- .
+envpk=$(git grep -l 'writeShellScriptBin "helium-profile-guard"' -- modules | head -1)
+sed -i 's|exec ${pkgs.python3}/bin/python3|exec ${pkgs.python3}/bin/python3 -B|' "$envpk"
+git commit -qam "selftest: change helium-profile-guard text"
+C7=$(git rev-parse HEAD)
+M verify --task SELFTEST --rev "$C7" --against "$C2" --hosts "$HOST" >"$SCRATCH/t7.txt" 2>&1 || true
+if jq -e --arg h "$HOST" '(.within_allowed | not) and .hosts[$h].drv_changed and (.hosts[$h].C | length == 0)
+    and (.hosts[$h].content_equivalence.equivalent == false)' .migration/reports/SELFTEST.json >/dev/null; then
+  ok "7 hidden content change rejected by content equivalence"
+else
+  bad "7 hidden content change not rejected: $(jq -c --arg h "$HOST" '{ok: .within_allowed, c: (.hosts[$h].C | length), eq: .hosts[$h].content_equivalence.equivalent}' .migration/reports/SELFTEST.json)"
+fi
+
 echo
 echo "selftest: $pass passed, ${#fails[@]} failed"
 [[ ${#fails[@]} -eq 0 ]]

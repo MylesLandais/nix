@@ -471,3 +471,11 @@ tasks:
     hosts: [kali-vm]
     contract: [packages/x86_64-linux/migration]
     touches: [scripts/migration/migration.sh]
+  - id: M-110
+    title: "Harness: content equivalence for drv changes with no config change; store-hash-normalized layer C"
+    phase: 2
+    depends_on: [M-109]
+    policy: contract_change
+    hosts: [kali-vm]
+    contract: [packages/x86_64-linux/migration]
+    touches: [scripts/migration/*, modules/flake/migration.nix, docs/migration/order-insensitive.txt, docs/migration/README.md]

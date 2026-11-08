@@ -18,12 +18,15 @@
           gnugrep
           gnused
           jq
+          findutils
+          gawk
           nix-diff
           yq-go
         ];
         text = ''
           export HARNESS_FLAKE=${harnessFlake}
         ''
+        + builtins.readFile ../../scripts/migration/drv-equiv.sh
         + builtins.readFile ../../scripts/migration/migration.sh;
       };
     in

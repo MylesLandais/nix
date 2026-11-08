@@ -178,7 +178,7 @@ frozen_touched() { # base sha -> changed files under frozen globs
 }
 
 nixdiff_summary() { # drvA drvB
-  nix-diff --color never --line-oriented "$1" "$2" 2>&1 | head -60 || true
+  nix-diff --color never --line-oriented "$1" "$2" 2>&1 | head -60 | cut -c1-300 | head -c 8000 || true
 }
 
 # --- verify -----------------------------------------------------------------
@@ -275,7 +275,7 @@ verify() { # base sha hosts-spec -> writes $REPORT, returns 0 if within policy
   while read -r h; do
     [[ -z $h ]] && continue
     local ha="$CACHE/$base/host-$h.json" hb="$CACHE/$sha/host-$h.json"
-    local cdiff bdiff drv_changed unexpected="[]" nd=""
+    local cdiff bdiff drv_changed unexpected="[]" nd="" equiv=""
     cdiff=$(flat_diff "$ha" "$hb" '.C')
     bdiff=$(flat_diff "$ha" "$hb" '.B')
     drv_changed=$([[ $(jq length <<<"$bdiff") -gt 0 ]] && echo true || echo false)
@@ -293,8 +293,20 @@ verify() { # base sha hosts-spec -> writes $REPORT, returns 0 if within policy
       nd=$(nixdiff_summary "$(jq -r .B.toplevel "$ha")" "$(jq -r .B.toplevel "$hb")")
       if [[ $POLICY != behavior_change ]]; then
         # A drv change whose only C trace is volatile noise is tolerated (and
-        # recorded); anything else under a non-behavior policy is a stop.
-        if [[ $real_c == 1 ]] || ! volatile "$h" "B/toplevel"; then
+        # recorded). Otherwise, with no layer-C change, the drvs may still be
+        # content-equivalent (e.g. a list merged in another order): prove it by
+        # building the root derivations (drv-equiv.sh). Anything else stops.
+        if [[ $real_c == 0 ]] && volatile "$h" "B/toplevel"; then
+          :
+        elif [[ $real_c == 0 ]]; then
+          log "$h: drv changed without layer-C change; checking content equivalence"
+          if equiv=$(drv_equiv "$(jq -r .B.toplevel "$ha")" "$(jq -r .B.toplevel "$hb")"); then
+            log "$h: content-equivalent ($(jq '.roots | length' <<<"$equiv") root derivation(s))"
+          else
+            problems+=("B: $h toplevel drv changed and is not provably content-equivalent: $(jq -c '[.roots[] | select(.equal | not) | {a: (.a | sub("/nix/store/[a-z0-9]{32}-"; "")), reason, manifest_diff}]' <<<"$equiv" | head -c 600)")
+            fail=1
+          fi
+        else
           problems+=("B: $h toplevel drv changed under $POLICY"); fail=1
         fi
       elif ! allowed "$h" "B/*" && [[ $real_c == 0 ]]; then
@@ -311,8 +323,8 @@ verify() { # base sha hosts-spec -> writes $REPORT, returns 0 if within policy
     echo "$unexpected" >"$TMPD/u.json"
     echo "$hosts_json" >"$TMPD/hosts.json"
     hosts_json=$(jq --arg h "$h" --slurpfile c "$TMPD/c.json" --slurpfile b "$TMPD/b.json" --slurpfile u "$TMPD/u.json" \
-      --arg nd "$nd" --argjson dc "$drv_changed" \
-      '. + {($h): {drv_changed: $dc, B: $b[0], C: $c[0], unexpected: $u[0], nix_diff_summary: ($nd | split("\n"))}}' "$TMPD/hosts.json")
+      --arg nd "$nd" --argjson dc "$drv_changed" --slurpfile eq <(echo "${equiv:-null}") \
+      '. + {($h): {drv_changed: $dc, B: $b[0], C: $c[0], unexpected: $u[0], content_equivalence: $eq[0], nix_diff_summary: ($nd | split("\n"))}}' "$TMPD/hosts.json")
   done <<<"$hosts"
 
   echo "$reg_diff" >"$TMPD/reg.json"

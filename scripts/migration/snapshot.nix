@@ -15,7 +15,19 @@ let
   inherit (flake.inputs.nixpkgs) lib;
 
   hash = builtins.hashString "sha256";
-  plain = s: builtins.unsafeDiscardStringContext (toString s);
+  # Layer B keeps exact store paths. Layer C is about configuration, so store
+  # hashes are normalized away there: a store path that changes only because
+  # something upstream was rebuilt is not a configuration change (layer B and
+  # the content-equivalence check cover the build side).
+  storeNorm =
+    s:
+    lib.concatStrings (
+      map (x: if builtins.isList x then "/nix/store/HASH-" else x) (
+        builtins.split "/nix/store/[0-9a-z]{32}-" s
+      )
+    );
+  exact = s: builtins.unsafeDiscardStringContext (toString s);
+  plain = s: storeNorm (exact s);
 
   try =
     v:
@@ -175,7 +187,7 @@ let
     out:
     lib.mapAttrs (
       _: perSys:
-      lib.mapAttrs (_: d: try (plain d.drvPath)) (
+      lib.mapAttrs (_: d: try (exact d.drvPath)) (
         lib.filterAttrs (n: _: !(lib.hasPrefix "host-" n)) perSys
       )
     ) (flake.${out} or { });
@@ -193,7 +205,6 @@ let
           hmOpts = sys.options.home-manager.users.type.getSubOptions [ ];
         in
         {
-          activationPackage = try (plain h.home.activationPackage.drvPath);
           packages = pkgIds h.home.packages;
           files = lib.mapAttrs (
             _: f:
@@ -215,8 +226,8 @@ let
     in
     {
       B = {
-        toplevel = try (plain cfg.system.build.toplevel.drvPath);
-        homeManager = lib.mapAttrs (_: h: try (plain h.home.activationPackage.drvPath)) hm;
+        toplevel = try (exact cfg.system.build.toplevel.drvPath);
+        homeManager = lib.mapAttrs (_: h: try (exact h.home.activationPackage.drvPath)) hm;
       };
       C = {
         units = units cfg.systemd.units;

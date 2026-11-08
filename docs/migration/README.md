@@ -33,13 +33,35 @@ that same revision. With uncommitted changes, it refuses to run against a bare
 | C, configuration | units (system and user: enable, wantedBy, text hash), activation scripts, `/etc` sources, package identities per profile, firewall, networking, users and groups, `nix.settings`, nixpkgs config, filesystems, swap, session, `programs.*`/`services.*` enable flags, `host.*`, `wsl.*`, and for each HM user: files, packages, session variables, activation, programs/services, user units, window manager settings | `.host <h>`.C |
 
 Identical drvPaths are strong evidence that the build is unchanged. They don't
-prove the configuration is unchanged, which is why layer C exists.
+prove the configuration is unchanged, which is why layer C exists. Layer C
+normalizes store hashes (`/nix/store/HASH-…`): a store path that changes only
+because something upstream was rebuilt is not a configuration change.
+
+### Content equivalence
+
+Moving a module into the registry nests it deeper in the module tree. That
+changes the order in which list definitions merge (for example the order of
+`home.packages`), and so the drvPath, without changing what gets built. When a
+host's drv changes and layer C shows no change, `verify` proves equivalence
+(`scripts/migration/drv-equiv.sh`):
+
+1. Pair the differing derivations and input sources by name, recursively.
+2. Map each pair's outputs to a shared placeholder on both sides.
+3. A pair that is identical under that map differs only through its inputs.
+   Every other pair is a root: build it, old and new, and compare the outputs
+   file for file under the same map.
+
+The proof fails if any input is unpaired, if a build would fetch more than
+`MIGRATION_MAX_FETCH_MIB` (default 2048), or if any root's outputs differ.
+`order-insensitive.txt` lists the few files whose token order carries no
+meaning; each entry has a reason. Self-test 7 checks that a hidden content
+change (same package name and version) is rejected.
 
 ## Policies
 
 | Policy | A | B | C |
 |---|---|---|---|
-| `pure_refactor` | registry changes only as declared in `registry:` | identical | no difference |
+| `pure_refactor` | registry changes only as declared in `registry:` | identical, or provably content-equivalent | no difference |
 | `contract_change` | outputs may change only where they match `contract:` globs | identical, except new outputs matching `contract:` | no difference |
 | `behavior_change` | as for `pure_refactor` | may change on hosts whose C changes explain it, or that `allowed_changes` lists as `<host>:B/*` | each changed path must match an `allowed_changes` glob `<host>:<path>` |
 | `repo_move` | Phase 6; source-provenance differences only, judged by per-file content hashes and nix-diff (added to the harness in Phase 6) | | |
