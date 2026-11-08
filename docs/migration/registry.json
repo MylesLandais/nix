@@ -135,6 +135,7 @@
     "waydroidFeh",
     "wifiProfiles",
     "workspaceBudget",
+    "wslAgent",
     "xfce"
   ],
   "nixosModules": [
@@ -217,6 +218,7 @@
     "waydroidFeh",
     "wifiProfiles",
     "workspaceBudget",
+    "wslAgent",
     "xfce"
   ]
 }
