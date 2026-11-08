@@ -437,3 +437,11 @@ tasks:
     hosts: [kali-vm]
     contract: [packages/x86_64-linux/migration]
     touches: [scripts/migration/migration.sh]
+  - id: M-108
+    title: "Harness: path-import metric counts module references only"
+    phase: 1
+    depends_on: [M-107]
+    policy: contract_change
+    hosts: [kali-vm]
+    contract: [packages/x86_64-linux/migration]
+    touches: [scripts/migration/migration.sh]

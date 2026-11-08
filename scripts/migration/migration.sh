@@ -106,7 +106,9 @@ host_list() { # sha spec
 
 # Layer A extras that come from the git tree rather than evaluation.
 path_imports() { # sha -> JSON array of "file: text"
-  git -C "$REPO" grep -nE '"\$\{(inputs\.)?self\}/modules/|(import |[[:space:]\[(])\.\./[A-Za-z0-9_./-]+' "$1" -- 'modules/*.nix' 'modules/**/*.nix' |
+  # Module references only: "${self}/modules/…" strings and ../ paths to .nix
+  # files. Data files read with readFile/importJSON are not imports.
+  git -C "$REPO" grep -nE '"\$\{(inputs\.)?self\}/modules/|(import |[[:space:]\[(])\.\./[A-Za-z0-9_./-]+\.nix' "$1" -- 'modules/*.nix' 'modules/**/*.nix' |
     sed -E "s/^$1://; s/^([^:]+):[0-9]+:[[:space:]]*/\1: /" | sort | jq -R . | jq -s .
 }
 
