@@ -113,6 +113,7 @@ path_imports() { # sha -> JSON array of "file: text"
 capture() { # sha hosts-spec noflake
   local sha=$1 h
   check_rev "$sha"
+  mkdir -p "$CACHE/$sha"
   [[ $3 == 1 ]] || capture_one "$sha" flake >/dev/null
   path_imports "$sha" >"$CACHE/$sha/path-imports.json"
   while read -r h; do capture_one "$sha" "$h" >/dev/null; done < <(host_list "$sha" "$2")

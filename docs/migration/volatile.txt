@@ -7,3 +7,8 @@
 installerIso:etc/iso-build-info/*
 installerIso:B/toplevel
 flake:packages/x86_64-linux/installer-iso
+# The same revision stamp reaches /etc/issue, so the etc activation snippet
+# (and the full activation script) of the installer changes with it.
+installerIso:etc/issue/*
+installerIso:activationScripts/etc
+installerIso:activationScripts/script

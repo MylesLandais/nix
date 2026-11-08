@@ -24,6 +24,21 @@ let
     in
     if r.success then r.value else "<eval-error>";
 
+  # Sources: a path value inside the flake source would otherwise be recorded
+  # by location (…-source/infra/x), which changes on every commit even though
+  # Nix copies it into the store by content. Record the content-addressed copy.
+  source =
+    v:
+    if builtins.isPath v then
+      plain (
+        builtins.path {
+          path = v;
+          name = baseNameOf v;
+        }
+      )
+    else
+      plain v;
+
   tryHash = v: try (if v == null then null else hash (plain v));
 
   # toJSON that tolerates functions and derivations: functions become a marker,
@@ -184,7 +199,7 @@ let
             _: f:
             try {
               inherit (f) target enable;
-              source = plain f.source;
+              source = source f.source;
               executable = f.executable or null;
             }
           ) h.home.file;
@@ -213,7 +228,7 @@ let
           _: e:
           try {
             inherit (e) enable target mode;
-            source = plain e.source;
+            source = source e.source;
           }
         ) cfg.environment.etc;
         systemPackages = pkgIds cfg.environment.systemPackages;
