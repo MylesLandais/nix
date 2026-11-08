@@ -10,6 +10,7 @@ let
   tableHosts = [
     "kali-vm"
     "lacie"
+    "argus"
   ];
 in
 {
