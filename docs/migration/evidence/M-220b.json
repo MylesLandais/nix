@@ -1,0 +1,152 @@
+{
+  "A": {
+    "outputs": [],
+    "registry": []
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/yggklcfcxx9m7bfcg3nzvz36r7yz0bbg-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/s4mi73ndk7ajyxx93lbb3jqaayqc1lx5-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    }
+  ],
+  "base": "ec7997025664fa0fb626fbbccd7cf3303a1c6646",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "7PZSZY2": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "94tl0m2": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "95qmom2": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "argus": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "cerberus": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "installerIso": {
+      "B": [
+        {
+          "after": "\"/nix/store/45nwlffw3pl1azpcwiwbh2dj9bgqx2nm-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv\"",
+          "before": "\"/nix/store/6j2kgbcxflxkwpcnr04wkcm7x16yfcbl-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv\"",
+          "path": "toplevel"
+        }
+      ],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": true,
+      "nix_diff_summary": [
+        "- /nix/store/6j2kgbcxflxkwpcnr04wkcm7x16yfcbl-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv:{out}",
+        "+ /nix/store/45nwlffw3pl1azpcwiwbh2dj9bgqx2nm-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv:{out}",
+        "• The input derivation named `activate` differs",
+        "  - /nix/store/vwzyjwzcw9l9spncnf75yqhibnwav69d-activate.drv:{out}",
+        "  + /nix/store/xw507wv5am3ln36nwl7238pvwijlr80s-activate.drv:{out}",
+        "  • The input derivation named `etc` differs",
+        "    - /nix/store/lhspw77yl72d2rhsw7nlk8srg1rb31i6-etc.drv:{out}",
+        "    + /nix/store/dr2iy3bx81h5vv6429kzl4yfnaiszr0m-etc.drv:{out}",
+        "    • The input derivation named `iso-build-info` differs",
+        "      - /nix/store/7ax50a5jmbwn69qdczfb2kb9k541nm51-iso-build-info.drv:{out}",
+        "      + /nix/store/5lxsplyxk2s1wxk5b5f3fzymb7glav92-iso-build-info.drv:{out}",
+        "      • The environments do not match:",
+        "          buildCommand=''",
+        "            {",
+        "              echo \"home-office-installer build info (shim)\"",
+        "              echo \"========================================\"",
+        "          -   echo \"flake-rev:       ec7997025664fa0fb626fbbccd7cf3303a1c6646\"",
+        "          -   echo \"flake-shortRev:  ec79970\"",
+        "          +   echo \"flake-rev:       f0ad1734fe73be248d10e1479db1f71d02f7ffeb\"",
+        "          +   echo \"flake-shortRev:  f0ad173\"",
+        "              echo \"nixpkgs-rev:     e7439b6b14ad3cc35d05608ebca9bce01a25f5f8\"",
+        "              echo \"system:          x86_64-linux\"",
+        "              echo \"edition:         minimal-shim\"",
+        "              echo",
+        "              echo \"authorized_keys fingerprints (warby == root):\"",
+        "              ssh-keygen -lf \"$keysPath\" || true",
+        "              echo",
+        "              echo \"verify from cerberus:\"",
+        "              echo \"  ssh warby@<ip> cat /etc/iso-build-info\"",
+        "            } > $out",
+        "      ''",
+        "    • The input derivation named `issue` differs",
+        "      - /nix/store/y7229f6jh6rb2yy2s549iyqhnbsgy352-issue.drv:{out}",
+        "      + /nix/store/082lgq8df86cah015cv1rhkzy67lkgy6-issue.drv:{out}",
+        "      • The environments do not match:",
+        "          __json=''",
+        "          - {\"allowSubstitutes\":false,\"buildCommand\":\"target=$out$destination\\nmkdir -p \\\"$(dirname \\\"$target\\\")\\\"\\n\\nif [ -e \\\"$textPath\\\" ]; then\\n  mv \\\"$textPath\\\" \\\"$target\\\"\\nelse\\n  printf \\\"%s\\\" \\\"$text\\\" > \\\"$target\\\"\\nfi\\n\\nif [ -n \\\"$executable\\\" ]; then\\n  chmod +x \\\"$target\\\"\\nfi\\n\\neva",
+        "      ''",
+        "    • Skipping environment comparison",
+        "  • Skipping environment comparison",
+        "• Input derivations differ but have already been compared",
+        "    etc",
+        "• Skipping environment comparison"
+      ],
+      "unexpected": []
+    },
+    "kali-vm": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "lacie": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "stage-db": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "stage-edge": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "pure_refactor",
+  "problems": [],
+  "rev": "f0ad1734fe73be248d10e1479db1f71d02f7ffeb",
+  "task": "M-220b",
+  "within_allowed": true
+}

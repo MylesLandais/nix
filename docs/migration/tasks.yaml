@@ -496,3 +496,23 @@ tasks:
     hosts: [kali-vm]
     contract: [packages/x86_64-linux/migration]
     touches: [scripts/migration/drv-equiv.sh, docs/migration/order-insensitive.txt]
+  - id: M-220b
+    title: "Monitor option descriptions; mkIf c true -> c for noctalia"
+    phase: 2
+    depends_on: [M-220]
+    policy: pure_refactor
+    hosts: [all]
+  - id: CHECKPOINT-2
+    title: Phase 2 checkpoint (against migration/phase-1)
+    phase: 2
+    depends_on: [M-201, M-202, M-203, M-204, M-205, M-206, M-207, M-208, M-209, M-210, M-211, M-212, M-213, M-214, M-215, M-216, M-217, M-218, M-220, M-220b, M-501, M-109, M-110, M-111, M-112]
+    policy: contract_change
+    hosts: [all]
+    contract: ["lib/*", packages/x86_64-linux/migration]
+    registry: {add: [nixos.agenixHost, nixos.chromiumPolicy, nixos.dev, nixos.gaming, nixos.nvidia, homeManager.base, homeManager.firefox, homeManager.shelltools, homeManager.devtooling, homeManager.terminals, homeManager.prompt, homeManager.gtk, homeManager.mpv, homeManager.stylix, homeManager.hyprland, homeManager.niri, homeManager.xfce, homeManager.bars, homeManager.appWrappers, homeManager.chromiumHeliumPrefs, homeManager.cargoTargetSweep, homeManager.diskPlaybook, homeManager.flameshot, homeManager.nixUserGc, homeManager.sshBitwarden, homeManager.hermes, homeManager.blenderMcp, homeManager.hermesDesktop, homeManager.hydraSmb, homeManager.penpotMcp, homeManager.workspaceBudget, homeManager.server, nixos.hostOptions, nixos.nixConfig, nixos.fishConfig, nixos.overlays, nixos.envPackages, nixos.chaotic, nixos.sshKeys, nixos.audio, nixos.fhsCompat, nixos.fileSharing, nixos.firefoxPolicy, nixos.gpuUnlock, nixos.hardwareTuning, nixos.pokeforce, nixos.security, nixos.sunshine, nixos.syncthing, nixos.users, nixos.waydroidFeh, nixos.workspaceBudget, nixos.hyprland, nixos.niri, nixos.xfce, nixos.kali, nixos.wslAgent]}
+    # Carried from M-214: the one-line ssh-keys import in frozen _oci-common.nix.
+    allow_frozen: true
+    # Known exceptions to "no active _features import":
+    #   modules/_features/penpot-mcp.nix  another session is retiring it (uncommitted);
+    #                                     converting it here would conflict with that work
+    #   modules/_features/grub-theme/     dead (never imported); deleted by M-502
