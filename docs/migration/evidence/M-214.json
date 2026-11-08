@@ -1,0 +1,174 @@
+{
+  "A": {
+    "outputs": [
+      {
+        "after": "[\"7PZSZY2\",\"agenixHost\",\"agenixInfra\",\"argus\",\"argusHardware\",\"authentikInfra\",\"cerberus\",\"cerberusHardware\",\"chaotic\",\"chromiumPolicy\",\"deepseekHarnessInfra\",\"desktops\",\"dev\",\"emulators\",\"envPackages\",\"fishConfig\",\"forgejo\",\"gamehacking\",\"gaming\",\"gitMirrors\",\"gnomeKeyring\",\"greeter\",\"hostOptions\",\"imaging\",\"infraContract\",\"infraIngress\",\"infraSecrets\",\"iw4x\",\"kaliVm\",\"kaliVmHardware\",\"lacie\",\"lacieHardware\",\"llmRouter\",\"mayaWorkerInfra\",\"nixConfig\",\"nvidia\",\"openbaoInfra\",\"overlays\",\"penpot\",\"pentest\",\"postgresInfra\",\"profileDemoCerberus\",\"profileInfraSpine\",\"pyloadInfra\",\"qmom2\",\"qmom2Hardware\",\"qmom2Postgres\",\"qmom2Seaweedfs\",\"scbw\",\"seaweedfsInfra\",\"sshKeys\",\"stageDb\",\"stageEdge\",\"tailscaleNode\",\"themeData\",\"tl0m2\",\"tl0m2Hardware\",\"tl0m2Postgres\",\"tl0m2Seaweedfs\",\"traefikInfra\",\"valkeyInfra\",\"warcraft3\",\"wifiProfiles\"]",
+        "before": "[\"7PZSZY2\",\"agenixHost\",\"agenixInfra\",\"argus\",\"argusHardware\",\"authentikInfra\",\"cerberus\",\"cerberusHardware\",\"chaotic\",\"chromiumPolicy\",\"deepseekHarnessInfra\",\"desktops\",\"dev\",\"emulators\",\"envPackages\",\"fishConfig\",\"forgejo\",\"gamehacking\",\"gaming\",\"gitMirrors\",\"gnomeKeyring\",\"greeter\",\"hostOptions\",\"imaging\",\"infraContract\",\"infraIngress\",\"infraSecrets\",\"iw4x\",\"kaliVm\",\"kaliVmHardware\",\"lacie\",\"lacieHardware\",\"llmRouter\",\"mayaWorkerInfra\",\"nixConfig\",\"nvidia\",\"openbaoInfra\",\"overlays\",\"penpot\",\"pentest\",\"postgresInfra\",\"profileDemoCerberus\",\"profileInfraSpine\",\"pyloadInfra\",\"qmom2\",\"qmom2Hardware\",\"qmom2Postgres\",\"qmom2Seaweedfs\",\"scbw\",\"seaweedfsInfra\",\"stageDb\",\"stageEdge\",\"tailscaleNode\",\"themeData\",\"tl0m2\",\"tl0m2Hardware\",\"tl0m2Postgres\",\"tl0m2Seaweedfs\",\"traefikInfra\",\"valkeyInfra\",\"warcraft3\",\"wifiProfiles\"]",
+        "path": "modules/nixos"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": null,
+        "path": "nixosModules/sshKeys"
+      }
+    ],
+    "registry": [
+      {
+        "after": "true",
+        "before": null,
+        "path": "nixos/sshKeys"
+      },
+      {
+        "after": "true",
+        "before": null,
+        "path": "nixosModules/sshKeys"
+      }
+    ]
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/7ihnwwnda9ipgn72vqxqn5mvymbzrpqy-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/xa56dz0dzjvr5620v6qks9282vc7ghk2-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    }
+  ],
+  "base": "27e2f7a048026e903ba8b73830732fe175dde758",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "7PZSZY2": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "94tl0m2": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "95qmom2": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "argus": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "cerberus": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "installerIso": {
+      "B": [
+        {
+          "after": "\"/nix/store/8sm7k46rl52lq0wppi09yd20p9bd6qz0-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv\"",
+          "before": "\"/nix/store/9c81v97qm32fwiwxsp422gslcssx65hx-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv\"",
+          "path": "toplevel"
+        }
+      ],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": true,
+      "nix_diff_summary": [
+        "- /nix/store/9c81v97qm32fwiwxsp422gslcssx65hx-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv:{out}",
+        "+ /nix/store/8sm7k46rl52lq0wppi09yd20p9bd6qz0-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv:{out}",
+        "• The input derivation named `activate` differs",
+        "  - /nix/store/0zxk85y6ijlqkvgwfbab39vvx26hci72-activate.drv:{out}",
+        "  + /nix/store/lriwl2gpnybflh1b3hid6czqyq7qmnya-activate.drv:{out}",
+        "  • The input derivation named `etc` differs",
+        "    - /nix/store/aw0nbhb9hq6viy5i3s2vawzwfgqcg73a-etc.drv:{out}",
+        "    + /nix/store/28vhzw28sc4cjcakyhggckz7gwcvd3bd-etc.drv:{out}",
+        "    • The input derivation named `iso-build-info` differs",
+        "      - /nix/store/y9qv2c04amyba94x5hqq8nixw3kmlbwv-iso-build-info.drv:{out}",
+        "      + /nix/store/anayfh3wbms1gx17ahprszfhz5hzfxbf-iso-build-info.drv:{out}",
+        "      • The environments do not match:",
+        "          buildCommand=''",
+        "            {",
+        "              echo \"home-office-installer build info (shim)\"",
+        "              echo \"========================================\"",
+        "          -   echo \"flake-rev:       27e2f7a048026e903ba8b73830732fe175dde758\"",
+        "          -   echo \"flake-shortRev:  27e2f7a\"",
+        "          +   echo \"flake-rev:       aa1b169c494b98a980869d0b3a5ec9f0fa9f1fef\"",
+        "          +   echo \"flake-shortRev:  aa1b169\"",
+        "              echo \"nixpkgs-rev:     e7439b6b14ad3cc35d05608ebca9bce01a25f5f8\"",
+        "              echo \"system:          x86_64-linux\"",
+        "              echo \"edition:         minimal-shim\"",
+        "              echo",
+        "              echo \"authorized_keys fingerprints (warby == root):\"",
+        "              ssh-keygen -lf \"$keysPath\" || true",
+        "              echo",
+        "              echo \"verify from cerberus:\"",
+        "              echo \"  ssh warby@<ip> cat /etc/iso-build-info\"",
+        "            } > $out",
+        "      ''",
+        "    • The input derivation named `issue` differs",
+        "      - /nix/store/spb5baqd57jib2p35in28azpm5vs9pa9-issue.drv:{out}",
+        "      + /nix/store/vcs882w51dhjka3ycr6g9ih5lyxqj17m-issue.drv:{out}",
+        "      • The environments do not match:",
+        "          __json=''",
+        "          - {\"allowSubstitutes\":false,\"buildCommand\":\"target=$out$destination\\nmkdir -p \\\"$(dirname \\\"$target\\\")\\\"\\n\\nif [ -e \\\"$textPath\\\" ]; then\\n  mv \\\"$textPath\\\" \\\"$target\\\"\\nelse\\n  printf \\\"%s\\\" \\\"$text\\\" > \\\"$target\\\"\\nfi\\n\\nif [ -n \\\"$executable\\\" ]; then\\n  chmod +x \\\"$target\\\"\\nfi\\n\\neva",
+        "      ''",
+        "    • Skipping environment comparison",
+        "  • Skipping environment comparison",
+        "• Input derivations differ but have already been compared",
+        "    etc",
+        "• Skipping environment comparison"
+      ],
+      "unexpected": []
+    },
+    "kali-vm": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "lacie": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "stage-db": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "stage-edge": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "pure_refactor",
+  "problems": [],
+  "rev": "aa1b169c494b98a980869d0b3a5ec9f0fa9f1fef",
+  "task": "M-214",
+  "within_allowed": true
+}
