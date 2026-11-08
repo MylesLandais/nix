@@ -1,0 +1,454 @@
+{
+  "A": {
+    "outputs": [
+      {
+        "after": "\"drv\"",
+        "before": null,
+        "path": "checks/x86_64-linux/module-registry"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/7PZSZY2"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/agenixHost"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/agenixInfra"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/argus"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/argusHardware"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/authentikInfra"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/cerberus"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/cerberusHardware"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/chromiumPolicy"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/deepseekHarnessInfra"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/desktops"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/dev"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/emulators"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/forgejo"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/gamehacking"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/gaming"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/gitMirrors"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/gnomeKeyring"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/greeter"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/imaging"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/infraContract"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/infraIngress"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/infraSecrets"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/iw4x"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/kaliVm"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/kaliVmHardware"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/lacie"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/lacieHardware"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/llmRouter"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/mayaWorkerInfra"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/nvidia"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/openbaoInfra"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/penpot"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/pentest"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/postgresInfra"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/profileDemoCerberus"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/profileInfraSpine"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/pyloadInfra"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/qmom2"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/qmom2Hardware"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/qmom2Postgres"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/qmom2Seaweedfs"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/scbw"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/seaweedfsInfra"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/stageDb"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/stageEdge"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/tailscaleNode"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/themeData"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/tl0m2"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/tl0m2Hardware"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/tl0m2Postgres"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/tl0m2Seaweedfs"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/traefikInfra"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/valkeyInfra"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/warcraft3"
+      },
+      {
+        "after": "[\"_class\",\"_file\",\"imports\"]",
+        "before": "\"leaf\"",
+        "path": "nixosModules/wifiProfiles"
+      }
+    ],
+    "registry": []
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/26mnialsbmv7g50jr2lawazwkgsg3ams-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/g8zdz9y6riyf6gkp3wdnsc67s0kig2w6-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    },
+    {
+      "after": "\"/nix/store/7zqbikixvl2hia4alpsw7a12x911jxr1-migration.drv\"",
+      "before": "\"/nix/store/rv4il1gr4fgg25wzf51wi77mrwh2nm7l-migration.drv\"",
+      "path": "packages/x86_64-linux/migration"
+    }
+  ],
+  "base": "793bb79ee77d1b26a54f28c77204155b502750ec",
+  "harness": "m2vbjyxdfm6j",
+  "hosts": {
+    "7PZSZY2": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "94tl0m2": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "95qmom2": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "argus": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "cerberus": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "installerIso": {
+      "B": [
+        {
+          "after": "\"/nix/store/yvdva1crwwrl4rvbhsz0ysv2rafiw082-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv\"",
+          "before": "\"/nix/store/qgs5577mz521hwv8sm2302p260ng9j6c-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv\"",
+          "path": "toplevel"
+        }
+      ],
+      "C": [
+        {
+          "after": "\"79abe05c6ba8f09cc84f680985aebe15e13188fe37e043efbcad5fd227d83167\"",
+          "before": "\"a556c343d19f13e017b92783c7de0d1a6e34aebbeda965a30eab3509c1497bc3\"",
+          "path": "activationScripts/etc"
+        },
+        {
+          "after": "\"209bb4eab7cddc68e27a06fc3abda9b21579c182ac8a0f983da6cc12beeb4a80\"",
+          "before": "\"abc314c94770cf34a9d9f83cb0ef93868a4c7d4a6c08069504fba03016e0ec3d\"",
+          "path": "activationScripts/script"
+        },
+        {
+          "after": "\"/nix/store/mnyvvcra4nzjbng03nji9jq2nlh57q1n-iso-build-info\"",
+          "before": "\"/nix/store/fvl14pw7hf3rkf8x33fkry5bihizh39x-iso-build-info\"",
+          "path": "etc/iso-build-info/source"
+        },
+        {
+          "after": "\"/nix/store/kxx1n416lbh69pabgh7b67niysqa4fr0-issue\"",
+          "before": "\"/nix/store/xvpdac8crfb40c64l4gxhl5k48cy05ma-issue\"",
+          "path": "etc/issue/source"
+        }
+      ],
+      "drv_changed": true,
+      "nix_diff_summary": [
+        "- /nix/store/qgs5577mz521hwv8sm2302p260ng9j6c-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv:{out}",
+        "+ /nix/store/yvdva1crwwrl4rvbhsz0ysv2rafiw082-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv:{out}",
+        "• The input derivation named `activate` differs",
+        "  - /nix/store/qs6raf23cwspbx5zd6q6yajlcg2cyzdx-activate.drv:{out}",
+        "  + /nix/store/kiz74kq8jh2k1c68vaj33izw5af2inbr-activate.drv:{out}",
+        "  • The input derivation named `etc` differs",
+        "    - /nix/store/ljcvfvmij47mikfz2vg12v500rkjwhkm-etc.drv:{out}",
+        "    + /nix/store/h640sf07dc1m86fcrswy9fqyqf1b8g67-etc.drv:{out}",
+        "    • The input derivation named `iso-build-info` differs",
+        "      - /nix/store/7hvis1mzw6a2yzvhm651i8pl0f4d9580-iso-build-info.drv:{out}",
+        "      + /nix/store/7pibgjm9yfv164adcr2z2iwdmfnqgkj8-iso-build-info.drv:{out}",
+        "      • The environments do not match:",
+        "          buildCommand=''",
+        "            {",
+        "              echo \"home-office-installer build info (shim)\"",
+        "              echo \"========================================\"",
+        "          -   echo \"flake-rev:       793bb79ee77d1b26a54f28c77204155b502750ec\"",
+        "          -   echo \"flake-shortRev:  793bb79\"",
+        "          +   echo \"flake-rev:       fb3617de6428b427bab2d4a216e991b934b408d3\"",
+        "          +   echo \"flake-shortRev:  fb3617d\"",
+        "              echo \"nixpkgs-rev:     e7439b6b14ad3cc35d05608ebca9bce01a25f5f8\"",
+        "              echo \"system:          x86_64-linux\"",
+        "              echo \"edition:         minimal-shim\"",
+        "              echo",
+        "              echo \"authorized_keys fingerprints (warby == root):\"",
+        "              ssh-keygen -lf \"$keysPath\" || true",
+        "              echo",
+        "              echo \"verify from cerberus:\"",
+        "              echo \"  ssh warby@<ip> cat /etc/iso-build-info\"",
+        "            } > $out",
+        "      ''",
+        "    • The input derivation named `issue` differs",
+        "      - /nix/store/9j3kis4nwlq52d9ph550v2f7b5lk0005-issue.drv:{out}",
+        "      + /nix/store/sahcqydz62b72fr2asc7b0qgynl66cg8-issue.drv:{out}",
+        "      • The environments do not match:",
+        "          __json=''",
+        "          - {\"allowSubstitutes\":false,\"buildCommand\":\"target=$out$destination\\nmkdir -p \\\"$(dirname \\\"$target\\\")\\\"\\n\\nif [ -e \\\"$textPath\\\" ]; then\\n  mv \\\"$textPath\\\" \\\"$target\\\"\\nelse\\n  printf \\\"%s\\\" \\\"$text\\\" > \\\"$target\\\"\\nfi\\n\\nif [ -n \\\"$executable\\\" ]; then\\n  chmod +x \\\"$target\\\"\\nfi\\n\\neval \\\"$checkPhase\\\"\\n\",\"buildInputs\":[],\"builder\":\"/nix/store/10dxp0qxqxxsyiljrh2kp0xqhz6arhcx-bash-5.3p15/bin/bash\",\"checkPhase\":\"\",\"cmakeFlags\":[],\"configureFlags\":[],\"depsBuildBuild\":[],\"depsBuildBuildPropagated\":[],\"depsBuildTarget\":[],\"depsBuildTargetPropagated\":[],\"depsHostHost\":[],\"depsHostHostPropagated\":[],\"depsTargetTarget\":[],\"depsTargetTargetPropagated\":[],\"destination\":\"\",\"doCheck\":false,\"doInstallCheck\":false,\"env\":{},\"executable\":false,\"mesonFlags\":[],\"name\":\"issue\",\"nativeBuildInputs\":[],\"outputChecks\":{\"out\":{}},\"outputs\":[\"out\"],\"patches\":[],\"preferLocalBuild\":true,\"propagatedBuildInputs\":[],\"propagatedNativeBuildInputs\":[],\"stdenv\":\"/nix/store/xai718x2gpf0kf73zwhhv50likh5c18l-stdenv-linux-no-cc\",\"strictDeps\":true,\"system\":\"x86_64-linux\",\"text\":\"\\n\\u001b[1;32m<<< Welcome to NixOS 26.11.20261008.e7439b6 (\\\\m) - \\\\l >>>\\u001b[0m\\n\\nHome Office NixOS installer (shim rev 793bb79).\\nRun `nix-install` to bootstrap LaCie onto an attached drive.\\nBuild provenance: `cat /etc/iso-build-info`\\nRemote access: sshd is up; warby user trusts cluster keys.\\n\\n\\n\\n\"}+ {\"allowSubstitutes\":false,\"buildCommand\":\"target=$out$destination\\nmkdir -p \\\"$(dirname \\\"$target\\\")\\\"\\n\\nif [ -e \\\"$textPath\\\" ]; then\\n  mv \\\"$textPath\\\" \\\"$target\\\"\\nelse\\n  printf \\\"%s\\\" \\\"$text\\\" > \\\"$target\\\"\\nfi\\n\\nif [ -n \\\"$executable\\\" ]; then\\n  chmod +x \\\"$target\\\"\\nfi\\n\\neval \\\"$checkPhase\\\"\\n\",\"buildInputs\":[],\"builder\":\"/nix/store/10dxp0qxqxxsyiljrh2kp0xqhz6arhcx-bash-5.3p15/bin/bash\",\"checkPhase\":\"\",\"cmakeFlags\":[],\"configureFlags\":[],\"depsBuildBuild\":[],\"depsBuildBuildPropagated\":[],\"depsBuildTarget\":[],\"depsBuildTargetPropagated\":[],\"depsHostHost\":[],\"depsHostHostPropagated\":[],\"depsTargetTarget\":[],\"depsTargetTargetPropagated\":[],\"destination\":\"\",\"doCheck\":false,\"doInstallCheck\":false,\"env\":{},\"executable\":false,\"mesonFlags\":[],\"name\":\"issue\",\"nativeBuildInputs\":[],\"outputChecks\":{\"out\":{}},\"outputs\":[\"out\"],\"patches\":[],\"preferLocalBuild\":true,\"propagatedBuildInputs\":[],\"propagatedNativeBuildInputs\":[],\"stdenv\":\"/nix/store/xai718x2gpf0kf73zwhhv50likh5c18l-stdenv-linux-no-cc\",\"strictDeps\":true,\"system\":\"x86_64-linux\",\"text\":\"\\n\\u001b[1;32m<<< Welcome to NixOS 26.11.20261008.e7439b6 (\\\\m) - \\\\l >>>\\u001b[0m\\n\\nHome Office NixOS installer (shim rev fb3617d).\\nRun `nix-install` to bootstrap LaCie onto an attached drive.\\nBuild provenance: `cat /etc/iso-build-info`\\nRemote access: sshd is up; warby user trusts cluster keys.\\n\\n\\n\\n\"}",
+        "      ''",
+        "    • Skipping environment comparison",
+        "  • Skipping environment comparison",
+        "• Input derivations differ but have already been compared",
+        "    etc",
+        "• Skipping environment comparison"
+      ],
+      "unexpected": []
+    },
+    "kali-vm": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "lacie": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "stage-db": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "stage-edge": {
+      "B": [],
+      "C": [],
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "contract_change",
+  "problems": [],
+  "rev": "fb3617de6428b427bab2d4a216e991b934b408d3",
+  "task": "CHECKPOINT-1",
+  "within_allowed": true
+}
