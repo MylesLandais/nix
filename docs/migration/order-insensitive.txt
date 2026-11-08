@@ -5,3 +5,10 @@
 # home-manager writes home.extraDependencies (GC roots kept alive by the
 # generation) as a space-separated list; its order follows module merge order.
 home-manager-generation:./extra-dependencies
+
+# The kernel command line: the order of parameters with distinct keys has no
+# effect. The kv/bootspec modes fall back to byte-exact comparison as soon as
+# any key repeats (later duplicates override earlier ones).
+nixos-system-*:./kernel-params:kv
+boot.json:.:bootspec
+nixos-system-*:./boot.json:bootspec

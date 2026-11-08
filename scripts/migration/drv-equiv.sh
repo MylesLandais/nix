@@ -75,11 +75,39 @@ _apply_subst() { # json-text subst-json -> substituted text (literal replace)
 # Manifest of a built output with substitutions applied: one line per entry
 # (type, mode, path, symlink target or content hash). Regular files are hashed
 # in bulk; only files that contain a substituted store path are rewritten first.
-# Files listed in docs/migration/order-insensitive.txt as "<drv-name>:<path>"
-# are compared as sorted whitespace-separated tokens.
-_order_insensitive() { # drv-name -> matching ./paths, one per line
+# docs/migration/order-insensitive.txt entries: "<drv-name glob>:<path>[:mode]".
+# Modes (default "tokens"):
+#   tokens    sorted whitespace-separated tokens
+#   kv        like tokens, but only when every key (text before "=") is unique;
+#             otherwise the file stays byte-exact
+#   bootspec  boot.json with .kernelParams sorted under the same kv rule
+# A path of "." means a single-file output.
+_order_insensitive() { # drv-name -> "path mode" lines
   [[ -f ${MIG:-}/order-insensitive.txt ]] || return 0
-  grep -v '^#' "$MIG/order-insensitive.txt" | awk -F: -v n="$1" '$1 == n {print $2}'
+  local glob path mode
+  grep -v -e '^#' -e '^$' "$MIG/order-insensitive.txt" | while IFS=: read -r glob path mode; do
+    # shellcheck disable=SC2053
+    [[ $1 == $glob ]] && echo "$path ${mode:-tokens}"
+  done
+}
+
+_normalize() { # file mode -> normalized content on stdout
+  case $2 in
+  tokens) tr -s ' \t\n' '\n' <"$1" | sort ;;
+  kv)
+    if tr -s ' \t\n' '\n' <"$1" | grep -v '^$' | cut -d= -f1 | sort | uniq -d | grep -q .; then
+      cat "$1"
+    else
+      tr -s ' \t\n' '\n' <"$1" | sort
+    fi
+    ;;
+  bootspec)
+    jq -S 'walk(if type == "object" and has("kernelParams")
+                  and ((.kernelParams | map(split("=")[0]) | unique | length) == (.kernelParams | length))
+                then .kernelParams |= sort else . end)' "$1"
+    ;;
+  *) cat "$1" ;;
+  esac
 }
 
 _manifest() { # store-path subst-json [drv-name]
@@ -88,7 +116,13 @@ _manifest() { # store-path subst-json [drv-name]
   jq -r '.[][0]' <<<"$subst" >"$pat"
   while read -r r; do sed_args+=(-e "s|$(jq -r '.[0]' <<<"$r")|$(jq -r '.[1]' <<<"$r")|g"); done < <(jq -c '.[]' <<<"$subst")
   if [[ ! -d $root ]]; then
-    printf 'file %s\n' "$(sed "${sed_args[@]}" "$root" | sha256sum | cut -c1-64)"
+    local mode
+    mode=$(_order_insensitive "$name" | awk '$1 == "." {print $2}' | head -1)
+    if [[ -n $mode ]]; then
+      printf 'file %s (normalized %s)\n' "$(_normalize "$root" "$mode" | sed "${sed_args[@]}" | sha256sum | cut -c1-64)" "$mode"
+    else
+      printf 'file %s\n' "$(sed "${sed_args[@]}" "$root" | sha256sum | cut -c1-64)"
+    fi
     return
   fi
   (
@@ -105,8 +139,8 @@ _manifest() { # store-path subst-json [drv-name]
     find . -type f -printf 'm %m %p\n'
     # Order-insensitive files: hash of sorted tokens, overriding the lines above.
     if [[ -n $name ]]; then
-      _order_insensitive "$name" | while read -r f; do
-        [[ -f $f ]] && printf 'f %s %s (sorted)\n' "$f" "$(sed "${sed_args[@]}" "$f" | tr -s ' \t\n' '\n' | sort | sha256sum | cut -c1-64)"
+      _order_insensitive "$name" | while read -r f mode; do
+        [[ $f != . && -f $f ]] && printf 'f %s %s (sorted)\n' "$f" "$(_normalize "$f" "$mode" | sed "${sed_args[@]}" | sha256sum | cut -c1-64)"
       done
     fi
   ) | sed "${sed_args[@]}" | sort | awk '
