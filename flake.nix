@@ -122,40 +122,12 @@
 
   outputs =
     inputs@{ flake-parts, import-tree, ... }:
-    let
-      base = flake-parts.lib.mkFlake { inherit inputs; } {
-        imports = [
-          inputs.flake-parts.flakeModules.modules
-          inputs.treefmt-nix.flakeModule
-          (import-tree ./modules)
-        ];
-        systems = [ "x86_64-linux" ];
-      };
-    in
-    base
-    // {
-      # Preserve the established public names while the repository migrates its
-      # declarations to the mergeable flake.modules interface.
-      nixosModules = base.modules.nixos;
-      homeManagerModules = base.modules.homeManager;
-      devShells = inputs.nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (
-        system:
-        let
-          pkgs = import inputs.nixpkgs { inherit system; };
-        in
-        {
-          forgejo = pkgs.mkShell {
-            packages = with pkgs; [
-              opentofu
-              docker-compose
-              openssl
-              jq
-              postgresql_16
-              skopeo
-            ];
-          };
-        }
-      );
-      colmena = import ./colmena.nix { inherit inputs; };
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        inputs.flake-parts.flakeModules.modules
+        inputs.treefmt-nix.flakeModule
+        (import-tree ./modules)
+      ];
+      systems = [ "x86_64-linux" ];
     };
 }

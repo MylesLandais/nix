@@ -1,15 +1,12 @@
 # Colmena Hive
 
-The cluster deploys via Colmena (0.4, from nixpkgs). Hive definition lives at `colmena.nix` at the repo root, grafted onto the flake outputs in `flake.nix`:
+The cluster deploys via Colmena (0.4, from nixpkgs). The hive definition lives in `colmena.nix` at the repo root and is exposed as a flake output by `modules/flake/outputs.nix`:
 
 ```nix
-(flake-parts.lib.mkFlake { ... } { ... })
-// {
-  colmena = import ./colmena.nix { inherit inputs; };
-}
+flake.colmena = import ../../colmena.nix { inherit inputs; };
 ```
 
-flake-parts doesn't whitelist a `colmena` output, hence the merge after the call. All other outputs (`nixosConfigurations`, `homeManagerModules`, `packages`, `apps`) stay inside flake-parts.
+flake-parts' `flake` option is free-form, so `colmena` sits next to the other outputs (`nixosConfigurations`, `homeManagerModules`, `packages`, `apps`).
 
 ## Why Colmena, not deploy-rs
 
