@@ -1,0 +1,68 @@
+{
+  "A": {
+    "outputs": [
+      {
+        "after": "\"leaf\"",
+        "before": null,
+        "path": "homeManagerModules/shelltools"
+      },
+      {
+        "after": "[\"base\",\"firefox\",\"shelltools\"]",
+        "before": "[\"base\",\"firefox\"]",
+        "path": "modules/homeManager"
+      }
+    ],
+    "registry": [
+      {
+        "after": "true",
+        "before": null,
+        "path": "homeManager/shelltools"
+      },
+      {
+        "after": "true",
+        "before": null,
+        "path": "homeManagerModules/shelltools"
+      }
+    ]
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/kldi65pwlcxl6r0b13gcc4szm2iavcqv-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/njas3kmvrsz1ycy0yfhyin7ky07kfldl-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    }
+  ],
+  "base": "13056c4368a2e232eba1f313504737647615faec",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "cerberus": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "kali-vm": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "lacie": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "pure_refactor",
+  "problems": [],
+  "rev": "deae8de605b7d6584ea96d6d38c4acd57c8d41c0",
+  "task": "M-205",
+  "within_allowed": true
+}
