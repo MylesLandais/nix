@@ -445,3 +445,14 @@ tasks:
     hosts: [kali-vm]
     contract: [packages/x86_64-linux/migration]
     touches: [scripts/migration/migration.sh]
+
+  # ---------------------------------------------------------------- checkpoints
+  # verify --hosts all against the previous phase tag. The contract is the union
+  # of that phase's declared output changes; B and C must otherwise be identical.
+  - id: CHECKPOINT-1
+    title: Phase 1 checkpoint (against migration/phase-0)
+    phase: 1
+    depends_on: [M-104, M-105, M-106, M-107, M-108]
+    policy: contract_change
+    hosts: [all]
+    contract: [checks/x86_64-linux/module-registry, packages/x86_64-linux/migration]
