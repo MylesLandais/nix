@@ -7,7 +7,10 @@ let
   mkHostLib = import ../flake/_mk-host.nix { inherit inputs lib; };
   deployNodes = import ./_deploy-nodes.nix { inherit inputs lib; };
   # Migrated to the table so far (M-301..M-303).
-  tableHosts = [ "kali-vm" ];
+  tableHosts = [
+    "kali-vm"
+    "lacie"
+  ];
 in
 {
   flake.nixosConfigurations = lib.genAttrs tableHosts (
