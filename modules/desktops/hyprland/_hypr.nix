@@ -26,8 +26,6 @@ let
     '';
   };
 
-  ricelinScripts = "${config.home.homeDirectory}/.config/hypr/scripts";
-
   execOnce = [
     "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_ICON_THEME"
     "nm-applet --indicator &"
@@ -36,15 +34,7 @@ let
   # noctalia's clipboard history runs its own text + image cliphist watchers;
   # a second, untyped watcher stored every copy twice.
   ++ lib.optionals (osConfig.host.bar != "noctalia") [ "wl-paste --watch cliphist store &" ]
-  ++ lib.optionals (osConfig.host.bar == "noctalia") [ "noctalia-shell" ]
-  ++ lib.optionals (osConfig.host.bar == "ricelin") [
-    "${ricelinScripts}/cliphist-watch.sh"
-    "${ricelinScripts}/pill-daemon.sh"
-    "${ricelinScripts}/topbar-daemon.sh"
-    "${ricelinScripts}/sidebar-daemon.sh"
-    "${ricelinScripts}/launcher-daemon.sh"
-    "${ricelinScripts}/lock-daemon.sh"
-  ];
+  ++ lib.optionals (osConfig.host.bar == "noctalia") [ "noctalia-shell" ];
 in
 {
   options = {
@@ -140,12 +130,7 @@ in
         -- == Gestures ==
         hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
         hl.gesture({ fingers = 3, direction = "down",       action = "close" })
-        hl.gesture({ fingers = 3, direction = "up",         action = (function() hl.exec_cmd("${
-          if osConfig.host.bar == "ricelin" then
-            "${ricelinScripts}/launcher.sh"
-          else
-            "noctalia-shell ipc call launcher toggle"
-        }") end) })
+        hl.gesture({ fingers = 3, direction = "up",         action = (function() hl.exec_cmd("noctalia-shell ipc call launcher toggle") end) })
 
         -- == Window Rules ==
         hl.window_rule({ float = true, pin = true, no_shadow = true, size = "(monitor_w*0.25) (monitor_h*0.25)", move = "(monitor_w - window_w - 20) 20", no_initial_focus = true, match = { title = "Picture-in-Picture" } })

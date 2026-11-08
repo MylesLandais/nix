@@ -24,8 +24,6 @@ _: {
         # Bar selection based on host.bar option
         bars = {
           noctalia.enable = lib.mkIf (osConfig.host.bar == "noctalia") true;
-          hyprpanel.enable = lib.mkIf (osConfig.host.bar == "hyprpanel") true;
-          ricelin.enable = lib.mkIf (osConfig.host.bar == "ricelin") true;
         };
         hyprlock.enable = lib.mkDefault true;
         hyprpaper.enable = lib.mkDefault true;

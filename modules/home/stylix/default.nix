@@ -28,8 +28,6 @@ _: {
             gtk.enable = true;
             qt.enable = true;
             hyprland.enable = true;
-            # stylix dropped its hyprpanel target upstream (gone as of the 2026-08-08
-            # bump). The bar is themed through modules/_features/bars/hyprpanel.nix.
             k9s.enable = true;
             kubecolor.enable = true;
             lazygit.enable = true;

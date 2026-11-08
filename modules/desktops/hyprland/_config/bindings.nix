@@ -73,20 +73,6 @@ in
   ${bind "${mod} + SHIFT + C" (exec "noctalia-shell ipc call controlCenter toggle")}
   ${bind "${mod} + SPACE" (exec "noctalia-shell ipc call controlCenter toggle")}
 ''
-+ lib.optionalString (bar == "ricelin") (
-  let
-    s = "$HOME/.config/hypr/scripts";
-  in
-  ''
-    ${bind "${mod} + R" (exec "${s}/launcher.sh")}
-    ${bind "${mod} + SPACE" (exec "${s}/launcher.sh")}
-    ${bind "${mod} + C" (exec "${s}/clipboard.sh")}
-    ${bind "${mod} + B" (exec "${s}/lock.sh")}
-    ${bind "${mod} + SHIFT + W" (exec "${s}/wallpaper-picker.sh")}
-    ${bindO "${mod} + SUPER_L" (exec "${s}/link.sh") { release = true; }}
-    ${bind "${mod} + S" (exec "grim -g \\\"$(slurp)\\\" - | wl-copy")}
-  ''
-)
 + (builtins.concatStringsSep "\n" (
   builtins.genList (
     i:
