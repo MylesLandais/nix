@@ -68,6 +68,7 @@ let
   mkModules =
     {
       modules,
+      homeManagerModule ? inputs.home-manager.nixosModules.home-manager,
       users,
       extraSpecialArgs ? { },
       backupFileExtension ? null,
@@ -83,7 +84,7 @@ let
     }))
     ++ modules
     ++ lib.optionals (userNames != [ ]) [
-      inputs.home-manager.nixosModules.home-manager
+      homeManagerModule
       (mkHomeManagerConfig {
         inherit
           system
@@ -111,8 +112,11 @@ in
       specialArgs ? { },
       baseline ? true,
       desktop ? false,
+      # nixpkgs and home-manager to build with; 7PZSZY2 uses nixos-wsl's pins.
+      nixpkgs ? inputs.nixpkgs,
+      homeManagerModule ? inputs.home-manager.nixosModules.home-manager,
     }:
-    inputs.nixpkgs.lib.nixosSystem {
+    nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = specialArgs // {
         inherit inputs;
@@ -120,6 +124,7 @@ in
       modules = mkModules {
         inherit
           modules
+          homeManagerModule
           users
           extraSpecialArgs
           backupFileExtension
