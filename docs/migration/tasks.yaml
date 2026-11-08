@@ -207,6 +207,7 @@ tasks:
     depends_on: [M-215]
     policy: pure_refactor
     hosts: [cerberus, lacie, kali-vm]
+    registry: {add: [nixos.hyprland, nixos.niri, nixos.xfce, nixos.kali]}
     touches: ["modules/_features/desktops/*/system.nix, modules/_features/kali/*, modules/services/{desktops,theme-data,greeter,imaging,wifi-profiles}.nix, modules/nixos/*"]
   - id: M-217
     title: "Gaming/emulation helpers: gamehacking, citra-agent, scbw packages, battlenet-game helper as private files of their consumers"
