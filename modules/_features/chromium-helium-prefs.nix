@@ -65,7 +65,7 @@ in
     '';
 
     home.activation.ensureHeliumProfile = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      ${pkgs.python3}/bin/python3 ${inputs.self}/scripts/helium-profile-guard.py \
+      ${pkgs.python3}/bin/python3 ${../../scripts/helium-profile-guard.py} \
         --data-dir "${config.xdg.configHome}/net.imput.helium" \
         --profile-directory Default --quiet || true
     '';

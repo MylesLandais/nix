@@ -8,7 +8,7 @@
 let
   heliumUpstream = inputs.helium.defaultPackage.x86_64-linux;
   heliumProfileGuard = pkgs.writeShellScriptBin "helium-profile-guard" ''
-    exec ${pkgs.python3}/bin/python3 ${inputs.self}/scripts/helium-profile-guard.py "$@"
+    exec ${pkgs.python3}/bin/python3 ${../../scripts/helium-profile-guard.py} "$@"
   '';
   # Upstream `helium` hardcodes --enable-features=VaapiVideoDecoder and ignores
   # ~/.config/helium-flags.conf. Call .helium-wrapped directly and inject HM flags.
