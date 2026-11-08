@@ -22,7 +22,7 @@ in
       inputs.self.modules.nixos.scbw
       inputs.self.modules.nixos.warcraft3
       inputs.self.modules.nixos.greeter
-      inputs.chaotic.nixosModules.default
+      inputs.self.modules.nixos.chaotic
       inputs.agenix.nixosModules.default
     ];
     users.warby = {

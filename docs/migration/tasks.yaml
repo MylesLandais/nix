@@ -180,7 +180,7 @@ tasks:
     depends_on: [M-202]
     policy: pure_refactor
     hosts: [all]
-    registry: {add: [nixos.hostOptions, nixos.nixConfig, nixos.fishConfig, nixos.overlays, nixos.envPackages]}
+    registry: {add: [nixos.hostOptions, nixos.nixConfig, nixos.fishConfig, nixos.overlays, nixos.envPackages, nixos.chaotic]}
     touches: ["modules/_features/{host-options,nix-config,fish-config,overlays,env-packages}.nix, modules/_features/overlays/*, modules/nixos/*, modules/flake/_mk-host.nix, modules/hosts/7PZSZY2/default.nix"]
   - id: M-214
     title: "nixos.sshKeys (9 importers, incl. the frozen _oci-common.nix and the installer)"

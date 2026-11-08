@@ -13,7 +13,7 @@ in
     modules = [
       inputs.self.modules.nixos."7PZSZY2"
       "${inputs.self}/modules/_features/wsl-agent.nix"
-      "${inputs.self}/modules/_features/fish-config.nix"
+      inputs.self.modules.nixos.fishConfig
       "${inputs.self}/modules/_features/ssh-keys.nix"
       inputs.home-manager-wsl.nixosModules.home-manager
       {

@@ -5,13 +5,13 @@ let
   baselineModulePaths =
     { desktop }:
     [
-      "${self}/modules/_features/host-options.nix"
-      "${self}/modules/_features/nix-config.nix"
-      "${self}/modules/_features/fish-config.nix"
-      "${self}/modules/_features/overlays.nix"
+      self.modules.nixos.hostOptions
+      self.modules.nixos.nixConfig
+      self.modules.nixos.fishConfig
+      self.modules.nixos.overlays
     ]
     ++ lib.optionals desktop [
-      "${self}/modules/_features/env-packages.nix"
+      self.modules.nixos.envPackages
     ];
 
   userHasAgenix = users: lib.any (u: (users.${u}.ageIdentity or null) != null) (lib.attrNames users);
