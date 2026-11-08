@@ -139,7 +139,7 @@ in
     inputs.self.modules.homeManager.hyprland
     inputs.self.modules.homeManager.niri
     inputs.self.modules.homeManager.xfce
-    ./_features/bars
+    inputs.self.modules.homeManager.bars
     inputs.self.modules.homeManager.prompt
     inputs.self.modules.homeManager.shelltools
     inputs.self.modules.homeManager.devtooling

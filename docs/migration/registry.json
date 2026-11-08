@@ -1,5 +1,6 @@
 {
   "homeManager": [
+    "bars",
     "base",
     "devtooling",
     "firefox",
@@ -14,6 +15,7 @@
     "xfce"
   ],
   "homeManagerModules": [
+    "bars",
     "base",
     "devtooling",
     "firefox",
