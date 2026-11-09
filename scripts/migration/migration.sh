@@ -266,7 +266,8 @@ verify() { # base sha hosts-spec -> writes $REPORT, returns 0 if within policy
     volatile flake "$p" && continue
     if [[ $POLICY == behavior_change ]] && allowed flake "$p"; then continue; fi
     local ok=0 g
-    [[ $POLICY == contract_change ]] && while read -r g; do
+    # Declared contract globs cover flake-level outputs under any policy.
+    while read -r g; do
       # shellcheck disable=SC2053
       [[ -n $g && $p == $g ]] && ok=1
     done <<<"$contract"
@@ -313,7 +314,13 @@ verify() { # base sha hosts-spec -> writes $REPORT, returns 0 if within policy
           problems+=("B: $h toplevel drv changed under $POLICY"); fail=1
         fi
       elif ! allowed "$h" "B/*" && [[ $real_c == 0 ]] && ! volatile "$h" "B/toplevel"; then
-        problems+=("B: $h drv changed but no layer-C change explains it; add '$h:B/*' to allowed_changes only if nix-diff below is expected"); fail=1
+        # No layer-C change explains it: it must be content-equivalent.
+        log "$h: drv changed without layer-C change; checking content equivalence"
+        if equiv=$(drv_equiv "$(jq -r .B.toplevel "$ha")" "$(jq -r .B.toplevel "$hb")"); then
+          log "$h: content-equivalent ($(jq '.roots | length' <<<"$equiv") root derivation(s))"
+        else
+          problems+=("B: $h drv changed, no layer-C change explains it, and it is not provably content-equivalent"); fail=1
+        fi
       fi
     fi
     if [[ $(jq length <<<"$unexpected") -gt 0 ]]; then

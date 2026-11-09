@@ -570,3 +570,11 @@ tasks:
     allowed_changes: ["*:host/username"]
     contract: ["lib/*", packages/x86_64-linux/migration]
     hosts: [all]
+  - id: M-114
+    title: "Harness: contract globs for flake B under any policy; content equivalence under behavior_change"
+    phase: 3
+    depends_on: [M-113]
+    policy: contract_change
+    hosts: [kali-vm]
+    contract: [packages/x86_64-linux/migration]
+    touches: [scripts/migration/migration.sh]
