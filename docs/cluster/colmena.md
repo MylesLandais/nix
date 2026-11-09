@@ -49,7 +49,7 @@ ssh-add ~/.ssh/id_ed25519
 
 Colmena evaluates with `lib.evalModules`, not `inputs.nixpkgs.lib.nixosSystem`. The resulting NixOS toplevel uses label `26.05pre-git` rather than the locked `26.05.20260505.<rev>` you get from `nix build .#nixosConfigurations.<name>.config.system.build.toplevel`. The closure content is otherwise identical — only the `nixos.label` string differs.
 
-To make Colmena's closure carry the same nixpkgs source that `lib.nixosSystem` ships, `modules/features/nix-config.nix` explicitly sets:
+To make Colmena's closure carry the same nixpkgs source that `lib.nixosSystem` ships, `modules/nixos/nix-config.nix` explicitly sets:
 
 ```nix
 nix.registry.nixpkgs.flake = inputs.nixpkgs;
@@ -63,8 +63,8 @@ For a second OptiPlex 7050 (media pipeline / storage), the on-ramp is:
 1. Bring up the target with NixOS installed, ssh enabled, `warby` user, our keys in `authorized_keys`, NOPASSWD sudo.
 2. On the target: `sudo nixos-generate-config` and capture `/etc/nixos/hardware-configuration.nix`.
 3. In the repo, create `modules/hosts/<tag>/` containing:
-   - `configuration.nix` — define `flake.nixosModules.<tag>` mirroring `nixosModules.qmom2`. Override hostname.
-   - `hardware-configuration.nix` — wrap the generated file as `flake.nixosModules.<tag>Hardware`.
+   - `configuration.nix` — define `flake.modules.nixos.<tag>`, or reuse `config.flake.lib.dell7050` like 95qmom2.
+   - `hardware-configuration.nix` — wrap the generated file as `flake.modules.nixos.<tag>Hardware`.
    - `default.nix` — define `flake.nixosConfigurations."<tag>"` with the module list (same shape as `95qmom2/default.nix`).
 4. Add a node block to `colmena.nix`:
 
@@ -94,7 +94,7 @@ Per-node:
 - `deployment.targetHost` and `deployment.tags`
 - Postgres: replica nodes use a different module that configures streaming replication (TODO)
 
-Shared (in `modules/features/` and pulled by every node):
+Shared (registry modules in `modules/nixos/`, pulled by every node):
 - `nix-config.nix` — registry, nixPath, GC, substituters
 - `fish-config.nix`
 - Eventually role modules like `seaweedfs.nix` can be promoted to `modules/services/` once a second node exists

@@ -6,7 +6,7 @@ Live USB used to bring up new staging-cluster nodes. Built from `modules/hosts/i
 
 - Hyprland session with the full home-manager dotfile stack (gated on `host.desktop = "hyprland"`, forced in the ISO override).
 - SDDM autologin into warby's Hyprland session.
-- `warby` and `kali (guest)` users; both get `modules/home.nix` via home-manager.
+- `warby` and `kali (guest)` users; both get the HM base (`homeManager.base`) via home-manager.
 - SSH on, password auth off, cerberus + warbpad keys pre-seeded.
 - Imaging tooling: `parted`, `gptfdisk`, `qemu_full`, `ntfs3g`, `smartmontools`, `cosmic-files`, plus `bootstrap-lacie` aliased as `nix-install`.
 - **Legacy (non-systemd) initrd** — required for GRUB loopback boot via `findiso=` (systemd initrd cannot locate an ISO file on another partition).
@@ -97,7 +97,7 @@ See [recovery-hardware-qa.md](recovery-hardware-qa.md) for OptiPlex recovery dri
    - `sudo dmidecode -s system-serial-number` (lowercase → hostname)
    - `lsblk -d -o NAME,SIZE,MODEL,SERIAL` (pick disks by serial, not letter)
    - `ip -o link`, `ip -4 addr` (NIC name + DHCP IP)
-4. From cerberus: `ssh warby@<dhcp-ip>` works on first boot — keys are already trusted. The cluster + installer hostnames bypass the Bitwarden SSH agent via the [`modules/features/ssh-bitwarden.nix`](../../modules/features/ssh-bitwarden.nix) `Host` block, so this works even with the vault locked.
+4. From cerberus: `ssh warby@<dhcp-ip>` works on first boot — keys are already trusted. The cluster + installer hostnames bypass the Bitwarden SSH agent via the [`modules/home/ssh-bitwarden.nix`](../../modules/home/ssh-bitwarden.nix) `Host` block, so this works even with the vault locked.
 5. Run `nix-install` (alias of `bootstrap-lacie`) for guided partition + install.
 6. After install, scaffold `modules/hosts/<tag>/` and add a node block to `colmena.nix`. See `docs/cluster/colmena.md`.
 

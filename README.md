@@ -1,160 +1,75 @@
-# NixOS dotfiles
-This repo contains the nix configurations for my main workstations
+# nixos-config
+
+NixOS and home-manager configuration for my workstations, laptops and the Dell
+staging cluster. It is a [flake-parts](https://flake.parts) flake in the
+*dendritic* style: every `.nix` file under `modules/` is a flake-parts module
+(loaded by [import-tree](https://github.com/vic/import-tree)), and features are
+composed through a registry of named modules rather than file paths.
+
+## Hosts
+
+| Host | What | Built by |
+|---|---|---|
+| `cerberus` | main workstation (Hyprland, NVIDIA, local LLM rig) | `modules/hosts/cerberus/` |
+| `lacie`, `kali-vm` | portable/VM desktops | deploy-node table |
+| `argus`, `94tl0m2`, `95qmom2` | Dell staging cluster (colmena) | deploy-node table |
+| `7PZSZY2` | WSL agent on a Windows laptop | `modules/hosts/7PZSZY2/` |
+| `installerIso` | recovery/installer ISO | `modules/hosts/installer-iso/` |
+| `stage-edge`, `stage-db` | OCI aarch64 hosts (moving to nebula-infra) | `modules/hosts/stage-*` |
+
+## Layout
+
+```
+flake.nix                 inputs + a bare flake-parts mkFlake
+modules/
+  flake/                  flake-level glue: outputs, flake.lib (mkHost, …),
+                          the packages overlay, formatter, checks, apps
+  nixos/                  flake.modules.nixos.<name>    — NixOS features
+  home/                   flake.modules.homeManager.<name> — home-manager features
+  desktops/<desktop>/     both halves of a desktop: default.nix (HM) + nixos.nix
+  hosts/                  one directory per host; default.nix builds the
+                          deploy-node table (_deploy-nodes.nix) with mkHost
+  services/, infra/, …    service modules (infra ones move to nebula-infra)
+pkgs/<name>/package.nix   custom packages, exposed via overlays.default and
+                          packages.<system>.<name>
+scripts/                  standalone scripts; module-private scripts live next
+                          to their module
+docs/                     runbooks; docs/migration/ holds the restructure spec
+```
+
+Conventions:
+
+- **Modules are registered, not imported by path.** A feature file declares
+  `flake.modules.<class>.<name>`, and hosts list
+  `inputs.self.modules.<class>.<name>`. Names are explicit camelCase and
+  recorded in `docs/migration/registry.json`, which
+  `checks.<system>.module-registry` enforces.
+- **Private files start with `_`.** import-tree skips them, so a feature can
+  split itself into `_part.nix` files or keep a `script.sh` beside it.
+- **Custom home-manager options live under `my.*`** (e.g. `my.zed.enable`) and
+  host facts under `host.*` (`modules/nixos/host-options.nix`).
+
+## Usage
+
+```sh
+nix flake check                                   # formatting, registry, every host evaluates
+nix build .#nixosConfigurations.cerberus.config.system.build.toplevel
+sudo nixos-rebuild switch --flake .#cerberus      # apply on cerberus
+nix run nixpkgs#colmena -- apply --on <host>      # Dell cluster
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the boot-path rules and the commit
+conventions, [docs/infra/git-history.md](docs/infra/git-history.md) for
+branches and mirrors, and
+[docs/infra/workspace-compute-budget.md](docs/infra/workspace-compute-budget.md)
+for cerberus's CPU/memory ceilings.
 
 ## OCI and team Git hosting
 
 The ARM64 OCI hosts run NixOS and use Tailscale for administration. Forgejo is
 live at [git.nebula-1.com](https://git.nebula-1.com), served from `stage-db`
-through Cloudflare Tunnel. Public signup requires administrator activation.
+through Cloudflare Tunnel.
 
 - [OCI inventory and routing](docs/infra/oci-forgejo.md)
 - [Forgejo deployment, signup, backups, and recovery](infra/forgejo/README.md)
 - [Personal Forgejo repository and GitHub mirror](docs/infra/repository-mirroring.md)
-
-## TODO:
-
-- [Workspace compute budget](docs/infra/workspace-compute-budget.md): Cerberus CPU/memory ceilings for workspace and Nix workloads; container placement still open.
-- missing package gemini-cli
-- feat:
- with api secrets and inject .env api keys
-
-## Structure
-
-Under hosts I have the hardware and basic config of each of my hosts, these are divided by their hostname.
-```
-.
-├── devtooling -> Direcotry that contains all the configs for my dev tools
-│   ├── default.nix
-│   ├── git
-│   │   └── default.nix
-│   ├── gleam
-│   │   └── default.nix
-│   ├── go
-│   │   └── default.nix
-│   ├── kubernetes
-│   │   ├── default.nix
-│   │   └── skin.yml
-│   ├── lua
-│   │   └── default.nix
-│   ├── rust
-│   │   └── default.nix
-│   └── tmux
-│       └── default.nix
-├
-├── flake.lock
-├── flake.nix
-├── gtk -> Needed gtk configs
-│   ├── conf
-│   │   └── default.nix
-│   └── default.nix
-├── home.nix
-├── hosts
-│   └── cerberus
-│       ├── configuration.nix
-│       └── hardware-configuration.nix
-├── hypr.nix -> Hyrpland configuration
-├── hyprland.nix -> Modular Hyprland configuration
-├── hyprpanel.nix -> currently not in use
-├── keymaps.nix -> nvim keymaps
-├── nixvim -> nvim configurations using nixvim
-│   ├── default.nix
-│   └── plugins
-│       ├── blink
-│       │   └── default.nix
-│       ├── clipboard-image
-│       │   └── default.nix
-│       ├── cmp
-│       │   └── default.nix
-│       ├── code_companion
-│       │   └── default.nix
-│       ├── dashboard
-│       │   └── default.nix
-│       ├── git
-│       │   └── default.nix
-│       ├── harpoon
-│       │   └── default.nix
-│       ├── hot-reload
-│       │   └── default.nix
-│       ├── images
-│       │   └── default.nix
-│       ├── lint
-│       │   └── default.nix
-│       ├── lsp
-│       │   └── default.nix
-│       ├── lualine
-│       │   └── default.nix
-│       ├── luasnip
-│       │   └── default.nix
-│       ├── markdown-preview
-│       │   └── default.nix
-│       ├── oil
-│       │   └── default.nix
-│       ├── packer
-│       │   └── default.nix
-│       ├── presence
-│       │   └── default.nix
-│       ├── telekasten
-│       │   └── default.nix
-│       ├── telescope
-│       │   └── default.nix
-│       ├── toggleterm
-│       │   └── default.nix
-│       ├── tree-sitter
-│       │   └── default.nix
-│       ├── trouble
-│       │   └── default.nix
-│       └── which-key
-│           └── default.nix
-├── prompt -> prompt for zsh
-│   ├── default.nix
-│   └── starship
-│       ├── default.nix
-│       ├── kanagawa.nix
-│       ├── oxocarbon.nix
-│       ├── oxo.toml
-│       └── tokyonight.nix
-├── README.md
-├── shelltools -> general tools I use within my terminal
-│   ├── atuin
-│   │   └── default.nix
-│   ├── bat
-│   │   └── default.nix
-│   ├── default.nix
-│   ├── direnv
-│   │   └── default.nix
-│   ├── eza
-│   │   └── default.nix
-│   ├── fzf
-│   │   └── default.nix
-│   ├── yazi
-│   │   └── default.nix
-│   ├── zoxide
-│   │   └── default.nix
-│   └── zsh
-│       └── default.nix
-├── vars.nix -> Global variables
-└── vimopts.nix -> nvim options
-```
-
-## Hyprland Configuration
-
-The Hyprland configuration is now modular and managed in `hyprland.nix`. It uses variables from `vars.nix` to configure monitors and other settings.
-
-## NVIDIA Configuration
-
-The NVIDIA driver is configured in `hosts/cerberus/configuration.nix`. It uses the open-source kernel modules and is optimized for Hyprland.
-
-## SillyTavern Service
-
-- **Port**: 8765 (changed from 8000 to avoid conflicts)
-- **Access**: http://127.0.0.1:8765/
-- **Container**: Podman with dedicated system user
-- **Documentation**: See `docs/sillytavern/` for detailed guides
-
-## Usage
-
-To apply changes: `sudo nixos-rebuild switch --flake .#cerberus`.
-
-## Source and collaboration
-
-See [nixos Git history and collaboration](docs/infra/git-history.md) for stable/dev branches, preserved history, cloning, and mirror recovery.

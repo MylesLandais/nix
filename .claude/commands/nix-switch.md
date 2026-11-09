@@ -41,7 +41,7 @@ Services: If changed a system service, service should auto-restart. If not, can 
 
 ## Rollback (if needed)
 
-If rebuild introduced a breaking change, NixOS keeps previous generations. Run: sudo nixos-rebuild switch -p 1 to roll back to previous generation. Then debug the issue and try again.
+If rebuild introduced a breaking change, NixOS keeps previous generations. Run: sudo nixos-rebuild switch --rollback to roll back to the previous generation. Then debug the issue and try again.
 
 ## If Rebuild Hangs
 

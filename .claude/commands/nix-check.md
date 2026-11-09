@@ -14,7 +14,7 @@ Run these commands in sequence:
 nix flake check --show-trace
 nix fmt -- --check .
 statix check .
-sudo nixos-rebuild dry-activate --flake .# --show-trace -L
+sudo nixos-rebuild dry-activate --flake .#cerberus --show-trace -L
 
 ## Reporting Results
 

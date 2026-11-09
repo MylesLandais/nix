@@ -55,7 +55,7 @@ config `configfile`s the editable `grub.cfg`) → extract Win11 ISO to the NTFS
 root → copy `windows-kit/autounattend.xml` → (optional) copy the NixOS ISO and
 auto-generate its loopback `findiso=` entry from the ISO's own `grub.cfg`.
 
-Needs `grub2_efi` + `ntfs3g` (added to `modules/packages.nix`; `/nix-switch` to
+Needs `grub2_efi` + `ntfs3g` (added to `modules/home/base/_packages.nix`; `/nix-switch` to
 get them on PATH — otherwise the script resolves `grub2_efi` via `nix build`).
 
 ## grub.cfg (what lands on the ESP)

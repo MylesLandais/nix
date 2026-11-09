@@ -2,7 +2,7 @@
 
 Recover a NixOS host that has drifted out of SSH reach (warby keys broken,
 user account locked, network config wedged, etc.). Every host that imports
-`modules/features/ssh-keys.nix` mirrors warby's keys to `root` with
+`modules/nixos/ssh-keys.nix` mirrors warby's keys to `root` with
 `PermitRootLogin = "prohibit-password"`, so the recovery account is always
 present in deployed configs.
 
