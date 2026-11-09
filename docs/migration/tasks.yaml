@@ -605,3 +605,11 @@ tasks:
     allowed_changes: ["*:nixpkgsConfig/overlays"]
     path_imports_allow: 1
     hosts: [all]
+  - id: M-115
+    title: "Harness: registry removals were reported as additions (null vs \"null\")"
+    phase: 5
+    depends_on: [M-114]
+    policy: contract_change
+    hosts: [kali-vm]
+    contract: [packages/x86_64-linux/migration]
+    touches: [scripts/migration/migration.sh]
