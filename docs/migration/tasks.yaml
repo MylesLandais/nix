@@ -295,10 +295,16 @@ tasks:
 
   # ---------------------------------------------------------------- Phase 4
   - id: M-401
-    title: pkgs/ + packagesFromDirectoryRecursive overlay; move derivations (one commit each)
+    title: pkgs/ + packagesFromDirectoryRecursive overlay (flake.overlays.default); move the overlay packages
     phase: 4
     depends_on: [CHECKPOINT-3]
-    policy: pure_refactor
+    policy: behavior_change
+    contract: ["overlays", "overlays/*"]
+    # Layer C records the number of nixpkgs.overlays: four package overlays
+    # become one. The drvs themselves must stay identical.
+    allowed_changes: ["*:nixpkgsConfig/overlays"]
+    # deepseek-harness keeps its prev-based call (see modules/flake/packages.nix).
+    path_imports_allow: 1
     hosts: [all]
   - id: M-402
     title: Expose perSystem.packages; curated CI build list

@@ -20,10 +20,26 @@
 # To bump: change `version`, set outputHash to lib.fakeHash, rebuild, and paste
 # the hash Nix reports. Expect the hash to also shift when nixpkgs bumps nodejs,
 # since native addons are compiled against it inside the FOD.
-_final: prev:
+{
+  bash,
+  cacert,
+  coreutils,
+  git,
+  gnumake,
+  lib,
+  makeWrapper,
+  node-gyp,
+  nodejs,
+  pkg-config,
+  python3,
+  ripgrep,
+  stdenv,
+  stdenvNoCC,
+  writeText,
+}:
 let
   version = "0.1.5-rc.3";
-  packageManifest = prev.writeText "deepseek-harness-package.json" (
+  packageManifest = writeText "deepseek-harness-package.json" (
     builtins.toJSON {
       name = "deepseek-harness-dependencies";
       private = true;
@@ -42,11 +58,11 @@ let
     }
   );
 
-  nodeModules = prev.stdenvNoCC.mkDerivation {
+  nodeModules = stdenvNoCC.mkDerivation {
     pname = "deepseek-harness-node-modules";
     inherit version;
 
-    nativeBuildInputs = with prev; [
+    nativeBuildInputs = [
       nodejs
       cacert
       # dsh depends on node-pty and node-addon-require-builtin, which are native
@@ -66,7 +82,7 @@ let
       export npm_config_cache=$TMPDIR/npm-cache
       # Point node-gyp at the nixpkgs headers so it does not try to fetch a
       # tarball from nodejs.org mid-build.
-      export npm_config_nodedir=${prev.nodejs}
+      export npm_config_nodedir=${nodejs}
 
       mkdir -p $out
       cp ${packageManifest} $out/package.json
@@ -102,55 +118,50 @@ let
     outputHash = "sha256-u7dW7vtdCMivPFVBE8izVV7IAdvlfja/k2UnSQx85sg=";
   };
 in
-{
-  deepseek-harness = prev.stdenvNoCC.mkDerivation {
-    pname = "deepseek-harness";
-    inherit version;
+stdenvNoCC.mkDerivation {
+  pname = "deepseek-harness";
+  inherit version;
 
-    nativeBuildInputs = [ prev.makeWrapper ];
-    dontUnpack = true;
+  nativeBuildInputs = [ makeWrapper ];
+  dontUnpack = true;
 
-    installPhase = ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/lib
-      cp -r ${nodeModules}/node_modules $out/lib/
+    mkdir -p $out/lib
+    cp -r ${nodeModules}/node_modules $out/lib/
 
-      # dsh resolves its plugins by walking node_modules at runtime, so the tree
-      # has to stay intact and the entrypoint has to run from inside it — a bare
-      # symlink into node_modules/.bin loses that context.
-      #
-      # --expose-internals is mandatory, not a nicety: cordis-plugin-hmr is in
-      # the default profile stack and throws "--expose-internals is required for
-      # HMR service" during boot without it, so *every* profile fails to start.
-      # This is the "expose Node internals" step both upstream flakes perform.
-      makeWrapper ${prev.nodejs}/bin/node $out/bin/dsh \
-        --add-flags "--expose-internals" \
-        --add-flags "$out/lib/node_modules/@deepseek-ai/dsh/lib/bin.js" \
-        --prefix PATH : ${
-          prev.lib.makeBinPath (
-            with prev;
-            [
-              nodejs
-              # Plugin subprocesses shell out for the bash/fs/web tools; without
-              # these on PATH the tools fail at runtime rather than at startup.
-              bash
-              coreutils
-              git
-              ripgrep
-            ]
-          )
-        }
+    # dsh resolves its plugins by walking node_modules at runtime, so the tree
+    # has to stay intact and the entrypoint has to run from inside it — a bare
+    # symlink into node_modules/.bin loses that context.
+    #
+    # --expose-internals is mandatory, not a nicety: cordis-plugin-hmr is in
+    # the default profile stack and throws "--expose-internals is required for
+    # HMR service" during boot without it, so *every* profile fails to start.
+    # This is the "expose Node internals" step both upstream flakes perform.
+    makeWrapper ${nodejs}/bin/node $out/bin/dsh \
+      --add-flags "--expose-internals" \
+      --add-flags "$out/lib/node_modules/@deepseek-ai/dsh/lib/bin.js" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          nodejs
+          # Plugin subprocesses shell out for the bash/fs/web tools; without
+          # these on PATH the tools fail at runtime rather than at startup.
+          bash
+          coreutils
+          git
+          ripgrep
+        ]
+      }
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-    meta = {
-      description = "DeepSeek Harness (dsh) — plugin-based agent harness";
-      homepage = "https://github.com/deepseek-ai/deepseek-harness";
-      license = prev.lib.licenses.bsd3;
-      mainProgram = "dsh";
-      platforms = prev.lib.platforms.linux;
-    };
+  meta = {
+    description = "DeepSeek Harness (dsh) — plugin-based agent harness";
+    homepage = "https://github.com/deepseek-ai/deepseek-harness";
+    license = lib.licenses.bsd3;
+    mainProgram = "dsh";
+    platforms = lib.platforms.linux;
   };
 }
