@@ -1,0 +1,108 @@
+{
+  "A": {
+    "outputs": [],
+    "registry": []
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/4fzi566s3ggax10vhnsa62bnj6wcv25k-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/j45xcp0151ai4lbzzhr6d2davmzymg79-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    }
+  ],
+  "base": "c0d15885e8cd004229e266209b411eb015a069b1",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "cerberus": {
+      "B": [
+        {
+          "after": "\"/nix/store/rgnx3bp2ssb7j4njgj38vx1vc36njljh-home-manager-generation.drv\"",
+          "before": "\"/nix/store/zj5v4jm69gh9nrvjd5h4h80af87xs4ca-home-manager-generation.drv\"",
+          "path": "homeManager/warby"
+        },
+        {
+          "after": "\"/nix/store/31b1bxrz80dhvdjxz2jj7c1iq6fy8vwh-nixos-system-cerberus-nix-26.11.20261008.e7439b6.drv\"",
+          "before": "\"/nix/store/3q2fx2h0305b64yi2pxfkcmzbr0ya4rj-nixos-system-cerberus-nix-26.11.20261008.e7439b6.drv\"",
+          "path": "toplevel"
+        }
+      ],
+      "C": [
+        {
+          "after": "\"/nix/store/HASH-hyprland-0.56.2/share/hypr/wall2.png\"",
+          "before": "\"/nix/store/HASH-flake-wallpaper-0.0.0/share/wallpapers/kanagawa-dragon/3895e.jpg\"",
+          "path": "host/wallpaper"
+        }
+      ],
+      "content_equivalence": null,
+      "drv_changed": true,
+      "nix_diff_summary": [
+        "- /nix/store/3q2fx2h0305b64yi2pxfkcmzbr0ya4rj-nixos-system-cerberus-nix-26.11.20261008.e7439b6.drv:{out}",
+        "+ /nix/store/31b1bxrz80dhvdjxz2jj7c1iq6fy8vwh-nixos-system-cerberus-nix-26.11.20261008.e7439b6.drv:{out}",
+        "• The input derivation named `activate` differs",
+        "  - /nix/store/9vj3ilg5gfjslfyd6kd34bar25yjlw0h-activate.drv:{out}",
+        "  + /nix/store/w17mm7b1ax0a0sbcr2hvz38dpd9g4ms5-activate.drv:{out}",
+        "  • The input derivation named `etc` differs",
+        "    - /nix/store/pg0f6ra7hykm557fia29mhgmg5g842y4-etc.drv:{out}",
+        "    + /nix/store/97yhdv84q0j1qvac63wvdwq307rh1l52-etc.drv:{out}",
+        "    • The input derivation named `system-units` differs",
+        "      - /nix/store/scik46sfgllkqbsd686pzwk08vk39x4z-system-units.drv:{out}",
+        "      + /nix/store/8njx0v11g3hqgsvjap8b1hkyvhzk4h2f-system-units.drv:{out}",
+        "      • The input derivation named `unit-home-manager-warby.service` differs",
+        "        - /nix/store/iyj8gks26ni3shm9n2wk6gqmab2nxnxn-unit-home-manager-warby.service.drv:{out}",
+        "        + /nix/store/b330grhbmi98j4iyhkrw5w47mig31623-unit-home-manager-warby.service.drv:{out}",
+        "        • The input derivation named `home-manager-generation` differs",
+        "          - /nix/store/zj5v4jm69gh9nrvjd5h4h80af87xs4ca-home-manager-generation.drv:{out}",
+        "          + /nix/store/rgnx3bp2ssb7j4njgj38vx1vc36njljh-home-manager-generation.drv:{out}",
+        "          • The input derivation named `hm-putter.json` differs",
+        "            - /nix/store/vmwajgz2l8rd4ck0sx8vzikk43ra9cl6-hm-putter.json.drv:{out}",
+        "            + /nix/store/cpbggc9ymk3ny1gs7kg4chkcbzpaax6c-hm-putter.json.drv:{out}",
+        "            • The input derivation named `home-manager-files` differs",
+        "              - /nix/store/rvzarhi2cvh2xfavcygavjc4lnfx8nl1-home-manager-files.drv:{out}",
+        "              + /nix/store/v133ccxgdxhk56csrh4161k4agg9v07n-home-manager-files.drv:{out}",
+        "              • The input derivation named `hm_hyprhyprlock.conf` differs",
+        "                - /nix/store/6nl02lb3rgzvsryi1nzr5fyr4zjqj1yp-hm_hyprhyprlock.conf.drv:{out}",
+        "                + /nix/store/clznq3zg3fr8r8vb2gj7d84497nx38wj-hm_hyprhyprlock.conf.drv:{out}",
+        "                • The set of input derivation names do not match:",
+        "                    - flake-wallpaper-0.0.0",
+        "                    + hyprland-0.56.2",
+        "                • The environments do not match:",
+        "                    __json=''",
+        "                    - {\"allowSubstitutes\":false,\"buildCommand\":\"target=$out$destination\\nmkdir -p \\\"$(dirname \\\"$target\\\")\\\"\\n\\nif [ -e \\\"$textPath\\\" ]; then\\n  mv \\\"$textPath\\\" \\\"$target\\\"\\nelse\\n  printf \\\"%s\\\" \\\"$text\\\" > \\\"$target\\\"\\nfi\\n\\nif [ -n \\\"$executable\\\" ]; then\\n  chmod +x \\\"$target\\\"\\",
+        "                ''",
+        "              • The input derivation named `hm_hyprhyprpaper.conf` differs",
+        "                - /nix/store/6p999c4niw3krav4wkvdgqgyli1g421l-hm_hyprhyprpaper.conf.drv:{out}",
+        "                + /nix/store/wbpkky1wkrnvvd4rajbn4mpi2f8djfph-hm_hyprhyprpaper.conf.drv:{out}",
+        "                • The set of input derivation names do not match:",
+        "                    - wallpapers-v1.0.0",
+        "                    + hyprland-0.56.2",
+        "                • The environments do not match:",
+        "                    __json=''",
+        "                    - {\"allowSubstitutes\":false,\"buildCommand\":\"target=$out$destination\\nmkdir -p \\\"$(dirname \\\"$target\\\")\\\"\\n\\nif [ -e \\\"$textPath\\\" ]; then\\n  mv \\\"$textPath\\\" \\\"$target\\\"\\nelse\\n  printf \\\"%s\\\" \\\"$text\\\" > \\\"$target\\\"\\nfi\\n\\nif [ -n \\\"$executable\\\" ]; then\\n  chmod +x \\\"$target\\\"\\",
+        "                ''",
+        "              • The input derivation named `hyprpaper.service` differs",
+        "                - /nix/store/qg9kb4vxmqy65wa544c6pj0zxqffi8b0-hyprpaper.service.drv:{out}",
+        "                + /nix/store/7kfrsr56sm8krwwgsa44gy1wr35lmq85-hyprpaper.service.drv:{out}",
+        "                • Input derivations differ but have already been compared",
+        "                    hm_hyprhyprpaper.conf",
+        "                • Skipping environment comparison",
+        "              • Skipping environment comparison",
+        "            • Skipping environment comparison",
+        "          • Input derivations differ but have already been compared",
+        "              home-manager-files",
+        "          • Skipping environment comparison",
+        "        • Skipping environment comparison",
+        "      • Skipping environment comparison",
+        "    • Skipping environment comparison",
+        "  • Skipping environment comparison",
+        "• The input derivation named `nixos-system-cerberus-nix-gpu-unlock-26.11.20261008.e7439b6` differs",
+        "  - /nix/store/lc4zfjqn0kg3s5nc9dbg78pw8l0ch2cd-nixos-system-cerberus-nix-gpu-unlock-26.11.20261008.e7439b6.drv:{out}"
+      ],
+      "unexpected": []
+    }
+  },
+  "policy": "behavior_change",
+  "problems": [],
+  "rev": "38d04babb3765fbae3761bb215061f3e6239f5f1",
+  "task": "M-505",
+  "within_allowed": true
+}
