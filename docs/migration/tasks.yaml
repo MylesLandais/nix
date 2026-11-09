@@ -307,12 +307,13 @@ tasks:
     path_imports_allow: 1
     hosts: [all]
   - id: M-402
-    title: Expose perSystem.packages; curated CI build list
+    title: Expose pkgs/ as perSystem.packages (evaluated by flake check; CI builds none)
     phase: 4
-    depends_on: [M-401]
+    depends_on: [M-401b]
     policy: contract_change
-    hosts: []
-    contract: ["packages/x86_64-linux/*", "checks/x86_64-linux/*"]
+    hosts: [kali-vm]
+    contract: ["packages/x86_64-linux/*"]
+    # Reads pkgs/ as a directory to list it (readDir), not an import.
   - id: M-410
     title: Extract inline scripts with the original builders (replaceStrings placeholders)
     phase: 4
