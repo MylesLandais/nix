@@ -81,10 +81,6 @@
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    thorium = {
-      url = "github:Rishabh5321/thorium_flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     noctalia = {
       # Compatibility hold: Noctalia v5 replaces the QML/Quickshell plugin API
       # with Luau. Keep the working Clipper combination until a separately
