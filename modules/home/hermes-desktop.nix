@@ -31,7 +31,7 @@ _: {
         '';
 
         home.file.".local/share/icons/hicolor/512x512/apps/hermes-desktop.png".source = "${
-          inputs.hermes-agent.packages.${pkgs.system}.desktop
+          inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.desktop
         }/share/hermes-desktop/dist/hermes.png";
 
         home.file.".local/share/applications/hermes-desktop.desktop".text = ''

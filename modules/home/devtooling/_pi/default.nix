@@ -21,7 +21,7 @@
   ...
 }:
 let
-  llm = inputs.llm.packages.${pkgs.system};
+  llm = inputs.llm.packages.${pkgs.stdenv.hostPlatform.system};
   inherit (llm) pi;
 
   secretspecFile = "${config.home.homeDirectory}/.config/pi/secretspec.toml";

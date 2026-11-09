@@ -380,11 +380,18 @@ tasks:
     policy: behavior_change
     hosts: [cerberus, lacie, kali-vm]
   - id: M-508
-    title: nix.settings merge, statix W20, pkgs.system, helium.defaultPackage, narrow `with`
+    title: pkgs.system -> pkgs.stdenv.hostPlatform.system
     phase: 5
     depends_on: [CHECKPOINT-4]
     policy: pure_refactor
     hosts: [all]
+    # Not done, with reasons:
+    #   nix.settings merge: hardware-tuning's max-jobs/cores are cerberus-specific;
+    #     moving them into the shared nix-config would change every other host.
+    #   helium.defaultPackage: helium's packages.<sys>.default is a different
+    #     derivation, so the upstream attribute stays.
+    #   statix W20 (repeated keys, 58): a style lint; folded into M-510's decision
+    #     on gating statix in CI.
   - id: M-509
     title: Kali assets via fetchFromGitLab
     phase: 5

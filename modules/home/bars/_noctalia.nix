@@ -95,7 +95,7 @@
             "${pkgs.systemd}"
             "${pkgs.gnused}"
             "${pkgs.procps}"
-            "${inputs.noctalia.packages.${pkgs.system}.default}"
+            "${inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default}"
             "${pkgs.systemd}"
           ]
           (builtins.readFile ./reload-noctalia.sh)

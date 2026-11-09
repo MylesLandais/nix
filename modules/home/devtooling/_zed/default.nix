@@ -26,7 +26,7 @@
   ...
 }:
 let
-  llm = inputs.llm.packages.${pkgs.system};
+  llm = inputs.llm.packages.${pkgs.stdenv.hostPlatform.system};
 
   secretspecFile = "${config.home.homeDirectory}/.config/zed/secretspec.toml";
 
@@ -173,7 +173,7 @@ in
 
           hermes = {
             type = "custom";
-            command = "${inputs.hermes-agent.packages.${pkgs.system}.default}/bin/hermes";
+            command = "${inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/hermes";
             args = [ "acp" ];
             env = { };
           };

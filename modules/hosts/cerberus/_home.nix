@@ -63,7 +63,7 @@ in
   };
 
   home.packages = [
-    inputs.llm.packages.${pkgs.system}.cursor-agent
+    inputs.llm.packages.${pkgs.stdenv.hostPlatform.system}.cursor-agent
     tvMode
   ];
 

@@ -32,6 +32,6 @@ _: {
         };
       };
 
-      environment.systemPackages = [ inputs.agenix.packages.${pkgs.system}.agenix ];
+      environment.systemPackages = [ inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.agenix ];
     };
 }

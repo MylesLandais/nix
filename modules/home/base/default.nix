@@ -73,7 +73,7 @@ _: {
       # reads /proc/self/exe, which follows symlinks straight back to the original store
       # path, where the helper is absent. The whole package has to move together.
       codexVersion = "0.158.0";
-      llmCodex = inputs.llm.packages.${pkgs.system}.codex;
+      llmCodex = inputs.llm.packages.${pkgs.stdenv.hostPlatform.system}.codex;
       llmCodexVersion = llmCodex.version or (lib.getVersion llmCodex.name);
 
       # Fail loudly if the `llm` input moves codex without this release tag following it,
