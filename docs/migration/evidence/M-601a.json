@@ -1,0 +1,50 @@
+{
+  "A": {
+    "outputs": [],
+    "registry": []
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/dp3dqjxj8h6fa7zbjpqxjx0frk26rq97-boot-windows-golden.drv\"",
+      "before": "\"/nix/store/rlw0hx8w9wwkwqcvkq10dfa88slqsnn6-boot-windows-golden.drv\"",
+      "path": "packages/x86_64-linux/boot-windows-golden"
+    },
+    {
+      "after": "\"/nix/store/scf6r7rg8y4mmk7hjp0ccl36cz2gv16x-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/9i6xrzlkmi4w8gx87d7vp722wirqhl0k-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    },
+    {
+      "after": "\"/nix/store/g3qv3pgn05yf2cwc9lsd37glwwh23gmn-rustdesk-windows-qemu.drv\"",
+      "before": "\"/nix/store/lngps60d398sjamirl5z5g9fnv3wn8ak-rustdesk-windows-qemu.drv\"",
+      "path": "packages/x86_64-linux/rustdesk-windows-qemu"
+    },
+    {
+      "after": "\"/nix/store/lk046g46khyqfycmc9raifqqv4bzl65v-seal-windows-golden.drv\"",
+      "before": "\"/nix/store/rl50djqpj4c4i67cxjmyxpp39b6dqaii-seal-windows-golden.drv\"",
+      "path": "packages/x86_64-linux/seal-windows-golden"
+    },
+    {
+      "after": "\"/nix/store/skw4bc3psldy85idccg9qq3kg4qaxvxb-test-windows-qemu.drv\"",
+      "before": "\"/nix/store/pnsiikcx1m9gbjpp070f5w81jhnxmwbr-test-windows-qemu.drv\"",
+      "path": "packages/x86_64-linux/test-windows-qemu"
+    }
+  ],
+  "base": "5c82a434fa85843927d0bcc76c836b56426b058b",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "kali-vm": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "behavior_change",
+  "problems": [],
+  "rev": "23ba463ef9a2fc9bf5a80b33292c4172d85d4316",
+  "task": "M-601a",
+  "within_allowed": true
+}
