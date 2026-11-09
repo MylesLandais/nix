@@ -416,12 +416,6 @@ tasks:
     depends_on: [M-511]
     policy: pure_refactor
     hosts: []
-  - id: M-513
-    title: Delete what remains of modules/_features/ and forbid it
-    phase: 5
-    depends_on: [M-501, M-502, M-511]
-    policy: pure_refactor
-    hosts: [all]
 
   # ---------------------------------------------------------------- Phase 6
   - id: M-601
@@ -634,3 +628,12 @@ tasks:
     hosts: [cerberus, lacie, kali-vm]
     # Comment text only; the files' content otherwise unchanged.
     allowed_changes: ["*:B/*", "*:homeManager/*/files/*"]
+  - id: M-513
+    title: Retire penpot on cerberus (user-approved); delete penpot-mcp.nix, the last file in modules/_features
+    phase: 5
+    depends_on: [M-512]
+    policy: behavior_change
+    hosts: [cerberus, lacie, kali-vm]
+    # penpot-desktop leaves the shared HM package list (all desktops); penpot-mcp
+    # (bridge, register script, zed context server) leaves cerberus.
+    allowed_changes: ["*:B/*", "*:homeManager/*/packages", "*:homeManager/*/files/*", "*:etc/profiles/*"]

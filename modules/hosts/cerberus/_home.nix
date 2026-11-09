@@ -46,7 +46,6 @@ in
 {
   imports = [
     inputs.self.modules.homeManager.blenderMcp
-    ../../_features/penpot-mcp.nix
     inputs.self.modules.homeManager.hydraSmb
     inputs.self.modules.homeManager.hermesDesktop
     inputs.self.modules.homeManager.workspaceBudget
