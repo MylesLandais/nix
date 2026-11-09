@@ -638,3 +638,10 @@ tasks:
     # penpot-desktop leaves the shared HM package list (all desktops); penpot-mcp
     # (bridge, register script, zed context server) leaves cerberus.
     allowed_changes: ["*:B/*", "*:homeManager/*/packages", "*:homeManager/*/files/*", "*:etc/profiles/*"]
+  - id: M-513b
+    title: Commit the retirement notes in docs/infra/README.md (penpot and other cerberus services)
+    phase: 5
+    depends_on: [M-513]
+    policy: pure_refactor
+    hosts: [kali-vm]
+    allow_frozen: true

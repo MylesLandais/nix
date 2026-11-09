@@ -137,6 +137,124 @@ dropped its own `seaweedfs` service block and volume),
 4. `services.infra.mayaWorker.workspacePath` points at a directory that exists —
    its default currently does not (see `modules/services/maya-worker.nix`).
 
+## Cerberus service retirements
+
+### One local development stack
+
+The target is one always-on ComfyUI server, one Booru web deployment, one
+crawler API, and one shared PostgreSQL cluster on Cerberus. A single cluster
+can host separate application databases and roles. The two-tier database
+layout above describes the existing compatibility split during migration.
+Keep additional experiments behind an explicit Compose profile with restart
+disabled. Record each always-on service's owner, Compose source, and readiness
+check in the deployment runbook.
+
+- **ComfyUI.** `comfyui-api-dev` owns Maya's native port 8188 and wrapper
+  port 3030. The idle `nebula-comfyui-h3-still` sidecar on 8199 is stopped
+  with restart disabled. Its node set and state differ from the primary.
+  TODO: Inventory H3 workflows that still matter, move their required nodes
+  and model references into the primary worker, and validate one representative
+  workflow before retiring the sidecar's stored state.
+- **Booru and crawler.** `dev.booru-internal` and `dev.crawler-api` are the
+  sole running web services for their respective stacks. The Booru thumbnail
+  worker is paused because it was spending attempts on SeaweedFS connection
+  timeouts. Its Compose service requires the `thumbnails` profile.
+  TODO: Verify authenticated S3 access from the `dev` bridge, recover stale
+  thumbnail claims through the worker's lease path, and prove a canary job
+  produces a readable thumbnail before draining the preserved backlog.
+- **Manus Langfuse.** The web container had been stopped for three months.
+  The worker and its dedicated Postgres, ClickHouse, MinIO, and Valkey are
+  stopped with restart disabled. Their Docker volumes are retained.
+  TODO: Identify a trace producer and data owner before restoring the stack.
+  Recover a supported Compose definition and test one trace from ingestion
+  to UI. If no owner needs the history, agree on retention before deleting
+  the volumes.
+
+### PostgreSQL consolidation
+
+Use the cluster behind the `warbee-dev-db` alias as the consolidation
+candidate. Its current PG19 build serves Booru. `dev.postgres`
+still serves the crawler and music worker on PG16, and
+`endless-dev-postgres` serves the gateway and browser-history job on PG18.
+The two databases called `maya` hold distinct data.
+
+On 2026-11-08 a PG18 `gateway` snapshot restored into an isolated copy of
+the current PG19 image. The restore had all 489 user tables, all three
+extensions, and matching music observation counts. The live source had one
+more RAG chunk when compared after the restore. The restored
+`gateway_runtime` role had database connect and public schema usage grants.
+The rehearsal used role definitions without passwords and left the live
+databases on their original endpoints.
+
+1. Move the PG18 gateway database and the named databases still in use into
+   the shared cluster. Reconcile the destination role grants and credential
+   references, then quiesce the gateway and history job for the final
+   snapshot. Verify both clients on the new endpoint before stopping PG18.
+   Keep the original data volume through the rollback window.
+2. The current PG19 image lacks Apache AGE. Inventory the live PG16 Cypher
+   callers and graph data, port them to the canonical graph model or supply
+   a compatible AGE build, then verify graph and relational queries on an
+   isolated restore. Restore the PG16 dataset under a distinct database name
+   until its overlap with the existing PG19 `maya` has been reconciled.
+3. After client cutover, remove the old database services from the default
+   startup paths. Verify all clients reconnect to one cluster after a clean
+   restart and that the retired database containers stay stopped.
+
+### Penpot on Cerberus
+
+The local Penpot deployment was removed on 2026-11-08. Its two databases,
+Docker assets, and local Compose configuration were archived under
+`~/.local/state/nebula/retired/penpot-2026-11-08-DflspI` with checksums.
+Both dumps restored in an isolated PostgreSQL instance. The local design
+database restored with one file, two projects, and two storage records.
+The Compose archive includes the old environment file. Keep the archive
+private.
+
+### Standalone Qwen inference container
+
+`llm-qwen38-llamacpp` is retired as an ad hoc deployment. It served
+`unsloth/Qwen3.8-27B-GGUF` on port 5808 while the inherited Docker probe
+checked port 8080.
+Docker removed the temporary container when it stopped. The model cache was
+a host bind mount and was kept. The old listener on port 5808 is retired.
+
+- TODO: Register this model through the managed inference router if a caller
+  needs it again. Pin the server image and model revision, declare the GPU
+  budget and network exposure, and give callers one configured endpoint.
+- TODO: Probe the declared listener from the container and from its intended
+  caller. Require readiness only once the model is loaded, then verify one
+  representative completion and that startup failures are visible.
+
+### Ambient document indexer
+
+`nebula-document-indexer.service` is disabled on Cerberus. The previous unit
+pointed into the `workspace-recipe-retrieval` checkout, where the wrapper
+could not find a built release binary. Keep the private worker environment,
+watch roots, index rows, and objects for recovery.
+
+- TODO: Package the release worker and pinned Poppler tools with a stable
+  executable path. Check the private environment, watched directories, and
+  PostgreSQL and S3 access before enabling the unit. Expose bounded retries
+  and a last successful scan timestamp.
+- TODO: Index a fixture under the configured principal and verify retrieval.
+  Restart the worker and confirm the same content resolves to the same source
+  without duplicate rows or objects. Enable ambient indexing only after the
+  canary passes. The existing document upload path is independent.
+
+### Speech Dispatcher output modules
+
+Cerberus uses a per-user allowlist for the working eSpeak NG, eSpeak NG MBROLA,
+Flite, and Pico backends. Voxin, Baratinoo, Cicero, Kali, Festival, and Open
+JTalk are retired from automatic discovery after their startup helpers became
+zombies. Firefox and Vesktop use the socket-activated service.
+
+- TODO: Move the allowlist into the declarative desktop configuration and
+  verify that session startup still leaves zero zombie children. Smoke-test
+  voice enumeration and speech output in the browser and a desktop client.
+- TODO: Restore an individual backend only when a client needs it and its
+  runtime, voice assets, and licensing are confirmed. Verify module startup,
+  speech playback, and child cleanup after a daemon restart.
+
 ## Before rebuild
 
 ```bash
