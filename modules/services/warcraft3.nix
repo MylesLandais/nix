@@ -387,8 +387,6 @@ _: {
           }
         ];
 
-        nixpkgs.config.allowUnfree = true;
-
         host.warcraft3.hyprlandExtraConfig = ''
           hl.window_rule({ workspace = "special:battlenet silent", match = { class = "^(steam_app_${hiddenGameId})$", title = "^(Battle\\.net)" } })
         '';

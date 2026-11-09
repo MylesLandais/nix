@@ -9,8 +9,6 @@ _: {
     {
       imports = [ inputs.self.modules.nixos.sshKeys ];
 
-      nixpkgs.config.allowUnfree = true;
-
       host = {
         hostName = "lacie";
         isDesktop = false;

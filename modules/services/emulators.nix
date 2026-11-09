@@ -10,7 +10,6 @@ _: {
       options.host.emulators.enable = lib.mkEnableOption "console / handheld emulators";
 
       config = lib.mkIf config.host.emulators.enable {
-        nixpkgs.config.allowUnfree = true;
 
         environment.systemPackages = with pkgs; [
           (retroarch.withCores (

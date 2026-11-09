@@ -48,8 +48,6 @@ _: {
           }
         ];
 
-        nixpkgs.config.allowUnfree = true;
-
         environment.systemPackages =
           packageGroups.runtime
           ++ [

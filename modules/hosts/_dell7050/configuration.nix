@@ -8,8 +8,6 @@
 {
   imports = [ inputs.self.modules.nixos.sshKeys ];
 
-  nixpkgs.config.allowUnfree = true;
-
   networking.hostName = hostName;
 
   boot = {
