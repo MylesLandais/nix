@@ -536,3 +536,9 @@ tasks:
     depends_on: [M-303]
     policy: pure_refactor
     hosts: [kali-vm, lacie, argus, 94tl0m2, 95qmom2]
+  - id: M-306a
+    title: Drop redundant allowUnfree lines
+    phase: 3
+    depends_on: [M-305]
+    policy: pure_refactor
+    hosts: [all]
