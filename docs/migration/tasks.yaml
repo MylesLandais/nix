@@ -553,3 +553,11 @@ tasks:
     # Host files keep their literal paths (they describe that machine's disk
     # layout); sudo command paths in nixos.security belong to the separate
     # security effort.
+  - id: M-113
+    title: "Harness: volatile toplevels are exempt under behavior_change too"
+    phase: 3
+    depends_on: [M-112]
+    policy: contract_change
+    hosts: [kali-vm]
+    contract: [packages/x86_64-linux/migration]
+    touches: [scripts/migration/migration.sh]

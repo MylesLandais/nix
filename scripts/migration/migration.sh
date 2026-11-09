@@ -312,7 +312,7 @@ verify() { # base sha hosts-spec -> writes $REPORT, returns 0 if within policy
         else
           problems+=("B: $h toplevel drv changed under $POLICY"); fail=1
         fi
-      elif ! allowed "$h" "B/*" && [[ $real_c == 0 ]]; then
+      elif ! allowed "$h" "B/*" && [[ $real_c == 0 ]] && ! volatile "$h" "B/toplevel"; then
         problems+=("B: $h drv changed but no layer-C change explains it; add '$h:B/*' to allowed_changes only if nix-diff below is expected"); fail=1
       fi
     fi
