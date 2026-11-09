@@ -112,7 +112,8 @@ _: {
         warcraft3.enable = true;
         remoteGaming.enable = true;
         syncthing.enable = true;
-        wallpaper = "${inputs.wallpapers.packages.x86_64-linux.default}/share/wallpapers/kanagawa-dragon/3895e.jpg";
+        # Hyprland's bundled wall2.png (the girl on the train).
+        wallpaper = "${pkgs.hyprland}/share/hypr/wall2.png";
         mainMonitor = {
           name = "desc:Dell Inc. Dell S2716DG #ASPYT+r5vCzd";
           width = "2560";

@@ -361,12 +361,13 @@ tasks:
     hosts: [all]
     allowed_changes: ["*:nixSettings/*", "*:etc/nix/nix.conf/*", "*:B/*"]
   - id: M-505
-    title: Choose the wallpaper (user decision)
+    title: "Wallpaper: Hyprland's wall2.png (user's choice: the girl on the train)"
     phase: 5
     depends_on: [M-307]
     policy: behavior_change
     hosts: [cerberus]
-    human_approval: wallpaper choice
+    human_approval: wallpaper choice (given 2026-11-08)
+    allowed_changes: ["cerberus:host/wallpaper", "cerberus:homeManager/warby/files/*", "cerberus:B/*"]
   - id: M-506
     title: Trim noctalia settings to non-defaults (effective settings unchanged)
     phase: 5

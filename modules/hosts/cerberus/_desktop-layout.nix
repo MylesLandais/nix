@@ -1,32 +1,6 @@
-# Cerberus display layout (monitor outputs and modes) and the hyprpaper
-# wallpaper, read by hosts/cerberus/_home.nix.
+# Cerberus display layout (monitor outputs and modes), read by
+# hosts/cerberus/_home.nix. The wallpaper is host.wallpaper (configuration.nix).
 {
-  pkgs,
-  ...
-}:
-let
-  wp = pkgs.stdenv.mkDerivation rec {
-    pname = "wallpapers";
-    version = "v1.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nixos-artwork";
-      rev = "9d2cdedd73d64a068214482902adea3d02783ba8";
-      hash = "sha256-//4BiRF1W5W2rEbw6MupiyDOjvcveqGtYjJ1mZfck9U=";
-    };
-    buildInputs = [ pkgs.imagemagick ];
-    installPhase = ''
-      mkdir -p $out/share/wallpapers
-      cp -r ${src}/wallpapers/* $out/share/wallpapers
-    '';
-    buildPhase = ''
-      echo ""
-    '';
-  };
-in
-{
-  wallpaper = "${wp}/share/wallpapers/nix-wallpaper-nineish-catppuccin-mocha.png";
-
   mainMonitor = {
     name = "desc:Dell Inc. Dell S2716DG #ASPYT+r5vCzd";
     width = 2560;

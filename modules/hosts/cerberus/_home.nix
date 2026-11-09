@@ -2,11 +2,13 @@
   pkgs,
   lib,
   config,
+  osConfig,
   inputs,
   ...
 }:
 let
-  m = import ./_desktop-layout.nix { inherit pkgs; };
+  m = import ./_desktop-layout.nix;
+  inherit (osConfig.host) wallpaper;
   workspaceMappings = {
     "1" = m.tertiaryMonitor.name;
     "2" = m.mainMonitor.name;
@@ -176,12 +178,12 @@ in
   };
 
   services.hyprpaper.settings = {
-    preload = lib.mkForce [ m.wallpaper ];
+    preload = lib.mkForce [ wallpaper ];
     wallpaper = lib.mkForce [
-      "${m.mainMonitor.name},${m.wallpaper}"
-      "${m.secondaryMonitor.name},${m.wallpaper}"
-      "${m.tertiaryMonitor.name},${m.wallpaper}"
-      "${m.fourthMonitor.name},${m.wallpaper}"
+      "${m.mainMonitor.name},${wallpaper}"
+      "${m.secondaryMonitor.name},${wallpaper}"
+      "${m.tertiaryMonitor.name},${wallpaper}"
+      "${m.fourthMonitor.name},${wallpaper}"
     ];
   };
 }
