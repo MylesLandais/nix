@@ -1,0 +1,27 @@
+{
+  "_rule": "Moves to nebula-infra if it implements the nebula platform (OCI hosts, shared services cerberus runs as a platform node, their secrets); stays if a non-platform role needs it. Shared needs get a minimal duplicate in nebula-infra rather than a reverse dependency.",
+  "move": {
+    "infraContract": ["cerberus"], "infraSecrets": ["cerberus"], "infraIngress": ["cerberus"],
+    "profileInfraSpine": ["cerberus"], "profileDemoCerberus": ["cerberus"],
+    "postgresInfra": ["cerberus"], "valkeyInfra": ["cerberus"], "seaweedfsInfra": ["cerberus"],
+    "openbaoInfra": ["cerberus"], "traefikInfra": ["cerberus"], "authentikInfra": ["cerberus"],
+    "agenixInfra": ["cerberus"], "pyloadInfra": ["cerberus"], "mayaWorkerInfra": ["cerberus"],
+    "gitMirrors": ["cerberus"], "forgejo": ["stage-db"], "penpot": ["stage-edge"],
+    "tailscaleNode": ["stage-edge", "stage-db"],
+    "hosts": ["stage-edge", "stage-db"]
+  },
+  "stay": {
+    "llmRouter": "cerberus workstation service (user decision)",
+    "deepseekHarnessInfra": "cerberus workstation service (user decision)"
+  },
+  "duplicate_in_nebula_infra": {
+    "sshKeys": "authorized keys for the OCI hosts; keep in sync by hand (TODO(ssh))",
+    "serverBase": "replaces mkHost's baseline (host options, nix settings, fish) for the OCI hosts"
+  },
+  "files": ["modules/{infra,security,database}/", "modules/networking/{traefik,tailscale}.nix",
+            "modules/profiles/{infra-spine,demo-cerberus}.nix",
+            "modules/services/{forgejo,penpot,git-mirrors,maya-worker,pyload}.nix",
+            "modules/hosts/{stage-edge,stage-db}/", "modules/hosts/_oci-common.nix",
+            "infra/", "docs/infra/ (except workspace-compute-budget.md)",
+            "scripts/openbao-bootstrap/", "scripts/seaweedfs-capacity-report.py"]
+}
