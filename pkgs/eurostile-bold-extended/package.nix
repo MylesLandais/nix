@@ -4,7 +4,7 @@ stdenvNoCC.mkDerivation {
   pname = "eurostile-bold-extended";
   version = "1.0";
 
-  src = ../../../assets/fonts/eurostile-bold-extended;
+  src = ../../assets/fonts/eurostile-bold-extended;
 
   dontUnpack = true;
 

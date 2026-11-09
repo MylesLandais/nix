@@ -1,9 +1,7 @@
+# eurostile-bold-extended and chatgpt-linux come from pkgs/ via the default
+# overlay (modules/flake/packages.nix).
 { pkgs }:
 
-let
-  eurostile-bold-extended = pkgs.callPackage ./_eurostile-bold-extended.nix { };
-  chatgpt-linux = pkgs.callPackage ./_chatgpt-linux.nix { };
-in
 with pkgs;
 [
   eurostile-bold-extended

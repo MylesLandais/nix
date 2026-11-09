@@ -584,3 +584,9 @@ tasks:
     hosts: [kali-vm]
     contract: [packages/x86_64-linux/migration]
     touches: [scripts/migration/migration.sh]
+  - id: M-401b
+    title: chatgpt-linux and eurostile-bold-extended move to pkgs/
+    phase: 4
+    depends_on: [M-401]
+    policy: pure_refactor
+    hosts: [cerberus, lacie, kali-vm]
