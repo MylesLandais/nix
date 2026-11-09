@@ -102,7 +102,7 @@ in
   config = lib.mkIf config.my.pi-agent.enable {
     # Declarations only — no values. `secretspec set` writes those to the keyring.
     home.file.".config/pi/secretspec.toml".text = ''
-      # Managed by modules/_features/devtooling/pi/default.nix.
+      # Managed by modules/home/devtooling/_pi/default.nix.
       # Values live in the keyring, never here.
       [project]
       name = "pi-agents"

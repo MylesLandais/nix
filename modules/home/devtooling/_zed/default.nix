@@ -57,7 +57,7 @@ in
   config = lib.mkIf config.my.zed.enable {
     # Declarations only — no values. `secretspec set` writes those to the keyring.
     home.file.".config/zed/secretspec.toml".text = ''
-      # Managed by modules/_features/devtooling/zed/default.nix.
+      # Managed by modules/home/devtooling/_zed/default.nix.
       # Values live in the keyring, never here. See the module header.
       [project]
       name = "zed-agents"

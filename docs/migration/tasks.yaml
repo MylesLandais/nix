@@ -626,3 +626,11 @@ tasks:
     depends_on: [M-508]
     policy: pure_refactor
     hosts: [all]
+  - id: M-511b
+    title: Stale paths in comments inside generated files (~/.ssh/config, zed/pi secretspec.toml)
+    phase: 5
+    depends_on: [M-511a]
+    policy: behavior_change
+    hosts: [cerberus, lacie, kali-vm]
+    # Comment text only; the files' content otherwise unchanged.
+    allowed_changes: ["*:B/*", "*:homeManager/*/files/*"]
