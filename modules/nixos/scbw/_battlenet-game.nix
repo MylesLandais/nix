@@ -1,6 +1,6 @@
 # Builds the launcher command and desktop entry for one Battle.net game that
 # lives in a shared, mutable Lutris Wine prefix. Imported by path from the
-# per-game modules (currently modules/services/scbw.nix; WC3 runs through umu
+# per-game modules (currently nixos.scbw, modules/nixos/scbw/; WC3 runs through umu
 # directly in modules/services/warcraft3.nix).
 #
 # The first run installs Battle.net quietly into the prefix (or registers an

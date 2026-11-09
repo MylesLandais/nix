@@ -3,7 +3,7 @@
 # Stable layout (pre-2e9e10b): Hydra + mount-hydra lived in hypr.nix with gcr on the
 # user dbus, Nemo in home.nix, and credentials in gnome-keyring from the Nemo UI.
 # Dendritic refactor (2e9e10b) stopped importing that monolithic hypr.nix for cerberus;
-# this module restores the GVfs mount path in the new modules/home.nix layout.
+# this module restores the GVfs mount path in the HM base layout.
 #
 # authMode "keyring" (default): gio mount smb://hydra/data using saved gnome-keyring
 # entries from Nemo → Connect to Server (your previous workflow).

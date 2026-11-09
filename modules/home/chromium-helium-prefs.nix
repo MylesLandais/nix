@@ -20,7 +20,7 @@ _: {
         # The daily-driver launcher. Upstream ships no usable helium.desktop here
         # (our env-packages wrapper is a bare writeShellScriptBin). The daily
         # profile now exposes CDP on 9222 deliberately via helium-flags.conf
-        # (modules/_home.nix). If tabs start sitting in "Paused in debugger"
+        # (modules/home/base/default.nix). If tabs start sitting in "Paused in debugger"
         # again, that flag is the cause: a local CDP client attached and left a
         # breakpoint.
         home.file.".local/share/applications/helium.desktop".text = ''

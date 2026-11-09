@@ -21,7 +21,7 @@ with pkgs;
   code-cursor
   coreutils
   copilot-language-server
-  # nemo and file-roller are managed by the gtk-mod feature (see modules/features/gtk/conf)
+  # nemo and file-roller are managed by the gtk-mod feature (see modules/home/gtk/_conf)
   cozy
   claude-code
   claude-monitor
@@ -130,7 +130,7 @@ with pkgs;
   grub2_efi
   ntfs3g
   # vivaldi is provided via environment.systemPackages (vivaldiWithFlags in
-  # modules/features/env-packages.nix) so it actually reads vivaldi-flags.conf.
+  # modules/nixos/env-packages.nix) so it actually reads vivaldi-flags.conf.
   vesktop
   vial
   vulkan-tools

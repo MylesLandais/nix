@@ -161,7 +161,7 @@ in
             env = { };
           };
 
-          # Wraps the patched codex from modules/_home.nix. Must come from the
+          # Wraps the patched codex from modules/home/base/default.nix. Must come from the
           # llm input: nixpkgs still has codex-acp 0.13.0, whose bundled config
           # parser rejects `service_tier` in ~/.codex/config.toml.
           codex = {

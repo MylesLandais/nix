@@ -1,5 +1,5 @@
 # Shared nixpkgs overlays required by modules consumed across hosts
-# (e.g. modules/firefox.nix needs pkgs.nur). Host-specific overlays
+# (e.g. homeManager.firefox needs pkgs.nur). Host-specific overlays
 # (CachyOS kernel, cursor AppImage pin) stay on the host module.
 _: {
   flake.modules.nixos.overlays =

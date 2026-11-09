@@ -20,7 +20,7 @@ in
 
   # Chromium-based browser policies (Helium, Chromium, etc.)
   # flags.vaapi here is metadata only; launch flags come from HM *-flags.conf
-  # with vaapiMode = "nvidia" (see modules/home.nix + gpuType in cerberus HM).
+  # with vaapiMode = "nvidia" (see modules/home/base/default.nix + gpuType in cerberus HM).
   chromiumPolicies = {
     enable = true;
     browsers = {

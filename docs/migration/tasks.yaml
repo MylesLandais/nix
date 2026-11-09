@@ -620,3 +620,9 @@ tasks:
     hosts: [kali-vm]
     contract: [packages/x86_64-linux/migration]
     touches: [scripts/migration/migration.sh]
+  - id: M-511a
+    title: Stale path references in Nix comments point at the new layout
+    phase: 5
+    depends_on: [M-508]
+    policy: pure_refactor
+    hosts: [all]

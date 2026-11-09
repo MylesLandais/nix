@@ -1,6 +1,6 @@
 # Home-manager module: garbage-collect the per-user Nix profile.
 #
-# `nix.gc.automatic` in modules/_features/nix-config.nix only prunes *system*
+# `nix.gc.automatic` in modules/nixos/nix-config.nix only prunes *system*
 # generations. It does not touch `~/.local/state/nix/profiles/profile-*-link`,
 # and `nix-collect-garbage -d` cannot free them either — only
 # `nix profile wipe-history` can. That gap let 879 user-profile generations
