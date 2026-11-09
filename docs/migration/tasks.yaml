@@ -546,8 +546,10 @@ tasks:
     title: host.username; shared modules derive per-user paths from the user's home
     phase: 3
     depends_on: [M-306a]
-    policy: pure_refactor
-    hosts: [cerberus, lacie]
+    # The only layer-C difference allowed is the new option's value itself.
+    policy: behavior_change
+    allowed_changes: ["*:host/username"]
+    hosts: [all]
     # Host files keep their literal paths (they describe that machine's disk
     # layout); sudo command paths in nixos.security belong to the separate
     # security effort.
