@@ -278,7 +278,8 @@ tasks:
     depends_on: [M-301]
     policy: pure_refactor
     hosts: [cerberus]
-    registry: {add: [nixos.adguard]}
+    # AdGuard stays a private cerberus file (hosts/cerberus/_adguard.nix): it is
+    # host configuration, not a reusable module, so no nixos.adguard.
   - id: M-306
     title: host.username option; replace /home/warby literals; drop repeated allowUnfree
     phase: 3
