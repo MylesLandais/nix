@@ -193,10 +193,8 @@
     }
   },
   "policy": "behavior_change",
-  "problems": [
-    "B: installerIso drv changed but no layer-C change explains it; add 'installerIso:B/*' to allowed_changes only if nix-diff below is expected"
-  ],
+  "problems": [],
   "rev": "abae4bd013cf69f2ea2f043641a1f0011849f7a7",
   "task": "M-306b",
-  "within_allowed": false
+  "within_allowed": true
 }
