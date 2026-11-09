@@ -321,11 +321,15 @@ tasks:
     policy: pure_refactor
     hosts: [cerberus, lacie, kali-vm]
   - id: M-430
-    title: Merge the helium/vivaldi flag-file wrappers
+    title: Merge the helium/vivaldi flag-file wrappers (SKIPPED)
     phase: 4
     depends_on: [M-410]
     policy: pure_refactor
     hosts: [cerberus, lacie, kali-vm]
+    # Skipped on inspection: the helium wrapper has grown profile-guard,
+    # data-dir and default-flag logic; only a 6-line flags-file loop is shared
+    # with vivaldi's. A common function would hide more than it saves.
+    status: skipped
 
   # ---------------------------------------------------------------- Phase 5
   - id: M-501
@@ -591,3 +595,13 @@ tasks:
     depends_on: [M-401]
     policy: pure_refactor
     hosts: [cerberus, lacie, kali-vm]
+  - id: CHECKPOINT-4
+    title: Phase 4 checkpoint (against migration/phase-3)
+    phase: 4
+    depends_on: [M-401, M-401b, M-402, M-410]
+    policy: behavior_change
+    contract: ["overlays", "overlays/*", "packages/x86_64-linux/*"]
+    # From M-401: four package overlays become one.
+    allowed_changes: ["*:nixpkgsConfig/overlays"]
+    path_imports_allow: 1
+    hosts: [all]
