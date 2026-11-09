@@ -29,7 +29,7 @@ _: {
           # entirely (no response to /nix-cache-info), and Nix waits on it before
           # falling through, so every cache miss paid the timeout. Re-enable once it
           # responds again; nothing here depends on it exclusively.
-          # "https://cache.garnix.io/"
+          # "https://cache.garnix.io/"  (key: cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=)
           "https://noctalia.cachix.org"
           "https://cache.numtide.com"
         ];
@@ -41,7 +41,6 @@ _: {
           # new URL and signing key (github.com/xddxdd/nix-cachyos-kernel/issues/110).
           # Do not re-add the old key.
           "zed.cachix.org-1:/pHQ6dpMsAZk2DiP4WCL0p9YDNKWj2Q5FL20bNmw1cU="
-          "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
           "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
           "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
         ];
@@ -60,7 +59,6 @@ _: {
         max-free = 214748364800; # 200 GiB
         trusted-users = [
           "root"
-          "franky"
           "@wheel"
         ];
       };
