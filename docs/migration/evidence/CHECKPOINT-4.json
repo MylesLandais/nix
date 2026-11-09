@@ -1,0 +1,271 @@
+{
+  "A": {
+    "outputs": [
+      {
+        "after": null,
+        "before": "{}",
+        "path": "overlays"
+      },
+      {
+        "after": "\"fn\"",
+        "before": null,
+        "path": "overlays/default"
+      },
+      {
+        "after": "\"drv\"",
+        "before": null,
+        "path": "packages/x86_64-linux/buzz-desktop"
+      },
+      {
+        "after": "\"drv\"",
+        "before": null,
+        "path": "packages/x86_64-linux/chatgpt-linux"
+      },
+      {
+        "after": "\"drv\"",
+        "before": null,
+        "path": "packages/x86_64-linux/claude-code"
+      },
+      {
+        "after": "\"drv\"",
+        "before": null,
+        "path": "packages/x86_64-linux/deepseek-harness"
+      },
+      {
+        "after": "\"drv\"",
+        "before": null,
+        "path": "packages/x86_64-linux/eurostile-bold-extended"
+      },
+      {
+        "after": "\"drv\"",
+        "before": null,
+        "path": "packages/x86_64-linux/kimi-code"
+      }
+    ],
+    "registry": []
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/37l8xqdlc6dx2nvjj6dvsqlviclw07fv-buzz-desktop-0.5.24.drv\"",
+      "before": null,
+      "path": "packages/x86_64-linux/buzz-desktop"
+    },
+    {
+      "after": "\"/nix/store/wj146gxfihhg3sf3qkbn5z2kx88ip94d-chatgpt-linux-26.1103.31037.drv\"",
+      "before": null,
+      "path": "packages/x86_64-linux/chatgpt-linux"
+    },
+    {
+      "after": "\"/nix/store/yb2d1z9v2vs2bpycm01s9r4n04xnmycw-claude-code-2.1.295.drv\"",
+      "before": null,
+      "path": "packages/x86_64-linux/claude-code"
+    },
+    {
+      "after": "\"/nix/store/pc5rrdlgzb4nbr4n03vf4w8hvjwr77fs-deepseek-harness-0.1.5-rc.3.drv\"",
+      "before": null,
+      "path": "packages/x86_64-linux/deepseek-harness"
+    },
+    {
+      "after": "\"/nix/store/bd1yz7j9pfrp0wjjg71cq8sh1kc7z9g3-eurostile-bold-extended-1.0.drv\"",
+      "before": null,
+      "path": "packages/x86_64-linux/eurostile-bold-extended"
+    },
+    {
+      "after": "\"/nix/store/jz905xklaycnbjgcpc7rq80v6fzg3y3n-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/gjjaink272xvrhfcr2ikv92iqk0l7gc6-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    },
+    {
+      "after": "\"/nix/store/00rn5gkk02v1dnvb7pkh9xh46573amyn-kimi-code-2.1.1.drv\"",
+      "before": null,
+      "path": "packages/x86_64-linux/kimi-code"
+    }
+  ],
+  "base": "c9b76cf7638c60cd5e7908782f8670c186174493",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "7PZSZY2": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "94tl0m2": {
+      "B": [],
+      "C": [
+        {
+          "after": "4",
+          "before": "7",
+          "path": "nixpkgsConfig/overlays"
+        }
+      ],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "95qmom2": {
+      "B": [],
+      "C": [
+        {
+          "after": "4",
+          "before": "7",
+          "path": "nixpkgsConfig/overlays"
+        }
+      ],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "argus": {
+      "B": [],
+      "C": [
+        {
+          "after": "4",
+          "before": "7",
+          "path": "nixpkgsConfig/overlays"
+        }
+      ],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "cerberus": {
+      "B": [],
+      "C": [
+        {
+          "after": "8",
+          "before": "11",
+          "path": "nixpkgsConfig/overlays"
+        }
+      ],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "installerIso": {
+      "B": [
+        {
+          "after": "\"/nix/store/jwlyfwzdjw7bdhb35gv5w9z9kcp0784s-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv\"",
+          "before": "\"/nix/store/3fli34s4q8rcbq2shbzqc0d4xpy23cwd-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv\"",
+          "path": "toplevel"
+        }
+      ],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": true,
+      "nix_diff_summary": [
+        "- /nix/store/3fli34s4q8rcbq2shbzqc0d4xpy23cwd-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv:{out}",
+        "+ /nix/store/jwlyfwzdjw7bdhb35gv5w9z9kcp0784s-nixos-system-home-office-installer-26.11.20261008.e7439b6.drv:{out}",
+        "• The input derivation named `activate` differs",
+        "  - /nix/store/rs44s03svdkkv1n7wlwcaad99c5azs4j-activate.drv:{out}",
+        "  + /nix/store/kfzkkx5h4fr9j085c5p5nw597nh0pyg2-activate.drv:{out}",
+        "  • The input derivation named `etc` differs",
+        "    - /nix/store/jkzpg9b63bnb7ilv24rc7qjxn42ka8nw-etc.drv:{out}",
+        "    + /nix/store/ph5ybmd8zkdpdg80cfbd9k1vvbn7ig39-etc.drv:{out}",
+        "    • The input derivation named `iso-build-info` differs",
+        "      - /nix/store/12qp5vvxsw7qnbqbldj6nfwmilq8mnd5-iso-build-info.drv:{out}",
+        "      + /nix/store/89b5rgd8glds8d6ggsj3kfsaxd72nmps-iso-build-info.drv:{out}",
+        "      • The environments do not match:",
+        "          buildCommand=''",
+        "            {",
+        "              echo \"home-office-installer build info (shim)\"",
+        "              echo \"========================================\"",
+        "          -   echo \"flake-rev:       c9b76cf7638c60cd5e7908782f8670c186174493\"",
+        "          -   echo \"flake-shortRev:  c9b76cf\"",
+        "          +   echo \"flake-rev:       15ac8368848878ecc65532a58aeebcb2a6aa472e\"",
+        "          +   echo \"flake-shortRev:  15ac836\"",
+        "              echo \"nixpkgs-rev:     e7439b6b14ad3cc35d05608ebca9bce01a25f5f8\"",
+        "              echo \"system:          x86_64-linux\"",
+        "              echo \"edition:         minimal-shim\"",
+        "              echo",
+        "              echo \"authorized_keys fingerprints (warby == root):\"",
+        "              ssh-keygen -lf \"$keysPath\" || true",
+        "              echo",
+        "              echo \"verify from cerberus:\"",
+        "              echo \"  ssh warby@<ip> cat /etc/iso-build-info\"",
+        "            } > $out",
+        "      ''",
+        "    • The input derivation named `issue` differs",
+        "      - /nix/store/rbj94y1n9sxrn110q35vhvhyw2znpff1-issue.drv:{out}",
+        "      + /nix/store/q9r8v01a9fxi851rm05pskfgrhxyhv23-issue.drv:{out}",
+        "      • The environments do not match:",
+        "          __json=''",
+        "          - {\"allowSubstitutes\":false,\"buildCommand\":\"target=$out$destination\\nmkdir -p \\\"$(dirname \\\"$target\\\")\\\"\\n\\nif [ -e \\\"$textPath\\\" ]; then\\n  mv \\\"$textPath\\\" \\\"$target\\\"\\nelse\\n  printf \\\"%s\\\" \\\"$text\\\" > \\\"$target\\\"\\nfi\\n\\nif [ -n \\\"$executable\\\" ]; then\\n  chmod +x \\\"$target\\\"\\nfi\\n\\neva",
+        "      ''",
+        "    • Skipping environment comparison",
+        "  • Skipping environment comparison",
+        "• Input derivations differ but have already been compared",
+        "    etc",
+        "• Skipping environment comparison"
+      ],
+      "unexpected": []
+    },
+    "kali-vm": {
+      "B": [],
+      "C": [
+        {
+          "after": "4",
+          "before": "7",
+          "path": "nixpkgsConfig/overlays"
+        }
+      ],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "lacie": {
+      "B": [],
+      "C": [
+        {
+          "after": "4",
+          "before": "7",
+          "path": "nixpkgsConfig/overlays"
+        }
+      ],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "stage-db": {
+      "B": [],
+      "C": [
+        {
+          "after": "4",
+          "before": "7",
+          "path": "nixpkgsConfig/overlays"
+        }
+      ],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    },
+    "stage-edge": {
+      "B": [],
+      "C": [
+        {
+          "after": "4",
+          "before": "7",
+          "path": "nixpkgsConfig/overlays"
+        }
+      ],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "behavior_change",
+  "problems": [],
+  "rev": "15ac8368848878ecc65532a58aeebcb2a6aa472e",
+  "task": "CHECKPOINT-4",
+  "within_allowed": true
+}
