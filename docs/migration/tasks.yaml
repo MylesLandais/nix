@@ -564,7 +564,7 @@ tasks:
   - id: CHECKPOINT-3
     title: Phase 3 checkpoint (against migration/phase-2)
     phase: 3
-    depends_on: [M-301, M-302, M-303, M-303b, M-304, M-304b, M-305, M-306a, M-306b, M-307, M-113]
+    depends_on: [M-301, M-302, M-303, M-303b, M-304, M-304b, M-305, M-306a, M-306b, M-307, M-113, M-114]
     # M-306b's new host.username option is the only allowed layer-C change.
     policy: behavior_change
     allowed_changes: ["*:host/username"]
