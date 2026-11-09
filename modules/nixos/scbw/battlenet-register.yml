@@ -1,0 +1,23 @@
+name: @NIX1@
+game_slug: @NIX2@
+version: "NixOS Battle.net"
+slug: @NIX3@-nixos
+runner: wine
+script:
+  game:
+    arch: win64
+    args: @NIX4@
+    exe: drive_c/Program Files (x86)/Battle.net/Battle.net.exe
+    prefix: @NIX5@
+  installer: []
+  system:
+    env:
+      DXVK_STATE_CACHE_PATH: @NIX6@
+      STAGING_SHARED_MEMORY: 1
+      __GL_SHADER_DISK_CACHE: 1
+      __GL_SHADER_DISK_CACHE_PATH: @NIX7@
+      __GL_SHADER_DISK_CACHE_SKIP_CLEANUP: 1
+  wine:
+    battleye: false
+    eac: false
+    fsr: false

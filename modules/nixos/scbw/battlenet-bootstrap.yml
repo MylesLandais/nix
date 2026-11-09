@@ -1,0 +1,70 @@
+name: @NIX1@
+game_slug: @NIX2@
+version: "NixOS Battle.net"
+slug: @NIX3@-nixos
+runner: wine
+script:
+  files:
+  - setup:
+      filename: Battle.net-Setup.exe
+      url: https://www.battle.net/download/getInstallerForGame?os=win&version=LIVE&gameProgram=BATTLENET_APP
+  game:
+    arch: win64
+    args: @NIX4@
+    exe: drive_c/Program Files (x86)/Battle.net/Battle.net.exe
+    prefix: @NIX5@
+  installer:
+  - task:
+      arch: win64
+      description: Creating the shared 64-bit Battle.net Wine prefix.
+      name: create_prefix
+      prefix: @NIX6@
+  - task:
+      arch: win64
+      description: 'Wine Staging: Enabling DXVA2'
+      key: backend
+      name: set_regedit
+      path: HKEY_CURRENT_USER\Software\Wine\DXVA2
+      prefix: @NIX7@
+      value: va
+  - write_json:
+      data:
+        Client:
+          GameLaunchWindowBehavior: '2'
+          GameSearch:
+            BackgroundSearch: 'true'
+          HardwareAcceleration: 'false'
+          Install:
+            DownloadLimitNextPatchInBps: '0'
+          Sound:
+            Enabled: 'false'
+          Streaming:
+            StreamingEnabled: 'false'
+      description: Disabling Battle.net hardware acceleration, sound, and streaming.
+      file: @NIX8@
+  - task:
+      args: --quiet
+      description: |-
+        Installing Battle.net quietly.
+        Sign in and install @NIX9@ on the next launch.
+      executable: setup
+      exclude_processes: Agent.exe "Battle.net Helper.exe" Battle.net.exe
+      name: wineexec
+      prefix: @NIX10@
+  - task:
+      name: winekill
+      prefix: @NIX11@
+  system:
+    env:
+      DXVK_STATE_CACHE_PATH: @NIX12@
+      STAGING_SHARED_MEMORY: 1
+      __GL_SHADER_DISK_CACHE: 1
+      __GL_SHADER_DISK_CACHE_PATH: @NIX13@
+      __GL_SHADER_DISK_CACHE_SKIP_CLEANUP: 1
+    exclude_processes: Agent.exe "Battle.net Helper.exe"
+  wine:
+    battleye: false
+    eac: false
+    fsr: false
+    overrides:
+      locationapi: d
