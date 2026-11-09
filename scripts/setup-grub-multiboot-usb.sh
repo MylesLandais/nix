@@ -30,6 +30,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+# shellcheck source=lib/windows-unattend.sh
+source "$SCRIPT_DIR/lib/windows-unattend.sh"
 
 DEVICE=""
 WIN_ISO=""
@@ -172,7 +174,7 @@ umount "$WISO_MNT"; rmdir "$WISO_MNT"; WISO_MNT=""
 
 if [[ -f "$UNATTEND" ]]; then
   log "Placing autounattend.xml at payload root..."
-  cp "$UNATTEND" "$PAY_MNT/autounattend.xml"
+  render_unattend "$UNATTEND" "$PAY_MNT/autounattend.xml"
 else
   log "note: $UNATTEND not found — Windows setup will be interactive"
 fi

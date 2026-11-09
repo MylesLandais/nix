@@ -10,7 +10,7 @@
 set -euo pipefail
 
 RD_HOST="${WIN_RUSTDESK_HOST:-127.0.0.1}"
-RD_PASSWORD="${WIN_RUSTDESK_PASSWORD:-ChangeMe!RD2026}"
+RD_PASSWORD="${WIN_RUSTDESK_PASSWORD:?set WIN_RUSTDESK_PASSWORD (the guest RustDesk password)}"
 RD_PORT="${WIN_RUSTDESK_PORT:-21116}"
 
 log() { echo "[rustdesk-win] $*" >&2; }

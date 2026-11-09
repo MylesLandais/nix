@@ -29,6 +29,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+# shellcheck source=lib/windows-unattend.sh
+source "$SCRIPT_DIR/lib/windows-unattend.sh"
 
 DEVICE=""
 ISO=""
@@ -178,7 +180,7 @@ fi
 
 if [[ $COPY_UNATTEND -eq 1 ]]; then
   log "Placing autounattend.xml at USB root..."
-  cp "$UNATTEND" "$USB_MNT/autounattend.xml"
+  render_unattend "$UNATTEND" "$USB_MNT/autounattend.xml"
 fi
 
 if [[ -n "$PAYLOAD" ]]; then

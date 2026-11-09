@@ -127,7 +127,7 @@
             <DisplayName>Owner</DisplayName>
             <Group>Administrators</Group>
             <!-- CHANGE-ME-AT-FIRST-BOOT — placeholder local password. -->
-            <Password><Value>ChangeMe!2026</Value><PlainText>true</PlainText></Password>
+            <Password><Value>@GUEST_PASSWORD@</Value><PlainText>true</PlainText></Password>
           </LocalAccount>
         </LocalAccounts>
       </UserAccounts>

@@ -61,7 +61,7 @@ nix run .#boot-windows-golden
 nix run .#rustdesk-windows-qemu
 ```
 
-Guest login: `Owner` / `ChangeMe!2026` (change in `autounattend.xml` before hardware).
+Guest login: `Owner` with the password from `WIN_GUEST_PASSWORD`, which the USB and QEMU tooling substitutes for `@GUEST_PASSWORD@` in `autounattend.xml` (it refuses to run without it).
 
 Edit `autounattend.xml` before building: review `DiskConfiguration` (**wipes Disk 0**).
 

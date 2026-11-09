@@ -204,6 +204,7 @@
           export OVMF_VARS_SRC="${pkgs.OVMFFull.fd}/FV/OVMF_VARS.ms.fd"
           export WINDOWS_KIT_DIR="${windowsKitQemu}"
           ${builtins.readFile ../../scripts/lib/qemu-spice.sh}
+          ${builtins.readFile ../../scripts/lib/windows-unattend.sh}
           ${builtins.readFile ../../scripts/test-windows-qemu.sh}
         '';
       };

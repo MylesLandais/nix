@@ -2,11 +2,11 @@
   install_rustdesk.ps1 — silent RustDesk install for QEMU + physical targets.
 
   Offline-first: stage Installers\rustdesk-<ver>-x86_64.exe (or rustdesk-x86_64.exe).
-  Env: WIN_RUSTDESK_PASSWORD (default ChangeMe!RD2026)
+  Env: WIN_RUSTDESK_PASSWORD (required)
 #>
 $ErrorActionPreference = 'Stop'
 $Version  = '1.4.6'
-$Password = if ($env:WIN_RUSTDESK_PASSWORD) { $env:WIN_RUSTDESK_PASSWORD } else { 'ChangeMe!RD2026' }
+$Password = if ($env:WIN_RUSTDESK_PASSWORD) { $env:WIN_RUSTDESK_PASSWORD } else { throw 'Set WIN_RUSTDESK_PASSWORD; there is no default password.' }
 $Marker   = 'C:\ProgramData\win-kit\rustdesk.installed'
 $Root     = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Installers = Join-Path $Root 'Installers'

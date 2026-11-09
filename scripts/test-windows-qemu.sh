@@ -203,7 +203,8 @@ build_unattend_floppy() {
   command -v mcopy >/dev/null 2>&1 || die "mcopy not found (mtools)"
   dd if=/dev/zero of="$floppy_img" bs=1024 count=1440 status=none
   mkfs.vfat -n UNATTEND "$floppy_img" >/dev/null
-  mcopy -i "$floppy_img" "$answer_file" ::autounattend.xml
+  render_unattend "$answer_file" "${floppy_img%.img}.xml"
+  mcopy -i "$floppy_img" "${floppy_img%.img}.xml" ::autounattend.xml
   log "autounattend floppy: $floppy_img ($(basename "$answer_file"))"
 }
 

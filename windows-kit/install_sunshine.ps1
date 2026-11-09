@@ -2,11 +2,11 @@
   install_sunshine.ps1 — Sunshine host for Moonlight streaming inside Windows guest.
 
   Offline-first: stage Installers\Sunshine-Setup.exe (pin release in kit docs).
-  Env: WIN_SUNSHINE_PIN (default 1234)
+  Env: WIN_SUNSHINE_PIN (required)
 #>
 $ErrorActionPreference = 'Stop'
 $Marker = 'C:\ProgramData\win-kit\sunshine.installed'
-$Pin    = if ($env:WIN_SUNSHINE_PIN) { $env:WIN_SUNSHINE_PIN } else { '1234' }
+$Pin    = if ($env:WIN_SUNSHINE_PIN) { $env:WIN_SUNSHINE_PIN } else { throw 'Set WIN_SUNSHINE_PIN; there is no default PIN.' }
 $Root   = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Installers = Join-Path $Root 'Installers'
 

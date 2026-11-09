@@ -645,3 +645,11 @@ tasks:
     policy: pure_refactor
     hosts: [kali-vm]
     allow_frozen: true
+  - id: M-601a
+    title: "Security gate S-1: Windows tooling has no default passwords (fail closed)"
+    phase: 6
+    depends_on: [CHECKPOINT-4]
+    policy: behavior_change
+    hosts: [kali-vm]
+    allow_frozen: true
+    allowed_changes: ["flake:packages/x86_64-linux/*windows*", "flake:packages/x86_64-linux/rustdesk-windows-qemu"]
