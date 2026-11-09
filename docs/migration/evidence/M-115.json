@@ -1,0 +1,35 @@
+{
+  "A": {
+    "outputs": [],
+    "registry": []
+  },
+  "B_flake": [
+    {
+      "after": "\"/nix/store/p0rv9brpvwx36crj1qcpjyka99f6c1yv-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "before": "\"/nix/store/f3acn9yd52x2cyjq9zfz5pi2d5jchp22-nixos-minimal-26.11.20261008.e7439b6-x86_64-linux.iso.drv\"",
+      "path": "packages/x86_64-linux/installer-iso"
+    },
+    {
+      "after": "\"/nix/store/sa0v49w4rri4mqc1503sqc8m7zxd0p8d-migration.drv\"",
+      "before": "\"/nix/store/2mf8zksg4hqp8g8nlr522ahf7303xawz-migration.drv\"",
+      "path": "packages/x86_64-linux/migration"
+    }
+  ],
+  "base": "72d798bbc3d048196a327c34b89e0d0c75541431",
+  "harness": "c4rfwa5rk9x5",
+  "hosts": {
+    "kali-vm": {
+      "B": [],
+      "C": [],
+      "content_equivalence": null,
+      "drv_changed": false,
+      "nix_diff_summary": [],
+      "unexpected": []
+    }
+  },
+  "policy": "contract_change",
+  "problems": [],
+  "rev": "5e015aecb3a2eef6361c2baaa7336b539be0a34e",
+  "task": "M-115",
+  "within_allowed": true
+}
