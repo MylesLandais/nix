@@ -73,7 +73,6 @@ in
       homeModules = [ homeNix ];
       ageIdentity = "/home/warby/.ssh/age";
     };
-    extraSpecialArgs.gpuType = "none";
   };
 
   kali-vm = {
@@ -89,6 +88,5 @@ in
       inputs.self.modules.nixos.desktops
     ];
     users.kali.homeModules = [ homeNix ];
-    extraSpecialArgs.gpuType = "none";
   };
 }

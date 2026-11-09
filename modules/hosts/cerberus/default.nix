@@ -5,11 +5,6 @@
   ...
 }:
 let
-  pkgsForVars = import inputs.nixpkgs {
-    system = "x86_64-linux";
-    config.allowUnfree = true;
-  };
-  vars = import "${inputs.self}/vars.nix" { pkgs = pkgsForVars; };
   inherit (inputs) self;
 in
 {
@@ -53,10 +48,6 @@ in
           };
         };
       };
-    };
-    extraSpecialArgs = {
-      inherit vars;
-      gpuType = "nvidia";
     };
   };
 }

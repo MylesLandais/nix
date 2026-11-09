@@ -1,13 +1,12 @@
 {
   pkgs,
   lib,
-  vars,
   config,
   inputs,
   ...
 }:
 let
-  m = vars;
+  m = import ./_desktop-layout.nix { inherit pkgs; };
   workspaceMappings = {
     "1" = m.tertiaryMonitor.name;
     "2" = m.mainMonitor.name;
@@ -23,7 +22,7 @@ let
   };
 
   # Live mode switch for the Samsung TV (fourthMonitor). The link is HDMI 1.4
-  # (300 MHz max TMDS), so 4K and 60 Hz are mutually exclusive -- see vars.nix.
+  # (300 MHz max TMDS), so 4K and 60 Hz are mutually exclusive -- see _desktop-layout.nix.
   # Every mode keeps bitdepth 8, which is part of the wake fix, not a preference.
   #
   #   tv-mode 1080     1920x1080@60  -- default; 60 Hz native retro content
@@ -178,12 +177,12 @@ in
   };
 
   services.hyprpaper.settings = {
-    preload = lib.mkForce [ vars.wallpaper ];
+    preload = lib.mkForce [ m.wallpaper ];
     wallpaper = lib.mkForce [
-      "${vars.mainMonitor.name},${vars.wallpaper}"
-      "${vars.secondaryMonitor.name},${vars.wallpaper}"
-      "${vars.tertiaryMonitor.name},${vars.wallpaper}"
-      "${vars.fourthMonitor.name},${vars.wallpaper}"
+      "${m.mainMonitor.name},${m.wallpaper}"
+      "${m.secondaryMonitor.name},${m.wallpaper}"
+      "${m.tertiaryMonitor.name},${m.wallpaper}"
+      "${m.fourthMonitor.name},${m.wallpaper}"
     ];
   };
 }

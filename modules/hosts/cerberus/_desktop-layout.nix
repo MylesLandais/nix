@@ -1,3 +1,5 @@
+# Cerberus display layout (monitor outputs and modes) and the hyprpaper
+# wallpaper, read by hosts/cerberus/_home.nix.
 {
   pkgs,
   ...
@@ -23,11 +25,6 @@ let
   };
 in
 {
-  hostName = "cerberus-nix";
-  username = "warby";
-  userEmail = "myles.landais@protonmail.com";
-
-  isDesktop = true;
   wallpaper = "${wp}/share/wallpapers/nix-wallpaper-nineish-catppuccin-mocha.png";
 
   mainMonitor = {
