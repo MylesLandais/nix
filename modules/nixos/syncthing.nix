@@ -11,8 +11,8 @@ _: {
         services.syncthing = {
           enable = true;
           user = "warby";
-          dataDir = "/home/warby/.local/share/syncthing";
-          configDir = "/home/warby/.config/syncthing";
+          dataDir = "${config.users.users.${config.host.username}.home}/.local/share/syncthing";
+          configDir = "${config.users.users.${config.host.username}.home}/.config/syncthing";
 
           # Manage devices through NixOS config, but allow manual folder management
           # This allows auto-accepted folders from trusted devices (Hydra) while
@@ -50,7 +50,7 @@ _: {
               # Existing "Obsidian vault" share - using the exact folder ID from Hydra
               # This will automatically join the existing share without manual steps
               "obsidian-vault" = {
-                path = "/home/warby/Notes";
+                path = "${config.users.users.${config.host.username}.home}/Notes";
                 id = "nzep2-ux6xz"; # Existing folder ID - must match exactly
                 label = "Obsidian vault"; # Display label matching the existing share
                 devices = [
@@ -110,7 +110,7 @@ _: {
 
         # Create Notes directory
         systemd.tmpfiles.rules = [
-          "d /home/warby/Notes 0755 warby users -"
+          "d ${config.users.users.${config.host.username}.home}/Notes 0755 ${config.host.username} users -"
         ];
 
         environment.systemPackages = [ pkgs.syncthing ];

@@ -29,6 +29,11 @@ _: {
           type = lib.types.str;
           description = "The hostname of this machine.";
         };
+        username = lib.mkOption {
+          type = lib.types.str;
+          default = "warby";
+          description = "The machine's primary user; per-user paths derive from their home directory.";
+        };
         isDesktop = lib.mkOption {
           type = lib.types.bool;
           default = false;

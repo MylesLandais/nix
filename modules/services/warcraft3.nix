@@ -339,7 +339,8 @@ _: {
 
         prefixDir = lib.mkOption {
           type = lib.types.str;
-          default = "/home/warby/Games/warcraft3";
+          default = "${config.users.users.${config.host.username}.home}/Games/warcraft3";
+          defaultText = lib.literalExpression ''"''${config.users.users.''${config.host.username}.home}/Games/warcraft3"'';
           description = ''
             Mutable Proton prefix holding Battle.net and the game, kept apart
             from StarCraft's prefix.

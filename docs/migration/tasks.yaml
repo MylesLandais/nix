@@ -542,3 +542,12 @@ tasks:
     depends_on: [M-305]
     policy: pure_refactor
     hosts: [all]
+  - id: M-306b
+    title: host.username; shared modules derive per-user paths from the user's home
+    phase: 3
+    depends_on: [M-306a]
+    policy: pure_refactor
+    hosts: [cerberus, lacie]
+    # Host files keep their literal paths (they describe that machine's disk
+    # layout); sudo command paths in nixos.security belong to the separate
+    # security effort.

@@ -109,13 +109,15 @@ in
 
     gameRoot = lib.mkOption {
       type = lib.types.str;
-      default = "/home/warby/Games/3DS";
+      default = "${config.users.users.${config.host.username}.home}/Games/3DS";
+      defaultText = lib.literalExpression ''"''${config.users.users.''${config.host.username}.home}/Games/3DS"'';
       description = "Absolute root containing owned 3DS images accepted by the bridge.";
     };
 
     stateDir = lib.mkOption {
       type = lib.types.str;
-      default = "/home/warby/.local/state/citra-agent";
+      default = "${config.users.users.${config.host.username}.home}/.local/state/citra-agent";
+      defaultText = lib.literalExpression ''"''${config.users.users.''${config.host.username}.home}/.local/state/citra-agent"'';
       description = "Mutable isolated Azahar, capture, and bridge state root.";
     };
 

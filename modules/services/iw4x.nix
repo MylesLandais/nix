@@ -150,13 +150,17 @@ _: {
 
         gameDir = lib.mkOption {
           type = lib.types.str;
-          default = "/home/warby/.local/share/Steam/steamapps/common/Call of Duty Modern Warfare 2";
+          default = "${
+            config.users.users.${config.host.username}.home
+          }/.local/share/Steam/steamapps/common/Call of Duty Modern Warfare 2";
+          defaultText = lib.literalExpression ''"''${config.users.users.''${config.host.username}.home}/.local/share/Steam/steamapps/common/Call of Duty Modern Warfare 2"'';
           description = "Mutable MW2 game directory used by the IW4x updater and runtime.";
         };
 
         prefixDir = lib.mkOption {
           type = lib.types.str;
-          default = "/home/warby/.local/share/iw4x/compatdata/10190";
+          default = "${config.users.users.${config.host.username}.home}/.local/share/iw4x/compatdata/10190";
+          defaultText = lib.literalExpression ''"''${config.users.users.''${config.host.username}.home}/.local/share/iw4x/compatdata/10190"'';
           description = "Dedicated UMU/Proton prefix for IW4x.";
         };
       };

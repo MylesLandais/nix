@@ -33,7 +33,8 @@ _: {
 
         prefixDir = lib.mkOption {
           type = lib.types.str;
-          default = "/home/warby/Games/battlenet";
+          default = "${config.users.users.${config.host.username}.home}/Games/battlenet";
+          defaultText = lib.literalExpression ''"''${config.users.users.''${config.host.username}.home}/Games/battlenet"'';
           description = "Mutable shared Battle.net Wine prefix used by Lutris.";
         };
 
