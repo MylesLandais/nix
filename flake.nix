@@ -32,13 +32,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     agenix.url = "github:ryantm/agenix";
-    # Declarative partitioning for the OCI aarch64 hosts (stage-edge, stage-db).
-    # These are installed with nixos-anywhere, which wipes and repartitions the
-    # Oracle boot volume from the disko config rather than reusing Oracle's LVM layout.
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nebula-infra.url = "git+https://git.nebula-1.com/nebula/infra.git?ref=main";
     trigo = {
       url = "github:FKouhai/trigo";
       inputs.nixpkgs.follows = "nixpkgs";

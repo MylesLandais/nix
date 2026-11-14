@@ -15,7 +15,7 @@ composed through a registry of named modules rather than file paths.
 | `argus`, `94tl0m2`, `95qmom2` | Dell staging cluster (colmena) | deploy-node table |
 | `7PZSZY2` | WSL agent on a Windows laptop | `modules/hosts/7PZSZY2/` |
 | `installerIso` | recovery/installer ISO | `modules/hosts/installer-iso/` |
-| `stage-edge`, `stage-db` | OCI aarch64 hosts (moving to nebula-infra) | `modules/hosts/stage-*` |
+| `stage-edge`, `stage-db` | OCI aarch64 hosts (external flake) | `inputs.nebula-infra` |
 
 ## Layout
 
@@ -70,6 +70,11 @@ The ARM64 OCI hosts run NixOS and use Tailscale for administration. Forgejo is
 live at [git.nebula-1.com](https://git.nebula-1.com), served from `stage-db`
 through Cloudflare Tunnel.
 
-- [OCI inventory and routing](docs/infra/oci-forgejo.md)
-- [Forgejo deployment, signup, backups, and recovery](infra/forgejo/README.md)
+- [OCI inventory and routing](https://git.nebula-1.com/nebula/infra/src/branch/main/docs/infra/oci-forgejo.md)
+- [Forgejo deployment, signup, backups, and recovery](https://git.nebula-1.com/nebula/infra/src/branch/main/infra/forgejo/README.md)
 - [Personal Forgejo repository and GitHub mirror](docs/infra/repository-mirroring.md)
+
+OCI sources now live in [nebula/infra](https://git.nebula-1.com/nebula/infra).
+This flake preserves the stage host outputs as aliases. Instance-wide CI runs
+on the dedicated OCI k3s node owned by that repo. Remaining workstation platform
+services are still local; this is the OCI portion of M-602b.

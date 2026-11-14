@@ -1,8 +1,0 @@
-.terraform/
-*.tfstate*
-.env.tf
-.env.local
-tfplan
-
-.env.cloudflare
-*.tfplan
