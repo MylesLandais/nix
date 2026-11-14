@@ -35,6 +35,7 @@ in
   ${bind "${mod} + M" "hl.dsp.exit()"}
   ${bind "${mod} + E" (app "nemo")}
   ${bind "${mod} + V" "hl.dsp.window.float()"}
+  ${bind "${mod} + F" "hl.dsp.window.fullscreen()"}
   ${bind "${mod} + P" (exec "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy")}
   ${bind "${mod} + H" (focus "l")}
   ${bind "${mod} + L" (focus "r")}

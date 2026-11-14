@@ -14,6 +14,8 @@
         font-family = "Maple Mono NF";
         background-opacity = 0.9;
         window-decoration = false;
+        # Leave fullscreen to the compositor and Ctrl+Enter to terminal apps.
+        keybind = [ "ctrl+enter=unbind" ];
         inherit (osConfig.host.themeData.ghostty) background;
         inherit (osConfig.host.themeData.ghostty) foreground;
         cursor-color = osConfig.host.themeData.ghostty.cursorColor;
