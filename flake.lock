@@ -668,11 +668,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1794680847,
-        "narHash": "sha256-IuerkvIM0DERI5vCsV4Iw/smSZHt3PMlczxE6cTOBJg=",
+        "lastModified": 1794682543,
+        "narHash": "sha256-Q4bA7P86L+EG+k32CQH+6cY1fAmgfq9hxFKj8RuPAh8=",
         "ref": "main",
-        "rev": "b6912b32299e2bb06f2d03e2f92e7c479cf45ae7",
-        "revCount": 5,
+        "rev": "0835c0f9d00241c1f0c2412b6735f34362278937",
+        "revCount": 7,
         "type": "git",
         "url": "https://git.nebula-1.com/nebula/infra.git"
       },

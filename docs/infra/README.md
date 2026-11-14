@@ -200,7 +200,12 @@ databases on their original endpoints.
    startup paths. Verify all clients reconnect to one cluster after a clean
    restart and that the retired database containers stay stopped.
 
-### Penpot on Cerberus
+### Penpot (retired)
+
+The OCI deployment was also retired on 2026-11-14. Its services, containers,
+images, endpoint and live data have been removed from stage-edge. A checksummed
+final recovery archive remains private at
+`~/.local/state/nebula/retired/penpot-oci-20261114/retirement.tar`.
 
 The local Penpot deployment was removed on 2026-11-08. Its two databases,
 Docker assets, and local Compose configuration were archived under

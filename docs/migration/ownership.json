@@ -6,7 +6,7 @@
     "postgresInfra": ["cerberus"], "valkeyInfra": ["cerberus"], "seaweedfsInfra": ["cerberus"],
     "openbaoInfra": ["cerberus"], "traefikInfra": ["cerberus"], "authentikInfra": ["cerberus"],
     "agenixInfra": ["cerberus"], "pyloadInfra": ["cerberus"], "mayaWorkerInfra": ["cerberus"],
-    "gitMirrors": ["cerberus"], "forgejo": ["stage-db"], "penpot": ["stage-edge"],
+    "gitMirrors": ["cerberus"], "forgejo": ["stage-db"],
     "tailscaleNode": ["stage-edge", "stage-db"],
     "hosts": ["stage-edge", "stage-db"]
   },
@@ -20,7 +20,7 @@
   },
   "files": ["modules/{infra,security,database}/", "modules/networking/{traefik,tailscale}.nix",
             "modules/profiles/{infra-spine,demo-cerberus}.nix",
-            "modules/services/{forgejo,penpot,git-mirrors,maya-worker,pyload}.nix",
+            "modules/services/{forgejo,git-mirrors,maya-worker,pyload}.nix",
             "modules/hosts/{stage-edge,stage-db}/", "modules/hosts/_oci-common.nix",
             "infra/", "docs/infra/ (except workspace-compute-budget.md)",
             "scripts/openbao-bootstrap/", "scripts/seaweedfs-capacity-report.py"]
