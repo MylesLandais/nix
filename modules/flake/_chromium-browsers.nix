@@ -1,4 +1,4 @@
-# Shared Chromium / Helium extension IDs and launch flags.
+# Private data: shared Chromium and Helium extension IDs and launch flags.
 # Exposed as flake.lib.chromiumBrowsers (modules/flake/lib.nix); used by the
 # home-manager base module and the cerberus Chromium policy.
 { lib }:

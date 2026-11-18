@@ -1,3 +1,1 @@
-[
-  ["modules/flake/_chromium-browsers.nix", "private-rationale", "", 1]
-]
+[]
