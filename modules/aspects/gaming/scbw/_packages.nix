@@ -1,3 +1,4 @@
+# Private helper: StarCraft package groups consumed by the scbw module.
 { pkgs }:
 
 {

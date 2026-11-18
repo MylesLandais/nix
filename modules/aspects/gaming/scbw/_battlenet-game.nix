@@ -1,3 +1,4 @@
+# Private helper: constructs the Battle.net launcher packages for scbw.
 # Builds the launcher command and desktop entry for one Battle.net game that
 # lives in a shared, mutable Lutris Wine prefix. Imported by path from the
 # per-game modules (currently nixos.scbw, modules/nixos/scbw/; WC3 runs through umu
