@@ -1,13 +1,6 @@
 [
   ["colmena.nix", "extraSpecialArgs", "extraSpecialArgs = node.extraSpecialArgs or { };", 2],
   ["colmena.nix", "specialArgs", "specialArgs = { inherit inputs; };", 1],
-  ["modules/desktops/kali/_greeter.nix", "private-module-body", "", 1],
-  ["modules/desktops/kali/_greeter.nix", "private-rationale", "", 1],
-  ["modules/desktops/kali/_packages.nix", "private-rationale", "", 1],
-  ["modules/desktops/kali/_skel.nix", "private-module-body", "", 1],
-  ["modules/desktops/kali/_skel.nix", "private-rationale", "", 1],
-  ["modules/desktops/kali/_theme.nix", "private-module-body", "", 1],
-  ["modules/desktops/kali/_theme.nix", "private-rationale", "", 1],
   ["modules/desktops/niri/_niri.nix", "private-rationale", "", 1],
   ["modules/flake/_chromium-browsers.nix", "private-rationale", "", 1],
   ["modules/flake/_mk-host.nix", "extraSpecialArgs", "// extraSpecialArgs;", 1],

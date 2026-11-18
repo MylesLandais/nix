@@ -1,3 +1,4 @@
+# The sibling module priorities retain the original import order and configuration precedence.
 _: {
   flake.modules.nixos.kali =
     {
@@ -7,11 +8,6 @@ _: {
       ...
     }:
     {
-      imports = [
-        ./_theme.nix
-        ./_greeter.nix
-        ./_skel.nix
-      ];
 
       config = lib.mkIf config.host.kali.enable {
         assertions = [

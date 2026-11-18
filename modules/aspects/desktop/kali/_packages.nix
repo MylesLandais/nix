@@ -1,3 +1,4 @@
+# Private helper: used by the kali package selection.
 {
   pkgs,
   profile ? "default",
