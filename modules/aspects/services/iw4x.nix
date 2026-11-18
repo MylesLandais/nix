@@ -12,7 +12,8 @@ _: {
       iw4x = pkgs.writeShellApplication {
         name = "iw4x";
         runtimeInputs = [ pkgs.coreutils ];
-        text = builtins.replaceStrings
+        text =
+          builtins.replaceStrings
             [ "@NIX1@" "@NIX2@" "@NIX3@" "@NIX4@" "@NIX5@" "@NIX6@" ]
             [
               "${lib.escapeShellArg cfg.gameDir}"
