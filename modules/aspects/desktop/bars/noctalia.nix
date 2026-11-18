@@ -1,3 +1,4 @@
+{ inputs, ... }:
 {
   flake.modules.homeManager.bars =
     {
@@ -5,7 +6,7 @@
       pkgs,
       osConfig,
       config,
-      inputs,
+
       ...
     }:
     {
