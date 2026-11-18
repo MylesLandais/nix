@@ -3,7 +3,7 @@ _: {
     { pkgs, ... }:
     let
       diskPlaybook = pkgs.writeShellScriptBin "disk-playbook" ''
-        exec ${pkgs.lua5_4}/bin/lua ${../../scripts/disk-playbook.lua} "$@"
+        exec ${pkgs.lua5_4}/bin/lua ${../../../scripts/disk-playbook.lua} "$@"
       '';
     in
     {
@@ -12,7 +12,7 @@ _: {
       systemd.user.services.disk-maintenance = {
         Unit = {
           Description = "Nightly disk space monitoring, reporting, and maintenance";
-          Documentation = [ "file://${../../scripts/disk-playbook.lua}" ];
+          Documentation = [ "file://${../../../scripts/disk-playbook.lua}" ];
         };
         Service = {
           Type = "oneshot";
