@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ inputs, lib, ... }:
 {
   flake.modules.homeManager.devtooling = lib.mkOrder 1140 {
     imports = [
@@ -27,7 +27,7 @@
           pkgs,
           lib,
           config,
-          inputs,
+
           ...
         }:
         let
