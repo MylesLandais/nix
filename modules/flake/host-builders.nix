@@ -1,5 +1,6 @@
-{ inputs, lib }:
+{ inputs, ... }:
 let
+  inherit (inputs.nixpkgs) lib;
   inherit (inputs) self;
 
   baselineModulePaths =
@@ -17,10 +18,9 @@ let
   userHasAgenix = users: lib.any (u: (users.${u}.ageIdentity or null) != null) (lib.attrNames users);
 
   mkHomeManagerConfig =
+    homeSettings:
     {
-      system,
       users,
-      extraSpecialArgs ? { },
       backupFileExtension ? null,
     }:
     {
@@ -57,27 +57,30 @@ let
           in
           lib.recursiveUpdate withAge extra
         ) users;
-        extraSpecialArgs = {
-          inherit inputs;
-          inherit system;
-        }
-        // extraSpecialArgs;
-      };
+      }
+      // homeSettings;
     };
 
   mkModules =
+    forExternalCaller:
     {
       modules,
       homeManagerModule ? inputs.home-manager.nixosModules.home-manager,
       users,
-      extraSpecialArgs ? { },
+      extraSpecialArgs ? { }, # Public mkModules accepts caller-supplied Home Manager values.
+      system ? "x86_64-linux",
       backupFileExtension ? null,
       baseline ? true,
       desktop ? false,
-      system ? "x86_64-linux",
     }:
     let
       userNames = lib.attrNames users;
+      homeSettings = lib.optionalAttrs forExternalCaller {
+        extraSpecialArgs = {
+          inherit inputs system;
+        }
+        // extraSpecialArgs;
+      };
     in
     (lib.optionals baseline (baselineModulePaths {
       inherit desktop;
@@ -85,21 +88,16 @@ let
     ++ modules
     ++ lib.optionals (userNames != [ ]) [
       homeManagerModule
-      (mkHomeManagerConfig {
+      (mkHomeManagerConfig homeSettings {
         inherit
-          system
           users
-          extraSpecialArgs
           backupFileExtension
           ;
       })
     ];
-in
-{
-  inherit mkModules;
-
   mkHost =
-    {
+    forExternalCaller:
+    args@{
       # deadnix: skipped via treefmt -L flag (lambda pattern names are not
       # checked); host files still pass `name`, so removing it breaks
       # evaluation with "called with unexpected argument 'name'".
@@ -107,31 +105,46 @@ in
       system ? "x86_64-linux",
       modules,
       users,
-      extraSpecialArgs ? { },
-      backupFileExtension ? null,
       specialArgs ? { },
+      extraSpecialArgs ? { }, # The published host constructor accepts both module classes.
+      backupFileExtension ? null,
       baseline ? true,
       desktop ? false,
       # nixpkgs and home-manager to build with; 7PZSZY2 uses nixos-wsl's pins.
       nixpkgs ? inputs.nixpkgs,
       homeManagerModule ? inputs.home-manager.nixosModules.home-manager,
     }:
-    nixpkgs.lib.nixosSystem {
-      inherit system;
-      specialArgs = specialArgs // {
+    let
+      compose = mkModules forExternalCaller;
+      callerArgs = specialArgs // {
         inherit inputs;
       };
-      modules = mkModules {
-        inherit
-          modules
-          homeManagerModule
-          users
-          extraSpecialArgs
-          backupFileExtension
-          baseline
-          desktop
-          system
-          ;
-      };
+    in
+    nixpkgs.lib.nixosSystem (
+      {
+        inherit system;
+        modules = compose (builtins.intersectAttrs (builtins.functionArgs compose) args);
+      }
+      // lib.optionalAttrs forExternalCaller {
+        specialArgs = callerArgs;
+      }
+    );
+in
+{
+  options.nodeBuilders = lib.mkOption {
+    type = lib.types.lazyAttrsOf (lib.types.addCheck lib.types.raw lib.isFunction);
+    internal = true;
+    description = "Host and module builders used by this repository.";
+  };
+  config = {
+    nodeBuilders = {
+      mkHost = mkHost false;
+      mkModules = mkModules false;
     };
+    # Other flakes may pass modules that request their own arguments.
+    flake.lib = {
+      mkHost = mkHost true;
+      mkModules = mkModules true;
+    };
+  };
 }

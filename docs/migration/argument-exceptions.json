@@ -1,1 +1,74 @@
-[]
+[
+  {
+    "file": "modules/flake/host-builders.nix",
+    "argument": "caller-provided Home Manager arguments, inputs and system",
+    "site": "extraSpecialArgs",
+    "expression": "extraSpecialArgs ? { }, # Public mkModules accepts caller-supplied Home Manager values.",
+    "consumer": "flake.lib.mkModules and the Home Manager modules supplied to flake.lib.mkHost",
+    "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host and Colmena composition select the local constructors.",
+    "test": "scripts/migration/test-host-builders.sh"
+  },
+  {
+    "file": "modules/flake/host-builders.nix",
+    "argument": "caller-provided Home Manager arguments, inputs and system",
+    "site": "extraSpecialArgs",
+    "expression": "extraSpecialArgs = {",
+    "consumer": "flake.lib.mkModules and the Home Manager modules supplied to flake.lib.mkHost",
+    "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host and Colmena composition select the local constructors.",
+    "test": "scripts/migration/test-host-builders.sh"
+  },
+  {
+    "file": "modules/flake/host-builders.nix",
+    "argument": "caller-provided Home Manager arguments, inputs and system",
+    "site": "extraSpecialArgs",
+    "expression": "// extraSpecialArgs;",
+    "consumer": "flake.lib.mkModules and the Home Manager modules supplied to flake.lib.mkHost",
+    "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host and Colmena composition select the local constructors.",
+    "test": "scripts/migration/test-host-builders.sh"
+  },
+  {
+    "file": "modules/flake/host-builders.nix",
+    "argument": "caller-provided NixOS arguments and the locked inputs",
+    "site": "specialArgs",
+    "expression": "specialArgs ? { },",
+    "consumer": "flake.lib.mkHost",
+    "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host and Colmena composition select the local constructors.",
+    "test": "scripts/migration/test-host-builders.sh"
+  },
+  {
+    "file": "modules/flake/host-builders.nix",
+    "argument": "caller-provided Home Manager arguments, inputs and system",
+    "site": "extraSpecialArgs",
+    "expression": "extraSpecialArgs ? { }, # The published host constructor accepts both module classes.",
+    "consumer": "flake.lib.mkHost",
+    "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host and Colmena composition select the local constructors.",
+    "test": "scripts/migration/test-host-builders.sh"
+  },
+  {
+    "file": "modules/flake/host-builders.nix",
+    "argument": "caller-provided NixOS arguments and the locked inputs",
+    "site": "specialArgs",
+    "expression": "callerArgs = specialArgs // {",
+    "consumer": "flake.lib.mkHost",
+    "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host and Colmena composition select the local constructors.",
+    "test": "scripts/migration/test-host-builders.sh"
+  },
+  {
+    "file": "modules/flake/host-builders.nix",
+    "argument": "caller-provided NixOS arguments and the locked inputs",
+    "site": "specialArgs",
+    "expression": "specialArgs = callerArgs;",
+    "consumer": "flake.lib.mkHost",
+    "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host and Colmena composition select the local constructors.",
+    "test": "scripts/migration/test-host-builders.sh"
+  },
+  {
+    "file": "colmena.nix",
+    "argument": "inputs",
+    "site": "specialArgs",
+    "expression": "specialArgs = { inherit inputs; };",
+    "consumer": "External Colmena modules using the published hive",
+    "reason": "The original hive exposed its pinned flake inputs under colmena.meta. Removing this field changed the public output tree.",
+    "test": "scripts/migration/test-host-builders.sh"
+  }
+]

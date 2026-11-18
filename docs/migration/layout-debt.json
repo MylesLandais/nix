@@ -1,15 +1,3 @@
 [
-  ["colmena.nix", "extraSpecialArgs", "extraSpecialArgs = node.extraSpecialArgs or { };", 2],
-  ["colmena.nix", "specialArgs", "specialArgs = { inherit inputs; };", 1],
-  ["modules/flake/_chromium-browsers.nix", "private-rationale", "", 1],
-  ["modules/flake/_mk-host.nix", "extraSpecialArgs", "// extraSpecialArgs;", 1],
-  ["modules/flake/_mk-host.nix", "extraSpecialArgs", "extraSpecialArgs", 2],
-  ["modules/flake/_mk-host.nix", "extraSpecialArgs", "extraSpecialArgs = {", 1],
-  ["modules/flake/_mk-host.nix", "extraSpecialArgs", "extraSpecialArgs ? { },", 3],
-  ["modules/flake/_mk-host.nix", "private-module-body", "", 1],
-  ["modules/flake/_mk-host.nix", "private-rationale", "", 1],
-  ["modules/flake/_mk-host.nix", "specialArgs", "specialArgs = specialArgs // {", 2],
-  ["modules/flake/_mk-host.nix", "specialArgs", "specialArgs ? { },", 1],
-  ["modules/hosts/default.nix", "extraSpecialArgs", "extraSpecialArgs = node.extraSpecialArgs or { };", 2],
-  ["modules/hosts/installer-iso/default.nix", "specialArgs", "specialArgs = { inherit inputs; };", 1]
+  ["modules/flake/_chromium-browsers.nix", "private-rationale", "", 1]
 ]

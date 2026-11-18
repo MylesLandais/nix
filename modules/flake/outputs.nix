@@ -14,6 +14,9 @@
       forgejo = inputs.nebula-infra.devShells.${system}.forgejo;
     });
 
-    colmena = import ../../colmena.nix { inherit inputs; };
+    colmena = import ../../colmena.nix {
+      inherit inputs;
+      inherit (config.nodeBuilders) mkModules;
+    };
   };
 }

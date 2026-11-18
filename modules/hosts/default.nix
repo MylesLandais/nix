@@ -14,10 +14,9 @@ in
 {
   flake.nixosConfigurations = lib.mapAttrs (
     name: node:
-    config.flake.lib.mkHost {
+    config.nodeBuilders.mkHost {
       inherit name;
       inherit (node) modules users desktop;
-      extraSpecialArgs = node.extraSpecialArgs or { };
     }
   ) deployNodes;
 }

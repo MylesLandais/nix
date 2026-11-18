@@ -1,7 +1,9 @@
-{ inputs }:
+{
+  inputs,
+  mkModules ? inputs.self.lib.mkModules,
+}:
 let
   lib = inputs.nixpkgs.lib;
-  mkHostLib = inputs.self.lib;
   deployNodes = import ./modules/hosts/_deploy-nodes.nix { inherit inputs lib; };
 
   mkColmenaNode = name: node: {
@@ -11,18 +13,18 @@ let
       buildOnTarget = false;
       tags = node.tags or [ ];
     };
-    imports = mkHostLib.mkModules {
+    imports = mkModules {
       inherit (node) modules;
       inherit (node) users;
       desktop = node.desktop or false;
-      extraSpecialArgs = node.extraSpecialArgs or { };
     };
   };
 in
 {
   meta = {
-    nixpkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
+    # Colmena exposes these inputs to modules supplied by downstream hive consumers.
     specialArgs = { inherit inputs; };
+    nixpkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
   };
 
   defaults = _: {

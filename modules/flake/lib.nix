@@ -8,6 +8,11 @@
   ...
 }:
 {
+  options.flake.lib = lib.mkOption {
+    type = lib.types.lazyAttrsOf lib.types.raw;
+    description = "Library functions and values exported by this flake.";
+  };
+
   options.dell7050 = lib.mkOption {
     # Callers can invoke the returned NixOS modules as functions.
     type = lib.types.attrsOf (lib.types.addCheck lib.types.raw lib.isFunction);
@@ -17,14 +22,5 @@
   config.flake.lib = {
     chromiumBrowsers = import ./_chromium-browsers.nix { inherit (inputs.nixpkgs) lib; };
     inherit (config) dell7050;
-    # Host builders (see _mk-host.nix).
-    inherit
-      (import ./_mk-host.nix {
-        inherit inputs;
-        inherit (inputs.nixpkgs) lib;
-      })
-      mkHost
-      mkModules
-      ;
   };
 }

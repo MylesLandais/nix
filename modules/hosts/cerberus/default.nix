@@ -5,7 +5,7 @@
   ...
 }:
 {
-  flake.nixosConfigurations.cerberus = config.flake.lib.mkHost {
+  flake.nixosConfigurations.cerberus = config.nodeBuilders.mkHost {
     name = "cerberus";
     desktop = true;
     backupFileExtension = "hm-backup";

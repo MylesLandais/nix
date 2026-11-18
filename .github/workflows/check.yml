@@ -68,6 +68,7 @@ jobs:
           git init -q --bare "$RUNNER_TEMP/cold-infra"
           git -C "$RUNNER_TEMP/cold-infra" fetch --depth=1 https://git.nebula-1.com/nebula/infra.git "$rev"
           test "$(git -C "$RUNNER_TEMP/cold-infra" rev-parse FETCH_HEAD)" = "$rev"
+          bash scripts/migration/test-host-builders.sh
           nix flake check --no-update-lock-file --accept-flake-config --show-trace
           for h in stage-edge stage-db; do
             nix eval --no-update-lock-file --accept-flake-config --raw ".#nixosConfigurations.$h.config.system.build.toplevel.drvPath"
