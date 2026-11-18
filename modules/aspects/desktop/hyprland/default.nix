@@ -1,3 +1,4 @@
+# The sibling module priorities retain the original import order and configuration precedence.
 _: {
   flake.modules.homeManager.hyprland =
     {
@@ -7,14 +8,6 @@ _: {
       ...
     }:
     {
-      imports = [
-        ./_hypr.nix
-        ./_hyprlock.nix
-        ./_hyprpaper.nix
-        ./_wlogout.nix
-        ./_workspace-recovery.nix
-        ./_prompt-follow-focus.nix
-      ];
 
       options = {
         my.hyprland.enable = lib.mkEnableOption "Enable hyprland module";

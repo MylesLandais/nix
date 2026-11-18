@@ -1,3 +1,4 @@
+# Private helper: used by the Hyprland bindings renderer.
 {
   lib,
   mod,
