@@ -102,7 +102,8 @@ let
       gamemode
       lutris
     ];
-    text = builtins.replaceStrings
+    text =
+      builtins.replaceStrings
         [
           "@NIX1@"
           "@NIX2@"
