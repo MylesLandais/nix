@@ -5,9 +5,6 @@ _: {
       ...
     }:
     {
-      imports = [
-        ./_noctalia.nix
-      ];
 
       config = {
         my.bars = {
