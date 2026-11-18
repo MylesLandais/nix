@@ -96,7 +96,7 @@ _: {
                 # Vendored from Workspace-internal (where its tests live) so a
                 # system unit never executes a script out of a home directory.
                 ExecStart = ''
-                  ${pkgs.python3}/bin/python3 ${../../scripts/seaweedfs-capacity-report.py} \
+                  ${pkgs.python3}/bin/python3 ${../../../scripts/seaweedfs-capacity-report.py} \
                     --master-url http://127.0.0.1:${toString cfg.masterPort} \
                     --volume-url http://127.0.0.1:${toString cfg.volumePort}
                 '';
