@@ -7,7 +7,7 @@ _: {
       ...
     }:
     let
-      infraLib = import ../aspects/infra/_lib.nix { inherit lib; };
+      infraLib = import ../infra/_lib.nix { inherit lib; };
       cfg = config.services.infra.pyload;
     in
     {
