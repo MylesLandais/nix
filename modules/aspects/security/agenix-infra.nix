@@ -17,7 +17,7 @@ _: {
       age.secrets = lib.mkMerge [
         (lib.mkIf (config.infra.demo.enable && hasOpenbaoUnseal) {
           openbao-unseal = {
-            file = ../secrets/openbao-unseal.age;
+            file = ../../secrets/openbao-unseal.age;
             owner = "root";
             group = "root";
             mode = "0400";
@@ -25,7 +25,7 @@ _: {
         })
         (lib.mkIf (config.infra.demo.enable && hasMayaApprole) {
           maya-approle-secret-id = {
-            file = ../secrets/maya-approle-secret-id.age;
+            file = ../../secrets/maya-approle-secret-id.age;
             owner = "warby";
             group = "users";
             mode = "0400";
@@ -33,7 +33,7 @@ _: {
         })
         (lib.mkIf (config.infra.demo.enable && hasAuthentikKey) {
           authentik-secret-key = {
-            file = ../secrets/authentik-secret-key.age;
+            file = ../../secrets/authentik-secret-key.age;
             owner = "root";
             group = "root";
             mode = "0400";
