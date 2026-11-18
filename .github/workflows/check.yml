@@ -21,10 +21,10 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Check migration rules and their debt ceiling
+      - name: Enforce the module layout and external argument boundaries
         env:
           BASE_REV: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: python3 scripts/migration/check-layout.py
+        run: python3 scripts/migration/check-layout.py --final
       - name: Run repository tests
         run: python3 -m unittest discover -s tests
   flake:
