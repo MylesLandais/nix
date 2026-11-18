@@ -1,5 +1,6 @@
+# Private data: monitor layout shared by Cerberus configuration and Home Manager.
 # Cerberus display layout (monitor outputs and modes), read by
-# hosts/cerberus/_home.nix. The wallpaper is host.wallpaper (configuration.nix).
+# hosts/cerberus/home.nix. The wallpaper is host.wallpaper (configuration.nix).
 {
   mainMonitor = {
     name = "desc:Dell Inc. Dell S2716DG #ASPYT+r5vCzd";

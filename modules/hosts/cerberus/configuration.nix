@@ -9,9 +9,6 @@ _: {
     }:
     {
       imports = [
-        ./_llm-router.nix
-        ./_chromium.nix
-        ./_adguard.nix
         inputs.self.modules.nixos.cerberusHardware
         inputs.self.modules.nixos.sshKeys
         inputs.self.modules.nixos.nvidia

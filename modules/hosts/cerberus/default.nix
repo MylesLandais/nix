@@ -4,9 +4,6 @@
   lib,
   ...
 }:
-let
-  inherit (inputs) self;
-in
 {
   flake.nixosConfigurations.cerberus = config.flake.lib.mkHost {
     name = "cerberus";
@@ -27,7 +24,7 @@ in
     users.warby = {
       homeModules = [
         inputs.self.modules.homeManager.base
-        "${self}/modules/hosts/cerberus/_home.nix"
+        config.cerberus.home
       ];
       uid = 1000;
       ageIdentity = "/home/warby/.ssh/age";
