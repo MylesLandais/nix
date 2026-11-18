@@ -1,4 +1,4 @@
-# 94tl0m2: Dell 7050 cluster node. The shared base lives in hosts/_dell7050;
+# 94tl0m2: Dell 7050 cluster node. The shared base lives in modules/roles/dell7050;
 # only this node's values are here.
 { config, ... }:
 let
