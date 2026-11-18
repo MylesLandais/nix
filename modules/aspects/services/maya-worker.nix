@@ -7,7 +7,7 @@ _: {
       ...
     }:
     let
-      infraLib = import ../aspects/infra/_lib.nix { inherit lib; };
+      infraLib = import ../infra/_lib.nix { inherit lib; };
       cfg = config.services.infra.mayaWorker;
       openbaoAddr = config.infra.secrets.openbaoAddr;
       secretIdFile = "/run/agenix/maya-approle-secret-id";
