@@ -1,7 +1,7 @@
-_: {
+{ inputs, ... }: {
   flake.modules.nixos.wslAgent =
     {
-      inputs,
+
       lib,
       config,
       pkgs,
