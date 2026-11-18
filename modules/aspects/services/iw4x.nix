@@ -52,7 +52,7 @@ _: {
           export IW4X_LAUNCHER_VERSION=${lib.escapeShellArg pkgs.iw4x-launcher.version}
           export IW4X_UMU_VERSION=${lib.escapeShellArg pkgs.umu-launcher.version}
           export IW4X_PROTON_VERSION=${lib.escapeShellArg pkgs.proton-ge-bin.version}
-          ${builtins.readFile ../../scripts/iw4x-pack.sh}
+          ${builtins.readFile ../../../scripts/iw4x-pack.sh}
         '';
       };
 
