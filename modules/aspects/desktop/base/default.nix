@@ -1,11 +1,11 @@
-_: {
+{ inputs, ... }: {
   flake.modules.homeManager.base =
     {
       pkgs,
       lib,
       config,
       osConfig,
-      inputs,
+
       ...
     }:
     let
