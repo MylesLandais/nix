@@ -80,7 +80,5 @@
   ["modules/hosts/installer-iso/default.nix", "specialArgs", "specialArgs = { inherit inputs; };", 1],
   ["modules/nixos/gamehacking/_citra-agent.nix", "private-module-body", "", 1],
   ["modules/nixos/gamehacking/_citra-agent.nix", "private-rationale", "", 1],
-  ["modules/nixos/gamehacking/_packages.nix", "private-rationale", "", 1],
-  ["modules/nixos/overlays/_cursor.nix", "private-rationale", "", 1],
-  ["modules/nixos/overlays/_pcsx2.nix", "private-rationale", "", 1]
+  ["modules/nixos/gamehacking/_packages.nix", "private-rationale", "", 1]
 ]

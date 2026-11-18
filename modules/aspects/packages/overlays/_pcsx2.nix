@@ -1,3 +1,4 @@
+# Private helper: the PCSX2 package overlay imported by the NixOS overlay module.
 # PCSX2 stable release fast-path.
 #
 # nixpkgs intentionally remains the owner of the build recipe and dependency

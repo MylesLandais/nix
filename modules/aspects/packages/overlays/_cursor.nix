@@ -1,3 +1,4 @@
+# Private helper: the Cursor package overlay imported by Cerberus.
 _final: prev:
 let
   pname = "code-cursor";
