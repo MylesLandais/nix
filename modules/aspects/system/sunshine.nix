@@ -1,10 +1,10 @@
-_: {
+{ inputs, ... }: {
   flake.modules.nixos.sunshine =
     {
       config,
       lib,
       pkgs,
-      inputs,
+
       ...
     }:
     let
