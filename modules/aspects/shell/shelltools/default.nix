@@ -1,3 +1,4 @@
+# The sibling module priorities retain the original import order and configuration precedence.
 _: {
   flake.modules.homeManager.shelltools =
     {
@@ -6,17 +7,6 @@ _: {
       ...
     }:
     {
-      imports = [
-        ./_atuin
-        ./_bat
-        ./_direnv
-        ./_eza
-        ./_fish
-        ./_fzf
-        ./_zoxide
-        ./_zsh
-        ./_yazi
-      ];
 
       options = {
         my.shelltools.enable = lib.mkEnableOption "Enable shell tools module";
