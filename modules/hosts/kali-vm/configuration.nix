@@ -1,10 +1,10 @@
-_: {
+{ inputs, ... }: {
   flake.modules.nixos.kaliVm =
     {
       config,
       lib,
       pkgs,
-      inputs,
+
       ...
     }:
     {
