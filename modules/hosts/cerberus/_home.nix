@@ -56,7 +56,15 @@ in
   my.hydra-smb.enable = true;
   my.hermesDesktop.enable = true;
 
-  my.hyprland.promptFollowFocus.enable = true;
+  my.hyprland.promptFollowFocus = {
+    enable = true;
+    # TV power-off is not reliably reflected in DPMS; allow only desk displays.
+    monitorDescriptions = map (monitor: lib.removePrefix "desc:" monitor.name) [
+      m.mainMonitor
+      m.secondaryMonitor
+      m.tertiaryMonitor
+    ];
+  };
 
   my.hyprland.workspaceRecovery = {
     enable = true;

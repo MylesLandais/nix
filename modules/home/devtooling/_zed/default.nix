@@ -99,9 +99,15 @@ in
 
       userSettings = {
         theme = "Kanagawa Wave";
-        buffer_font_family = "Maple Mono NF";
+        buffer_font_family = "Atkinson Hyperlegible Mono";
+        buffer_font_fallbacks = [ "Symbols Nerd Font Mono" ];
         buffer_font_size = 14;
-        ui_font_size = 16;
+        buffer_line_height = "comfortable";
+        ui_font_family = "B612";
+        ui_font_size = 15;
+        agent_ui_font_family = "Maple Mono";
+        agent_ui_font_size = 14;
+        agent_buffer_font_family = "Atkinson Hyperlegible Mono";
         autosave = "on_focus_change";
         vim_mode = true;
 
@@ -223,9 +229,10 @@ in
           };
           dock = "bottom";
           env.TERM = "ghostty";
-          font_family = "Hack Nerd Font";
+          font_family = "Atkinson Hyperlegible Mono";
+          font_fallbacks = [ "Symbols Nerd Font Mono" ];
           font_features = null;
-          font_size = null;
+          font_size = 14;
           line_height = "comfortable";
           option_as_meta = false;
           shell = "system";

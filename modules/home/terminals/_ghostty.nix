@@ -11,7 +11,19 @@
     programs.ghostty = {
       enable = true;
       settings = {
-        font-family = "Maple Mono NF";
+        font-family = [
+          "Atkinson Hyperlegible Mono"
+          "Symbols Nerd Font Mono"
+        ];
+        font-family-italic = "Maple Mono";
+        font-family-bold-italic = "Maple Mono";
+        font-feature = [
+          "-calt"
+          "-liga"
+        ];
+        adjust-cell-height = "15%";
+        cursor-style = "block";
+        cursor-style-blink = false;
         background-opacity = 0.9;
         window-decoration = false;
         # Leave fullscreen to the compositor and Ctrl+Enter to terminal apps.

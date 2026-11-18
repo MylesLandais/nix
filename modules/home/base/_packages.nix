@@ -7,6 +7,8 @@ with pkgs;
   eurostile-bold-extended
 
   age
+  atkinson-hyperlegible-mono
+  b612
   ags
   argocd
   beads
@@ -52,6 +54,7 @@ with pkgs;
   hack-font
   pkgs.maple-mono.NF-unhinted
   pkgs.maple-mono.truetype
+  nerd-fonts.symbols-only
   heroic
   hubble
   hyprshot

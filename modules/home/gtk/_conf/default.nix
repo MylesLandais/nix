@@ -42,6 +42,8 @@
       nemo-fileroller # Nemo → "Open with Archive Manager" context menu bridge
       file-roller # GNOME Archive Manager (backend for nemo-fileroller)
       ffmpegthumbnailer # Video thumbnails in Nemo, including WebM
+      webp-pixbuf-loader # WebP thumbnailer registration and decoder for Nemo
+      libheif.out # AVIF/HEIF thumbnailer registration (not in the default bin output)
       evince # GNOME document viewer (PDF, ePub, etc.)
       pkgs.gnome.gvfs # SMB/network locations for Nemo (matches services.gvfs on Cerberus)
 
