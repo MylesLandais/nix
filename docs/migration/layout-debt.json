@@ -51,8 +51,6 @@
   ["modules/home/devtooling/_tmux/default.nix", "private-rationale", "", 1],
   ["modules/home/devtooling/_zed/default.nix", "private-module-body", "", 1],
   ["modules/home/devtooling/_zed/default.nix", "private-rationale", "", 1],
-  ["modules/home/gtk/_conf/default.nix", "private-module-body", "", 1],
-  ["modules/home/gtk/_conf/default.nix", "private-rationale", "", 1],
   ["modules/home/prompt/_starship/default.nix", "private-module-body", "", 1],
   ["modules/home/prompt/_starship/default.nix", "private-rationale", "", 1],
   ["modules/home/prompt/_starship/kanagawa.nix", "private-rationale", "", 1],
