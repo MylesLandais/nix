@@ -6,9 +6,6 @@ _: {
       ...
     }:
     {
-      imports = [
-        ./_starship
-      ];
 
       options = {
         my.prompt.enable = lib.mkEnableOption "Enable prompt module";

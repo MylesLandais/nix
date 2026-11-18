@@ -1,3 +1,4 @@
+# Private helper: used by the Starship prompt settings.
 {
   scan_timeout = 10;
   add_newline = false;
