@@ -1,10 +1,10 @@
-_: {
+{ inputs, ... }: {
   flake.modules.nixos.argus =
     {
       config,
       lib,
       pkgs,
-      inputs,
+
       ...
     }:
     {
