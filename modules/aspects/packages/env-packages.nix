@@ -1,8 +1,8 @@
-_: {
+{ inputs, ... }: {
   flake.modules.nixos.envPackages =
     {
       config,
-      inputs,
+
       pkgs,
       lib,
       ...
