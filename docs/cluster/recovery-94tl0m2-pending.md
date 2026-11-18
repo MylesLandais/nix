@@ -12,12 +12,12 @@
 
 From cerberus, `ssh warby@192.168.0.32` was denied because:
 
-1. The staged ISO predated the canonical [`modules/nixos/ssh-keys.nix`](../../modules/nixos/ssh-keys.nix) wiring and/or got built before the keys landed on the `warby` user.
+1. The staged ISO predated the canonical [`modules/aspects/identity/ssh-keys.nix`](../../modules/aspects/identity/ssh-keys.nix) wiring and/or got built before the keys landed on the `warby` user.
 2. Cerberus's `~/.ssh/config` forced `IdentityAgent ~/.bitwarden-ssh-agent.sock` for **all** hosts, and the Bitwarden agent was down (`Connection refused`), so `~/.ssh/id_ed25519` never got offered.
 
 Both are fixed in the **Reproducible Installer ISO Rebuild** work:
 
-- [`modules/home/ssh-bitwarden.nix`](../../modules/home/ssh-bitwarden.nix) now has a `Host home-office-installer 94tl0m2 95qmom2 argus lacie dell-potato 192.168.0.* 100.107.*` block that pins `IdentityFile ~/.ssh/id_ed25519` + `IdentitiesOnly yes` + `IdentityAgent none`, so unattended ops work without Bitwarden.
+- [`modules/aspects/identity/ssh-bitwarden.nix`](../../modules/aspects/identity/ssh-bitwarden.nix) now has a `Host home-office-installer 94tl0m2 95qmom2 argus lacie dell-potato 192.168.0.* 100.107.*` block that pins `IdentityFile ~/.ssh/id_ed25519` + `IdentitiesOnly yes` + `IdentityAgent none`, so unattended ops work without Bitwarden.
 - [`modules/hosts/installer-iso/default.nix`](../../modules/hosts/installer-iso/default.nix) bakes `/etc/iso-build-info` with the flake rev + key fingerprints so the live tty proves which keys are loaded.
 
 ## Recovery drill — pending re-flash with new ISO

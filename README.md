@@ -24,12 +24,10 @@ flake.nix                 inputs + a bare flake-parts mkFlake
 modules/
   flake/                  flake-level glue: outputs, flake.lib (mkHost, …),
                           the packages overlay, formatter, checks, apps
-  nixos/                  flake.modules.nixos.<name>    — NixOS features
-  home/                   flake.modules.homeManager.<name> — home-manager features
-  desktops/<desktop>/     both halves of a desktop: default.nix (HM) + nixos.nix
-  hosts/                  one directory per host; default.nix builds the
-                          deploy-node table (_deploy-nodes.nix) with mkHost
-  services/, infra/, …    service modules (infra ones move to nebula-infra)
+  aspects/<domain>/        reusable NixOS and Home Manager features
+  roles/                  compositions shared by several hosts
+  hosts/                  machine facts, host wiring and the deploy-node table
+  nixos/                  existing GPU unlock module and its patches
 pkgs/<name>/package.nix   custom packages, exposed via overlays.default and
                           packages.<system>.<name>
 scripts/                  standalone scripts; module-private scripts live next
@@ -44,10 +42,11 @@ Conventions:
   `inputs.self.modules.<class>.<name>`. Names are explicit camelCase and
   recorded in `docs/migration/registry.json`, which
   `checks.<system>.module-registry` enforces.
-- **Private files start with `_`.** import-tree skips them, so a feature can
-  split itself into `_part.nix` files or keep a `script.sh` beside it.
+- **Private Nix helpers and data** have an underscore-prefixed path and a
+  comment naming their purpose or consumer. Registered module bodies live in
+  discoverable files. Scripts and other assets can sit beside their feature.
 - **Custom home-manager options live under `my.*`** (e.g. `my.zed.enable`) and
-  host facts under `host.*` (`modules/nixos/host-options.nix`).
+  host facts under `host.*` (`modules/aspects/hosts/host-options.nix`).
 
 ## Usage
 

@@ -101,7 +101,7 @@ These still run their own Postgres and are unconverted:
 
 ### Object storage (consolidated 2026-09-24)
 
-`services.infra.seaweedfs` (`modules/database/seaweedfs.nix`) replaces the Docker
+`services.infra.seaweedfs` (`modules/aspects/database/seaweedfs.nix`) replaces the Docker
 container `dev.seaweedfs`. Single-node `weed server` (master + volume + filer + S3),
 running as `warby`, `-dir=/srv/data/seaweedfs-data` — the same data directory the
 Docker container migrated onto via `scripts/cutover_seaweedfs.sh`
@@ -135,7 +135,7 @@ dropped its own `seaweedfs` service block and volume),
 2. Exactly one Valkey answers `:6379`, with no container publishing that port.
 3. Authentik's secret key comes from agenix, not the checked-in demo placeholder.
 4. `services.infra.mayaWorker.workspacePath` points at a directory that exists —
-   its default currently does not (see `modules/services/maya-worker.nix`).
+   its default currently does not (see `modules/aspects/services/maya-worker.nix`).
 
 ## Cerberus service retirements
 

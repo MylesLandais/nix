@@ -97,7 +97,7 @@ See [recovery-hardware-qa.md](recovery-hardware-qa.md) for OptiPlex recovery dri
    - `sudo dmidecode -s system-serial-number` (lowercase → hostname)
    - `lsblk -d -o NAME,SIZE,MODEL,SERIAL` (pick disks by serial, not letter)
    - `ip -o link`, `ip -4 addr` (NIC name + DHCP IP)
-4. From cerberus: `ssh warby@<dhcp-ip>` works on first boot — keys are already trusted. The cluster + installer hostnames bypass the Bitwarden SSH agent via the [`modules/home/ssh-bitwarden.nix`](../../modules/home/ssh-bitwarden.nix) `Host` block, so this works even with the vault locked.
+4. From cerberus: `ssh warby@<dhcp-ip>` works on first boot — keys are already trusted. The cluster + installer hostnames bypass the Bitwarden SSH agent via the [`modules/aspects/identity/ssh-bitwarden.nix`](../../modules/aspects/identity/ssh-bitwarden.nix) `Host` block, so this works even with the vault locked.
 5. Run `nix-install` (alias of `bootstrap-lacie`) for guided partition + install.
 6. After install, scaffold `modules/hosts/<tag>/` and add a node block to `colmena.nix`. See `docs/cluster/colmena.md`.
 

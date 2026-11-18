@@ -82,7 +82,7 @@ Caches listed only in `flake.nix` under `nixConfig.extra-substituters` are **sil
 dropped** unless the invoking user is a `trusted-user` — Nix prints *"ignoring
 untrusted flake configuration setting"* and compiles from source instead. Add caches
 to `nix.settings.substituters` in
-[`modules/nixos/nix-config.nix`](modules/nixos/nix-config.nix), and keep the
+[`modules/aspects/system/nix-config.nix`](modules/aspects/system/nix-config.nix), and keep the
 two lists in sync.
 
 This bit us: `noctalia.cachix.org` and `cache.numtide.com` were declared only in

@@ -43,14 +43,13 @@ is NOPASSWD for `warby`.
 
 Every `.nix` file under `modules/` is a flake-parts module loaded by import-tree, except files and directories whose name starts with `_` (private to the module next to them). Features are registry modules, never imported by path:
 
-- NixOS feature: `modules/nixos/<name>.nix` declaring `flake.modules.nixos.<name>` (camelCase). Host wiring lists `inputs.self.modules.nixos.<name>`.
-- Home Manager feature: `modules/home/<name>.nix` (or `modules/home/<name>/default.nix` with private `_parts`) declaring `flake.modules.homeManager.<name>`. The HM base (`modules/home/base/default.nix`, `homeManager.base`) imports the shared ones; per-host ones go in `modules/hosts/<host>/_home.nix`. Custom HM options live under `my.*`.
-- Desktop: `modules/desktops/<desktop>/` holds both halves, `default.nix` (HM) and `nixos.nix` (NixOS); `nixos.desktops` composes the NixOS halves.
+- Reusable features live under `modules/aspects/<domain>/`. Register their NixOS and Home Manager contributions under `flake.modules.nixos.<name>` and `flake.modules.homeManager.<name>`. The shared Home Manager base imports the common features. Keep host options under `host.*` and user options under `my.*`.
+- Put reusable compositions in `modules/roles/`. Keep machine facts and the wiring that instantiates a machine in `modules/hosts/<host>/`. Use underscore Nix paths for private helpers and data, and name the caller or purpose in a one-line comment.
 - New or renamed module: update `docs/migration/registry.json` in the same commit (`checks.<system>.module-registry` enforces it).
 
-Host-specific facts (hostname, disks, one-off flags): `modules/hosts/<host>/configuration.nix`, or private `_*.nix` files beside it (cerberus: `_llm-router.nix`, `_chromium.nix`, `_adguard.nix`, `_desktop-layout.nix`).
+Cerberus keeps its DNS, browser and model-service settings in `adguard.nix`, `chromium.nix` and `llm-router.nix` beside the host configuration. Its private monitor table is `_desktop-layout.nix`.
 
-Host composition: deploy-node hosts are entries in `modules/hosts/_deploy-nodes.nix` (built by `modules/hosts/default.nix` and read by `colmena.nix`); cerberus and 7PZSZY2 call `config.flake.lib.mkHost` in their own `default.nix`.
+Host composition: deploy-node hosts are entries in `modules/hosts/_deploy-nodes.nix` (built by `modules/hosts/default.nix` and read by `colmena.nix`); cerberus and 7PZSZY2 call `config.nodeBuilders.mkHost` in their own `default.nix`.
 
 Custom packages: `pkgs/<name>/package.nix`, picked up automatically by `overlays.default` and `packages.<system>.<name>` (`modules/flake/packages.nix`). Long scripts belong in a file next to their module, read with `builtins.readFile`, not inline in Nix strings.
 
@@ -74,23 +73,23 @@ Clean up generated repo-local artifacts such as the `result` symlink after build
 
 ### Add a System Package
 
-Edit `modules/nixos/env-packages.nix` (shared desktop) or the host’s `configuration.nix` for host-only packages. Add the package name. Run /nix-check. If error "attribute missing", the package doesn't exist in nixpkgs; search with `nix search nixpkgs package-name`. Commit with `chore(packages): add package-name`. Run /nix-switch.
+Edit `modules/aspects/packages/env-packages.nix` (shared desktop) or the host’s `configuration.nix` for host-only packages. Add the package name. Run /nix-check. If error "attribute missing", the package doesn't exist in nixpkgs; search with `nix search nixpkgs package-name`. Commit with `chore(packages): add package-name`. Run /nix-switch.
 
 ### Add User Program or Dotfile
 
-Edit `modules/home/base/_packages.nix` (package list), `modules/home/base/default.nix`, or the feature module under `modules/home/`. Find `home.packages` or create a `home.file` entry. Use proper XDG paths for config files. Run /nix-check. If home-manager syntax error, the error message shows file and line number. Commit appropriately. Run /nix-switch.
+Edit `modules/aspects/desktop/base/_packages.nix` (package list), `modules/aspects/desktop/base/default.nix`, or the feature under `modules/aspects/`. Find `home.packages` or create a `home.file` entry. Use proper XDG paths for config files. Run /nix-check. If home-manager syntax error, the error message shows file and line number. Commit appropriately. Run /nix-switch.
 
 Important: Do NOT run home-manager switch alone. Always use nixos-rebuild switch which handles both system and home-manager.
 
 ### Update Git Configuration
 
-Edit `modules/home/devtooling/_git/default.nix`. Find `programs.git.settings` and add or modify the setting. Run /nix-check. Commit with `chore(git): add or update setting_name`. Run /nix-switch.
+Edit `modules/aspects/development/devtooling/git.nix`. Find `programs.git.settings` and add or modify the setting. Run /nix-check. Commit with `chore(git): add or update setting_name`. Run /nix-switch.
 
 Git config at `~/.config/git/config` is read-only (symlink to `/nix/store`). All changes must be in that module. Verify after rebuild with `git config --global key_name`.
 
 ### Add Passwordless Sudo Rule
 
-Edit `modules/nixos/security.nix` (shared) or the host’s `configuration.nix`. Find `security.sudo.extraRules`. Add a new rule with command path and NOPASSWD. Use `/run/current-system/sw/bin/command` for paths (not `${pkgs.command}`). Run /nix-check. Commit with `chore(sudo): add NOPASSWD for command_name`. Run /nix-switch.
+Edit `modules/aspects/system/security.nix` (shared) or the host’s `configuration.nix`. Find `security.sudo.extraRules`. Add a new rule with command path and NOPASSWD. Use `/run/current-system/sw/bin/command` for paths (not `${pkgs.command}`). Run /nix-check. Commit with `chore(sudo): add NOPASSWD for command_name`. Run /nix-switch.
 
 ### Fix Build Errors After /nix-check
 
@@ -98,7 +97,7 @@ Read error message and note file path and line number. Common errors: "attribute
 
 ### Handle Home-Manager Configuration Not Applying
 
-Changes to `modules/home/` or `modules/desktops/` should appear in `~/.config` after rebuild. If not: Verify rebuild ran by checking the target file. If the file is old, rebuild didn't apply. Cause is usually running `home-manager switch` instead of `nixos-rebuild switch`. Run: `sudo nixos-rebuild switch --flake ~/.config/nixos#cerberus`. Wait for completion. Check file again. If still missing, check the module is imported in `modules/home/base/default.nix` (or the host’s `_home.nix`) and registered in `docs/migration/registry.json`. If still failing, run /nix-check for validation errors.
+Changes to Home Manager or desktop aspects should appear in `~/.config` after rebuild. If not: Verify rebuild ran by checking the target file. If the file is old, rebuild didn't apply. Cause is usually running `home-manager switch` instead of `nixos-rebuild switch`. Run: `sudo nixos-rebuild switch --flake ~/.config/nixos#cerberus`. Wait for completion. Check file again. If still missing, check the module is imported in `modules/aspects/desktop/base/default.nix` (or the host’s `home.nix`) and registered in `docs/migration/registry.json`. If still failing, run /nix-check for validation errors.
 
 ### Shell Not Seeing Changes
 
@@ -130,7 +129,7 @@ Local Cerberus changes use `/nix-switch` instead of Colmena.
 
 ### Deploy troubleshooting
 
-- SSH: verify hostname and keys in `modules/nixos/ssh-keys.nix` / target `authorized_keys`
+- SSH: verify hostname and keys in `modules/aspects/identity/ssh-keys.nix` / target `authorized_keys`
 - Sudo prompts: add NOPASSWD or use root in `colmena.nix`
 - Build failures: reproduce with `nix build .#nixosConfigurations.<host>.config.system.build.toplevel`
 - Rollback on target: `sudo nixos-rebuild switch --rollback`
