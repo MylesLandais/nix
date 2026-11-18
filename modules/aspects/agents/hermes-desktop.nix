@@ -1,11 +1,11 @@
 # Hermes agent launcher entries, desktop icon, and dashboard theme.
-_: {
+{ inputs, ... }: {
   flake.modules.homeManager.hermesDesktop =
     {
       config,
       lib,
       pkgs,
-      inputs,
+
       ...
     }:
     let
