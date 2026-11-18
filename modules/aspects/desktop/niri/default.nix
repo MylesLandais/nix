@@ -1,9 +1,9 @@
-_: {
+{ inputs, ... }: {
   flake.modules.homeManager.niri =
     {
       lib,
       osConfig,
-      inputs,
+
       ...
     }:
     {
