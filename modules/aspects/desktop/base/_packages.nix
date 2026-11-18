@@ -1,3 +1,4 @@
+# Private helper: used by nixos.nix.
 # eurostile-bold-extended and chatgpt-linux come from pkgs/ via the default
 # overlay (modules/flake/packages.nix).
 { pkgs }:

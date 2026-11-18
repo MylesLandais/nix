@@ -33,7 +33,6 @@
   ["modules/flake/_mk-host.nix", "specialArgs", "specialArgs ? { },", 1],
   ["modules/home/bars/_noctalia.nix", "private-module-body", "", 1],
   ["modules/home/bars/_noctalia.nix", "private-rationale", "", 1],
-  ["modules/home/base/_packages.nix", "private-rationale", "", 1],
   ["modules/home/devtooling/_git/default.nix", "private-module-body", "", 1],
   ["modules/home/devtooling/_git/default.nix", "private-rationale", "", 1],
   ["modules/home/devtooling/_gleam/default.nix", "private-module-body", "", 1],
