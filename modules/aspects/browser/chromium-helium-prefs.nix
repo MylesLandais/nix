@@ -1,9 +1,9 @@
 # Helium profile prefs (ext_proxy, vertical tabs) and CDP launcher desktop entry.
-_: {
+{ inputs, ... }: {
   flake.modules.homeManager.chromiumHeliumPrefs =
     {
       config,
-      inputs,
+
       lib,
       pkgs,
       ...
