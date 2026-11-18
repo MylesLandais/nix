@@ -1,3 +1,4 @@
+# Private helper: used by the gamehacking package selection.
 { pkgs }:
 
 with pkgs;
