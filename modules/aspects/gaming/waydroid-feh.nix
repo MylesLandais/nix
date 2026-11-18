@@ -18,7 +18,8 @@ _: {
           waydroid
           xdg-utils
         ];
-        text = builtins.replaceStrings
+        text =
+          builtins.replaceStrings
             [
               "@NIX1@"
               "@NIX2@"
@@ -60,9 +61,9 @@ _: {
           gnugrep
           waydroid
         ];
-        text = builtins.replaceStrings [ "@NIX1@" "@NIX2@" ] [ "${toString cfg.width}" "${toString cfg.height}" ] (
-            builtins.readFile ./waydroid-feh/feh-waydroid-bootstrap.sh
-          );
+        text =
+          builtins.replaceStrings [ "@NIX1@" "@NIX2@" ] [ "${toString cfg.width}" "${toString cfg.height}" ]
+            (builtins.readFile ./waydroid-feh/feh-waydroid-bootstrap.sh);
       };
 
       armTranslation = pkgs.writeShellApplication {
@@ -76,8 +77,8 @@ _: {
           waydroid
         ];
         text = builtins.replaceStrings [ "@NIX1@" ] [ "${pkgs.python3}" ] (
-            builtins.readFile ./waydroid-feh/feh-waydroid-arm-translation.sh
-          );
+          builtins.readFile ./waydroid-feh/feh-waydroid-arm-translation.sh
+        );
       };
 
       deviceId = pkgs.writeShellApplication {
@@ -100,8 +101,8 @@ _: {
           waydroid
         ];
         text = builtins.replaceStrings [ "@NIX1@" "@NIX2@" ] [ "${androidPackage}" "${androidPackage}" ] (
-            builtins.readFile ./waydroid-feh/feh-waydroid-doctor.sh
-          );
+          builtins.readFile ./waydroid-feh/feh-waydroid-doctor.sh
+        );
       };
 
       gameplayTest = pkgs.writeShellApplication {
@@ -112,8 +113,8 @@ _: {
           waydroid
         ];
         text = builtins.replaceStrings [ "@NIX1@" "@NIX2@" ] [ "${androidPackage}" "${androidPackage}" ] (
-            builtins.readFile ./waydroid-feh/feh-waydroid-test.sh
-          );
+          builtins.readFile ./waydroid-feh/feh-waydroid-test.sh
+        );
       };
 
       androidDevice = pkgs.writeShellApplication {
@@ -125,8 +126,8 @@ _: {
           usbutils
         ];
         text = builtins.replaceStrings [ "@NIX1@" ] [ "${androidPackage}" ] (
-            builtins.readFile ./waydroid-feh/feh-android-device.sh
-          );
+          builtins.readFile ./waydroid-feh/feh-android-device.sh
+        );
       };
 
       samsungRecover = pkgs.writeShellApplication {
@@ -137,8 +138,8 @@ _: {
           scrcpy
         ];
         text = builtins.replaceStrings [ "@NIX1@" "@NIX2@" ] [ "${androidPackage}" "${androidPackage}" ] (
-            builtins.readFile ./waydroid-feh/feh-samsung-recover.sh
-          );
+          builtins.readFile ./waydroid-feh/feh-samsung-recover.sh
+        );
       };
     in
     {
