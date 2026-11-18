@@ -1,5 +1,5 @@
-_: {
-  flake.modules.nixos.nixConfig = { inputs, ... }: {
+{ inputs, ... }: {
+  flake.modules.nixos.nixConfig = _: {
     nixpkgs.config = {
       allowUnfree = true;
       # electron-39 is EOL but still pulled transitively by desktop apps
