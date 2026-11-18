@@ -1,3 +1,4 @@
+# Private helper: used by maya-worker.nix.
 { lib }:
 let
   inherit (lib) types mkOption mkEnableOption;
