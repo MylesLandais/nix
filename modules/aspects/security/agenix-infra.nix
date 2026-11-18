@@ -1,8 +1,8 @@
-_: {
+{ inputs, ... }: {
   flake.modules.nixos.agenixInfra =
     {
       config,
-      inputs,
+
       lib,
       pkgs,
       ...
