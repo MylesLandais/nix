@@ -38,6 +38,8 @@ jobs:
         with:
           persist-credentials: false
       - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa
+      - name: Verify installer comparisons with Nix-backed fixtures
+        run: python3 -m unittest discover -s tests -p test_migration_closures.py
       - name: Cold-fetch infra and evaluate the locked flake
         env:
           FORGEJO_INFRA_USERNAME: ${{ secrets.FORGEJO_INFRA_USERNAME }}

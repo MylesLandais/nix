@@ -60,6 +60,10 @@ change (same package name and version) is rejected.
 
 ### Realized closure proof for the whole-tree pass
 
+Run `python3 scripts/migration/check-layout.py` on each slice. Remove its resolved entries from `layout-debt.json` in the same commit. At structural sign-off, run the checker with `--final` to require an empty debt file. The revision-specific inventory stays with the comparison evidence.
+
+Document an unavoidable external module argument in `argument-exceptions.json`. Each entry names the file, argument, consumer, reason, and test file. Its `site` is the Nix option name and its `expression` is the exact stripped source line. Each entry covers one occurrence. Delete it when the boundary goes away.
+
 Run `prove-closures` for both the parent comparison and the cumulative comparison against the accepted early rebuild. Save stdout as JSON evidence. The command reads both committed trees, verifies their revision identities, enumerates system and Home Manager roots, and compares realized store closures. Run the existing configuration/registry verification alongside it. Identical store paths must have the same NAR hash. A relocated path must match exactly one output with the same logical name, version, output suffix, and NAR hash. Missing realizations or unmatched outputs fail the check.
 
 For `installerIso`, the comparison evaluates the real locked sources with a constant full and short revision stamp. It leaves production evaluation untouched and permits no installer-name exception. To identify the exact comparison roots that need realizing, inspect the `before` and `after` paths in a failed proof.
