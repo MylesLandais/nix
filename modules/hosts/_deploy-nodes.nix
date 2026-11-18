@@ -1,3 +1,4 @@
+# Private data: node configurations shared by flake host construction and Colmena.
 { inputs, ... }:
 let
   inherit (inputs) self;
