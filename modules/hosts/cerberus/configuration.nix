@@ -1,8 +1,8 @@
-_: {
+{ inputs, ... }: {
   flake.modules.nixos.cerberus =
     {
       config,
-      inputs,
+
       lib,
       pkgs,
       ...
