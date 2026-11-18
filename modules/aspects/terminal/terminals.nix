@@ -6,11 +6,6 @@ _: {
       ...
     }:
     {
-      imports = [
-        ./_kitty.nix
-        ./_ghostty.nix
-      ];
-
       options = {
         my.terminals.enable = lib.mkEnableOption "Enable terminals module";
       };
