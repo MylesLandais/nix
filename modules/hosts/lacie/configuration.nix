@@ -1,9 +1,9 @@
-_: {
+{ inputs, ... }: {
   flake.modules.nixos.lacie =
     {
       lib,
       pkgs,
-      inputs,
+
       ...
     }:
     {
