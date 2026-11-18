@@ -22,29 +22,33 @@
             builtins.readFile ../../../../scripts/fe_echoes_index.py
           );
 
-          checkpointChlink = pkgs.buildGoModule rec {
-            pname = "checkpoint-chlink";
-            version = "5.2.0";
-            src = pkgs.fetchFromGitHub {
-              owner = "BernardoGiordano";
-              repo = "Checkpoint";
-              rev = "ac9863c161ce440c225c02285ab89b4e1fb21424";
-              hash = "sha256-wFvE1B9AVSkwVzFKgq5eKsPS/76Fb6gM8AlYhO3W8yU=";
+          checkpointChlink =
+            let
+              version = "5.2.0";
+              src = pkgs.fetchFromGitHub {
+                owner = "BernardoGiordano";
+                repo = "Checkpoint";
+                rev = "ac9863c161ce440c225c02285ab89b4e1fb21424";
+                hash = "sha256-wFvE1B9AVSkwVzFKgq5eKsPS/76Fb6gM8AlYhO3W8yU=";
+              };
+            in
+            pkgs.buildGoModule {
+              inherit version src;
+              pname = "checkpoint-chlink";
+              sourceRoot = "${src.name}/tools/chlink";
+              vendorHash = null;
+              ldflags = [
+                "-s"
+                "-w"
+                "-X main.version=${version}"
+              ];
+              meta = {
+                description = "Checkpoint wireless save-transfer companion";
+                homepage = "https://github.com/BernardoGiordano/Checkpoint/tree/v${version}/tools/chlink";
+                license = lib.licenses.gpl3Only;
+                mainProgram = "chlink";
+              };
             };
-            sourceRoot = "${src.name}/tools/chlink";
-            vendorHash = null;
-            ldflags = [
-              "-s"
-              "-w"
-              "-X main.version=${version}"
-            ];
-            meta = {
-              description = "Checkpoint wireless save-transfer companion";
-              homepage = "https://github.com/BernardoGiordano/Checkpoint/tree/v${version}/tools/chlink";
-              license = lib.licenses.gpl3Only;
-              mainProgram = "chlink";
-            };
-          };
 
           azaharMaya = pkgs.writeShellApplication {
             name = "azahar-maya";
