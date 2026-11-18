@@ -1,3 +1,4 @@
+# Keep the sibling module priorities in import order so profile links and shell settings retain their precedence.
 _: {
   flake.modules.homeManager.devtooling =
     {
@@ -6,18 +7,6 @@ _: {
       ...
     }:
     {
-      imports = [
-        ./_git
-        ./_gleam
-        ./_go
-        ./_kubernetes
-        ./_lua
-        ./_pi
-        ./_remmina
-        ./_rust
-        ./_tmux
-        ./_zed
-      ];
 
       options = {
         my.devtooling.enable = lib.mkEnableOption "Enable devtooling module";
