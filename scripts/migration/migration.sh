@@ -10,6 +10,7 @@ migration capture   [--rev REV] [--hosts a,b|all] [--no-flake]
 migration verify    --task ID [--rev REV] [--against REV] [--hosts a,b|all] [--write-evidence]
 migration audit     [--rev REV] [--hosts a,b|all]
 migration inventory [--rev REV]
+migration prove-closures --against REV [--rev REV] [--hosts a,b|all]
 common: [--repo DIR]   (default: the git toplevel of $PWD)
 
 REV defaults to HEAD; --against defaults to REV^. Snapshots are cached in
@@ -494,6 +495,19 @@ verify)
 audit)
   refuse_dirty_head "$REV"
   audit "$(resolve "$REV")" "${HOSTS:-all}"
+  ;;
+prove-closures)
+  refuse_dirty_head "$REV"
+  [[ -n $AGAINST ]] || die "prove-closures requires --against"
+  for side in before after; do
+    ref=$REV
+    if [[ $side == before ]]; then ref=$AGAINST; fi
+    sha=$(resolve "$ref")
+    nix eval --json --file "$HARNESS_FLAKE/closure-roots.nix" \
+      --argstr flakeRef "git+file://$REPO?rev=$sha" --argstr expectedRev "$sha" \
+      --argstr hosts "${HOSTS:-all}" profiles > "$TMPD/$side.json"
+  done
+  python3 "$CLOSURE_COMPARE" --manifests "$TMPD/before.json" "$TMPD/after.json"
   ;;
 inventory)
   inventory "$(resolve "$REV")"

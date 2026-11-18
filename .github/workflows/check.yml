@@ -14,20 +14,61 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check:
+  layout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check migration rules and their debt ceiling
+        env:
+          BASE_REV: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python3 scripts/migration/check-layout.py
+      - name: Run repository tests
+        run: python3 -m unittest discover -s tests
+  flake:
+    # Only trusted branch revisions may receive the read-only Forgejo credential.
+    if: github.event_name != 'pull_request' && contains(fromJSON('["refs/heads/dev","refs/heads/stable","refs/heads/dendritic"]'), github.ref)
+    needs: layout
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
-      # Checks are cheap by design: host-<name> only records the toplevel drvPath
-      # (full evaluation, no closure build). Full closures are packages.<system>.host-*,
-      # built explicitly, never by flake check. Not --no-build: evaluating the
-      # hosts needs import-from-derivation (e.g. tokyonight.nix) to be realised.
-      - name: nix flake check (x86_64-linux checks, incl. treefmt + host eval)
-        run: nix flake check --accept-flake-config --show-trace
-      - name: evaluate aarch64 hosts (eval only, not buildable here)
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa
+      - name: Verify installer comparisons with Nix-backed fixtures
+        run: python3 -m unittest discover -s tests -p test_migration_closures.py
+      - name: Cold-fetch infra and evaluate the locked flake
+        env:
+          FORGEJO_INFRA_USERNAME: ${{ secrets.FORGEJO_INFRA_USERNAME }}
+          FORGEJO_INFRA_READ_TOKEN: ${{ secrets.FORGEJO_INFRA_READ_TOKEN }}
+          GIT_TERMINAL_PROMPT: 0
+        shell: bash
         run: |
+          set -eu
+          : "${FORGEJO_INFRA_USERNAME:?missing read-only infra username}"
+          : "${FORGEJO_INFRA_READ_TOKEN:?missing read-only infra token}"
+          export GIT_CONFIG_COUNT=2
+          export GIT_CONFIG_KEY_0=credential.useHttpPath GIT_CONFIG_VALUE_0=true
+          export GIT_CONFIG_KEY_1=credential.helper
+          export GIT_CONFIG_VALUE_1="$RUNNER_TEMP/infra-credential"
+          cat > "$GIT_CONFIG_VALUE_1" <<'HELPER'
+          #!/bin/sh
+          [ "$1" = get ] || exit 0
+          request=$(cat)
+          for match in protocol=https host=git.nebula-1.com path=nebula/infra.git; do
+            printf '%s\n' "$request" | grep -Fxq "$match" || exit 0
+          done
+          printf 'username=%s\npassword=%s\n' "$FORGEJO_INFRA_USERNAME" "$FORGEJO_INFRA_READ_TOKEN"
+          HELPER
+          chmod 700 "$GIT_CONFIG_VALUE_1"
+          rev=$(jq -er '.nodes[.nodes.root.inputs["nebula-infra"]].locked.rev' flake.lock)
+          git init -q --bare "$RUNNER_TEMP/cold-infra"
+          git -C "$RUNNER_TEMP/cold-infra" fetch --depth=1 https://git.nebula-1.com/nebula/infra.git "$rev"
+          test "$(git -C "$RUNNER_TEMP/cold-infra" rev-parse FETCH_HEAD)" = "$rev"
+          nix flake check --no-update-lock-file --accept-flake-config --show-trace
           for h in stage-edge stage-db; do
-            nix eval --accept-flake-config --raw ".#nixosConfigurations.$h.config.system.build.toplevel.drvPath"; echo
+            nix eval --no-update-lock-file --accept-flake-config --raw ".#nixosConfigurations.$h.config.system.build.toplevel.drvPath"
           done

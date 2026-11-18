@@ -8,6 +8,8 @@
       harnessFlake = pkgs.runCommand "migration-harness" { } ''
         mkdir $out
         cp ${../../scripts/migration/snapshot.nix} $out/snapshot.nix
+        cp ${../../scripts/migration/installer-comparison.nix} $out/installer-comparison.nix
+        cp ${../../scripts/migration/closure-roots.nix} $out/closure-roots.nix
         echo '{ outputs = _: { lib = import ./snapshot.nix; }; }' > $out/flake.nix
       '';
       migration = pkgs.writeShellApplication {
@@ -21,10 +23,12 @@
           findutils
           gawk
           nix-diff
+          python3
           yq-go
         ];
         text = ''
           export HARNESS_FLAKE=${harnessFlake}
+          export CLOSURE_COMPARE=${../../scripts/migration/compare-closures.py}
         ''
         + builtins.readFile ../../scripts/migration/drv-equiv.sh
         + builtins.readFile ../../scripts/migration/migration.sh;
