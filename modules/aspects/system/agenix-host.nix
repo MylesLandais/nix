@@ -1,7 +1,7 @@
-_: {
+{ inputs, ... }: {
   flake.modules.nixos.agenixHost =
     {
-      inputs,
+
       pkgs,
       ...
     }:
