@@ -1,4 +1,4 @@
-# Private helper: used by nixos.nix.
+# Private helper: package list consumed by the shared Home Manager base.
 # eurostile-bold-extended and chatgpt-linux come from pkgs/ via the default
 # overlay (modules/flake/packages.nix).
 { pkgs }:
