@@ -48,7 +48,8 @@ _: {
           procps
           umu-launcher
         ];
-        text = builtins.replaceStrings
+        text =
+          builtins.replaceStrings
             [
               "@NIX1@"
               "@NIX2@"
