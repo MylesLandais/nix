@@ -10,27 +10,8 @@ _: {
       cfg = config.host.warcraft3;
       name = "Warcraft III: Reforged";
 
-      # GE-Proton11-7 and later carry the crypt32 fix for the WC3 3.0 "check
-      # your VPN" login error (proton-ge-custom PR #765); 11-11 was verified
-      # signing in on 2026-10-30. A binary repack, so overriding the version
-      # only downloads a release tarball.
-      geProton = pkgs.proton-ge-bin.overrideAttrs (
-        finalAttrs: old: {
-          version = "GE-Proton11-11";
-          __intentionallyOverridingVersion = true;
-          passthru = old.passthru // {
-            variants = old.passthru.variants // {
-              x86_64-linux = {
-                toolName = "${finalAttrs.version}-x86_64";
-                src = pkgs.fetchzip {
-                  url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}-x86_64.tar.gz";
-                  hash = "sha256-3tVgf83IkteFtVo/bHd4yG1xCtPeuW8FXaTrHOLjvKQ=";
-                };
-              };
-            };
-          };
-        }
-      );
+      # GE-Proton 11-7 and later include the Battle.net crypt32 login fix.
+      geProton = pkgs.proton-ge-bin;
 
       # Battle.net windows from a pre-warmed session get this class
       # (umu maps GAMEID=umu-<id> to steam_app_<id>) so Hyprland can park them
@@ -125,7 +106,7 @@ _: {
         protonPath = lib.mkOption {
           type = lib.types.str;
           default = "${geProton.steamcompattool}";
-          defaultText = lib.literalExpression ''"''${proton-ge-bin (GE-Proton11-11)}.steamcompattool"'';
+          defaultText = lib.literalExpression ''"''${proton-ge-bin}.steamcompattool"'';
           description = "Proton build run by umu. Must be GE-Proton11-7 or newer for the WC3 login fix.";
         };
 

@@ -115,10 +115,10 @@ _: {
 
       # sched_ext LAVD: latency-criticality-aware scheduling for interactive and
       # gaming workloads under heavy background load. The CachyOS kernel ships
-      # sched_ext; roll back at runtime with `systemctl stop scx`.
-      services.scx = {
+      # sched_ext; roll back at runtime with `systemctl stop scx_loader`.
+      services.scx-loader = {
         enable = true;
-        scheduler = "scx_lavd";
+        config.default_sched = "scx_lavd";
       };
 
       # THP `always` makes khugepaged/compaction stall on a box that is

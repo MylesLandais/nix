@@ -38,7 +38,7 @@
   writeText,
 }:
 let
-  version = "0.1.5-rc.3";
+  version = "0.2.2-rc.5";
   packageManifest = writeText "deepseek-harness-package.json" (
     builtins.toJSON {
       name = "deepseek-harness-dependencies";
@@ -48,11 +48,11 @@ let
       # prepare the native PTY/FFI modules and restore spawn-helper's executable
       # bit; silently skipping them produces an installed but broken harness.
       allowScripts = {
-        "@deepseek-ai/dsh-subprocess-local@0.1.5-rc.3" = true;
-        "koffi@3.3.1" = true;
+        "@deepseek-ai/dsh-subprocess-local@0.2.2-rc.5" = true;
+        "koffi@3.1.1" = true;
         "koffi@3.3.2" = true;
         "node-pty@1.2.0-beta.15" = true;
-        "@google/genai@1.52.0" = true;
+        "@google/genai@2.21.0" = false; # Upstream preinstall only prints a message.
         "protobufjs@7.6.6" = true;
       };
     }
@@ -86,7 +86,9 @@ let
 
       mkdir -p $out
       cp ${packageManifest} $out/package.json
-      npm install --prefix $out --no-audit --no-fund --omit=dev --strict-allow-scripts
+      # Pin npm resolution to the refresh date so transitive version ranges stay repeatable.
+      npm install --before=2026-11-19T15:00:00Z --prefix "$out" \
+        --no-audit --no-fund --omit=dev --strict-allow-scripts
     '';
 
     installPhase = ''
@@ -115,7 +117,7 @@ let
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-u7dW7vtdCMivPFVBE8izVV7IAdvlfja/k2UnSQx85sg=";
+    outputHash = "sha256-lnTQCNgeUptuU0jMswvh+p+4UcFz1wYhUb/VxkMlEnc=";
   };
 in
 stdenvNoCC.mkDerivation {
@@ -130,6 +132,17 @@ stdenvNoCC.mkDerivation {
 
     mkdir -p $out/lib
     cp -r ${nodeModules}/node_modules $out/lib/
+
+    # Use the exposed Node internals in both copies of the profile resolver.
+    # The npm native addon only recognizes upstream-built Node executables.
+    for bundle in index.js worker/profile-resolution-bootstrap.js; do
+      resolver="$out/lib/node_modules/@deepseek-ai/dsh-app-boot/lib/$bundle"
+      chmod u+w "$resolver"
+      substituteInPlace "$resolver" \
+        --replace-fail 'const addon = createRequire(import.meta.url)("node-addon-require-builtin");' \
+                       'const requireInternal = createRequire(import.meta.url);' \
+        --replace-fail 'addon.requireBuiltin("internal/' 'requireInternal("internal/'
+    done
 
     # dsh resolves its plugins by walking node_modules at runtime, so the tree
     # has to stay intact and the entrypoint has to run from inside it — a bare

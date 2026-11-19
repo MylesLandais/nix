@@ -21,6 +21,11 @@ let
   # runaway app (and per-app usage shows up in systemd-cgtop). Ghostty
   # already creates its own scopes.
   app = cmd: exec "${app2unit} -- ${cmd}";
+  clipboard =
+    if bar == "noctalia" then
+      "noctalia msg panel-toggle clipboard"
+    else
+      "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy";
   focus = dir: "hl.dsp.focus({ direction = \"${dir}\" })";
   wMove = dir: "hl.dsp.window.move({ direction = \"${dir}\" })";
   wResize =
@@ -37,7 +42,7 @@ in
   ${bind "${mod} + E" (app "nemo")}
   ${bind "${mod} + V" "hl.dsp.window.float()"}
   ${bind "${mod} + F" "hl.dsp.window.fullscreen()"}
-  ${bind "${mod} + P" (exec "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy")}
+  ${bind "${mod} + P" (exec clipboard)}
   ${bind "${mod} + H" (focus "l")}
   ${bind "${mod} + L" (focus "r")}
   ${bind "${mod} + K" (focus "u")}
@@ -62,18 +67,18 @@ in
   ${bindO "${mod} + mouse:273" "hl.dsp.window.resize()" { mouse = true; }}
 ''
 + lib.optionalString (bar == "noctalia") ''
-  ${bind "${mod} + B" (exec "noctalia-shell ipc call lockScreen lock")}
-  ${bind "${mod} + C" (exec "noctalia-shell ipc call plugin:clipper toggle")}
-  ${bind "${mod} + R" (exec "noctalia-shell ipc call launcher toggle")}
+  ${bind "${mod} + B" (exec "noctalia msg session lock")}
+  ${bind "${mod} + C" (exec clipboard)}
+  ${bind "${mod} + R" (exec "noctalia msg panel-toggle launcher")}
   ${bind "${mod} + S" (exec "hyprshot -m region --clipboard-only")}
-  ${bind "${mod} + SHIFT + R" (exec "noctalia-shell ipc call sessionMenu toggle")}
-  ${bind "${mod} + X" (exec "noctalia-shell ipc call settings toggle")}
+  ${bind "${mod} + SHIFT + R" (exec "noctalia msg panel-toggle session")}
+  ${bind "${mod} + X" (exec "noctalia msg settings-toggle")}
   ${bind "${mod} + SHIFT + S" (app "obs")}
-  ${bind "${mod} + SHIFT + N" (exec "noctalia-shell ipc call nightLight toggle")}
-  ${bind "${mod} + N" (exec "noctalia-shell ipc call notifications toggleHistory")}
-  ${bind "${mod} + SHIFT + W" (exec "noctalia-shell ipc call wallpaper toggle")}
-  ${bind "${mod} + SHIFT + C" (exec "noctalia-shell ipc call controlCenter toggle")}
-  ${bind "${mod} + SPACE" (exec "noctalia-shell ipc call controlCenter toggle")}
+  ${bind "${mod} + SHIFT + N" (exec "noctalia msg nightlight-toggle")}
+  ${bind "${mod} + N" (exec "noctalia msg panel-toggle control-center notifications")}
+  ${bind "${mod} + SHIFT + W" (exec "noctalia msg panel-toggle wallpaper")}
+  ${bind "${mod} + SHIFT + C" (exec "noctalia msg panel-toggle control-center")}
+  ${bind "${mod} + SPACE" (exec "noctalia msg panel-toggle control-center")}
 ''
 + (builtins.concatStringsSep "\n" (
   builtins.genList (

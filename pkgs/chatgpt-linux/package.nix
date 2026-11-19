@@ -127,7 +127,7 @@ let
 in
 stdenv.mkDerivation (_finalAttrs: {
   pname = "chatgpt-linux";
-  version = "26.1103.31037";
+  version = "26.1111.71704";
 
   src = fetchurl {
     # OpenAI's official x64 Linux preview package. Upstream only publishes a
@@ -136,7 +136,7 @@ stdenv.mkDerivation (_finalAttrs: {
     # file, read its version (`dpkg-deb -f chatgpt_amd64.deb Version`), and bump
     # `version` + `hash` together. Never accept a suggested hash unverified.
     url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_amd64.deb";
-    hash = "sha256-Mv7YCtP4yvZm5YYAIjYelwnWSqMYz7GfVI6LRY1PZ5M=";
+    hash = "sha256-Ae73x3yDX34a+5K6HCkXikwZ1sZlc73TuGUg4qv4BqQ=";
   };
 
   nativeBuildInputs = [

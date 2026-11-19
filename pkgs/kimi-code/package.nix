@@ -16,7 +16,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kimi-code";
-  version = "2.1.1";
+  version = "2.7.0";
 
   src = fetchurl {
     url =
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
       + "%40moonshot-ai/kimi-code%40${finalAttrs.version}/"
       + "kimi-code-linux-x64.zip";
     # Matches the sha256 digest GitHub reports for the release asset itself.
-    hash = "sha256-npQpI+4YSC0CfqltfIXUWf7+CBX8JPMiLxjs2ot1bAA=";
+    hash = "sha256-9r37E+LqYu/PUWr5DFiuUcP10H6jiaF8ogWrHC6Ae9Q=";
   };
 
   nativeBuildInputs = [

@@ -2,10 +2,10 @@
 _final: prev:
 let
   pname = "code-cursor";
-  version = "3.20.17";
+  version = "3.30.14";
   src = prev.fetchurl {
-    url = "https://downloads.cursor.com/production/0c32194e3fb5ffaced9fb36430b860ec301e1fc8/linux/x64/Cursor-${version}-x86_64.AppImage";
-    hash = "sha256-E+gInIUlGhAveZBa3/uR3SmN1YYmUlmb5jRX4o3DEhg=";
+    url = "https://downloads.cursor.com/production/5f54c8173e5552412beb40702adac16275677fa0/linux/x64/Cursor-${version}-x86_64.AppImage";
+    hash = "sha256-6gfkPW9kEnXIhd4LqzZXVBEMVyH+hSTNuDtoUIDoq7k=";
   };
   contents = prev.appimageTools.extract { inherit pname version src; };
 in

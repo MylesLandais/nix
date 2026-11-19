@@ -72,7 +72,7 @@
       # resolves the helper as a sibling of the real binary; on Linux current_exe()
       # reads /proc/self/exe, which follows symlinks straight back to the original store
       # path, where the helper is absent. The whole package has to move together.
-      codexVersion = "0.158.0";
+      codexVersion = "0.170.0";
       llmCodex = inputs.llm.packages.${pkgs.stdenv.hostPlatform.system}.codex;
       llmCodexVersion = llmCodex.version or (lib.getVersion llmCodex.name);
 
@@ -80,14 +80,14 @@
       # rather than silently pairing a helper binary with a different codex.
       patchedCodex =
         assert lib.assertMsg (llmCodexVersion == codexVersion)
-          "codex release ${codexVersion} is out of sync with llm codex ${llmCodexVersion} — bump codexVersion and its hash in modules/_home.nix";
+          "codex release ${codexVersion} is out of sync with llm codex ${llmCodexVersion} — bump codexVersion and its hash in modules/aspects/desktop/base/default.nix";
         pkgs.stdenv.mkDerivation {
           pname = "codex";
           version = codexVersion;
 
           src = pkgs.fetchurl {
             url = "https://github.com/openai/codex/releases/download/rust-v${codexVersion}/codex-package-x86_64-unknown-linux-musl.tar.gz";
-            hash = "sha256-szzUJsmsq5s0xakyALpP6DyOYUwYzl71KyvzZAi44Yw=";
+            hash = "sha256-p3/4e+e6gJ1xVygnCnj1zjUn3AdSlBbR74kpuQuEdes=";
           };
 
           # codex, codex-code-mode-host, rg and bwrap are static-pie and need nothing.
@@ -156,7 +156,6 @@
         inputs.self.modules.homeManager.diskPlaybook
         inputs.self.modules.homeManager.firefox
         inputs.stylix.homeModules.stylix
-        inputs.noctalia.homeModules.default
         inputs.tokyonight.homeManagerModules.default
         inputs.hermes-agent.homeManagerModules.default
         inputs.self.modules.homeManager.hermes
@@ -189,17 +188,24 @@
         # ignored), so their flags go in through commandLineArgs. Chromium's override
         # must match programs.chromium.commandLineArgs below so both resolve to one store path.
         packages =
-          map (
-            p:
-            if lib.getName p == "chromium" || (webgpu && lib.getName p == "google-chrome") then
-              p.override {
-                commandLineArgs = lib.concatStringsSep " " (
-                  if lib.getName p == "chromium" then chromiumCliArgs else chromiumWebgpuFlags
-                );
+          map
+            (
+              p:
+              if lib.getName p == "chromium" || (webgpu && lib.getName p == "google-chrome") then
+                p.override {
+                  commandLineArgs = lib.concatStringsSep " " (
+                    if lib.getName p == "chromium" then chromiumCliArgs else chromiumWebgpuFlags
+                  );
+                }
+              else
+                p
+            )
+            (
+              import ./_packages.nix {
+                inherit pkgs;
+                agsPackage = inputs.installer-compat.legacyPackages.${pkgs.stdenv.hostPlatform.system}.ags;
               }
-            else
-              p
-          ) (import ./_packages.nix { inherit pkgs; })
+            )
           ++ [ patchedCodex ];
         pointerCursor = {
           gtk.enable = true;

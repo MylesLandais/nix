@@ -10,6 +10,9 @@ _: {
 
       nixpkgs.overlays = [
         (_final: prev: {
+          # Bitwarden uses a private keyring daemon only in its build tests.
+          # Keep that dependency stock so Hydra's desktop binary can be used.
+          bitwarden-desktop = prev.bitwarden-desktop.override { inherit (prev) gnome-keyring; };
           gnome-keyring = prev.gnome-keyring.overrideAttrs (oldAttrs: {
             patches = (oldAttrs.patches or [ ]) ++ [
               ./_patches/gnome-keyring-opensession-race.patch

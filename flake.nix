@@ -3,7 +3,7 @@
 
     extra-substituters = [
       "https://nix-community.cachix.org/"
-      "https://cache.nixos.org/"
+      "https://cache.nixos.org?priority=10"
       "https://noctalia.cachix.org"
       "https://cache.numtide.com"
     ];
@@ -31,7 +31,17 @@
       url = "github:FKouhai/helium2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Legacy AGS and the findiso installer require this nixpkgs revision.
+    installer-compat.url = "github:NixOS/nixpkgs/e7439b6b14ad3cc35d05608ebca9bce01a25f5f8";
     agenix.url = "github:ryantm/agenix";
+    # Source-only tracking: upstream ships no flake. The NixOS module in
+    # modules/nixos/gpu-unlock.nix consumes `inputs.gpu-unlock` directly and
+    # builds the kernel module and firmware from it. `nix flake update
+    # gpu-unlock` advances the source pin to upstream's default branch.
+    gpu-unlock = {
+      url = "github:Zagitta/gpu-unlock";
+      flake = false;
+    };
     nebula-infra.url = "git+https://git.nebula-1.com/nebula/infra.git?ref=main";
     trigo = {
       url = "github:FKouhai/trigo";
@@ -43,7 +53,7 @@
     # invalidated it and forced a local CUDA build. Pinned here so ordinary updates
     # leave it alone; bump deliberately when you actually want a newer sunshine.
     # Must stay a fixed rev — a second moving branch would recreate the problem.
-    sunshine-nixpkgs.url = "github:NixOS/nixpkgs/f13ff45afd1bb73e640eaa08a7066dbed07e3238";
+    sunshine-nixpkgs.url = "github:NixOS/nixpkgs/04906337b6d53e8bb0eaf0470ae9f070a4d4eb55";
     chaotic = {
       url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -57,7 +67,7 @@
     # cached against its own pin: adding `follows` puts 934 derivations
     # (nodejs + electron + the whole npm tree) into a local build. A duplicated
     # closure is cheaper than that compile.
-    hermes-agent.url = "github:NousResearch/hermes-agent/v0.21.6";
+    hermes-agent.url = "github:NousResearch/hermes-agent/v0.23.2";
     nur.url = "github:nix-community/NUR";
     # numtide multi-agent flake: opencode, codex, gemini-cli, etc. Tracks
     # upstream agent releases — `nix flake update llm` keeps them all current.
@@ -73,13 +83,6 @@
     };
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    noctalia = {
-      # Compatibility hold: Noctalia v5 replaces the QML/Quickshell plugin API
-      # with Luau. Keep the working Clipper combination until a separately
-      # validated migration preserves saved clips, notecards and keybindings.
-      url = "github:noctalia-dev/noctalia-shell/b16dc50250af05d5048ac454dbf4e898d1adcac0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri = {

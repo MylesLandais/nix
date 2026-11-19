@@ -12,6 +12,7 @@
         inputs.self.modules.nixos.cerberusHardware
         inputs.self.modules.nixos.sshKeys
         inputs.self.modules.nixos.nvidia
+        inputs.self.modules.nixos.gpuUnlock
         inputs.self.modules.nixos.gaming
         inputs.self.modules.nixos.gitMirrors
         inputs.self.modules.nixos.dev
@@ -49,33 +50,16 @@
 
       networking.hostName = config.host.hostName;
 
-      # gpu-unlock A/B: the default entry stays stock; these two boot entries
-      # unlock the 3090 Ti, upstream as shipped and with the open stability
-      # PRs. The module is imported only here so that the default system,
-      # including its option docs, is identical to a build without it.
-      specialisation =
-        let
-          gpuUnlock = inputs.self.modules.nixos.gpuUnlock;
-        in
-        {
-          gpu-unlock.configuration = {
-            imports = [ gpuUnlock ];
-            system.nixos.tags = [ "gpu-unlock" ];
-            hardware.gpuUnlock = {
-              enable = true;
-              targets = "0000:2b:00.0";
-            };
-          };
-          gpu-unlock-patched.configuration = {
-            imports = [ gpuUnlock ];
-            system.nixos.tags = [ "gpu-unlock-patched" ];
-            hardware.gpuUnlock = {
-              enable = true;
-              patched = true;
-              targets = "0000:2b:00.0";
-            };
-          };
-        };
+      # gpu-unlock: the DEFAULT entry unlocks the 3090 Ti upstream 2.0
+      # (tracking Zagitta/gpu-unlock main). The stock comparison is the
+      # previous boot generation, not a specialisation: keeping the unlock in
+      # a specialisation forever meant the running system never measured it.
+      # Revert by switching back a generation. A/B protocol and stock
+      # baselines: ~/Vault/nix-issues/gpu-unlock-ab.md.
+      hardware.gpuUnlock = {
+        enable = true;
+        targets = "0000:2b:00.0";
+      };
 
       nixpkgs.overlays = [
         (import "${inputs.self}/modules/aspects/packages/overlays/_cursor.nix")
@@ -162,7 +146,6 @@
       boot = {
         plymouth.enable = true;
         consoleLogLevel = 3;
-        initrd.verbose = false;
         loader = {
           systemd-boot.enable = true;
           efi.canTouchEfiVariables = true;

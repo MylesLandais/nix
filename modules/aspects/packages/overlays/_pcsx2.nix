@@ -27,36 +27,40 @@ let
   };
 in
 {
-  pcsx2 = prev.pcsx2.overrideAttrs (oldAttrs: {
-    inherit version;
-    src = source;
+  pcsx2 =
+    if prev.lib.versionAtLeast prev.pcsx2.version version then
+      prev.pcsx2
+    else
+      prev.pcsx2.overrideAttrs (oldAttrs: {
+        inherit version;
+        src = source;
 
-    # New mandatory dependency in 2.8.0; the 2.6.3 nixpkgs recipe predates it.
-    buildInputs = (oldAttrs.buildInputs or [ ]) ++ [ prev.rapidyaml ];
+        # New mandatory dependency in 2.8.0; the 2.6.3 nixpkgs recipe predates it.
+        buildInputs = (oldAttrs.buildInputs or [ ]) ++ [ prev.rapidyaml ];
 
-    # The nixpkgs recipe closes over its own patches snapshot in postInstall,
-    # so replace that small phase to make our vendored snapshot authoritative.
-    postInstall = ''
-      install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/icons/hicolor/64x64/apps/PCSX2.png
-      install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
+        # The nixpkgs recipe closes over its own patches snapshot in postInstall,
+        # so replace that small phase to make our vendored snapshot authoritative.
+        postInstall = ''
+          install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/icons/hicolor/64x64/apps/PCSX2.png
+          install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
-      zip -jq $out/share/PCSX2/resources/patches.zip ${patches}/patches/*
-      strip-nondeterminism $out/share/PCSX2/resources/patches.zip
-    '';
+          zip -jq $out/share/PCSX2/resources/patches.zip ${patches}/patches/*
+          strip-nondeterminism $out/share/PCSX2/resources/patches.zip
+        '';
 
-    passthru =
-      builtins.removeAttrs (oldAttrs.passthru or { }) [
-        "pcsx2_patches"
-        "updateScript"
-      ]
-      // {
-        pcsx2_patches = patches;
-        vendorPins = {
-          inherit version patchesRev;
-          sourceTag = "v${version}";
-          sourceHash = source.outputHash;
-          patchesHash = patches.outputHash;
-        };
-      };
-  });
+        passthru =
+          builtins.removeAttrs (oldAttrs.passthru or { }) [
+            "pcsx2_patches"
+            "updateScript"
+          ]
+          // {
+            pcsx2_patches = patches;
+            vendorPins = {
+              inherit version patchesRev;
+              sourceTag = "v${version}";
+              sourceHash = source.outputHash;
+              patchesHash = patches.outputHash;
+            };
+          };
+      });
 }

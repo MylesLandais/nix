@@ -1,7 +1,7 @@
 # Private helper: package list consumed by the shared Home Manager base.
 # eurostile-bold-extended and chatgpt-linux come from pkgs/ via the default
 # overlay (modules/flake/packages.nix).
-{ pkgs }:
+{ pkgs, agsPackage }:
 
 with pkgs;
 [
@@ -10,7 +10,7 @@ with pkgs;
   age
   atkinson-hyperlegible-mono
   b612
-  ags
+  agsPackage
   argocd
   beads
   bind

@@ -14,16 +14,11 @@
       registry.nixpkgs.flake = inputs.nixpkgs;
       nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
       settings = {
-        # Keep this list in sync with the `nixConfig.extra-substituters` block in
-        # flake.nix. Those flake-level entries are silently dropped ("ignoring
-        # untrusted flake configuration setting") because the invoking user is not a
-        # trusted-user, so a cache declared only there is never actually consulted and
-        # its packages get compiled locally instead. noctalia and numtide were in that
-        # position — noctalia is a direct input with a bar module, so it was building
-        # from source on every bump.
+        # Keep daemon and flake substituters in sync so both interactive builds
+        # and privileged rebuilds can use the same signed binaries.
         substituters = [
           "https://nix-community.cachix.org/"
-          "https://cache.nixos.org/"
+          "https://cache.nixos.org?priority=10"
           "https://zed.cachix.org/"
           # TODO(unsolved): cache.garnix.io disabled 2026-08-09 — it was timing out
           # entirely (no response to /nix-cache-info), and Nix waits on it before

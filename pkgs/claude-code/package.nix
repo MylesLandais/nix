@@ -14,7 +14,7 @@
   socat,
 }:
 let
-  version = "2.1.295";
+  version = "2.1.328";
 
   platformMap = {
     "aarch64-darwin" = "darwin-arm64";
@@ -28,10 +28,10 @@ let
       or (throw "Claude Code is not supported on ${stdenv.hostPlatform.system}");
 
   nativeHashes = {
-    "darwin-arm64" = "0w3z0jgn0cccbf065d72g1j6hiw7y5ki75fr6fv00fai18pfw5h1";
-    "darwin-x64" = "0k3jzw6b1279rv06gqs8rl9an517sa5b4b28bvps31c5529681m6";
-    "linux-x64" = "0n7kwqgm6sxdndvhjfxha3vlhhn08z9y1d9r1cgcqzvc3bhvy0s5";
-    "linux-arm64" = "0fza3p5s7093rm97ijlq6f09l5xkj4z84dgqhfk94vzv689xrffg";
+    "darwin-arm64" = "sha256-6FVHGQ74zZgwM7phsXGUBFpv6gADXaNJ7+q+2GutrMk=";
+    "darwin-x64" = "sha256-v0ClVVwB5q/mwCj74Hgvk1gPTwg1/V0TAi4DnsdlB+E=";
+    "linux-x64" = "sha256-qYLTgDC5fnUISK3Sy7LfbZpw1VRKIsqbIWo0m6JYZeg=";
+    "linux-arm64" = "sha256-MH+LraJ7N9t1U/rHXoYATj2/9akx/8YRtU/nEM4etSE=";
   };
 
   nativeBinary = fetchurl {

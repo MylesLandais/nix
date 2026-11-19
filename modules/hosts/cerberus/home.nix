@@ -188,7 +188,7 @@
         Service = {
           ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p %h/Weed";
           ExecStart = "${pkgs.seaweedfs}/bin/weed mount -filer=127.0.0.1:8888 -dir=%h/Weed -filer.path=/buckets -map.uid=1000:0 -map.gid=1000:0";
-          ExecStop = "/run/wrappers/bin/fusermount -u -z %h/Weed";
+          ExecStop = "/run/wrappers/bin/fusermount3 -u -z %h/Weed";
           Restart = "on-failure";
           RestartSec = "15s";
         };

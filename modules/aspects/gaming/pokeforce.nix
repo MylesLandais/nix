@@ -11,7 +11,7 @@ _: {
 
       launcherArchive = pkgs.fetchurl {
         url = "https://cdn.pokeforce.org/launcher/PokeForce%20Launcher%20Linux.tar";
-        hash = "sha256-yXZ9RgkIkkWn4nWtZGI7s6qATJsuNmXrfAsDOKX7/F8=";
+        hash = "sha256-MAEMjLHf913OA0NAdsoOPIO5Fd36wVb4Xra5wtLmE+Y=";
       };
 
       launcherAppImage = pkgs.runCommand "pokeforce-launcher.AppImage" { } ''
@@ -21,14 +21,14 @@ _: {
 
       pokeforce = pkgs.appimageTools.wrapType2 {
         pname = "pokeforce";
-        version = "beta-2026-09-04";
+        version = "beta-2026-10-14";
         src = launcherAppImage;
 
         extraInstallCommands = ''
           install -Dm644 ${
             pkgs.appimageTools.extractType2 {
               pname = "pokeforce-extracted";
-              version = "beta-2026-09-04";
+              version = "beta-2026-10-14";
               src = launcherAppImage;
             }
           }/PokeForce.png \

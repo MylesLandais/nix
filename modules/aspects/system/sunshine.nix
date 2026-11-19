@@ -93,6 +93,10 @@
           };
         };
 
+        # The pinned package's shell wrapper adds vulkan-loader, which its ELF
+        # already has in RUNPATH. NixOS requires an ELF for file capabilities.
+        security.wrappers.sunshine.source = lib.mkForce "${config.services.sunshine.package}/bin/.sunshine-wrapped";
+
         # mDNS discovery for Moonlight clients
         services.avahi = {
           enable = true;

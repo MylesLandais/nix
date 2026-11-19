@@ -10,11 +10,11 @@
   # Anything richer (hyprland desktop, pentest toolkit, emulators, full
   # qemu_full, home-manager profiles, ...) is layered on lacie post-install,
   # NOT in the live shim. See modules/hosts/lacie/configuration.nix.
-  flake.nixosConfigurations.installerIso = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations.installerIso = inputs.installer-compat.lib.nixosSystem {
     system = "x86_64-linux";
 
     modules = [
-      "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+      "${inputs.installer-compat}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
 
       inputs.self.modules.nixos.sshKeys
 
@@ -25,7 +25,7 @@
           flakeShortRev =
             inputs.self.shortRev
               or (if (inputs.self ? dirtyShortRev) then inputs.self.dirtyShortRev else "dirty");
-          nixpkgsRev = inputs.nixpkgs.rev or inputs.nixpkgs.shortRev or "unknown";
+          nixpkgsRev = inputs.installer-compat.rev or inputs.installer-compat.shortRev or "unknown";
           authorizedKeys = config.users.users.warby.openssh.authorizedKeys.keys;
           buildInfo =
             pkgs.runCommand "iso-build-info"

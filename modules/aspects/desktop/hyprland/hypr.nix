@@ -36,10 +36,8 @@
             "nm-applet --indicator &"
             "add_record_player"
           ]
-          # noctalia's clipboard history runs its own text + image cliphist watchers;
-          # a second, untyped watcher stored every copy twice.
-          ++ lib.optionals (osConfig.host.bar != "noctalia") [ "wl-paste --watch cliphist store &" ]
-          ++ lib.optionals (osConfig.host.bar == "noctalia") [ "noctalia-shell" ];
+          # Noctalia v5 maintains its own clipboard history.
+          ++ lib.optionals (osConfig.host.bar != "noctalia") [ "wl-paste --watch cliphist store &" ];
         in
         {
           options = {
@@ -135,7 +133,7 @@
                 -- == Gestures ==
                 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
                 hl.gesture({ fingers = 3, direction = "down",       action = "close" })
-                hl.gesture({ fingers = 3, direction = "up",         action = (function() hl.exec_cmd("noctalia-shell ipc call launcher toggle") end) })
+                hl.gesture({ fingers = 3, direction = "up",         action = (function() hl.exec_cmd("noctalia msg panel-toggle launcher") end) })
 
                 -- == Window Rules ==
                 hl.window_rule({ float = true, pin = true, no_shadow = true, size = "(monitor_w*0.25) (monitor_h*0.25)", move = "(monitor_w - window_w - 20) 20", no_initial_focus = true, match = { title = "Picture-in-Picture" } })

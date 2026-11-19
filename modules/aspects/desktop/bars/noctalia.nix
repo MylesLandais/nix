@@ -2,584 +2,93 @@
 {
   flake.modules.homeManager.bars =
     {
+      config,
       lib,
       pkgs,
-      osConfig,
-      config,
-
       ...
     }:
     {
-      options = {
-        my.bars.noctalia.enable = lib.mkEnableOption "Enable noctalia bar";
-      };
-      config = lib.mkIf config.my.bars.noctalia.enable (
-        let
-          homeDir = config.home.homeDirectory;
-        in
-        {
+      options.my.bars.noctalia.enable = lib.mkEnableOption "the Noctalia desktop shell";
 
-          # Install noctalia plugins by copying out of a fetched monorepo. Noctalia
-          # writes settings.json / pinned.json / notecards/ inside the plugin dir at
-          # runtime, so we can't use a read-only store symlink. Idempotent: only
-          # copies if the destination is missing. To pull updates, bump the rev
-          # below and delete ~/.config/noctalia/plugins/clipper before rebuilding.
-          home.activation.noctaliaClipper =
-            let
-              plugins = pkgs.fetchFromGitHub {
-                owner = "blackbartblues";
-                repo = "noctalia-plugins";
-                rev = "main";
-                hash = "sha256-YGspOSjP6Y7ilW2w8Rp/QEyCkkW/4Cg7lKbC82BzU50=";
-              };
-            in
-            lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-              PLUGIN_DIR="$HOME/.config/noctalia/plugins/clipper"
-              if [ ! -e "$PLUGIN_DIR" ]; then
-                run mkdir -p "$HOME/.config/noctalia/plugins"
-                run cp -r --no-preserve=mode,ownership ${plugins}/clipper "$PLUGIN_DIR"
-              fi
-            '';
-
-          # Restart noctalia-shell after every rebuild so the launcher index reflects
-          # newly installed packages, and — just as importantly — so IPC keybinds
-          # (Mod+R launcher, Mod+C clipboard, etc.) keep working at all: noctalia-shell
-          # is a plain Hyprland exec-once with no supervision, so whenever a rebuild
-          # changes its store path (any nixpkgs bump can do this, not just a direct
-          # noctalia change), the running instance is silently orphaned — same store
-          # path but a different hash, `noctalia-shell ipc call ...` can no longer
-          # find it, and it never restarts on its own.
-          #
-          # `pgrep -x noctalia-shell` never actually matched here: quickshell execs
-          # into the real binary rather than preserving argv[0], so /proc/<pid>/comm
-          # is the truncated wrapper name (".quickshell-wra"), not "noctalia-shell" —
-          # this whole activation step was a silent no-op. Match on the binary path
-          # instead (Quickshell's DesktopEntries inotify watcher also misses NixOS's
-          # atomic profile symlink swap and won't fire onValuesChanged on its own).
-          #
-          # The relaunch has to be `systemd-run --scope`, not a bare backgrounded
-          # subshell: activation runs inside home-manager-warby.service's cgroup, and
-          # a plain `(cmd &)` gets reaped along with it once activation finishes —
-          # confirmed live: the pkill half ran, the relaunch didn't survive, and the
-          # launcher was gone until restarted by hand. Only runs inside an active
-          # Wayland session.
-          home.activation.reloadNoctalia = lib.hm.dag.entryAfter [ "writeBoundary" ] (
-            builtins.replaceStrings
-              [
-                "@NIX1@"
-                "@NIX2@"
-                "@NIX3@"
-                "@NIX4@"
-                "@NIX5@"
-                "@NIX6@"
-                "@NIX7@"
-                "@NIX8@"
-                "@NIX9@"
-                "@NIX10@"
-                "@NIX11@"
-                "@NIX12@"
-                "@NIX13@"
-                "@NIX14@"
-                "@NIX15@"
-                "@NIX16@"
-              ]
-              [
-                "${pkgs.systemd}"
-                "${pkgs.procps}"
-                "${pkgs.procps}"
-                "${pkgs.coreutils}"
-                "${pkgs.procps}"
-                "${pkgs.procps}"
-                "${pkgs.coreutils}"
-                "${pkgs.systemd}"
-                "${osConfig.host.themeData.gtk.iconName}"
-                "${pkgs.systemd}"
-                "${pkgs.gnused}"
-                "${pkgs.systemd}"
-                "${pkgs.gnused}"
-                "${pkgs.procps}"
-                "${inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default}"
-                "${pkgs.systemd}"
-              ]
-              (builtins.readFile ./reload-noctalia.sh)
-          );
-
-          programs.noctalia-shell = {
-            enable = osConfig.host.bar == "noctalia";
-            # Upstream deprecated the systemd unit; the compositor's execOnce
-            # (see modules/desktops/hyprland/_hypr.nix) launches the
-            # shell instead. See https://docs.noctalia.dev/getting-started/nixos/
-            systemd.enable = false;
-            settings = {
-              appLauncher = {
-                autoPasteClipboard = false;
-                # Launch apps into their own systemd scopes (see hyprland bindings.nix).
-                # This noctalia rev ignores useApp2Unit; the prefix is what it honours.
-                customLaunchPrefix = "${lib.getExe pkgs.app2unit} --";
-                customLaunchPrefixEnabled = true;
-                enableClipPreview = true;
-                enableClipboardHistory = true;
-                iconMode = "tabler";
-                ignoreMouseInput = false;
-                position = "center";
-                screenshotAnnotationTool = "";
-                showCategories = true;
-                showIconBackground = true;
-                sortByMostUsed = true;
-                terminalCommand = "ghostty -e";
-                useApp2Unit = false;
-                viewMode = "list";
-              };
-              audio = {
-                cavaFrameRate = 30;
-                externalMixer = "pwvucontrol || pavucontrol";
-                mprisBlacklist = [
-
-                ];
-                preferredPlayer = "";
-                visualizerType = "linear";
-                volumeOverdrive = false;
-                volumeStep = 5;
-              };
-              bar = {
-                backgroundOpacity = lib.mkForce 0;
-                capsuleOpacity = lib.mkForce 1;
-                density = lib.mkForce "compact";
-                exclusive = lib.mkForce true;
-                floating = lib.mkForce true;
-                marginHorizontal = lib.mkForce 0.5;
-                marginVertical = lib.mkForce 0.15;
-                monitors = [
-
-                ];
-                outerCorners = false;
-                position = "top";
-                showCapsule = true;
-                showOutline = true;
-                useSeparateOpacity = true;
-                widgets = {
-                  center = [
-                    {
-                      characterCount = 1;
-                      colorizeIcons = false;
-                      enableScrollWheel = true;
-                      followFocusedScreen = false;
-                      groupedBorderOpacity = 1;
-                      hideUnoccupied = false;
-                      iconScale = 0.7;
-                      id = "Workspace";
-                      labelMode = "index";
-                      showApplications = false;
-                      showLabelsOnlyWhenOccupied = true;
-                      unfocusedIconsOpacity = 1;
-                    }
-                  ];
-                  left = [
-                    {
-                      icon = "rocket";
-                      id = "Launcher";
-                      usePrimaryColor = false;
-                    }
-                    {
-                      customFont = "";
-                      formatHorizontal = "HH:mm";
-                      formatVertical = "HH mm - dd MM";
-                      id = "Clock";
-                      tooltipFormat = "HH:mm ddd, MMM dd";
-                      useCustomFont = false;
-                      usePrimaryColor = false;
-                    }
-                  ];
-                  right = [
-                    {
-                      blacklist = [
-
-                      ];
-                      colorizeIcons = false;
-                      drawerEnabled = true;
-                      hidePassive = true;
-                      id = "Tray";
-                      pinned = [
-
-                      ];
-                    }
-                    {
-                      colorizeDistroLogo = false;
-                      colorizeSystemIcon = "none";
-                      customIconPath = "";
-                      enableColorization = false;
-                      icon = "noctalia";
-                      id = "ControlCenter";
-                      useDistroLogo = true;
-                    }
-                  ];
-                };
-              };
-              brightness = {
-                brightnessStep = 5;
-                enableDdcSupport = true;
-                enforceMinimum = true;
-              };
-              calendar = {
-                cards = [
-                  {
-                    enabled = true;
-                    id = "calendar-header-card";
-                  }
-                  {
-                    enabled = true;
-                    id = "calendar-month-card";
-                  }
-                  {
-                    enabled = true;
-                    id = "timer-card";
-                  }
-                  {
-                    enabled = true;
-                    id = "weather-card";
-                  }
-                ];
-              };
-              colorSchemes = {
-                darkMode = true;
-                manualSunrise = "06:30";
-                manualSunset = "18:30";
-                matugenSchemeType = "scheme-fruit-salad";
-                schedulingMode = "off";
-                useWallpaperColors = true;
-              };
-              controlCenter = {
-                cards = [
-                  {
-                    enabled = true;
-                    id = "profile-card";
-                  }
-                  {
-                    enabled = true;
-                    id = "shortcuts-card";
-                  }
-                  {
-                    enabled = true;
-                    id = "audio-card";
-                  }
-                  {
-                    enabled = true;
-                    id = "brightness-card";
-                  }
-                  {
-                    enabled = true;
-                    id = "weather-card";
-                  }
-                  {
-                    enabled = true;
-                    id = "media-sysmon-card";
-                  }
-                ];
-                diskPath = "/";
-                position = "close_to_bar_button";
-                shortcuts = {
-                  left = [
-                    {
-                      id = "Network";
-                    }
-                    {
-                      id = "Bluetooth";
-                    }
-                    {
-                      id = "ScreenRecorder";
-                    }
-                    {
-                      id = "WallpaperSelector";
-                    }
-                  ];
-                  right = [
-                    {
-                      id = "Notifications";
-                    }
-                    {
-                      id = "PowerProfile";
-                    }
-                    {
-                      id = "KeepAwake";
-                    }
-                    {
-                      id = "NightLight";
-                    }
-                  ];
-                };
-              };
-              desktopWidgets = {
-                enabled = false;
-                gridSnap = false;
-                monitorWidgets = [
-
-                ];
-              };
-              dock = {
-                enabled = false;
-              };
-              general = {
-                allowPanelsOnScreenWithoutBar = true;
-                animationDisabled = false;
-                animationSpeed = 1;
-                avatarImage = "${homeDir}/.face";
-                boxRadiusRatio = 0.4;
-                compactLockScreen = false;
-                lockScreenAnimations = true;
-                enableLockScreenMediaControls = true;
-                dimmerOpacity = 0.2;
-                enableShadows = true;
-                forceBlackScreenCorners = false;
-                iRadiusRatio = 0.3;
-                language = "";
-                lockOnSuspend = true;
-                radiusRatio = 0.5;
-                scaleRatio = 1;
-                screenRadiusRatio = 0.5;
-                shadowDirection = "bottom_right";
-                shadowOffsetX = 1;
-                shadowOffsetY = 2;
-                showChangelogOnStartup = true;
-                showHibernateOnLockScreen = false;
-                showScreenCorners = false;
-                showSessionButtonsOnLockScreen = true;
-              };
-              hooks = {
-                darkModeChange = "";
-                enabled = true;
-                performanceModeDisabled = "";
-                performanceModeEnabled = "";
-                screenLock = "";
-                screenUnlock = "";
-                wallpaperChange = "";
-              };
-              location = {
-                analogClockInCalendar = false;
-                firstDayOfWeek = -1;
-                hideWeatherCityName = false;
-                hideWeatherTimezone = false;
-                name = "Madrid";
-                showCalendarEvents = true;
-                showCalendarWeather = true;
-                showWeekNumberInCalendar = false;
-                use12hourFormat = false;
-                useFahrenheit = false;
-                weatherEnabled = true;
-                weatherShowEffects = true;
-              };
-              network = {
-                bluetoothDetailsViewMode = "grid";
-                bluetoothHideUnnamedDevices = false;
-                bluetoothRssiPollIntervalMs = 10000;
-                bluetoothRssiPollingEnabled = false;
-                wifiDetailsViewMode = "grid";
-                wifiEnabled = true;
-              };
-              nightLight = {
-                autoSchedule = true;
-                dayTemp = "6500";
-                enabled = false;
-                forced = false;
-                manualSunrise = "06:30";
-                manualSunset = "18:30";
-                nightTemp = "4000";
-              };
-              notifications = {
-                backgroundOpacity = lib.mkForce 1;
-                criticalUrgencyDuration = 15;
-                enableKeyboardLayoutToast = true;
-                enabled = true;
-                location = "top_right";
-                lowUrgencyDuration = 3;
-                # Quickshell matches the connector name (not Hyprland's desc:), so
-                # this pins toasts to the Dell S2716DG 1440p on Cerberus.
-                monitors = [ "DP-3" ];
-                normalUrgencyDuration = 8;
-                overlayLayer = true;
-                respectExpireTimeout = false;
-                saveToHistory = {
-                  critical = true;
-                  low = true;
-                  normal = true;
-                };
-                sounds = {
-                  criticalSoundFile = "";
-                  enabled = false;
-                  excludedApps = "discord,firefox,chrome,chromium,edge";
-                  lowSoundFile = "";
-                  normalSoundFile = "";
-                  separateSounds = false;
-                  volume = 0.5;
-                };
-              };
-              osd = {
-                autoHideMs = 2000;
-                backgroundOpacity = lib.mkForce 1;
-                enabled = true;
-                enabledTypes = [
-                  0
-                  1
-                  2
-                  4
-                ];
-                location = "top_right";
-                monitors = [
-
-                ];
-                overlayLayer = true;
-              };
-              screenRecorder = {
-                audioCodec = "opus";
-                audioSource = "default_output";
-                colorRange = "limited";
-                copyToClipboard = false;
-                directory = "${homeDir}/Videos";
-                frameRate = 60;
-                quality = "very_high";
-                showCursor = true;
-                videoCodec = "h264";
-                videoSource = "portal";
-              };
-              sessionMenu = {
-                countdownDuration = 10000;
-                enableCountdown = true;
-                largeButtonsLayout = "grid";
-                largeButtonsStyle = false;
-                position = "center";
-                powerOptions = [
-                  {
-                    action = "lock";
-                    enabled = true;
-                  }
-                  {
-                    action = "suspend";
-                    enabled = true;
-                  }
-                  {
-                    action = "hibernate";
-                    enabled = true;
-                  }
-                  {
-                    action = "reboot";
-                    enabled = true;
-                  }
-                  {
-                    action = "logout";
-                    enabled = true;
-                  }
-                  {
-                    action = "shutdown";
-                    enabled = true;
-                  }
-                ];
-                showHeader = true;
-                showNumberLabels = true;
-              };
-              settingsVersion = 37;
-              systemMonitor = {
-                cpuCriticalThreshold = 90;
-                cpuPollingInterval = 3000;
-                cpuWarningThreshold = 80;
-                criticalColor = "";
-                diskCriticalThreshold = 90;
-                diskPollingInterval = 3000;
-                diskWarningThreshold = 80;
-                enableDgpuMonitoring = false;
-                externalMonitor = "resources || missioncenter || jdsystemmonitor || corestats || system-monitoring-center || gnome-system-monitor || plasma-systemmonitor || mate-system-monitor || ukui-system-monitor || deepin-system-monitor || pantheon-system-monitor";
-                gpuCriticalThreshold = 90;
-                gpuPollingInterval = 3000;
-                gpuWarningThreshold = 80;
-                loadAvgPollingInterval = 3000;
-                memCriticalThreshold = 90;
-                memPollingInterval = 3000;
-                memWarningThreshold = 80;
-                networkPollingInterval = 3000;
-                tempCriticalThreshold = 90;
-                tempPollingInterval = 3000;
-                tempWarningThreshold = 80;
-                useCustomColors = false;
-                warningColor = "";
-              };
-              templates = {
-                alacritty = false;
-                cava = false;
-                code = false;
-                discord = false;
-                emacs = false;
-                enableUserTemplates = false;
-                foot = false;
-                fuzzel = false;
-                ghostty = false;
-                gtk = false;
-                helix = false;
-                hyprland = false;
-                kcolorscheme = false;
-                kitty = false;
-                mango = false;
-                niri = false;
-                pywalfox = false;
-                qt = false;
-                spicetify = false;
-                telegram = false;
-                vicinae = false;
-                walker = false;
-                wezterm = false;
-                yazi = false;
-                zed = false;
-                zenBrowser = false;
-              };
-              ui = {
-                bluetoothDetailsViewMode = "grid";
-                bluetoothHideUnnamedDevices = false;
-                boxBorderEnabled = true;
-                fontDefault = lib.mkForce "Maple Mono NF";
-                fontDefaultScale = lib.mkForce 1;
-                fontFixed = lib.mkForce "monospace";
-                fontFixedScale = 1;
-                networkPanelView = "wifi";
-                panelBackgroundOpacity = lib.mkForce 1;
-                panelsAttachedToBar = true;
-                settingsPanelMode = "attached";
-                tooltipsEnabled = true;
-                wifiDetailsViewMode = "grid";
-              };
-              wallpaper = {
-                directory = "${inputs.wallpapers}";
-                enableMultiMonitorDirectories = false;
-                enabled = true;
-                fillColor = "#000000";
-                fillMode = "crop";
-                hideWallpaperFilenames = false;
-                monitorDirectories = [
-
-                ];
-                overviewEnabled = false;
-                panelPosition = "follow_bar";
-                randomEnabled = false;
-                randomIntervalSec = 300;
-                recursiveSearch = true;
-                setWallpaperOnAllMonitors = true;
-                solidColor = "#1a1a2e";
-                transitionDuration = 1500;
-                transitionEdgeSmoothness = 0.05;
-                transitionType = "random";
-                useSolidColor = false;
-                useWallhaven = false;
-                wallhavenApiKey = "";
-                wallhavenCategories = "111";
-                wallhavenOrder = "desc";
-                wallhavenPurity = "100";
-                wallhavenQuery = "";
-                wallhavenRatios = "";
-                wallhavenResolutionHeight = "";
-                wallhavenResolutionMode = "atleast";
-                wallhavenResolutionWidth = "";
-                wallhavenSorting = "relevance";
-                wallpaperChangeMode = "random";
-              };
+      config = lib.mkIf config.my.bars.noctalia.enable {
+        programs.noctalia = {
+          enable = true;
+          systemd.enable = true;
+          settings = {
+            shell = {
+              font_family = "Maple Mono NF";
+              avatar_path = "${config.home.homeDirectory}/.face";
+              setup_wizard_enabled = false;
+              launch_apps_custom_command = "${lib.getExe pkgs.app2unit} -- $CMD";
+              clipboard_enabled = true;
+              clipboard_history_max_entries = 750;
+              clipboard_auto_paste = "off";
+              launcher.auto_paste = "off";
+            };
+            bar.main = {
+              position = "top";
+              background_opacity = 0.0;
+              capsule = true;
+              margin_ends = 1;
+              margin_edge = 0;
+              start = [
+                "launcher"
+                "clock"
+              ];
+              center = [ "workspaces" ];
+              end = [
+                "tray"
+                "notes"
+                "control-center"
+              ];
+            };
+            widget.notes.type = "noctalia/notes:notes";
+            plugins.enabled = [ "noctalia/notes" ];
+            theme = {
+              mode = "dark";
+              source = "wallpaper";
+              wallpaper_scheme = "m3-fruit-salad";
+            };
+            wallpaper = {
+              directory = toString inputs.wallpapers;
+              fill_mode = "crop";
+              automation.recursive = true;
+            };
+            notification = {
+              monitors = [ "DP-3" ];
+              position = "top_right";
+              layer = "overlay";
+              background_opacity = 1.0;
+            };
+            nightlight = {
+              enabled = false;
+              temperature_day = 6500;
+              temperature_night = 4000;
+            };
+            lockscreen.lock_before_suspend = true;
+            location.address = "Madrid";
+            storage = {
+              key_source = "file";
+              key_file = "${config.xdg.stateHome}/noctalia/storage.key";
             };
           };
-        }
-      );
+        };
+
+        # The login keyring can stay locked on an autologin desktop. Generate a
+        # private, persistent key before the shell starts, outside the Nix store.
+        home.activation.noctaliaStorageKey = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          run ${pkgs.bash}/bin/bash -euc '
+            umask 077
+            dir=$1
+            mkdir -p "$dir"
+            if [[ ! -e "$dir/storage.key" ]]; then
+              tmp=$(mktemp "$dir/.storage-key.XXXXXXXX")
+              trap "rm -f -- \"\$tmp\"" EXIT
+              ${pkgs.openssl}/bin/openssl rand -hex 32 > "$tmp"
+              ln -T "$tmp" "$dir/storage.key" || test -f "$dir/storage.key"
+            fi
+          ' _ "${config.xdg.stateHome}/noctalia"
+        '';
+      };
     };
 }
