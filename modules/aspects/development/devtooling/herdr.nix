@@ -28,6 +28,15 @@
                 manifest_check = false;
               };
             };
+            # herdr is a TUI and ships no .desktop file, so launchers (fuzzel)
+            # can't see it. Wrap it in the default terminal instead.
+            xdg.desktopEntries.herdr = {
+              name = "Herdr";
+              comment = "Agent-aware terminal workspace manager";
+              exec = "ghostty -e herdr";
+              categories = [ "Development" ];
+              startupNotify = false;
+            };
           };
         }
       )
