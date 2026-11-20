@@ -15,6 +15,7 @@ _: {
         my.git.enable = lib.mkDefault true;
         my.gleam.enable = lib.mkDefault true;
         my.go.enable = lib.mkDefault true;
+        my.herdr.enable = lib.mkDefault true;
         my.kubernetes.enable = lib.mkDefault true;
         my.lua.enable = lib.mkDefault true;
         my.pi-agent.enable = lib.mkDefault true;
