@@ -89,6 +89,7 @@ with pkgs;
   pulseaudio-ctl
   pulsemixer
   protonup-rs
+  pyright
   python3
   revive
   ripgrep

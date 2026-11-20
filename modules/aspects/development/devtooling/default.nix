@@ -18,6 +18,7 @@ _: {
         my.herdr.enable = lib.mkDefault true;
         my.kubernetes.enable = lib.mkDefault true;
         my.lua.enable = lib.mkDefault true;
+        my.mojo.enable = lib.mkDefault true;
         my.pi-agent.enable = lib.mkDefault true;
         my.remmina.enable = lib.mkDefault true;
         my.rust.enable = lib.mkDefault true;

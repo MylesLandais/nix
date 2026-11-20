@@ -54,6 +54,11 @@
     # leave it alone; bump deliberately when you actually want a newer sunshine.
     # Must stay a fixed rev — a second moving branch would recreate the problem.
     sunshine-nixpkgs.url = "github:NixOS/nixpkgs/04906337b6d53e8bb0eaf0470ae9f070a4d4eb55";
+    # Frozen nixpkgs for mojo-bin only. The prebuilt Modular toolchain landed in
+    # nixpkgs after the main pin (2026-09-25), and its wheels are unfree binary
+    # blobs Hydra does cache, so this pin exists solely to unlock it without
+    # dragging the whole main pin forward. Bump deliberately, like sunshine-nixpkgs.
+    mojo-nixpkgs.url = "github:NixOS/nixpkgs/04906337b6d53e8bb0eaf0470ae9f070a4d4eb55";
     chaotic = {
       url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
       inputs.nixpkgs.follows = "nixpkgs";
