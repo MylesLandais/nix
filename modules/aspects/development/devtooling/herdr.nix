@@ -21,11 +21,31 @@
               # Let herdr save UI toggles back to config.toml while Nix keeps
               # the settings below merged in on activation.
               mutableSettings = true;
-              # Updates come from flake bumps of nixpkgs, so silence herdr's
-              # background checks against herdr.dev.
-              settings.update = {
-                version_check = false;
-                manifest_check = false;
+              settings = {
+                # Match the tmux module's ctrl+a prefix muscle memory
+                # (keybinding names verified against herdr's config reference).
+                keys = {
+                  prefix = "ctrl+a";
+                  toggle_sidebar = "prefix+a";
+                  split_vertical = "prefix+%";
+                  detach = "prefix+d";
+                };
+                ui = {
+                  sound.enabled = false;
+                  sidebar_start_collapsed = true;
+                  sidebar_collapsed_mode = "hidden";
+                  toast = {
+                    delivery = "herdr";
+                    herdr.position = "top-right";
+                  };
+                };
+                theme.name = "terminal";
+                # Updates come from flake bumps of nixpkgs, so silence herdr's
+                # background checks against herdr.dev.
+                update = {
+                  version_check = false;
+                  manifest_check = false;
+                };
               };
             };
             # herdr is a TUI and ships no .desktop file, so launchers (fuzzel)
