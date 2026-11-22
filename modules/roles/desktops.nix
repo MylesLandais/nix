@@ -1,14 +1,8 @@
-# nixos.desktops: the NixOS halves of every desktop. Each one is gated by
-# host.desktop / host.kali.enable inside its own module, so hosts import the
-# whole set.
+# nixos.desktops: the NixOS half of the desktop session. Hyprland is the only
+# one; its Home Manager half comes in through homeManager.base.
 { config, ... }:
 {
   flake.modules.nixos.desktops = {
-    imports = [
-      config.flake.modules.nixos.hyprland
-      config.flake.modules.nixos.niri
-      config.flake.modules.nixos.xfce
-      config.flake.modules.nixos.kali
-    ];
+    imports = [ config.flake.modules.nixos.hyprland ];
   };
 }

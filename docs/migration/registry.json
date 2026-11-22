@@ -16,15 +16,13 @@
     "hydraSmb",
     "hyprland",
     "mpv",
-    "niri",
     "nixUserGc",
     "prompt",
     "shelltools",
     "sshBitwarden",
     "stylix",
     "terminals",
-    "workspaceBudget",
-    "xfce"
+    "workspaceBudget"
   ],
   "homeManagerModules": [
     "appWrappers",
@@ -43,15 +41,13 @@
     "hydraSmb",
     "hyprland",
     "mpv",
-    "niri",
     "nixUserGc",
     "prompt",
     "shelltools",
     "sshBitwarden",
     "stylix",
     "terminals",
-    "workspaceBudget",
-    "xfce"
+    "workspaceBudget"
   ],
   "nixos": [
     "agenixHost",
@@ -82,10 +78,8 @@
     "infraIngress",
     "infraSecrets",
     "iw4x",
-    "kali",
     "llmRouter",
     "mayaWorkerInfra",
-    "niri",
     "nixConfig",
     "nvidia",
     "openbaoInfra",
@@ -107,8 +101,7 @@
     "valkeyInfra",
     "warcraft3",
     "waydroidFeh",
-    "workspaceBudget",
-    "xfce"
+    "workspaceBudget"
   ],
   "nixosModules": [
     "agenixHost",
@@ -139,10 +132,8 @@
     "infraIngress",
     "infraSecrets",
     "iw4x",
-    "kali",
     "llmRouter",
     "mayaWorkerInfra",
-    "niri",
     "nixConfig",
     "nvidia",
     "openbaoInfra",
@@ -164,7 +155,6 @@
     "valkeyInfra",
     "warcraft3",
     "waydroidFeh",
-    "workspaceBudget",
-    "xfce"
+    "workspaceBudget"
   ]
 }

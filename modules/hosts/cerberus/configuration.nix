@@ -74,7 +74,6 @@
         greeter = "sddm";
         gpuType = "nvidia";
         theme = "kanagawa-dragon";
-        workload = "default";
         gamehacking.enable = true;
         citraAgent = {
           enable = true;

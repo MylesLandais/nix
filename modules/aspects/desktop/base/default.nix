@@ -139,8 +139,6 @@
         inputs.self.modules.homeManager.appWrappers
         inputs.self.modules.homeManager.chromiumHeliumPrefs
         inputs.self.modules.homeManager.hyprland
-        inputs.self.modules.homeManager.niri
-        inputs.self.modules.homeManager.xfce
         inputs.self.modules.homeManager.bars
         inputs.self.modules.homeManager.prompt
         inputs.self.modules.homeManager.shelltools
