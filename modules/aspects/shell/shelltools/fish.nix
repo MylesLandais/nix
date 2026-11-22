@@ -27,9 +27,13 @@
                   set -gx SSH_AUTH_SOCK "$HOME/.bitwarden-ssh-agent.sock"
                 end
                 function last_history_item; echo $history[1]; end
-                export GEMINI_API_KEY=$(cat {$XDG_RUNTIME_DIR}/agenix/gemini)
-                for line in (cat $XDG_RUNTIME_DIR/agenix/grafana)
-                  export $line
+                if test -s "$XDG_RUNTIME_DIR/agenix/gemini"
+                  set -gx GEMINI_API_KEY (string collect < "$XDG_RUNTIME_DIR/agenix/gemini")
+                end
+                if test -r "$XDG_RUNTIME_DIR/agenix/grafana"
+                  for line in (cat "$XDG_RUNTIME_DIR/agenix/grafana")
+                    string match -qr '^[A-Za-z_][A-Za-z0-9_]*=' -- "$line"; and export "$line"
+                  end
                 end
                 abbr -a !! --position anywhere --function last_history_item
               '';
