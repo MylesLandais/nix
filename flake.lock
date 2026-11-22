@@ -164,27 +164,6 @@
         "type": "github"
       }
     },
-    "disko": {
-      "inputs": {
-        "nixpkgs": [
-          "nebula-infra",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1789770686,
-        "narHash": "sha256-uZkBR7yHdIKUFB5SZdfgh1qkGfI3XmYmI/lTiquxbck=",
-        "owner": "nix-community",
-        "repo": "disko",
-        "rev": "725ea35e410ad83be4931d1bff7e090eacaf3563",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "disko",
-        "type": "github"
-      }
-    },
     "firefox-gnome-theme": {
       "flake": false,
       "locked": {
@@ -295,24 +274,6 @@
     },
     "flake-parts_4": {
       "inputs": {
-        "nixpkgs-lib": "nixpkgs-lib_2"
-      },
-      "locked": {
-        "lastModified": 1788450739,
-        "narHash": "sha256-glZLQlzIn1fXH6PazR2iUmTo7kzzyYSshrWhLS9TqCU=",
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "rev": "31729ca8cbdb4fa927b34e5f4353e6a83f39e993",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "type": "github"
-      }
-    },
-    "flake-parts_5": {
-      "inputs": {
         "nixpkgs-lib": [
           "nur",
           "nixpkgs"
@@ -332,7 +293,7 @@
         "type": "github"
       }
     },
-    "flake-parts_6": {
+    "flake-parts_5": {
       "inputs": {
         "nixpkgs-lib": [
           "stylix",
@@ -638,21 +599,6 @@
         "type": "github"
       }
     },
-    "import-tree_2": {
-      "locked": {
-        "lastModified": 1788467110,
-        "narHash": "sha256-ljEMTXP/rH0tOvDzc9gzwww6KcHRPRnEHzd9lK48V7s=",
-        "owner": "vic",
-        "repo": "import-tree",
-        "rev": "eb1b52eaecc57f7c136d07ae8a93e724dfecac46",
-        "type": "github"
-      },
-      "original": {
-        "owner": "vic",
-        "repo": "import-tree",
-        "type": "github"
-      }
-    },
     "installer-compat": {
       "locked": {
         "lastModified": 1791456040,
@@ -705,28 +651,6 @@
         "repo": "nixpkgs",
         "rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
         "type": "github"
-      }
-    },
-    "nebula-infra": {
-      "inputs": {
-        "disko": "disko",
-        "flake-parts": "flake-parts_4",
-        "import-tree": "import-tree_2",
-        "nixpkgs": "nixpkgs_4"
-      },
-      "locked": {
-        "lastModified": 1794683090,
-        "narHash": "sha256-Dc/h8yu9fhqlQGDlGGG5F0x1nkiiTkakoqAwxbf2AJw=",
-        "ref": "main",
-        "rev": "2e3e3561e42cf3e60024bf9aec317fbf293aa6b8",
-        "revCount": 9,
-        "type": "git",
-        "url": "https://git.nebula-1.com/nebula/infra.git"
-      },
-      "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "https://git.nebula-1.com/nebula/infra.git"
       }
     },
     "niri": {
@@ -810,7 +734,7 @@
     "nixos-wsl": {
       "inputs": {
         "flake-compat": "flake-compat_2",
-        "nixpkgs": "nixpkgs_5"
+        "nixpkgs": "nixpkgs_4"
       },
       "locked": {
         "lastModified": 1794351628,
@@ -850,21 +774,6 @@
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
         "rev": "7851ba61fd862b277cb6a9cef37394bc18bb94e4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "type": "github"
-      }
-    },
-    "nixpkgs-lib_2": {
-      "locked": {
-        "lastModified": 1788057806,
-        "narHash": "sha256-DTQSMxzDWmT0zhguthvegnVkn7CFqGCv4IHCzk5ZUpM=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "596e2e3940e09b2abbeb03f75fa1828c57fcd72c",
         "type": "github"
       },
       "original": {
@@ -923,22 +832,6 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1791456040,
-        "narHash": "sha256-H83yz/do+hjOO0uujHyH8RgtIQP2v7Mw+cLwcZK/xKc=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_5": {
-      "locked": {
         "lastModified": 1793865203,
         "narHash": "sha256-/cpdPHaySDIyCgZI6EWngiM6jK3YLUNzv1b7lTzy6Bk=",
         "owner": "NixOS",
@@ -949,6 +842,22 @@
       "original": {
         "owner": "NixOS",
         "ref": "nixos-26.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_5": {
+      "locked": {
+        "lastModified": 1794890597,
+        "narHash": "sha256-lME2lHoDHAaSHP3/okgiVoJ0icVEvsQH8LeU3We7tcc=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -969,26 +878,10 @@
         "type": "github"
       }
     },
-    "nixpkgs_7": {
-      "locked": {
-        "lastModified": 1794890597,
-        "narHash": "sha256-lME2lHoDHAaSHP3/okgiVoJ0icVEvsQH8LeU3We7tcc=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nur": {
       "inputs": {
-        "flake-parts": "flake-parts_5",
-        "nixpkgs": "nixpkgs_7"
+        "flake-parts": "flake-parts_4",
+        "nixpkgs": "nixpkgs_6"
       },
       "locked": {
         "lastModified": 1795102978,
@@ -1094,11 +987,10 @@
         "installer-compat": "installer-compat",
         "llm": "llm",
         "mojo-nixpkgs": "mojo-nixpkgs",
-        "nebula-infra": "nebula-infra",
         "niri": "niri",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixos-wsl": "nixos-wsl",
-        "nixpkgs": "nixpkgs_6",
+        "nixpkgs": "nixpkgs_5",
         "nur": "nur",
         "stylix": "stylix",
         "sunshine-nixpkgs": "sunshine-nixpkgs",
@@ -1116,7 +1008,7 @@
         "base16-helix": "base16-helix",
         "base16-vim": "base16-vim",
         "firefox-gnome-theme": "firefox-gnome-theme",
-        "flake-parts": "flake-parts_6",
+        "flake-parts": "flake-parts_5",
         "gnome-shell": "gnome-shell",
         "nixpkgs": [
           "nixpkgs"

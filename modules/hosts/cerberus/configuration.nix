@@ -63,13 +63,6 @@
 
       nixpkgs.overlays = [
         (import "${inputs.self}/modules/aspects/packages/overlays/_cursor.nix")
-        (_final: prev: {
-          # oci-cli 3.88.0 declares setuptools <81, but nixpkgs supplies 82.
-          # The wheel builds successfully; only the metadata check is stale.
-          oci-cli = prev.oci-cli.overridePythonAttrs (_old: {
-            dontCheckRuntimeDeps = true;
-          });
-        })
       ];
 
       host = {

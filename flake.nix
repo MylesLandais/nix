@@ -42,7 +42,6 @@
       url = "github:Zagitta/gpu-unlock";
       flake = false;
     };
-    nebula-infra.url = "git+https://git.nebula-1.com/nebula/infra.git?ref=main";
     trigo = {
       url = "github:FKouhai/trigo";
       inputs.nixpkgs.follows = "nixpkgs";

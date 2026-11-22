@@ -80,7 +80,6 @@ with pkgs;
   nwg-look
   obs-studio
   obsidian
-  oci-cli
   opentofu
   opencloud-desktop
   pavucontrol

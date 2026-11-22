@@ -10,9 +10,8 @@
 #   explicitly (`nix build .#host-cerberus`) or from a dedicated builder/cache
 #   job. Never part of `nix flake check`.
 #
-# Both are filed under each host's OWN system rather than a hardcoded
-# x86_64-linux: the OCI hosts (stage-edge, stage-db) are aarch64, and filing an
-# aarch64 output under x86_64-linux makes Nix try to build it natively and fail.
+# Both are filed under each host's own system rather than a hardcoded
+# x86_64-linux, so an aarch64 host is never built natively on x86_64.
 # Uses config.flake (not self) to avoid infinite recursion.
 { config, inputs, ... }:
 let
