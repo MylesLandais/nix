@@ -97,9 +97,6 @@ with pkgs;
   # not published (404 in cache.nixos.org, chaotic and nix-community). Cargo fans out
   # inside each Nix job slot, so it drove load to 35 on a 12-core box even under
   # --max-jobs 4 --cores 3, and blew the 20-minute build budget.
-  # This breaks `rustdesk-windows-qemu` (modules/flake/bootstrap-apps.nix),
-  # which shells out to the system rustdesk. windows-kit/install_rustdesk.ps1 is
-  # unaffected — that installs on the Windows guest.
   # To restore: re-add once Hydra publishes a cached build for the current nixpkgs.
   virt-viewer
   sesh
@@ -119,9 +116,8 @@ with pkgs;
   treefmt
   upower
   unzip
-  # windows-kit USB builders (scripts/write-windows-usb.sh, build-firmware-usb.sh,
-  # fetch-driver-pack.sh). Heavy VM deps (qemu_full/OVMFFull/swtpm) come from the
-  # `nix run .#test-windows-qemu` app instead.
+  # Disk and USB image tools (scripts/build-firmware-usb.sh, and the USB writers
+  # in the separate win repo).
   wimlib
   dosfstools
   mtools
@@ -129,7 +125,7 @@ with pkgs;
   parted
   p7zip
   rsync
-  # FOSS GRUB multiboot USB (scripts/setup-grub-multiboot-usb.sh)
+  # GRUB multiboot USB (setup-grub-multiboot-usb.sh in the win repo)
   grub2_efi
   ntfs3g
   # vivaldi is provided via environment.systemPackages (vivaldiWithFlags in

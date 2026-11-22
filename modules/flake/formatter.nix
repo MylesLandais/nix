@@ -13,8 +13,6 @@ _: {
       programs.statix.enable = true;
       settings.global.excludes = [
         "assets/**"
-        "ventoy-*/**"
-        "windows-kit/**"
       ];
     };
   };

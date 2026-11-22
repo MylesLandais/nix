@@ -48,22 +48,12 @@ node_modules/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
 
-# VM images and bootable media
+# VM images, bootable media and firmware images
 *.qcow2
 *.vhdx
-ventoy-*.tar.gz
-ventoy-*/
-
-# windows-kit payload binaries — staged off-repo, never committed
-win-kit-staging/
 *.iso
 *.CAP
 *.cap
-*.swm
-Microsoft-Activation-Scripts*
-
-# Diagnostics
-.nix-usb-logs/
 
 # Migration harness snapshot cache and local reports
 .migration/
