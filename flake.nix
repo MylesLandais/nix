@@ -6,6 +6,7 @@
       "https://cache.nixos.org?priority=10"
       "https://noctalia.cachix.org"
       "https://cache.numtide.com"
+      "https://cerberus-nix.cachix.org"
     ];
 
     extra-trusted-public-keys = [
@@ -13,6 +14,7 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
       "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+      "cerberus-nix.cachix.org-1:wU6BDW2o4M2M9UFBpbcT60bThGSBukO770anPc+eigM="
     ];
   };
 

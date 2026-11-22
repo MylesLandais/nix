@@ -27,6 +27,8 @@
           # "https://cache.garnix.io/"  (key: cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=)
           "https://noctalia.cachix.org"
           "https://cache.numtide.com"
+          # Filled by this repo's GitHub Actions build job (.github/workflows/check.yml).
+          "https://cerberus-nix.cachix.org"
         ];
         trusted-public-keys = [
           "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
@@ -38,6 +40,7 @@
           "zed.cachix.org-1:/pHQ6dpMsAZk2DiP4WCL0p9YDNKWj2Q5FL20bNmw1cU="
           "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
           "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+          "cerberus-nix.cachix.org-1:wU6BDW2o4M2M9UFBpbcT60bThGSBukO770anPc+eigM="
         ];
         experimental-features = [
           "nix-command"

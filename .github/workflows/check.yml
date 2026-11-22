@@ -1,75 +1,82 @@
-name: nix flake check
+name: ci
 
 on:
   push:
-    branches: [dev, stable, dendritic]
+    branches: [dev, main]
   pull_request:
+  schedule:
+    # Weekly, so the cache stays warm for the paths Cerberus actually pulls.
+    - cron: "17 6 * * 1"
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: nix-check-${{ github.ref }}
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  layout:
+  lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-depth: 0
           persist-credentials: false
-      - name: Enforce the module layout and external argument boundaries
-        env:
-          BASE_REV: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: python3 scripts/migration/check-layout.py --final
-      - name: Run repository tests
+      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+      - name: Module layout
+        run: python3 scripts/ci/check-layout.py --final
+      - name: Repository tests
         run: python3 -m unittest discover -s tests
-  flake:
-    # Only trusted branch revisions may receive the read-only Forgejo credential.
-    if: github.event_name != 'pull_request' && contains(fromJSON('["refs/heads/dev","refs/heads/stable","refs/heads/dendritic"]'), github.ref)
-    needs: layout
+      - name: Formatting (nixfmt, deadnix, statix)
+        run: nix fmt -- --ci
+
+  eval:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa
-      - name: Verify installer comparisons with Nix-backed fixtures
-        run: python3 -m unittest discover -s tests -p test_migration_closures.py
-      - name: Cold-fetch infra and evaluate the locked flake
-        env:
-          FORGEJO_INFRA_USERNAME: ${{ secrets.FORGEJO_INFRA_USERNAME }}
-          FORGEJO_INFRA_READ_TOKEN: ${{ secrets.FORGEJO_INFRA_READ_TOKEN }}
-          GIT_TERMINAL_PROMPT: 0
-        shell: bash
-        run: |
-          set -eu
-          : "${FORGEJO_INFRA_USERNAME:?missing read-only infra username}"
-          : "${FORGEJO_INFRA_READ_TOKEN:?missing read-only infra token}"
-          export GIT_CONFIG_COUNT=2
-          export GIT_CONFIG_KEY_0=credential.useHttpPath GIT_CONFIG_VALUE_0=true
-          export GIT_CONFIG_KEY_1=credential.helper
-          export GIT_CONFIG_VALUE_1="$RUNNER_TEMP/infra-credential"
-          cat > "$GIT_CONFIG_VALUE_1" <<'HELPER'
-          #!/bin/sh
-          [ "$1" = get ] || exit 0
-          request=$(cat)
-          for match in protocol=https host=git.nebula-1.com path=nebula/infra.git; do
-            printf '%s\n' "$request" | grep -Fxq "$match" || exit 0
-          done
-          printf 'username=%s\npassword=%s\n' "$FORGEJO_INFRA_USERNAME" "$FORGEJO_INFRA_READ_TOKEN"
-          HELPER
-          chmod 700 "$GIT_CONFIG_VALUE_1"
-          rev=$(jq -er '.nodes[.nodes.root.inputs["nebula-infra"]].locked.rev' flake.lock)
-          git init -q --bare "$RUNNER_TEMP/cold-infra"
-          git -C "$RUNNER_TEMP/cold-infra" fetch --depth=1 https://git.nebula-1.com/nebula/infra.git "$rev"
-          test "$(git -C "$RUNNER_TEMP/cold-infra" rev-parse FETCH_HEAD)" = "$rev"
-          bash scripts/migration/test-host-builders.sh
-          nix flake check --no-update-lock-file --accept-flake-config --show-trace
-          for h in stage-edge stage-db; do
-            nix eval --no-update-lock-file --accept-flake-config --raw ".#nixosConfigurations.$h.config.system.build.toplevel.drvPath"
-          done
+      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+      - name: Evaluate the flake and the module registry
+        run: nix flake check --no-build --show-trace
+      - name: Published host constructors
+        run: bash scripts/ci/test-host-builders.sh
+      - name: Cerberus evaluates
+        run: nix eval --raw .#nixosConfigurations.cerberus.config.system.build.toplevel.drvPath
+
+  build:
+    # Free runners build what the public caches don't have (custom packages,
+    # overrides, unfree) and push it to Cachix, which Cerberus substitutes from.
+    if: github.event_name != 'pull_request'
+    needs: [lint, eval]
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: wimpysworld/nothing-but-nix@b2574ec1cf1462bee0a34de0fb6ff11ad3c43cb2 # v12
+        with:
+          hatchet-protocol: rampage
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+        with:
+          # The same caches Cerberus uses (modules/aspects/system/nix-config.nix
+          # and the chaotic module), so CI only builds what Cerberus would.
+          extra-conf: |
+            extra-substituters = https://nix-community.cachix.org https://zed.cachix.org https://noctalia.cachix.org https://cache.numtide.com https://nyx-cache.chaotic.cx
+            extra-trusted-public-keys = nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= zed.cachix.org-1:/pHQ6dpMsAZk2DiP4WCL0p9YDNKWj2Q5FL20bNmw1cU= noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4= niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g= nyx-cache.chaotic.cx:dJxTrgMC3V3cFfyIiBQDQorG6k1LsqurH/srpMSq7qk=
+      - uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # v17
+        with:
+          name: cerberus-nix
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          # Daemon mode pushes only what this job builds. Skip sources and the
+          # vendor download, which are cheap to refetch and eat the 5 GB quota.
+          pushFilter: "(-source$|\\.tar\\.(gz|xz|zst)$|\\.deb$|\\.zip$)"
+      - name: Build packages and the Cerberus closure
+        run: bash scripts/ci/build-closure.sh
+      - name: Store usage
+        if: always()
+        run: df -h /nix
