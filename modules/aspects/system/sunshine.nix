@@ -37,6 +37,11 @@
           settings = {
             sunshine_name = "Cerberus Stream Host";
             min_log_level = "info";
+            # Pin wlr-screencopy (what 2026.516 auto-selected). Left unset, 2026.914
+            # probes portalgrab first; that opens an xdg-desktop-portal ScreenCast
+            # picker at login which nobody answers (it lands on the TV), and xdph
+            # then can't serve Vesktop/browser screen-share requests.
+            capture = "wlr";
             output_name = ""; # set to HEADLESS-1 after Phase 5 testing
           };
 
@@ -74,6 +79,12 @@
                 cmd = "${pkgs.gamescope}/bin/gamescope -w 2266 -h 1488 -r 60 -f --rt -- ${pkgs.hyprland}/bin/Hyprland";
                 "auto-detach" = "true";
                 "exclude-global-prep-cmd" = "false";
+              }
+
+              {
+                name = "EmblemWeave";
+                working-dir = "/home/warby/klein-data/EmblemWeave/EmblemWeave-v0.1.41";
+                cmd = "/home/warby/.local/bin/emblemweave-stream";
               }
 
               # Fire Emblem: Path of Radiance via Dolphin
