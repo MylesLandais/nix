@@ -11,8 +11,8 @@ monorepo branch `codex/workspace-performance`; see its
 
 | Scope | Where | CPU | Memory |
 | --- | --- | --- | --- |
-| `workspace.slice` (user): every `nebula-*` unit via a prefix drop-in, plus `chrome-cdp.service` | `modules/_features/workspace-budget-home.nix` | `CPUQuota=400%`, `CPUWeight=20` | `MemoryHigh=24G`, `MemoryMax=32G`, oomd kill at 60% pressure |
-| `workspace-host.slice` (system): `nix-daemon` and its builders | `modules/_features/workspace-budget.nix` | `CPUQuota=200%`, `CPUWeight=20`, `IOWeight=20`; Nix `max-jobs=1`, `cores=2` | `MemoryHigh=24G`, `MemoryMax=32G` |
+| `workspace.slice` (user): every `nebula-*` unit via a prefix drop-in, plus `chrome-cdp.service` | `modules/aspects/resources/workspace-budget-home.nix` | `CPUQuota=400%`, `CPUWeight=20` | `MemoryHigh=24G`, `MemoryMax=32G`, oomd kill at 60% pressure |
+| `workspace-host.slice` (system): `nix-daemon` and its builders | `modules/aspects/resources/workspace-budget.nix` | `CPUQuota=200%`, `CPUWeight=20`, `IOWeight=20`; Nix `max-jobs=1`, `cores=2` | `MemoryHigh=24G`, `MemoryMax=32G` |
 
 Deviations from the proposal below:
 

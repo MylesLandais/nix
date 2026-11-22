@@ -113,7 +113,7 @@ seen by whoever touches it next. Broader issues go to `~/Vault/nix-issues/`.
 
 ## 8. Docker on this host is declared, but its containers are not
 
-Cerberus enables `virtualisation.docker` in [`modules/_dev.nix`](modules/_dev.nix)
+Cerberus enables `virtualisation.docker` in [`modules/aspects/system/dev.nix`](modules/aspects/system/dev.nix)
 with `enableOnBoot = false`: dockerd is socket-activated and starts on the first
 `docker` call. The dev stack itself (compose projects, restart-policy containers)
 is still not declared in Nix. Its containers come back whenever dockerd starts, by
