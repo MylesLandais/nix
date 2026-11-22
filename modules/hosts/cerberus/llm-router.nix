@@ -6,7 +6,7 @@
       # these at a time, so llama-swap fronts them all on the named loopback
       # endpoint llm:8000 and swaps the resident model based on each request's
       # "model" field.
-      # See modules/services/llm-router.nix for why this is not oci-containers.
+      # See modules/aspects/services/llm-router.nix for why this is not oci-containers.
       #
       # VRAM budget is genuinely tight — weights alone are 17-21.6 GB of the
       # 24 GB, and Hyprland/browsers hold some of the rest. If a model OOMs on

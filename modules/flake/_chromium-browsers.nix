@@ -41,7 +41,7 @@ let
     }) (lib.attrValues chromiumExtensionPack)
   );
 
-  # Default launch flags; vaapiMode is set per-host from gpuType in modules/home/base/default.nix.
+  # Default launch flags; vaapiMode is set per-host from gpuType in modules/aspects/desktop/base/default.nix.
   chromiumStandardBrowserFlags = {
     wayland = true;
     verticalTabs = true;
@@ -84,7 +84,7 @@ let
   # 1. [applied] Drop ZeroCopyGL from enableFeatures (see below)
   # 2. [applied] Disable UseChromeOSDirectVideoDecoder (see below)
   # 3. [applied for Helium + Vivaldi] Set vaapiMode = false (software decode;
-  #    higher CPU). See softwareDecodeFlagsFile in modules/home/base/default.nix — both
+  #    higher CPU). See softwareDecodeFlagsFile in modules/aspects/desktop/base/default.nix — both
   #    still artifacted after rungs 1-2, so they get vaapiMode forced to
   #    false. Chromium proper keeps hw decode on ANGLE GL (see
   #    chromiumWebgpuVaapiFlags), which fixed its green 1080p video.

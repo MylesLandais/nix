@@ -4,7 +4,7 @@ _: {
     {
       # Setting authorizedKeys alone creates a partial user; mark warby as a
       # normal user by default so hosts that only import this module still
-      # evaluate. Hosts that fully define warby (cerberus, lacie) override the
+      # evaluate. Hosts that fully define warby (cerberus) override the
       # rest of the account.
       users.users.warby = {
         isNormalUser = lib.mkDefault true;

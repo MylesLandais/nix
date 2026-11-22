@@ -129,7 +129,7 @@ with pkgs;
   grub2_efi
   ntfs3g
   # vivaldi is provided via environment.systemPackages (vivaldiWithFlags in
-  # modules/nixos/env-packages.nix) so it actually reads vivaldi-flags.conf.
+  # modules/aspects/packages/env-packages.nix) so it actually reads vivaldi-flags.conf.
   vesktop
   vial
   vulkan-tools

@@ -62,7 +62,7 @@
           config = lib.mkIf config.my.zed.enable {
             # Declarations only — no values. `secretspec set` writes those to the keyring.
             home.file.".config/zed/secretspec.toml".text = ''
-              # Managed by modules/home/devtooling/_zed/default.nix.
+              # Managed by modules/aspects/development/devtooling/zed.nix.
               # Values live in the keyring, never here. See the module header.
               [project]
               name = "zed-agents"
@@ -172,7 +172,7 @@
                     env = { };
                   };
 
-                  # Wraps the patched codex from modules/home/base/default.nix. Must come from the
+                  # Wraps the patched codex from modules/aspects/desktop/base/default.nix. Must come from the
                   # llm input: nixpkgs still has codex-acp 0.13.0, whose bundled config
                   # parser rejects `service_tier` in ~/.codex/config.toml.
                   codex = {

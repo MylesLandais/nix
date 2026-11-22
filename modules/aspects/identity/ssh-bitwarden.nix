@@ -41,7 +41,7 @@ _: {
           # Cluster + installer unattended SSH path. Bypasses the Bitwarden SSH
           # agent so that automated recovery / iso-deploy keeps working when the
           # vault is locked or the agent socket is unavailable. Uses the on-disk
-          # ed25519 key whose public half lives in modules/nixos/ssh-keys.nix.
+          # ed25519 key whose public half lives in modules/aspects/identity/ssh-keys.nix.
           Host home-office-installer 94tl0m2 95qmom2 argus lacie dell-potato 192.168.0.* 100.107.*
             User warby
             IdentityFile ~/.ssh/id_ed25519

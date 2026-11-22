@@ -1,6 +1,6 @@
 # DeepSeek Harness (`dsh`) — agent harness web UI.
 #
-# Points at the local llama-swap endpoint (modules/services/llm-router.nix) rather than
+# Points at the local llama-swap endpoint (modules/aspects/services/llm-router.nix) rather than
 # DeepSeek's hosted API, so the models under test are driven through the same
 # agent loop they would be in production.
 #

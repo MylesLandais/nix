@@ -63,7 +63,7 @@
       optimise.automatic = true;
       # NOTE: this prunes *system* generations only. Per-user `nix profile`
       # generations need `nix profile wipe-history`, which nix-collect-garbage
-      # cannot do — see modules/home/nix-user-gc.nix for that half.
+      # cannot do — see modules/aspects/desktop/nix-user-gc.nix for that half.
       gc = {
         automatic = true;
         dates = "weekly";

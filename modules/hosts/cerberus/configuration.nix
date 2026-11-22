@@ -117,7 +117,7 @@
       # the one-shot setup/sync command (Bitwarden unlock is human-in-the-loop):
       #   bw login   # one time per machine
       #   export BW_SESSION=$(bw unlock --raw) && forgejo-mirror-sync
-      # See modules/services/git-mirrors.nix for the mapping and token items.
+      # See modules/aspects/services/git-mirrors.nix for the mapping and token items.
       services.infra.gitMirrors.enable = true;
 
       # Agent harness driving the router above; see /etc/deepseek-harness/env.
@@ -213,7 +213,7 @@
         ];
 
         # Hermes dashboard, tailnet-only. The backend binds the MagicDNS name
-        # (see modules/_hermes.nix), never the LAN address, and the port is
+        # (see modules/aspects/agents/hermes.nix), never the LAN address, and the port is
         # accepted on tailscale0 alone — deliberately not in allowedTCPPorts,
         # which would open it to the whole LAN.
         interfaces."tailscale0".allowedTCPPorts = [ 9119 ];
