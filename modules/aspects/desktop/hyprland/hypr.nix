@@ -55,6 +55,18 @@
               pkgs.libsecret
             ];
 
+            # hyprtoolkit apps (xdph >= 1.5 share picker, hyprland-guiutils) ignore
+            # Qt/GTK theming and read this file; Stylix has no target for it.
+            xdg.configFile."hypr/hyprtoolkit.conf".text = ''
+              background = ${rgb c.base00}
+              base = ${rgb c.base01}
+              alternate_base = ${rgb c.base02}
+              text = ${rgb c.base05}
+              bright_text = ${rgb c.base07}
+              accent = ${rgb c.base0D}
+              accent_secondary = ${rgb c.base0C}
+            '';
+
             wayland.windowManager.hyprland = {
               enable = true;
               configType = "lua";
