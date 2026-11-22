@@ -65,7 +65,7 @@ download that only has a mutable URL.
 GitHub Actions (`.github/workflows/check.yml`) runs on the free hosted runners:
 
 - **lint**: the layout checker, unit tests, nixfmt, deadnix and statix.
-- **eval**: `nix flake check --no-build` and the cerberus derivation.
+- **eval**: `nix flake check` (evaluation-only checks) and the cerberus derivation.
 - **build** (pushes to `dev`/`main`, plus a weekly run): builds the custom
   packages and the full cerberus closure against the same upstream caches the
   machine uses, then pushes what it had to build to
