@@ -66,42 +66,6 @@ _: {
               command = "/run/current-system/sw/bin/systemctl";
               options = [ "NOPASSWD" ];
             }
-            # lacie USB boot loop — QEMU tests, ISO staging, GRUB refresh
-            {
-              command = "/home/warby/.config/nixos/scripts/test-usb-qemu.sh";
-              options = [
-                "NOPASSWD"
-                "SETENV"
-              ];
-            }
-            {
-              command = "/home/warby/.config/nixos/scripts/setup-nix-usb.sh";
-              options = [
-                "NOPASSWD"
-                "SETENV"
-              ];
-            }
-            {
-              command = "/home/warby/.config/nixos/scripts/stage-installer-iso.sh";
-              options = [
-                "NOPASSWD"
-                "SETENV"
-              ];
-            }
-            {
-              command = "/home/warby/.config/nixos/scripts/iso-deploy.sh";
-              options = [
-                "NOPASSWD"
-                "SETENV"
-              ];
-            }
-            {
-              command = "/home/warby/.config/nixos/scripts/write-kali-usb.sh";
-              options = [
-                "NOPASSWD"
-                "SETENV"
-              ];
-            }
             {
               command = "/run/current-system/sw/bin/mount";
               options = [

@@ -110,7 +110,7 @@ let
       backupFileExtension ? null,
       baseline ? true,
       desktop ? false,
-      # nixpkgs and home-manager to build with; 7PZSZY2 uses nixos-wsl's pins.
+      # nixpkgs and home-manager to build with.
       nixpkgs ? inputs.nixpkgs,
       homeManagerModule ? inputs.home-manager.nixosModules.home-manager,
     }:

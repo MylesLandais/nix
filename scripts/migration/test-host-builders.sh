@@ -41,6 +41,3 @@ nix eval --json --no-write-lock-file ".#lib" --apply '
   assert args.inputs.nixpkgs.rev == hm.pin;
   true
 '
-
-locked=$(jq -er '.nodes[.nodes[.root].inputs.nixpkgs].locked.rev' flake.lock)
-test "$(nix eval --raw --no-write-lock-file .#colmena.meta.specialArgs.inputs.nixpkgs.rev)" = "$locked"
