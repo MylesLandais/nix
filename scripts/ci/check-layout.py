@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check module discovery and flag new migration debt in a Git checkout."""
+"""Check module discovery, private-file rationales and argument threading in a Git checkout."""
 
 import argparse
 from collections import Counter
@@ -9,8 +9,8 @@ from pathlib import Path
 import re
 import subprocess
 
-BASELINE = Path("docs/migration/layout-debt.json")
-EXCEPTIONS = Path("docs/migration/argument-exceptions.json")
+BASELINE = Path("docs/layout/layout-debt.json")
+EXCEPTIONS = Path("docs/layout/argument-exceptions.json")
 RATIONALE = re.compile(r"^\s*# Private (?:helper|data):\s+\S.{8,}", re.MULTILINE)
 ARGS = re.compile(r"\b(?:specialArgs|extraSpecialArgs)\b")
 

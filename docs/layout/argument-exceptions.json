@@ -6,7 +6,7 @@
     "expression": "extraSpecialArgs ? { }, # Public mkModules accepts caller-supplied Home Manager values.",
     "consumer": "flake.lib.mkModules and the Home Manager modules supplied to flake.lib.mkHost",
     "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host composition selects the local constructors.",
-    "test": "scripts/migration/test-host-builders.sh"
+    "test": "scripts/ci/test-host-builders.sh"
   },
   {
     "file": "modules/flake/host-builders.nix",
@@ -15,7 +15,7 @@
     "expression": "extraSpecialArgs = {",
     "consumer": "flake.lib.mkModules and the Home Manager modules supplied to flake.lib.mkHost",
     "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host composition selects the local constructors.",
-    "test": "scripts/migration/test-host-builders.sh"
+    "test": "scripts/ci/test-host-builders.sh"
   },
   {
     "file": "modules/flake/host-builders.nix",
@@ -24,7 +24,7 @@
     "expression": "// extraSpecialArgs;",
     "consumer": "flake.lib.mkModules and the Home Manager modules supplied to flake.lib.mkHost",
     "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host composition selects the local constructors.",
-    "test": "scripts/migration/test-host-builders.sh"
+    "test": "scripts/ci/test-host-builders.sh"
   },
   {
     "file": "modules/flake/host-builders.nix",
@@ -33,7 +33,7 @@
     "expression": "specialArgs ? { },",
     "consumer": "flake.lib.mkHost",
     "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host composition selects the local constructors.",
-    "test": "scripts/migration/test-host-builders.sh"
+    "test": "scripts/ci/test-host-builders.sh"
   },
   {
     "file": "modules/flake/host-builders.nix",
@@ -42,7 +42,7 @@
     "expression": "extraSpecialArgs ? { }, # The published host constructor accepts both module classes.",
     "consumer": "flake.lib.mkHost",
     "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host composition selects the local constructors.",
-    "test": "scripts/migration/test-host-builders.sh"
+    "test": "scripts/ci/test-host-builders.sh"
   },
   {
     "file": "modules/flake/host-builders.nix",
@@ -51,7 +51,7 @@
     "expression": "callerArgs = specialArgs // {",
     "consumer": "flake.lib.mkHost",
     "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host composition selects the local constructors.",
-    "test": "scripts/migration/test-host-builders.sh"
+    "test": "scripts/ci/test-host-builders.sh"
   },
   {
     "file": "modules/flake/host-builders.nix",
@@ -60,6 +60,6 @@
     "expression": "specialArgs = callerArgs;",
     "consumer": "flake.lib.mkHost",
     "reason": "Preserve the published constructor contract for modules supplied by external callers. Repository host composition selects the local constructors.",
-    "test": "scripts/migration/test-host-builders.sh"
+    "test": "scripts/ci/test-host-builders.sh"
   }
 ]

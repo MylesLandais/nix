@@ -1,5 +1,5 @@
 # checks.<system>.module-registry: the module registry must match
-# docs/migration/registry.json. Renaming, adding or removing a module means
+# docs/layout/registry.json. Renaming, adding or removing a module means
 # updating that file in the same commit, so module identities never change by
 # accident (for example when a file is moved).
 { config, lib, ... }:
@@ -10,7 +10,7 @@ let
     nixosModules = builtins.attrNames config.flake.nixosModules;
     homeManagerModules = builtins.attrNames config.flake.homeManagerModules;
   };
-  expected = lib.importJSON ../../docs/migration/registry.json;
+  expected = lib.importJSON ../../docs/layout/registry.json;
   diff = lib.concatStringsSep "\n" (
     lib.concatMap (
       ns:
@@ -29,7 +29,7 @@ in
     {
       checks.module-registry = pkgs.runCommand "module-registry" { inherit diff; } ''
         if [ -n "$diff" ]; then
-          echo "module registry differs from docs/migration/registry.json:"
+          echo "module registry differs from docs/layout/registry.json:"
           echo "$diff"
           exit 1
         fi
